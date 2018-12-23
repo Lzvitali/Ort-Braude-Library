@@ -1,0 +1,32 @@
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ OBL;
+USE OBL;
+
+
+DROP TABLE IF EXISTS `Students`;
+CREATE TABLE `Students` (
+  `StudentID` int(9) NOT NULL auto_increment,
+  `StudentName` varchar(60) collate latin1_german1_ci NOT NULL default '',
+  `StatusMembership` enum('Active','Frozen','Locked','NotRegistered') default 'Frozen',
+  `Operation` set('ExtendBookRequest','ReturnBookRequest','LendingReqest'),
+   `Freeze` enum('True','False') default 'True',
+  PRIMARY KEY  (`StudentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
+
+--
+-- Dumping data for table `test`.`authors`
+--
+
+/*!40000 ALTER TABLE `Students` DISABLE KEYS */;
+INSERT INTO `Students` (`StudentID`,`StudentName`,`StatusMembership`,`Operation`,`Freeze`) VALUES 
+ (308328756,'Kofler Michael','Active','ExtendBookRequest','False'),
+ (308512561,'Kramer David','Active','ReturnBookRequest','False'),
+ (205124362,'Orfali Robert','Active','LendingReqest','False'),
+ (202124875,'Harkey Dan','Active','ReturnBookRequest','False'),
+ (302134873,'Edwards Jeri','Frozen','ReturnBookRequest','True'),
+ (354946422,'Ratschiller Tobias','Locked','ReturnBookRequest','True'),
+ (354126424,'Gerken Till','Frozen','ReturnBookRequest','True'),
+ (241848926,'Yarger Randy Jay','Active','ExtendBookRequest','False'),
+ (247891429,'Reese Georg','NotRegistered','','True'),
+ (223646897,'King Tim','Locked','ReturnBookRequest','True'),
+ (216897163,'Date Chris','NotRegistered','','True');
