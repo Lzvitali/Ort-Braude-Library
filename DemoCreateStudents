@@ -19,14 +19,14 @@ CREATE TABLE `Students` (
 
 /*!40000 ALTER TABLE `Students` DISABLE KEYS */;
 INSERT INTO `Students` (`StudentID`,`StudentName`,`StatusMembership`,`Operation`,`Freeze`) VALUES 
- (308328756,'Kofler Michael','Active','ExtendBookRequest','False'),
- (308512561,'Kramer David','Active','ReturnBookRequest','False'),
- (205124362,'Orfali Robert','Active','LendingReqest','False'),
- (202124875,'Harkey Dan','Active','ReturnBookRequest','False'),
+ (308328756,'Kofler Michael','Active',('ExtendBookRequest,ReturnBookRequest,LendingReqest'),'False'),
+ (308512561,'Kramer David','Active',('ExtendBookRequest,ReturnBookRequest,LendingReqest'),'False'),
+ (205124362,'Orfali Robert','Active',('ExtendBookRequest,ReturnBookRequest,LendingReqest'),'False'),
+ (202124875,'Harkey Dan','Active',('ExtendBookRequest,ReturnBookRequest,LendingReqest'),'False'),
  (302134873,'Edwards Jeri','Frozen','ReturnBookRequest','True'),
  (354946422,'Ratschiller Tobias','Locked','ReturnBookRequest','True'),
  (354126424,'Gerken Till','Frozen','ReturnBookRequest','True'),
- (241848926,'Yarger Randy Jay','Active','ExtendBookRequest','False'),
+ (241848926,'Yarger Randy Jay','Active',('ExtendBookRequest,ReturnBookRequest,LendingReqest'),'False'),
  (247891429,'Reese Georg','NotRegistered','','True'),
  (223646897,'King Tim','Locked','ReturnBookRequest','True'),
  (216897163,'Date Chris','NotRegistered','','True');
