@@ -45,5 +45,24 @@
             <TableColumn fx:id="borrowColumn" prefWidth="85.0" text="Borrow" />
         </columns>
       </TableView>
+      <VBox layoutX="33.0" layoutY="101.0" prefHeight="83.0" prefWidth="787.0">
+         <children>
+            <HBox prefHeight="39.0" prefWidth="780.0" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" prefWidth="165.0" text="Main" />
+                  <Button mnemonicParsing="false" prefWidth="165.0" text="Borrow book" />
+                  <Button mnemonicParsing="false" prefWidth="165.0" text="Return book" />
+                  <Button mnemonicParsing="false" prefWidth="165.0" text="Add new book" />
+               </children>
+            </HBox>
+            <HBox prefHeight="39.0" prefWidth="780.0" spacing="10.0">
+               <children>
+                  <Button mnemonicParsing="false" prefWidth="165.0" text="Delete book" />
+                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="165.0" text="Register new account" />
+                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="165.0" text="Search account" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
