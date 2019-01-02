@@ -24,7 +24,7 @@
          </children>
       </VBox>
       <Button fx:id="logInBtn" layoutX="764.0" layoutY="20.0" mnemonicParsing="false" onAction="#makeLogIn" text="Log in" underline="true" />
-      <HBox alignment="TOP_CENTER" layoutX="16.0" layoutY="192.0" prefHeight="39.0" prefWidth="819.0" spacing="15.0">
+      <HBox alignment="TOP_CENTER" layoutX="25.0" layoutY="192.0" prefHeight="39.0" prefWidth="780.0" spacing="15.0">
          <children>
             <MenuButton fx:id="searchByMenuButton" mnemonicParsing="false" text="Search by">
               <items>
@@ -42,8 +42,15 @@
           <TableColumn fx:id="authorNameColumn" prefWidth="160.0" text="Author name" />
             <TableColumn fx:id="yearColumn" prefWidth="118.0" text="Year" />
             <TableColumn fx:id="viewIntroColumn" prefWidth="85.0" text="View intro" />
-            <TableColumn prefWidth="85.0" />
+            <TableColumn fx:id="reserveBtn" prefWidth="85.0" text="Reserve" />
         </columns>
       </TableView>
+      <HBox layoutX="31.0" layoutY="120.0" prefHeight="39.0" prefWidth="780.0" spacing="10.0">
+         <children>
+            <Button mnemonicParsing="false" prefWidth="175.0" text="My orders and borrows" />
+            <Button mnemonicParsing="false" prefWidth="175.0" text="My history" />
+            <Button mnemonicParsing="false" prefWidth="175.0" text="My personal details" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

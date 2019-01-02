@@ -42,7 +42,7 @@
           <TableColumn fx:id="authorNameColumn" prefWidth="160.0" text="Author name" />
             <TableColumn fx:id="yearColumn" prefWidth="118.0" text="Year" />
             <TableColumn fx:id="viewIntroColumn" prefWidth="85.0" text="View intro" />
-            <TableColumn prefWidth="85.0" />
+            <TableColumn fx:id="borrowColumn" prefWidth="85.0" text="Borrow" />
         </columns>
       </TableView>
    </children>
