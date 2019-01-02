@@ -47,6 +47,7 @@
       </TableView>
       <HBox layoutX="31.0" layoutY="120.0" prefHeight="39.0" prefWidth="780.0" spacing="10.0">
          <children>
+            <Button mnemonicParsing="false" prefWidth="175.0" text="Main" />
             <Button mnemonicParsing="false" prefWidth="175.0" text="My orders and borrows" />
             <Button mnemonicParsing="false" prefWidth="175.0" text="My history" />
             <Button mnemonicParsing="false" prefWidth="175.0" text="My personal details" />
