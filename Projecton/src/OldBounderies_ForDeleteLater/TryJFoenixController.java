@@ -2,7 +2,7 @@
  * Sample Skeleton for 'TtyJFoenix.fxml' Controller Class
  */
 
-package Common;
+package OldBounderies_ForDeleteLater;
 
 import java.net.URL;
 import java.util.ResourceBundle;
