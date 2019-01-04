@@ -25,11 +25,11 @@
                   </ImageView>
                   <AnchorPane prefHeight="109.0" prefWidth="756.0">
                      <children>
-                        <Label layoutX="124.0" layoutY="20.0" text="ORT Braude Library" textFill="#18048a">
-                           <font>
-                              <Font name="System Bold Italic" size="47.0" />
-                           </font>
-                        </Label>
+                        <ImageView fitHeight="82.0" fitWidth="647.0" layoutX="44.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/OBL_Title.gif" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
                   <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="67.0" prefWidth="73.0" text="Log in">
