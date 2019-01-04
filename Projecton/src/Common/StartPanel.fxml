@@ -14,11 +14,11 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BorderPane layoutX="17.0" layoutY="18.0" prefHeight="689.0" prefWidth="925.0">
+      <BorderPane layoutX="17.0" layoutY="18.0" prefHeight="689.0" prefWidth="940.0">
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="833.0">
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="871.0">
                      <children>
                         <Label text="ORT-Braude Library" textFill="#180090">
                            <font>
@@ -27,9 +27,9 @@
                         </Label>
                      </children>
                   </VBox>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="88.0" prefWidth="87.0" text="Log in">
+                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="22.0" prefWidth="65.0" text="Log in">
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../icons/login6.png" />
                            </image>
