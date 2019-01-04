@@ -18,16 +18,21 @@
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="871.0">
+                  <ImageView fitHeight="109.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/OBL_logo2.gif" />
+                     </image>
+                  </ImageView>
+                  <AnchorPane prefHeight="109.0" prefWidth="756.0">
                      <children>
-                        <Label text="ORT-Braude Library" textFill="#180090">
+                        <Label layoutX="124.0" layoutY="20.0" text="ORT Braude Library" textFill="#18048a">
                            <font>
-                              <Font name="System Bold Italic" size="35.0" />
+                              <Font name="System Bold Italic" size="47.0" />
                            </font>
                         </Label>
                      </children>
-                  </VBox>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="22.0" prefWidth="65.0" text="Log in">
+                  </AnchorPane>
+                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="67.0" prefWidth="73.0" text="Log in">
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -80,51 +85,55 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <HBox layoutX="73.0" layoutY="74.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
+                  <AnchorPane layoutX="22.0" layoutY="37.0" prefHeight="150.0" prefWidth="689.0">
                      <children>
-                        <JFXTextField prefHeight="34.0" prefWidth="490.0" promptText="Search book">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </JFXTextField>
-                        <Button contentDisplay="RIGHT" mnemonicParsing="false" text="Search">
-                           <graphic>
-                              <ImageView fitHeight="26.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../icons/search%20-%20Copy.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Button>
+                        <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
+                           <children>
+                              <JFXTextField prefHeight="34.0" prefWidth="490.0" promptText="Search book">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Button contentDisplay="RIGHT" mnemonicParsing="false" text="Search">
+                                 <graphic>
+                                    <ImageView fitHeight="26.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/search%20-%20Copy.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="20.0" layoutY="19.0" prefHeight="50.0" prefWidth="660.0" spacing="40.0">
+                           <children>
+                              <JFXRadioButton prefHeight="36.0" prefWidth="128.0" selected="true" text="Book name">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXRadioButton>
+                              <JFXRadioButton prefHeight="36.0" prefWidth="146.0" text="Author name">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXRadioButton>
+                              <JFXRadioButton prefHeight="36.0" prefWidth="91.0" text="Topic">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXRadioButton>
+                              <JFXRadioButton prefHeight="36.0" prefWidth="129.0" text="Free search">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </JFXRadioButton>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <HBox layoutX="59.0" layoutY="24.0" prefHeight="50.0" prefWidth="660.0" spacing="40.0">
-                     <children>
-                        <JFXRadioButton prefHeight="36.0" prefWidth="128.0" selected="true" text="Book name">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXRadioButton>
-                        <JFXRadioButton prefHeight="36.0" prefWidth="146.0" text="Author name">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXRadioButton>
-                        <JFXRadioButton prefHeight="36.0" prefWidth="91.0" text="Topic">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXRadioButton>
-                        <JFXRadioButton prefHeight="36.0" prefWidth="129.0" text="Free search">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </JFXRadioButton>
-                     </children>
-                  </HBox>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </left>
