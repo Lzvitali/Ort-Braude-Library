@@ -85,7 +85,7 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <AnchorPane layoutX="22.0" layoutY="37.0" prefHeight="150.0" prefWidth="689.0">
+                  <AnchorPane layoutX="22.0" layoutY="37.0" prefHeight="134.0" prefWidth="689.0">
                      <children>
                         <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                            <children>
