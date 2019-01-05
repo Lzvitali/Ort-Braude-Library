@@ -11,14 +11,14 @@ public class ObjectMessage implements Serializable
 {
 	
 	private ArrayList<IEntity> objectList;
-	private IEntity objectArray[];
+	private ArrayList<IEntity[]> objectArray;
 	private String message;
 
 	//Constructors
 	public ObjectMessage(String message)
 	{
 		objectList=new ArrayList<IEntity>();
-		objectArray=null;
+		objectArray=new ArrayList<IEntity[]>();;
 		this.message=message;
 	}
 	
@@ -26,7 +26,7 @@ public class ObjectMessage implements Serializable
 	{
 		objectList=new ArrayList<IEntity>();
 		objectList.add(entityOne);
-		objectArray=null;
+		objectArray=new ArrayList<IEntity[]>();;
 		this.message=message;
 	}
 	
@@ -35,15 +35,16 @@ public class ObjectMessage implements Serializable
 		objectList=new ArrayList<IEntity>();
 		objectList.add(entityOne);
 		objectList.add(entityTwo);
-		objectArray=null;
+		objectArray=new ArrayList<IEntity[]>();;
 		this.message=message;
 	}
 	
 	public ObjectMessage(IEntity arrayObject[],String Message)
 	{
 		objectList=new ArrayList<IEntity>();
-		this.objectArray=arrayObject;
-		this.message=message;
+		objectArray=new ArrayList<IEntity[]>();
+		objectArray.add(arrayObject);
+		this.message=Message;
 	}
 	
 	
@@ -68,6 +69,10 @@ public class ObjectMessage implements Serializable
 		return objectList.size();
 	}
 	
+	public void addObjectArray(IEntity entity[])
+	{
+		objectArray.add(entity);
+	}
 	//Getters And Setters
 	
 	public ArrayList<IEntity> getObjectList() 
@@ -75,7 +80,7 @@ public class ObjectMessage implements Serializable
 		return objectList;
 	}
 
-	public IEntity[] getObjectArray() 
+	public ArrayList<IEntity[]> getObjectArray() 
 	{
 		return objectArray;
 	}
