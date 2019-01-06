@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Common.Book;
 import Common.ObjectMessage;
 
 public abstract class  ABookDBController 
