@@ -4,7 +4,7 @@ import javafx.scene.control.Button;
 
 public class Book implements IEntity 
 {
-	private String bookID;
+	private int bookID;
 	private String bookName;
 	private String authorName;
 	private String year;

@@ -6,8 +6,8 @@ import javafx.scene.control.Button;
 
 public class Copy implements IEntity  
 {
-	private String copyID;
-	private String bookID;
+	private int copyID;
+	private int bookID;
 	private String borrowerID;
 	
 	private Date borrowDate;
