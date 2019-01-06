@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Button?>
@@ -48,7 +49,10 @@
             </HBox>
          </top>
          <right>
-            <VBox prefHeight="489.0" prefWidth="148.0" BorderPane.alignment="CENTER" />
+            <VBox prefHeight="480.0" prefWidth="206.0" BorderPane.alignment="CENTER">
+               <children>
+                  <JFXButton prefHeight="70.0" prefWidth="182.0" />
+               </children></VBox>
          </right>
          <bottom>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
