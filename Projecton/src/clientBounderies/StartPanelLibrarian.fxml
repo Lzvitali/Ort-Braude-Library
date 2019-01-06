@@ -49,14 +49,17 @@
             </HBox>
          </top>
          <right>
-            <VBox prefHeight="480.0" prefWidth="206.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="509.0" prefWidth="206.0" BorderPane.alignment="CENTER">
                <children>
-                  <JFXButton prefHeight="70.0" prefWidth="182.0" />
+                  <AnchorPane prefHeight="47.0" prefWidth="206.0" />
+                  <JFXButton prefHeight="80.0" prefWidth="182.0" text="Main" />
+                  <JFXButton prefHeight="80.0" prefWidth="182.0" text="Borrow book" />
+                  <JFXButton prefHeight="80.0" prefWidth="182.0" text="Return book" />
+                  <JFXButton prefHeight="80.0" prefWidth="182.0" text="Add book" />
+                  <JFXButton prefHeight="80.0" prefWidth="182.0" text="Delete book" />
+                  <JFXButton prefHeight="80.0" prefWidth="182.0" text="Register new account" />
                </children></VBox>
          </right>
-         <bottom>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-         </bottom>
          <left>
             <AnchorPane prefHeight="489.0" prefWidth="748.0" BorderPane.alignment="CENTER">
                <children>
