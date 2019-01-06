@@ -1,4 +1,4 @@
-package Common;
+package Client;
 
 public class StartPanelController {
 
