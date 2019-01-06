@@ -1,5 +1,6 @@
 package Client;
 
-public class StartPanelController {
+public class StartPanelController 
+{
 
 }

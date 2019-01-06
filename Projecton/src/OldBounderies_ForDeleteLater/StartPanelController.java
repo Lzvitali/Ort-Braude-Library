@@ -14,6 +14,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+
+
+Clientconsole conn;
 public class StartPanelController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
@@ -55,7 +58,9 @@ public class StartPanelController {
     }
 
     @FXML
-    void makeSearch(ActionEvent event) {
+    void makeSearch(ActionEvent event) 
+    {
+
 
     }
 
