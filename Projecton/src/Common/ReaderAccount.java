@@ -9,5 +9,6 @@ public class ReaderAccount extends User
 	private String phone;
 	private String email;
 	private String status; // active/frozen/locked
+	private int numOfDelays;
 	
 }

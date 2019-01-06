@@ -8,7 +8,8 @@ public class Book implements IEntity
 	private String bookName;
 	private String authorName;
 	private String year;
-	private boolean isDesired;
+	private String topic;
+	private boolean isDesired; 
 	//buttons
 	private Button reserve;
 	private Button details;

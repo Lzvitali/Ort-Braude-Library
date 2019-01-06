@@ -32,7 +32,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="67.0" prefWidth="73.0" text="Log in">
+                  <Button fx:id="loginBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#makeLogin" prefHeight="67.0" prefWidth="73.0" text="Log in">
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -89,12 +89,12 @@
                      <children>
                         <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                            <children>
-                              <JFXTextField prefHeight="34.0" prefWidth="490.0" promptText="Search book">
+                              <JFXTextField fx:id="searchTextField" prefHeight="34.0" prefWidth="490.0" promptText="Search book">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </JFXTextField>
-                              <Button contentDisplay="RIGHT" mnemonicParsing="false" text="Search">
+                              <Button fx:id="searchBtn" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#makeSearch" text="Search">
                                  <graphic>
                                     <ImageView fitHeight="26.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -110,22 +110,22 @@
                         </HBox>
                         <HBox layoutX="20.0" layoutY="19.0" prefHeight="50.0" prefWidth="660.0" spacing="40.0">
                            <children>
-                              <JFXRadioButton prefHeight="36.0" prefWidth="128.0" selected="true" text="Book name">
+                              <JFXRadioButton fx:id="bookNameRB" prefHeight="36.0" prefWidth="128.0" selected="true" text="Book name">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </JFXRadioButton>
-                              <JFXRadioButton prefHeight="36.0" prefWidth="146.0" text="Author name">
+                              <JFXRadioButton fx:id="authorNameRB" prefHeight="36.0" prefWidth="146.0" text="Author name">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </JFXRadioButton>
-                              <JFXRadioButton prefHeight="36.0" prefWidth="91.0" text="Topic">
+                              <JFXRadioButton fx:id="topicRB" prefHeight="36.0" prefWidth="91.0" text="Topic">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
                               </JFXRadioButton>
-                              <JFXRadioButton prefHeight="36.0" prefWidth="129.0" text="Free search">
+                              <JFXRadioButton fx:id="freeSearchRB" prefHeight="36.0" prefWidth="129.0" text="Free search">
                                  <font>
                                     <Font name="System Bold" size="15.0" />
                                  </font>
