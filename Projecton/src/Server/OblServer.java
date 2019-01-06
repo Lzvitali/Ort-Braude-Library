@@ -6,6 +6,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import Common.Book;
+import Common.ObjectMessage;
 import ocsf.server.*;
 
 /**
@@ -48,6 +51,11 @@ public OblServer(int port)
 
 public void handleMessageFromClient(Object msg, ConnectionToClient client)
 {
+	ObjectMessage objectMessage=(ObjectMessage)msg;
+	if(objectMessage.getObjectList().get(0) instanceof Book)
+	{
+		BookDBController.Selection(connToSQL, objectMessage);
+	}
 	
 }
 
