@@ -16,7 +16,6 @@ import javafx.scene.control.TextField;
 
 
 
-Clientconsole conn;
 public class StartPanelController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
