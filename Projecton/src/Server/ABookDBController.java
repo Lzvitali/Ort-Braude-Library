@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 import Common.ObjectMessage;
 
-public abstract class  BookDBController 
+public abstract class  ABookDBController 
 {
 
 	

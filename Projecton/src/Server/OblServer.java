@@ -54,7 +54,7 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 	ObjectMessage objectMessage=(ObjectMessage)msg;
 	if(objectMessage.getObjectList().get(0) instanceof Book)
 	{
-		BookDBController.Selection(connToSQL, objectMessage);
+		ABookDBController.Selection(connToSQL, objectMessage);
 	}
 	
 }
