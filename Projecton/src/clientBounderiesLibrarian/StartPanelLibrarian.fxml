@@ -6,6 +6,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="720.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
    <children>
       <BorderPane layoutX="17.0" layoutY="18.0" prefHeight="689.0" prefWidth="940.0">
          <top>
@@ -34,7 +36,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="loginBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#makeLogin" prefHeight="67.0" prefWidth="95.0" text="Log out">
+                  <Button fx:id="logOutBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#makeLogin" prefHeight="67.0" prefWidth="95.0" text="Log out">
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -53,7 +55,7 @@
             <VBox prefHeight="580.0" prefWidth="175.0" BorderPane.alignment="CENTER">
                <children>
                   <AnchorPane prefHeight="19.0" prefWidth="175.0" />
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="90.0" prefWidth="174.0" text="Main">
+                  <Button fx:id="mainBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openMain" prefHeight="90.0" prefWidth="174.0" text="Main">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -65,7 +67,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="90.0" prefWidth="174.0" text="Borrow book">
+                  <Button fx:id="borrowBookBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openBorrowBook" prefHeight="90.0" prefWidth="174.0" text="Borrow book">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -77,7 +79,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="90.0" prefWidth="174.0" text="Return book">
+                  <Button fx:id="returnBookBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openReturnBook" prefHeight="90.0" prefWidth="174.0" text="Return book">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -89,7 +91,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="90.0" prefWidth="174.0" text="Add book">
+                  <Button fx:id="addBookBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openAddBook" prefHeight="90.0" prefWidth="174.0" text="Add book">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -101,7 +103,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="90.0" prefWidth="174.0" text="Delete book">
+                  <Button fx:id="deleteBookBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openDeleteBookBtn" prefHeight="90.0" prefWidth="174.0" text="Delete book">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -113,7 +115,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="90.0" prefWidth="174.0" text="Register new account">
+                  <Button fx:id="registerNewAccountBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openRegisterNewAccount" prefHeight="90.0" prefWidth="174.0" text="Register new account">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -159,9 +161,9 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <TabPane layoutX="14.0" layoutY="22.0" prefHeight="536.0" prefWidth="744.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane layoutX="5.0" layoutY="22.0" prefHeight="536.0" prefWidth="753.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                      <Tab text="Search book">
+                      <Tab fx:id="searchBookTab" text="Search book">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
@@ -169,12 +171,12 @@
                                        <children>
                                           <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                                              <children>
-                                                <JFXTextField fx:id="searchTextField1" prefHeight="34.0" prefWidth="490.0" promptText="Search book">
+                                                <JFXTextField fx:id="searchBookTextField" prefHeight="34.0" prefWidth="490.0" promptText="Search book">
                                                    <font>
                                                       <Font size="16.0" />
                                                    </font>
                                                 </JFXTextField>
-                                                <Button fx:id="searchBtn1" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#makeSearch" text="Search">
+                                                <Button fx:id="searchBookBtn" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#makeSearch" text="Search">
                                                    <graphic>
                                                       <ImageView fitHeight="26.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -190,22 +192,22 @@
                                           </HBox>
                                           <HBox layoutX="20.0" layoutY="19.0" prefHeight="50.0" prefWidth="660.0" spacing="40.0">
                                              <children>
-                                                <JFXRadioButton fx:id="bookNameRB1" prefHeight="36.0" prefWidth="128.0" selected="true" text="Book name">
+                                                <JFXRadioButton fx:id="bookNameRB" prefHeight="36.0" prefWidth="128.0" selected="true" text="Book name">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </JFXRadioButton>
-                                                <JFXRadioButton fx:id="authorNameRB1" prefHeight="36.0" prefWidth="146.0" text="Author name">
+                                                <JFXRadioButton fx:id="authorNameRB" prefHeight="36.0" prefWidth="146.0" text="Author name">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </JFXRadioButton>
-                                                <JFXRadioButton fx:id="topicRB1" prefHeight="36.0" prefWidth="91.0" text="Topic">
+                                                <JFXRadioButton fx:id="topicRB" prefHeight="36.0" prefWidth="91.0" text="Topic">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </JFXRadioButton>
-                                                <JFXRadioButton fx:id="freeSearchRB1" prefHeight="36.0" prefWidth="129.0" text="Free search">
+                                                <JFXRadioButton fx:id="freeSearchBookRB" prefHeight="36.0" prefWidth="129.0" text="Free search">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
@@ -214,11 +216,21 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
+                                    <TableView fx:id="searchResultTable" layoutX="5.0" layoutY="149.0" prefHeight="345.0" prefWidth="743.0">
+                                      <columns>
+                                        <TableColumn fx:id="bookNameColumn" prefWidth="232.0" text="Book name" />
+                                        <TableColumn fx:id="authorNameColumn" prefWidth="167.0" text="Author name" />
+                                          <TableColumn fx:id="bookYearColumn" prefWidth="87.0" text="Year" />
+                                          <TableColumn fx:id="BookTopicColumn" prefWidth="106.0" text="Topic" />
+                                          <TableColumn fx:id="isDesiredBookColumn" prefWidth="67.0" text="Desired?" />
+                                          <TableColumn fx:id="viewIntroColumn" prefWidth="82.0" text="View intro" />
+                                      </columns>
+                                    </TableView>
                                  </children>
                               </AnchorPane>
                         </content>
                       </Tab>
-                      <Tab text="Search reader account">
+                      <Tab fx:id="searchReaderAccountTab" text="Search reader account">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
@@ -226,12 +238,12 @@
                                        <children>
                                           <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                                              <children>
-                                                <JFXTextField fx:id="searchTextField" prefHeight="34.0" prefWidth="490.0" promptText="Search reader account">
+                                                <JFXTextField fx:id="searchReaderAccountSearchField" prefHeight="34.0" prefWidth="490.0" promptText="Search reader account">
                                                    <font>
                                                       <Font size="16.0" />
                                                    </font>
                                                 </JFXTextField>
-                                                <Button fx:id="searchBtn" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#makeSearch" text="Search">
+                                                <Button fx:id="searchReaderAccountBtn" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#makeSearch" text="Search">
                                                    <graphic>
                                                       <ImageView fitHeight="26.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -247,22 +259,22 @@
                                           </HBox>
                                           <HBox layoutX="20.0" layoutY="19.0" prefHeight="50.0" prefWidth="660.0" spacing="40.0">
                                              <children>
-                                                <JFXRadioButton fx:id="topicRB" prefHeight="36.0" prefWidth="91.0" selected="true" text="ID">
+                                                <JFXRadioButton fx:id="iDRB" prefHeight="36.0" prefWidth="91.0" selected="true" text="ID">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </JFXRadioButton>
-                                                <JFXRadioButton fx:id="bookNameRB" prefHeight="36.0" prefWidth="128.0" text="First name">
+                                                <JFXRadioButton fx:id="firstNameRB" prefHeight="36.0" prefWidth="128.0" text="First name">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </JFXRadioButton>
-                                                <JFXRadioButton fx:id="authorNameRB" prefHeight="36.0" prefWidth="146.0" text="Last name">
+                                                <JFXRadioButton fx:id="lastNameRB" prefHeight="36.0" prefWidth="146.0" text="Last name">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </JFXRadioButton>
-                                                <JFXRadioButton fx:id="freeSearchRB" prefHeight="36.0" prefWidth="129.0" text="Free search">
+                                                <JFXRadioButton fx:id="freeSearchReaderAccountRB" prefHeight="36.0" prefWidth="129.0" text="Free search">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
@@ -271,6 +283,16 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="2.0" layoutY="138.0" prefHeight="358.0" prefWidth="746.0">
+                                      <columns>
+                                        <TableColumn fx:id="accountIDColumn" prefWidth="128.0" text="ID" />
+                                        <TableColumn prefWidth="136.0" text="First name" />
+                                          <TableColumn fx:id="accountLastNameColumn" prefWidth="122.0" text="Last name" />
+                                          <TableColumn fx:id="accountStatusColumn" prefWidth="103.0" text="status" />
+                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="107.0" text="phone" />
+                                          <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="149.0" text="Borrows &amp; Reserves" />
+                                      </columns>
+                                    </TableView>
                                  </children>
                               </AnchorPane>
                         </content>

@@ -11,6 +11,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class StartPanelController 
 {
@@ -42,25 +44,43 @@ public class StartPanelController
     @FXML // fx:id="freeSearchRB"
     private JFXRadioButton freeSearchRB; // Value injected by FXMLLoader
 
+    @FXML // fx:id="searchResultTable"
+    private TableView<?> searchResultTable; // Value injected by FXMLLoader
+
+    @FXML // fx:id="bookNameColumn"
+    private TableColumn<?, ?> bookNameColumn; // Value injected by FXMLLoader
+
+    @FXML // fx:id="authorNameColumn"
+    private TableColumn<?, ?> authorNameColumn; // Value injected by FXMLLoader
+
+    @FXML // fx:id="yearColumn"
+    private TableColumn<?, ?> yearColumn; // Value injected by FXMLLoader
+
+    @FXML // fx:id="topicColumn"
+    private TableColumn<?, ?> topicColumn; // Value injected by FXMLLoader
+
+    @FXML // fx:id="isDesiredColumn"
+    private TableColumn<?, ?> isDesiredColumn; // Value injected by FXMLLoader
+
+    @FXML // fx:id="viewIntroColumn"
+    private TableColumn<?, ?> viewIntroColumn; // Value injected by FXMLLoader
+
     @FXML
-    void makeLogin(ActionEvent event) {
+    void makeLogin(ActionEvent event) 
+    {
 
     }
 
     @FXML
-    void makeSearch(ActionEvent event) {
+    void makeSearch(ActionEvent event) 
+    {
 
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
-        assert loginBtn != null : "fx:id=\"loginBtn\" was not injected: check your FXML file 'StartPanel.fxml'.";
-        assert searchTextField != null : "fx:id=\"searchTextField\" was not injected: check your FXML file 'StartPanel.fxml'.";
-        assert searchBtn != null : "fx:id=\"searchBtn\" was not injected: check your FXML file 'StartPanel.fxml'.";
-        assert bookNameRB != null : "fx:id=\"bookNameRB\" was not injected: check your FXML file 'StartPanel.fxml'.";
-        assert authorNameRB != null : "fx:id=\"authorNameRB\" was not injected: check your FXML file 'StartPanel.fxml'.";
-        assert topicRB != null : "fx:id=\"topicRB\" was not injected: check your FXML file 'StartPanel.fxml'.";
-        assert freeSearchRB != null : "fx:id=\"freeSearchRB\" was not injected: check your FXML file 'StartPanel.fxml'.";
+    void initialize() 
+    {
+       
 
     }
 }
