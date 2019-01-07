@@ -1,13 +1,15 @@
-package clientBounderiesReaderAccount;
+/**
+ * Sample Skeleton for 'MyOrdersAndBorrows.fxml' Controller Class
+ */
 
+package clientBounderiesReaderAccount;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 
-public class MyOrdersAndBorrowsController 
-{
+public class MyOrdersAndBorrowsController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -53,18 +55,7 @@ public class MyOrdersAndBorrowsController
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        assert BookNameBorrowColumn != null : "fx:id=\"BookNameBorrowColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert AuthorNameBorrowColumn != null : "fx:id=\"AuthorNameBorrowColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert YearBorrowColumn != null : "fx:id=\"YearBorrowColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert TopicBorrowColumn != null : "fx:id=\"TopicBorrowColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert BorrowDateColumn != null : "fx:id=\"BorrowDateColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert ReturnDateColumn != null : "fx:id=\"ReturnDateColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert DelayBorrowButtonColumn != null : "fx:id=\"DelayBorrowButtonColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert BookNameReservColumn != null : "fx:id=\"BookNameReservColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert AuthorNameReservColumn != null : "fx:id=\"AuthorNameReservColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert YeareReservColumn != null : "fx:id=\"YeareReservColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert TopicReservColumn != null : "fx:id=\"TopicReservColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
-        assert ButtonOrderColumn != null : "fx:id=\"ButtonOrderColumn\" was not injected: check your FXML file 'MyOrdersAndBorrows.fxml'.";
+        
 
     }
 }
