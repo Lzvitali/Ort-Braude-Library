@@ -13,6 +13,7 @@ import javafx.scene.control.DatePicker;
 
 public class AddBookController 
 {
+	//comment for Vitalik
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
