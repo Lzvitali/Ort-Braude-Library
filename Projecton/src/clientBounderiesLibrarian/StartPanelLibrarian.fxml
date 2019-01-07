@@ -18,7 +18,7 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
    <children>
-      <BorderPane layoutX="17.0" layoutY="18.0" prefHeight="689.0" prefWidth="940.0">
+      <BorderPane layoutY="18.0" prefHeight="689.0" prefWidth="968.0">
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
@@ -130,7 +130,7 @@
                </children></VBox>
          </right>
          <left>
-            <AnchorPane prefHeight="580.0" prefWidth="764.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="580.0" prefWidth="787.0" BorderPane.alignment="CENTER">
                <children>
                   <VBox layoutX="51.0" layoutY="154.0" prefHeight="200.0" prefWidth="201.0" visible="false">
                      <children>
@@ -161,7 +161,7 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <TabPane layoutX="5.0" layoutY="22.0" prefHeight="536.0" prefWidth="753.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane layoutY="24.0" prefHeight="534.0" prefWidth="784.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab fx:id="searchBookTab" text="Search book">
                         <content>
@@ -216,7 +216,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchResultTable" layoutX="5.0" layoutY="149.0" prefHeight="345.0" prefWidth="743.0">
+                                    <TableView fx:id="searchResultTable" layoutX="21.0" layoutY="136.0" prefHeight="345.0" prefWidth="743.0">
                                       <columns>
                                         <TableColumn fx:id="bookNameColumn" prefWidth="232.0" text="Book name" />
                                         <TableColumn fx:id="authorNameColumn" prefWidth="167.0" text="Author name" />
@@ -283,7 +283,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchReaderAccountTable" layoutX="2.0" layoutY="138.0" prefHeight="358.0" prefWidth="746.0">
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="19.0" layoutY="137.0" prefHeight="358.0" prefWidth="746.0">
                                       <columns>
                                         <TableColumn fx:id="accountIDColumn" prefWidth="128.0" text="ID" />
                                         <TableColumn prefWidth="136.0" text="First name" />

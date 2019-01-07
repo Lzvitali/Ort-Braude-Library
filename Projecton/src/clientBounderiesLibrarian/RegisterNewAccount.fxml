@@ -107,7 +107,7 @@
          <children>
             <Label alignment="CENTER" prefHeight="28.0" prefWidth="111.0" text="Education year" textFill="#1e1d1d">
                <font>
-                  <Font name="System Italic" size="14.0" />
+                  <Font name="System Italic" size="15.0" />
                </font>
             </Label>
             <JFXComboBox fx:id="EditionYearsCmbBox" prefHeight="21.0" prefWidth="108.0" />
@@ -115,12 +115,12 @@
       </HBox>
       <JFXButton fx:id="SaveBtn" layoutX="254.0" layoutY="462.0" onAction="#saveRegistration" prefHeight="32.0" prefWidth="103.0" text="Save" />
       <JFXButton fx:id="CancelBtn" layoutX="50.0" layoutY="462.0" onAction="#cancelRegistration" prefHeight="32.0" prefWidth="95.0" text="Cancel" />
-      <Label alignment="CENTER" layoutX="50.0" layoutY="410.0" prefHeight="28.0" prefWidth="10.0" text="*" textFill="#e40a0a">
+      <Label alignment="CENTER" layoutX="50.0" layoutY="419.0" prefHeight="28.0" prefWidth="10.0" text="*" textFill="#e40a0a">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Label alignment="CENTER" layoutX="61.0" layoutY="410.0" prefHeight="28.0" prefWidth="108.0" text="Required fields" textFill="#171515" />
+      <Label alignment="CENTER" layoutX="61.0" layoutY="419.0" prefHeight="28.0" prefWidth="108.0" text="Required fields" textFill="#171515" />
       <ImageView fitHeight="37.0" fitWidth="372.0" layoutX="10.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../icons/titles-librarian/registerNewReaderAccount.gif" />

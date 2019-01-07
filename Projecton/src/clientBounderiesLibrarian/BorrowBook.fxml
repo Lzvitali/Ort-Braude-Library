@@ -3,7 +3,8 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -11,11 +12,6 @@
 
 <AnchorPane prefHeight="317.0" prefWidth="499.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="190.0" layoutY="31.0" text="Borrow Book" textFill="#293dbf">
-         <font>
-            <Font name="System Bold Italic" size="24.0" />
-         </font>
-      </Label>
       <JFXButton fx:id="AproveBtn" layoutX="355.0" layoutY="271.0" onAction="#aproveBorrowBook" text="Aprove">
          <font>
             <Font name="System Bold" size="14.0" />
@@ -25,7 +21,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <VBox layoutX="136.0" layoutY="79.0" prefHeight="102.0" prefWidth="253.0" spacing="15.0">
+      <VBox layoutX="123.0" layoutY="99.0" prefHeight="102.0" prefWidth="253.0" spacing="20.0">
          <children>
             <JFXTextField labelFloat="true" promptText="Reader Account ID">
                <font>
@@ -41,7 +37,12 @@
                </font>
             </JFXTextField>
          </children></VBox>
-      <Text fx:id="BorrowDateText" layoutX="144.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrow date" />
-      <Text fx:id="ReturnDateText" layoutX="272.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return date" />
+      <Text fx:id="BorrowDateText" layoutX="138.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrow date" />
+      <Text fx:id="ReturnDateText" layoutX="266.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return date" />
+      <ImageView fitHeight="54.0" fitWidth="337.0" layoutX="94.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../icons/titles-librarian/borrowBook.gif" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
