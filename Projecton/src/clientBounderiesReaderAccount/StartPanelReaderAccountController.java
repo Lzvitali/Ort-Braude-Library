@@ -1,4 +1,4 @@
-package clientBounderiesReaderAccount;
+package clientBounderiesReaderAccount; 
 
 public class StartPanelReaderAccountController {
 
