@@ -10,5 +10,6 @@ public class ReaderAccount extends User
 	private String email;
 	private String status; // active/frozen/locked
 	private int numOfDelays;
-	
+	private String adress;//add to table column 
+	private String educationYear;//add to table column 
 }

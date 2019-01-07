@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="500.0" prefWidth="620.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
-	<!-- TODO Add Nodes -->
+<AnchorPane prefHeight="194.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="158.0" layoutY="27.0" text="Delete Book Copy" textFill="#0d1d94">
+         <font>
+            <Font name="System Bold Italic" size="23.0" />
+         </font>
+      </Label>
+      <JFXTextField alignment="TOP_LEFT" layoutX="122.0" layoutY="97.0" promptText="Copy ID">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton buttonType="RAISED" layoutX="365.0" layoutY="94.0" prefHeight="34.0" prefWidth="71.0" text="Ok" />
+      <JFXButton layoutX="35.0" layoutY="148.0" prefHeight="34.0" prefWidth="71.0" text="Cancel" />
+   </children>
 </AnchorPane>
