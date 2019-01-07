@@ -8,7 +8,8 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-public class ReturnBookController {
+public class ReturnBookController
+{
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
