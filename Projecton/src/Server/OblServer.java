@@ -51,7 +51,12 @@ public OblServer(int port)
 
 public void handleMessageFromClient(Object msg, ConnectionToClient client)
 {
-
+	ObjectMessage objectMessage=(ObjectMessage)msg;
+	if(objectMessage.getObjectList().get(0) instanceof Book)
+	{
+	//	ABookDBController.Selection(objectMessage,connToSQL);
+	}
+	
 	
 }
 

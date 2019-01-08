@@ -7,7 +7,7 @@ package clientCommonBounderies;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
-
+import Common.Book;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import clientConrollers.OBLClient;
@@ -95,7 +95,14 @@ public class StartPanelController implements IGUIController
     @FXML
     void makeSearch(ActionEvent event) 
     {
-
+    	//lets example that will be here valdaion for book(still not exist so didnt write)
+    	
+    	//if success do this and if selected book :
+    	
+    	Book book= new Book(searchTextField.getText());
+    	ObjectMessage objectMessage=new ObjectMessage(book,"SearchBook");
+    	connToClientController.handleMessageFromClient(objectMessage);
+    	
     }
 
     

@@ -14,4 +14,18 @@ public class Book implements IEntity
 	private Button reserve;
 	private Button details;
 	
+	
+	public Book(String bookName)
+	{
+		this.bookName=bookName;
+	}
+
+	
+	
+	
+
+	public String getBookName() {
+		return bookName;
+	}
+
 }
