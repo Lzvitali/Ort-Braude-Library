@@ -25,6 +25,10 @@ import javafx.scene.control.TableView;
 
 public class StartPanelLibrarianController implements IGUIController
 {
+	//Class variables *************************************************
+	private int port;
+	private String host;
+
 	//Instance variables **********************************************
 
 	/**
@@ -139,29 +143,13 @@ public class StartPanelLibrarianController implements IGUIController
     private TableColumn<?, ?> borrowsAndReservesColumn; // Value injected by FXMLLoader
     
     
-    ///////////////////////////////////////////////////////////////////////////////////
-    //for the Library Director only
-    @FXML // fx:id="reportBtn"
-    private Button reportBtn; // Value injected by FXMLLoader
-    
-    @FXML
-    void openReportWindow(ActionEvent event) 
-    {
-
-    }
-    ///////////////////////////////////////////////////////////////////////////////////
-    
-    
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize(String []connectionDetails) 
+    void initialize(String ip,int port) 
     {
-    	
-    	String ip = connectionDetails[0];
-    	int port = Integer.parseInt(connectionDetails[0]);
-    	
+    	//liklot et ha mishtanim
     	try 
         {
-          client= new OBLClient(ip, port, this);
+          client= new OBLClient(host, port, this);
         } 
         catch(IOException exception) 
         {

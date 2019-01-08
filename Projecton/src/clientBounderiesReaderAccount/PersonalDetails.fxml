@@ -1,8 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+
+<AnchorPane prefHeight="501.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+   <children>
+      <Label layoutX="127.0" layoutY="15.0" prefHeight="45.0" prefWidth="251.0" text="Personal details" textFill="#0b1472">
+         <font>
+            <Font name="System Bold Italic" size="30.0" />
+         </font>
+      </Label>
+      <VBox layoutX="203.0" layoutY="82.0" prefHeight="216.0" prefWidth="220.0" spacing="10.0">
+         <children>
+            <TextField fx:id="FirstNameTextField" editable="false" prefHeight="26.0" prefWidth="131.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="LastnameTextField" editable="false">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="IDTextField" editable="false">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="PhoneTextField">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="AdressTextField">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="EducationYearTextField">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="EmailTextField">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+         </children>
+      </VBox>
+      <VBox layoutX="89.0" layoutY="82.0" prefHeight="293.0" prefWidth="110.0" spacing="21.0">
+         <children>
+            <Label prefHeight="26.0" prefWidth="131.0" text="Frist name">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="26.0" prefWidth="131.0" text="Last name">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="26.0" prefWidth="131.0" text="ID">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="26.0" prefWidth="131.0" text="Phone">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="26.0" prefWidth="131.0" text="Email">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="26.0" prefWidth="131.0" text="Adress">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="26.0" prefWidth="131.0" text="Education year">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="26.0" prefWidth="131.0" />
+         </children>
+      </VBox>
+      <HBox layoutX="65.0" layoutY="435.0" prefHeight="45.0" prefWidth="375.0">
+         <children>
+            <JFXButton fx:id="cancelBtn" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Cancel">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <AnchorPane prefHeight="36.0" prefWidth="136.0" />
+            <JFXButton fx:id="UpdatePersonalDetailsBtn" onAction="#updatePersonalDetailsClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Update">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </HBox>
+   </children>
 </AnchorPane>
-
