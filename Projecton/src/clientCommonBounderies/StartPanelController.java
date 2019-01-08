@@ -2,7 +2,7 @@
  * Sample Skeleton for 'StartPanel.fxml' Controller Class
  */
 
-package clientBounderies;
+package clientCommonBounderies;
 
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;

@@ -36,7 +36,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <Button fx:id="logOutBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#makeLogin" prefHeight="67.0" prefWidth="95.0" text="Log out">
+                  <Button fx:id="logOutBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#makeLogOut" prefHeight="67.0" prefWidth="95.0" text="Log out">
                      <graphic>
                         <ImageView fitHeight="32.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                            <image>

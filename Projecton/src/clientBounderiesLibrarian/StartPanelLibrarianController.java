@@ -1,11 +1,13 @@
-/**
- * Sample Skeleton for 'StartPanelLibrarian.fxml' Controller Class
- */
-
 package clientBounderiesLibrarian;
 
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+
+import Common.IGUIController;
+import Common.ObjectMessage;
+import clientConrollers.OBLClient;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -15,9 +17,26 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class StartPanelLibrarianController 
-{
 
+/**
+ *  Controller Class for 'StartPanelLibrarian.fxml' 
+ */
+
+
+public class StartPanelLibrarianController implements IGUIController
+{
+	//Class variables *************************************************
+	private int port;
+	private String host;
+
+	//Instance variables **********************************************
+
+	/**
+	 * The instance of the client that created this ConsoleChat.
+	 */
+	OBLClient client;
+
+	
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
@@ -26,9 +45,6 @@ public class StartPanelLibrarianController
 
     @FXML // fx:id="logOutBtn"
     private Button logOutBtn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="mainBtn"
-    private Button mainBtn; // Value injected by FXMLLoader
 
     @FXML // fx:id="borrowBookBtn"
     private Button borrowBookBtn; // Value injected by FXMLLoader
@@ -125,9 +141,27 @@ public class StartPanelLibrarianController
 
     @FXML // fx:id="borrowsAndReservesColumn"
     private TableColumn<?, ?> borrowsAndReservesColumn; // Value injected by FXMLLoader
+    
+    
+    @FXML // This method is called by the FXMLLoader when initialization is complete
+    void initialize(String ip,int port) 
+    {
+    	//liklot et ha mishtanim
+    	try 
+        {
+          client= new OBLClient(host, port, this);
+        } 
+        catch(IOException exception) 
+        {
+        	System.out.println("Error: Can't setup connection!"+ " Terminating client.");
+        	System.exit(1);
+        }
+    	
+    }
+    
 
     @FXML
-    void makeLogin(ActionEvent event) 
+    void makeLogOut(ActionEvent event) 
     {
 
     }
@@ -151,12 +185,7 @@ public class StartPanelLibrarianController
     }
 
     @FXML
-    void openDeleteBookBtn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void openMain(ActionEvent event) 
+    void openDeleteBookBtn(ActionEvent event) 
     {
 
     }
@@ -173,9 +202,14 @@ public class StartPanelLibrarianController
 
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() 
-    {
-        
-    }
+
+	@Override
+	public void display(ObjectMessage msg) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+   
 }
+
