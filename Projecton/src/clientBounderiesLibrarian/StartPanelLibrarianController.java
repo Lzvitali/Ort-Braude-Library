@@ -12,10 +12,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 /**
@@ -33,116 +38,110 @@ public class StartPanelLibrarianController implements IGUIController
 	OBLClient client;
 
 	
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
-
     @FXML // fx:id="logOutBtn"
-    private Button logOutBtn; // Value injected by FXMLLoader
+    private Button logOutBtn; 
 
     @FXML // fx:id="borrowBookBtn"
-    private Button borrowBookBtn; // Value injected by FXMLLoader
+    private Button borrowBookBtn; 
 
     @FXML // fx:id="returnBookBtn"
-    private Button returnBookBtn; // Value injected by FXMLLoader
+    private Button returnBookBtn;
 
     @FXML // fx:id="addBookBtn"
-    private Button addBookBtn; // Value injected by FXMLLoader
+    private Button addBookBtn; 
 
     @FXML // fx:id="deleteBookBtn"
-    private Button deleteBookBtn; // Value injected by FXMLLoader
+    private Button deleteBookBtn; 
 
     @FXML // fx:id="registerNewAccountBtn"
-    private Button registerNewAccountBtn; // Value injected by FXMLLoader
+    private Button registerNewAccountBtn; 
 
     @FXML // fx:id="searchBookTab"
-    private Tab searchBookTab; // Value injected by FXMLLoader
+    private Tab searchBookTab; 
 
     @FXML // fx:id="searchBookTextField"
-    private JFXTextField searchBookTextField; // Value injected by FXMLLoader
+    private JFXTextField searchBookTextField; 
 
     @FXML // fx:id="searchBookBtn"
-    private Button searchBookBtn; // Value injected by FXMLLoader
+    private Button searchBookBtn; 
 
     @FXML // fx:id="bookNameRB"
-    private JFXRadioButton bookNameRB; // Value injected by FXMLLoader
+    private JFXRadioButton bookNameRB; 
 
     @FXML // fx:id="authorNameRB"
-    private JFXRadioButton authorNameRB; // Value injected by FXMLLoader
+    private JFXRadioButton authorNameRB; 
 
     @FXML // fx:id="topicRB"
-    private JFXRadioButton topicRB; // Value injected by FXMLLoader
+    private JFXRadioButton topicRB; 
 
     @FXML // fx:id="freeSearchBookRB"
-    private JFXRadioButton freeSearchBookRB; // Value injected by FXMLLoader
+    private JFXRadioButton freeSearchBookRB; 
 
     @FXML // fx:id="searchResultTable"
-    private TableView<?> searchResultTable; // Value injected by FXMLLoader
+    private TableView<?> searchResultTable; 
 
     @FXML // fx:id="bookNameColumn"
-    private TableColumn<?, ?> bookNameColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> bookNameColumn; 
 
     @FXML // fx:id="authorNameColumn"
-    private TableColumn<?, ?> authorNameColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> authorNameColumn; 
 
     @FXML // fx:id="bookYearColumn"
-    private TableColumn<?, ?> bookYearColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> bookYearColumn; 
 
     @FXML // fx:id="BookTopicColumn"
-    private TableColumn<?, ?> BookTopicColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> BookTopicColumn; 
 
     @FXML // fx:id="isDesiredBookColumn"
-    private TableColumn<?, ?> isDesiredBookColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> isDesiredBookColumn; 
 
     @FXML // fx:id="viewIntroColumn"
-    private TableColumn<?, ?> viewIntroColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> viewIntroColumn; 
 
     @FXML // fx:id="searchReaderAccountTab"
-    private Tab searchReaderAccountTab; // Value injected by FXMLLoader
+    private Tab searchReaderAccountTab; 
 
     @FXML // fx:id="searchReaderAccountSearchField"
-    private JFXTextField searchReaderAccountSearchField; // Value injected by FXMLLoader
+    private JFXTextField searchReaderAccountSearchField; 
 
     @FXML // fx:id="searchReaderAccountBtn"
-    private Button searchReaderAccountBtn; // Value injected by FXMLLoader
+    private Button searchReaderAccountBtn; 
 
     @FXML // fx:id="iDRB"
-    private JFXRadioButton iDRB; // Value injected by FXMLLoader
+    private JFXRadioButton iDRB; 
 
     @FXML // fx:id="firstNameRB"
-    private JFXRadioButton firstNameRB; // Value injected by FXMLLoader
+    private JFXRadioButton firstNameRB; 
 
     @FXML // fx:id="lastNameRB"
-    private JFXRadioButton lastNameRB; // Value injected by FXMLLoader
+    private JFXRadioButton lastNameRB; 
 
     @FXML // fx:id="freeSearchReaderAccountRB"
-    private JFXRadioButton freeSearchReaderAccountRB; // Value injected by FXMLLoader
+    private JFXRadioButton freeSearchReaderAccountRB; 
 
     @FXML // fx:id="searchReaderAccountTable"
-    private TableView<?> searchReaderAccountTable; // Value injected by FXMLLoader
+    private TableView<?> searchReaderAccountTable; 
 
     @FXML // fx:id="accountIDColumn"
-    private TableColumn<?, ?> accountIDColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> accountIDColumn; 
 
     @FXML // fx:id="accountLastNameColumn"
-    private TableColumn<?, ?> accountLastNameColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> accountLastNameColumn; 
 
     @FXML // fx:id="accountStatusColumn"
-    private TableColumn<?, ?> accountStatusColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> accountStatusColumn; 
 
     @FXML // fx:id="accountPhoneColumn"
-    private TableColumn<?, ?> accountPhoneColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> accountPhoneColumn;
 
     @FXML // fx:id="borrowsAndReservesColumn"
-    private TableColumn<?, ?> borrowsAndReservesColumn; // Value injected by FXMLLoader
+    private TableColumn<?, ?> borrowsAndReservesColumn; 
     
-    
-    ///////////////////////////////////////////////////////////////////////////////////
     //for the Library Director only
+    ///////////////////////////////////////////////////////////////////////////////////
+  
     @FXML // fx:id="reportBtn"
-    private Button reportBtn; // Value injected by FXMLLoader
+    private Button reportBtn; 
     
     @FXML
     void openReportWindow(ActionEvent event) 
@@ -187,13 +186,13 @@ public class StartPanelLibrarianController implements IGUIController
     @FXML
     void openAddBook(ActionEvent event) 
     {
-
+    	loadWindow("/clientBounderiesLibrarian/AddBook.fxml","Add book copy");
     }
 
     @FXML
     void openBorrowBook(ActionEvent event) 
     {
-
+    	loadWindow("/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
     }
 
     @FXML
@@ -212,6 +211,29 @@ public class StartPanelLibrarianController implements IGUIController
     void openReturnBook(ActionEvent event) 
     {
 
+    }
+    
+    /**
+     * this function open new the new window from current one 
+     * @param loc is the location of the fxml file 
+     * @param title is the title of the new window
+     */
+    void loadWindow(String loc, String title)
+    {
+    	try 
+    	{
+			Parent parent = FXMLLoader.load(getClass().getResource(loc));
+			Stage stage = new Stage(StageStyle.DECORATED);
+			stage.setTitle(title);
+			stage.setScene(new Scene(parent));
+			stage.show();
+		} 
+    	catch (IOException e) 
+    	{
+    		//-----TO_DO: open error message
+			e.printStackTrace();
+		}
+    	
     }
 
 
