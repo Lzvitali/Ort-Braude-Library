@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+<AnchorPane prefHeight="474.0" prefWidth="538.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="65.0" fitWidth="301.0" layoutX="166.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="65.0" fitWidth="301.0" layoutX="168.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../icons/viewHistoryTitle.png" />
          </image>
       </ImageView>
+      <TableView layoutX="18.0" layoutY="79.0" prefHeight="337.0" prefWidth="503.0">
+        <columns>
+          <TableColumn fx:id="ActionDateColumn" prefWidth="121.0" text="Action date" />
+          <TableColumn fx:id="ActionColumn" prefWidth="183.0" text="Action" />
+            <TableColumn fx:id="Details" prefWidth="244.0" text="Details" />
+        </columns>
+      </TableView>
+      <JFXButton fx:id="ExitBtn" layoutX="48.0" layoutY="429.0" onAction="#exitBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Exit">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>
