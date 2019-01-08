@@ -9,13 +9,16 @@
 
 <AnchorPane prefHeight="194.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXTextField fx:id="CopyIdTextField" alignment="TOP_LEFT" layoutX="122.0" layoutY="97.0" promptText="Copy ID">
+      <JFXTextField fx:id="CopyIdTextField" alignment="TOP_LEFT" layoutX="122.0" layoutY="97.0" prefHeight="28.0" prefWidth="196.0" promptText="Copy ID">
          <font>
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXButton fx:id="OkDeleteBtn" buttonType="RAISED" layoutX="365.0" layoutY="94.0" onAction="#okDeleteBtnClicked" prefHeight="34.0" prefWidth="71.0" text="Ok" />
-      <JFXButton fx:id="CancelBtn" layoutX="35.0" layoutY="148.0" onAction="#cancelBtnClicked" prefHeight="34.0" prefWidth="71.0" text="Cancel" />
+      <JFXButton fx:id="OkDeleteBtn" buttonType="RAISED" layoutX="331.0" layoutY="94.0" onAction="#okDeleteBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Ok" />
+      <JFXButton fx:id="CancelBtn" layoutX="61.0" layoutY="146.0" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font></JFXButton>
       <ImageView fitHeight="46.0" fitWidth="356.0" layoutX="82.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../icons/titles-librarian/deleteBookCopy.png" />

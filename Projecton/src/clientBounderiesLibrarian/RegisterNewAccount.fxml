@@ -113,8 +113,6 @@
             <JFXComboBox fx:id="EditionYearsCmbBox" prefHeight="21.0" prefWidth="108.0" />
          </children>
       </HBox>
-      <JFXButton fx:id="SaveBtn" layoutX="254.0" layoutY="462.0" onAction="#saveRegistration" prefHeight="32.0" prefWidth="103.0" text="Save" />
-      <JFXButton fx:id="CancelBtn" layoutX="50.0" layoutY="462.0" onAction="#cancelRegistration" prefHeight="32.0" prefWidth="95.0" text="Cancel" />
       <Label alignment="CENTER" layoutX="50.0" layoutY="419.0" prefHeight="28.0" prefWidth="10.0" text="*" textFill="#e40a0a">
          <font>
             <Font name="System Bold Italic" size="18.0" />
@@ -126,5 +124,20 @@
             <Image url="@../../icons/titles-librarian/registerNewReaderAccount.gif" />
          </image>
       </ImageView>
+      <HBox layoutX="41.0" layoutY="474.0" prefHeight="54.0" prefWidth="372.0">
+         <children>
+            <JFXButton fx:id="CancelBtn" onAction="#cancelRegistration" prefHeight="32.0" prefWidth="95.0" stylesheets="@buttonsStyle.css" text="Cancel">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+            <AnchorPane prefHeight="54.0" prefWidth="125.0" />
+            <JFXButton fx:id="SaveBtn" onAction="#saveRegistration" prefHeight="32.0" prefWidth="103.0" stylesheets="@buttonsStyle.css" text="Save">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

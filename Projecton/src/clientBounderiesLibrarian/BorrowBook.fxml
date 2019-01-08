@@ -6,21 +6,13 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="317.0" prefWidth="499.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <JFXButton fx:id="AproveBtn" layoutX="355.0" layoutY="271.0" onAction="#aproveBorrowBook" text="Aprove">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font></JFXButton>
-      <JFXButton fx:id="CancelBtn" layoutX="57.0" layoutY="271.0" onAction="#cancelBorrrow" text="Cancel">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </JFXButton>
       <VBox layoutX="123.0" layoutY="99.0" prefHeight="102.0" prefWidth="253.0" spacing="20.0">
          <children>
             <JFXTextField labelFloat="true" promptText="Reader Account ID">
@@ -37,12 +29,27 @@
                </font>
             </JFXTextField>
          </children></VBox>
-      <Text fx:id="BorrowDateText" layoutX="138.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrow date" />
-      <Text fx:id="ReturnDateText" layoutX="266.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return date" />
+      <Text fx:id="BorrowDateText" layoutX="137.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrow date" />
+      <Text fx:id="ReturnDateText" layoutX="292.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return date" />
       <ImageView fitHeight="54.0" fitWidth="337.0" layoutX="94.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../icons/titles-librarian/borrowBook.gif" />
          </image>
       </ImageView>
+      <HBox layoutX="123.0" layoutY="256.0" prefHeight="47.0" prefWidth="303.0">
+         <children>
+            <JFXButton fx:id="CancelBtn" onAction="#cancelBorrrow" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </JFXButton>
+            <AnchorPane prefHeight="47.0" prefWidth="26.0" />
+            <JFXButton fx:id="AproveBtn" onAction="#aproveBorrowBook" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Aprove">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
