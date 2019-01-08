@@ -19,7 +19,7 @@ public class Main extends Application
 	{
 		Parent root;
 		 
-		root = FXMLLoader.load(getClass().getResource("/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml"));
+		root = FXMLLoader.load(getClass().getResource("/clientBounderiesLibrarian/StartPanelLibrarian.fxml"));
 			
 		//attach scene graph to scene
 		Scene scene = new Scene(root);

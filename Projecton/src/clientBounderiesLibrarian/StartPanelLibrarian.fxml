@@ -271,7 +271,11 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
+<<<<<<< HEAD
                                     <TableView fx:id="searchReaderAccountTable" layoutX="19.0" layoutY="137.0" prefHeight="358.0" prefWidth="746.0">
+=======
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="6.0" layoutY="137.0" prefHeight="358.0" prefWidth="718.0">
+>>>>>>> branch 'master' of https://github.com/ziper02/Projecton.git
                                       <columns>
                                         <TableColumn fx:id="accountIDColumn" prefWidth="128.0" text="ID" />
                                         <TableColumn prefWidth="136.0" text="First name" />
