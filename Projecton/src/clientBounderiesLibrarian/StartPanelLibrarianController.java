@@ -157,7 +157,7 @@ public class StartPanelLibrarianController implements IGUIController
         	System.exit(1);
         }
     	
-    }
+    } 
     
 
     @FXML
