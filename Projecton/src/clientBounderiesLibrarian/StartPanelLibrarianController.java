@@ -30,10 +30,6 @@ import javafx.stage.StageStyle;
 
 public class StartPanelLibrarianController implements IGUIController
 {
-	//Class variables *************************************************
-	private int port;
-	private String host;
-
 	//Instance variables **********************************************
 
 	/**
@@ -141,8 +137,6 @@ public class StartPanelLibrarianController implements IGUIController
     @FXML // fx:id="borrowsAndReservesColumn"
     private TableColumn<?, ?> borrowsAndReservesColumn; 
     
-<<<<<<< HEAD
-=======
     //for the Library Director only
     ///////////////////////////////////////////////////////////////////////////////////
   
@@ -156,15 +150,17 @@ public class StartPanelLibrarianController implements IGUIController
     }
     ///////////////////////////////////////////////////////////////////////////////////
     
->>>>>>> branch 'master' of https://github.com/ziper02/Projecton.git
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize(String ip,int port) 
+    void initialize(String []connectionDetails) 
     {
-    	//liklot et ha mishtanim
+    	
+    	String ip = connectionDetails[0];
+    	int port = Integer.parseInt(connectionDetails[0]);
+    	
     	try 
         {
-          client= new OBLClient(host, port, this);
+          client= new OBLClient(ip, port, this);
         } 
         catch(IOException exception) 
         {
