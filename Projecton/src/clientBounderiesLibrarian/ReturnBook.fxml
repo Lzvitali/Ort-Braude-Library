@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="186.0" prefWidth="428.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="186.0" prefWidth="428.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.ReturnBookController">
    <children>
       <JFXTextField fx:id="CopyIdTextFielf" labelFloat="true" layoutX="92.0" layoutY="90.0" prefHeight="28.0" prefWidth="173.0" promptText="Enter Copy ID">
          <font>
-            <Font size="14.0" />
+            <Font name="System Bold" size="14.0" />
          </font>
       </JFXTextField>
       <JFXButton fx:id="OkBtn" buttonType="RAISED" layoutX="275.0" layoutY="93.0" onAction="#OkBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Ok">

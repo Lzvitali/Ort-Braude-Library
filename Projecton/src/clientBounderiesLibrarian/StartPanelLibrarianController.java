@@ -198,19 +198,19 @@ public class StartPanelLibrarianController implements IGUIController
     @FXML
     void openDeleteBookBtn(ActionEvent event) 
     {
-
+    	loadWindow("/clientBounderiesLibrarian/DeleteBook.fxml","Delete book");
     }
 
     @FXML
     void openRegisterNewAccount(ActionEvent event) 
     {
-
+    	loadWindow("/clientBounderiesLibrarian/RegisterNewAccount.fxml","Registrate new reader account");
     }
 
     @FXML
     void openReturnBook(ActionEvent event) 
     {
-
+    	loadWindow("/clientBounderiesLibrarian/ReturnBook.fxml","Return book");
     }
     
     /**
