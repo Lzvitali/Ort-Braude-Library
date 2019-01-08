@@ -6,15 +6,26 @@ package clientCommonBounderies;
 
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+
+
+import Common.IGUIController;
+import Common.ObjectMessage;
+import clientConrollers.OBLClient;
+
+import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class StartPanelController 
+public class StartPanelController implements IGUIController
 {
 
     @FXML // ResourceBundle that was given to the FXMLLoader 
@@ -65,6 +76,16 @@ public class StartPanelController
     @FXML // fx:id="viewIntroColumn"
     private TableColumn<?, ?> viewIntroColumn; // Value injected by FXMLLoader
 
+    OBLClient connToClientController;
+    
+    
+    @FXML // This method is called by the FXMLLoader when initialization is complete
+    void initialize(String[] arr) 
+   {
+    	connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
+
+   }
+    
     @FXML
     void makeLogin(ActionEvent event) 
     {
@@ -77,10 +98,41 @@ public class StartPanelController
 
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-     void initialize(String[] arr) 
+    
+    
+    
+    public  void connect(String ip,int port) //make the connection to ClientController.
     {
-       
-
+        try 
+        {
+        	connToClientController= new OBLClient(ip, port,this);
+		} catch (IOException e) 
+        {
+			e.printStackTrace();
+			alertError("Please check server connection","No Server Connection ");
+		}
     }
+    
+    
+    
+    private void alertError(String headerText,String title) // if dont have connection to server print propper message and exit
+    { 
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        ButtonType bttexit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().clear();
+        alert.setHeaderText(headerText);
+        alert.setTitle(title);
+        alert.getButtonTypes().addAll(bttexit);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) {
+            System.exit(0);
+        }
+    }
+
+	@Override
+	public void display(ObjectMessage msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

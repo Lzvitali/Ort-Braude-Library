@@ -9,7 +9,7 @@ public abstract class AValidationInput
 {/**
 *this method call to the relevant method according the field that was sent
 */
-	public static String chackValidationUser(String field, String context)
+	public static String checkValidationUser(String field, String context)
 	{
 		String result="correct";
 		switch(field)

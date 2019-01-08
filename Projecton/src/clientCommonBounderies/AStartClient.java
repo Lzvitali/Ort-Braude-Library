@@ -41,7 +41,7 @@ public class AStartClient extends Application
         }
         root.setId("pane");
         primaryStage.setTitle("OBL");
-        Scene scene=new Scene(root, 750, 450);
+        Scene scene=new Scene(root, 980, 720);
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(e->{ System.exit(0);}); // if the user press "cross" button , its close all threads ( exit from process);
         primaryStage.show(); //start the scene
