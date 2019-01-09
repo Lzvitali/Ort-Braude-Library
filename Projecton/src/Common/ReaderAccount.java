@@ -12,4 +12,8 @@ public class ReaderAccount extends User
 	private int numOfDelays;
 	private String adress;//add to table column 
 	private String educationYear;//add to table column 
+
+	//buttons for the Librarian and for the Library director
+	private Button borrowsAndReserves;
+	private Button freeze;
 }

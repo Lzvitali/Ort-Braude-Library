@@ -144,6 +144,9 @@ public class StartPanelLibrarianController implements IGUIController
     private Button reportBtn; 
     
     @FXML
+    private TableColumn<?, ?> freezeColumn;
+    
+    @FXML
     void openReportWindow(ActionEvent event) 
     {
 
