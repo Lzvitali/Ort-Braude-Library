@@ -1,5 +1,7 @@
 package Common;
 
+import java.sql.Date;
+
 import javafx.scene.control.Button;
 
 public class Book implements IEntity 
@@ -7,7 +9,7 @@ public class Book implements IEntity
 	private int bookID;
 	private String bookName;
 	private String authorName;
-	private String year;
+	private Date dateOfBook;
 	private String topic;
 	private boolean isDesired; 
 	//buttonss

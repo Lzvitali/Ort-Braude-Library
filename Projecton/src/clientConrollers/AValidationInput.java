@@ -1,4 +1,11 @@
 package clientConrollers;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * 
  * @author Ester Asulin
@@ -16,31 +23,62 @@ public abstract class AValidationInput
 		{
 			case "UserID":
 			{	
-				result=chackValidationID(context);
+				result=checkValidationID(context);
 				break;
 			}
 			case "Last Name":
 			{
-				result=chackValidationLastName(context);
+				result=checkValidationLastName(context);
 				break;
 			}
 			case "First Name":
 			{
-				result=chackValidationFirstName(context);
+				result=checkValidationFirstName(context);
 				break;
 			}
 			case "Phone Number":
 			{
-				result=chackValidationPhoneNumber(context);
+				result=checkValidationPhoneNumber(context);
 				break;
 
 			}
 			case "Email":
 			{
-				result=chackValidationEmail(context);
+				result=checkValidationEmail(context);
 				break;
 
 			}
+			case "bookID":
+			{
+				result=checkValidationBookID(context); 
+				break;
+
+			}
+			case "bookName":
+			{
+				result=checkValidationBookName(context);
+				break;
+
+			}
+			case "authorName":
+			{
+				result=checkValidationAuthorName(context);
+				break;
+
+			}
+			case "dateOfBook":
+			{
+				result=checkValidationDateOfBook(context); 
+				break;
+
+			}
+			case "topic":
+			{
+				result=checkValidationTopic(context);
+				break;
+
+			}
+				
 		}
 		return result;
 	}
@@ -49,7 +87,7 @@ public abstract class AValidationInput
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
 	 */
-	private static String chackValidationEmail(String context)
+	private static String checkValidationEmail(String context)
 	{
 		if(context.equals(""))
 		{
@@ -70,7 +108,7 @@ public abstract class AValidationInput
  * @param context is the value of the field
  * @return correct if context passed all the Tests else return the match massage by the test how's fails 
 */
-	private static String chackValidationPhoneNumber(String context)
+	private static String checkValidationPhoneNumber(String context)
 	{
 		if(context.equals(""))
 		{
@@ -95,7 +133,7 @@ public abstract class AValidationInput
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
 	*/
-	private static String chackValidationFirstName(String context)
+	private static String checkValidationFirstName(String context)
 	{
 		if(context.equals(""))
 		{
@@ -116,7 +154,7 @@ public abstract class AValidationInput
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
 	*/
-	private static String chackValidationLastName(String context)
+	private static String checkValidationLastName(String context)
 	{
 		if(context.equals(""))
 		{
@@ -137,7 +175,7 @@ public abstract class AValidationInput
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
 	*/
-	private static String chackValidationID(String context)
+	private static String checkValidationID(String context)
 	{
 		if(context.equals(""))
 		{
@@ -230,6 +268,31 @@ public abstract class AValidationInput
 		}
 		return true;
 	}
+	
+	private static boolean checkDateOfBookBeforeToday(String context)
+	{
+		
+		
+		//check if date before is before today
+	    Date enteredDate=null;
+	    try
+	    {
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM");
+	    enteredDate = sdf.parse(context);
+	    }catch (Exception ex)
+	    {
+	        // enteredDate will be null if date="287686";
+	    }
+	    Date currentDate = new Date();      
+	    if(enteredDate.after(currentDate)){
+	        return false;
+	    }
+	    else 
+	    	return true;
+	    
+		
+	}
+	
 	/**
 	 * this method is called by checkValidationPhoneNumbers or chackValidationID
 	 * it checks if the string contains only numbers
@@ -284,5 +347,85 @@ public abstract class AValidationInput
 			return false;
 		}
 		return true;
+	}
+	
+	private static String checkValidationBookID(String context)
+	{
+		if(context.equals(""))
+		{
+			return"Insert 9 digit book id";	
+		}
+		if(context.length()<9)
+		{
+			return "Insert 9 digit book id or fill zero before";
+		}
+		if(!onlyNumbers(context))
+		{
+			return "You must fill only numbers";
+		}
+		
+		return "correct";
+	}
+	
+	private static String checkValidationBookName(String context)
+	{
+		if(context.equals(""))
+		{
+			return"Insert Name Of A Book";	
+		}
+		if(context.length()>15)
+		{
+			return "The Book Name is too long";
+		}
+		
+		return "correct";
+	}
+	
+	
+	private static String checkValidationAuthorName(String context)
+	{
+		if(context.equals(""))
+		{
+			return "Insert Author Name";	
+		}
+		if(context.length()>15)
+		{
+			return "The Author Name is too long";
+		}
+		if(!onlyCharacters(context))
+		{
+			return "You must fill only character";
+		}
+		return "correct";
+	}
+	
+	private static String checkValidationTopic(String context)
+	{
+		if(context.equals(""))
+		{
+			return "Insert Topic";	
+		}
+		if(context.length()>15)
+		{
+			return "The Topic is too long"; 
+		}
+		if(!onlyCharacters(context))
+		{
+			return "You must fill only character";
+		}
+		return "correct";
+	}
+	
+	private static String checkValidationDateOfBook(String context)
+	{
+		if(!onlyNumbers(context))
+		{
+			return "Year must be only numbers";
+		}
+		if(!checkDateOfBookBeforeToday(context)) 
+		{
+			return "Date is bigger than the date of today";	
+		}
+		return "correct";
 	}
 }
