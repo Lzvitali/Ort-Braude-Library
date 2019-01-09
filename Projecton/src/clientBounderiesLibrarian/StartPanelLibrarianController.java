@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
 import Common.IGUIController;
+import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import clientCommonBounderies.AClientCommonUtilities;
 import clientConrollers.OBLClient;
@@ -22,7 +23,7 @@ import javafx.scene.control.TableView;
  */
 
 
-public class StartPanelLibrarianController implements IGUIController
+public class StartPanelLibrarianController implements IGUIController,IGUIStartPanel
 {
 	//Instance variables **********************************************
 
@@ -31,7 +32,8 @@ public class StartPanelLibrarianController implements IGUIController
 	 */
 	OBLClient client;
 
-	public static int ActiveWindows=0; 
+	private static int activeWindows=0; 
+	
     @FXML // fx:id="logOutBtn"
     private Button logOutBtn; 
 
@@ -213,9 +215,21 @@ public class StartPanelLibrarianController implements IGUIController
     
     	
 
+
 	@Override
-	public void display(ObjectMessage msg) 
+	public int getActivateWindows() 
 	{
+		return activeWindows;
+	}
+
+
+	@Override
+	public void setActivateWindows(int newWindows) 
+	{
+		activeWindows=newWindows;
+	}
+	@Override
+	public void display(ObjectMessage msg) {
 		// TODO Auto-generated method stub
 		
 	}
