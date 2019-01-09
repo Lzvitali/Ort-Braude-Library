@@ -31,7 +31,7 @@ public class StartPanelLibrarianController implements IGUIController
 	 */
 	OBLClient client;
 
-	
+	public static int ActiveWindows=0; 
     @FXML // fx:id="logOutBtn"
     private Button logOutBtn; 
 

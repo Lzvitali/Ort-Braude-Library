@@ -13,7 +13,7 @@ import javafx.scene.Scene;
 //main to check the gui 
 public class Main extends Application 
 {
-	
+	public static Stage PrimaryStage;
 	@Override
 	public void start(Stage primaryStage) throws IOException
 	{
@@ -23,8 +23,12 @@ public class Main extends Application
 			
 		//attach scene graph to scene
 		Scene scene = new Scene(root);
-		
+		PrimaryStage=primaryStage;
 		//setting the stage
+		PrimaryStage.setOnCloseRequest(e->
+		{ 
+			System.exit(0);
+		});
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Try");
 		primaryStage.show();

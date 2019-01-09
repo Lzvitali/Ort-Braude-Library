@@ -3,6 +3,8 @@ package clientCommonBounderies;
 import java.io.IOException;
 import java.util.Optional;
 
+import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientConrollers.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -31,11 +33,25 @@ public abstract class AClientCommonUtilities
 	{
 		try 
 		{
-			Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
-			Stage stage = new Stage(StageStyle.DECORATED);
-			stage.setTitle(title);
-			stage.setScene(new Scene(parent));
-			stage.show();
+			if(StartPanelLibrarianController.ActiveWindows==0)
+			{
+				Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
+				Stage stage = new Stage(StageStyle.DECORATED);
+				stage.setTitle(title);
+				stage.setScene(new Scene(parent));
+				stage.show();
+				stage.setOnCloseRequest(e->
+				{
+					stage.close();
+					StartPanelLibrarianController.ActiveWindows--;
+				});
+				StartPanelLibrarianController.ActiveWindows++;
+			}
+			else
+			{
+				infoAlert("You have already active window ,close him first","Already activate task");
+			}
+
 		} 
 		catch (IOException e) 
 		{
