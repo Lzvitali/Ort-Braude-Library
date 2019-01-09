@@ -106,16 +106,16 @@ public class RegisterNewReaderAccountController {
     
     
     void infoAlert(String headerText,String title)  //print propper message according to value that enterd
-    	{
+    {
     	Platform.runLater(()->
     	{   
     		Alert alert = new Alert(Alert.AlertType.INFORMATION);
-	        ButtonType bttCountiue = new ButtonType("countiue", ButtonBar.ButtonData.FINISH);
-	        alert.getButtonTypes().clear();
-	        alert.setHeaderText(headerText);
-	        alert.setTitle(title);
-	        alert.getButtonTypes().addAll(bttCountiue);
-	        Optional<ButtonType> result = alert.showAndWait();
-	    });
+    		ButtonType bttCountiue = new ButtonType("countiue", ButtonBar.ButtonData.FINISH);
+    		alert.getButtonTypes().clear();
+    		alert.setHeaderText(headerText);
+    		alert.setTitle(title);
+    		alert.getButtonTypes().addAll(bttCountiue);
+    		Optional<ButtonType> result = alert.showAndWait();
+    	});
     }
 }

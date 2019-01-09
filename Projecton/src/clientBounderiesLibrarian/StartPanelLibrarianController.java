@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 
 import Common.IGUIController;
 import Common.ObjectMessage;
+import clientCommonBounderies.ACommonActions;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
@@ -189,56 +190,35 @@ public class StartPanelLibrarianController implements IGUIController
     @FXML
     void openAddBook(ActionEvent event) 
     {
-    	loadWindow("/clientBounderiesLibrarian/AddBook.fxml","Add book copy");
+    	ACommonActions.loadWindow(getClass(),"/clientBounderiesLibrarian/AddBook.fxml","Add book copy");
     }
 
     @FXML
     void openBorrowBook(ActionEvent event) 
     {
-    	loadWindow("/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
+    	ACommonActions.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
     }
 
     @FXML
     void openDeleteBookBtn(ActionEvent event) 
     {
-    	loadWindow("/clientBounderiesLibrarian/DeleteBook.fxml","Delete book");
+    	ACommonActions.loadWindow(getClass(),"/clientBounderiesLibrarian/DeleteBook.fxml","Delete book");
     }
 
     @FXML
     void openRegisterNewAccount(ActionEvent event) 
     {
-    	loadWindow("/clientBounderiesLibrarian/RegisterNewAccount.fxml","Registrate new reader account");
+    	ACommonActions.loadWindow(getClass(),"/clientBounderiesLibrarian/RegisterNewAccount.fxml","Registrate new reader account");
     }
 
     @FXML
     void openReturnBook(ActionEvent event) 
     {
-    	loadWindow("/clientBounderiesLibrarian/ReturnBook.fxml","Return book");
+    	ACommonActions.loadWindow(getClass(),"/clientBounderiesLibrarian/ReturnBook.fxml","Return book");
     }
     
-    /**
-     * this function open new the new window from current one 
-     * @param loc is the location of the fxml file 
-     * @param title is the title of the new window
-     */
-    void loadWindow(String loc, String title)
-    {
-    	try 
-    	{
-			Parent parent = FXMLLoader.load(getClass().getResource(loc));
-			Stage stage = new Stage(StageStyle.DECORATED);
-			stage.setTitle(title);
-			stage.setScene(new Scene(parent));
-			stage.show();
-		} 
-    	catch (IOException e) 
-    	{
-    		//-----TO_DO: open error message
-			e.printStackTrace();
-		}
+    
     	
-    }
-
 
 	@Override
 	public void display(ObjectMessage msg) 
