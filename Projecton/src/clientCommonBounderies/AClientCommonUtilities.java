@@ -27,6 +27,8 @@ public abstract class AClientCommonUtilities
 {
 	
 	private static IGUIStartPanel startPanelUser=Main.temp.getController();
+
+
 	/**
 	 * This method opens a new GUI window 
 	 * @param classThatAsk - in the original Class just type: getClass() 

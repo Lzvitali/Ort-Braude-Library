@@ -32,106 +32,108 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	 */
 	OBLClient client;
 
-	private static int activeWindows=0; 
+	private static int numOfActiveWindows=0;  
 	
-    @FXML // fx:id="logOutBtn"
+    @FXML 
     private Button logOutBtn; 
 
-    @FXML // fx:id="borrowBookBtn"
+    @FXML 
     private Button borrowBookBtn; 
 
-    @FXML // fx:id="returnBookBtn"
+    @FXML 
     private Button returnBookBtn;
 
-    @FXML // fx:id="addBookBtn"
+    @FXML 
     private Button addBookBtn; 
 
-    @FXML // fx:id="deleteBookBtn"
+    @FXML 
     private Button deleteBookBtn; 
 
-    @FXML // fx:id="registerNewAccountBtn"
+    @FXML
     private Button registerNewAccountBtn; 
 
-    @FXML // fx:id="searchBookTab"
+    @FXML 
     private Tab searchBookTab; 
 
-    @FXML // fx:id="searchBookTextField"
+    @FXML 
     private JFXTextField searchBookTextField; 
 
-    @FXML // fx:id="searchBookBtn"
+    @FXML 
     private Button searchBookBtn; 
 
-    @FXML // fx:id="bookNameRB"
+    @FXML 
     private JFXRadioButton bookNameRB; 
 
-    @FXML // fx:id="authorNameRB"
+    @FXML 
     private JFXRadioButton authorNameRB; 
 
-    @FXML // fx:id="topicRB"
+    @FXML 
     private JFXRadioButton topicRB; 
 
-    @FXML // fx:id="freeSearchBookRB"
+    @FXML 
     private JFXRadioButton freeSearchBookRB; 
 
-    @FXML // fx:id="searchResultTable"
+    @FXML 
     private TableView<?> searchResultTable; 
 
-    @FXML // fx:id="bookNameColumn"
+    @FXML 
     private TableColumn<?, ?> bookNameColumn; 
 
-    @FXML // fx:id="authorNameColumn"
+    @FXML 
     private TableColumn<?, ?> authorNameColumn; 
 
-    @FXML // fx:id="bookYearColumn"
+    @FXML
     private TableColumn<?, ?> bookYearColumn; 
 
-    @FXML // fx:id="BookTopicColumn"
+    @FXML
     private TableColumn<?, ?> BookTopicColumn; 
 
-    @FXML // fx:id="isDesiredBookColumn"
+    @FXML
     private TableColumn<?, ?> isDesiredBookColumn; 
 
-    @FXML // fx:id="viewIntroColumn"
+    @FXML
     private TableColumn<?, ?> viewIntroColumn; 
 
-    @FXML // fx:id="searchReaderAccountTab"
+    @FXML 
     private Tab searchReaderAccountTab; 
 
-    @FXML // fx:id="searchReaderAccountSearchField"
+    @FXML 
     private JFXTextField searchReaderAccountSearchField; 
 
-    @FXML // fx:id="searchReaderAccountBtn"
+    @FXML 
     private Button searchReaderAccountBtn; 
 
-    @FXML // fx:id="iDRB"
+    @FXML 
     private JFXRadioButton iDRB; 
 
-    @FXML // fx:id="firstNameRB"
+    @FXML 
     private JFXRadioButton firstNameRB; 
 
-    @FXML // fx:id="lastNameRB"
+    @FXML 
     private JFXRadioButton lastNameRB; 
 
-    @FXML // fx:id="freeSearchReaderAccountRB"
+    @FXML 
     private JFXRadioButton freeSearchReaderAccountRB; 
 
-    @FXML // fx:id="searchReaderAccountTable"
+    @FXML 
     private TableView<?> searchReaderAccountTable; 
 
-    @FXML // fx:id="accountIDColumn"
+    @FXML 
     private TableColumn<?, ?> accountIDColumn; 
 
-    @FXML // fx:id="accountLastNameColumn"
+    @FXML
     private TableColumn<?, ?> accountLastNameColumn; 
 
-    @FXML // fx:id="accountStatusColumn"
+    @FXML
     private TableColumn<?, ?> accountStatusColumn; 
 
-    @FXML // fx:id="accountPhoneColumn"
+    @FXML 
     private TableColumn<?, ?> accountPhoneColumn;
 
-    @FXML // fx:id="borrowsAndReservesColumn"
+    @FXML 
     private TableColumn<?, ?> borrowsAndReservesColumn; 
+    
+    
     
     //for the Library Director only
     ///////////////////////////////////////////////////////////////////////////////////
@@ -150,6 +152,8 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     ///////////////////////////////////////////////////////////////////////////////////
     
     
+    
+    
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize(String []connectionDetails) 
     {
@@ -166,6 +170,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
         	System.out.println("Error: Can't setup connection!"+ " Terminating client.");
         	System.exit(1);
         }
+    	
     	
     }
     
@@ -219,17 +224,20 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	@Override
 	public int getActivateWindows() 
 	{
-		return activeWindows;
+		return numOfActiveWindows;
 	}
 
 
 	@Override
 	public void setActivateWindows(int newWindows) 
 	{
-		activeWindows=newWindows;
+		numOfActiveWindows=newWindows;
 	}
+	
+	
 	@Override
-	public void display(ObjectMessage msg) {
+	public void display(ObjectMessage msg) 
+	{
 		// TODO Auto-generated method stub
 		
 	}
