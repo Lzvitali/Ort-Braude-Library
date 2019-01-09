@@ -18,7 +18,7 @@ import javafx.scene.control.TableView;
 
 
 /**
- *  Controller Class for 'StartPanelLibrarian.fxml' 
+ *  Controller Class for 'StartPanelLibrarian.fxml' AND for 'StartPanelLibraryDirector.fxml'
  */
 
 
