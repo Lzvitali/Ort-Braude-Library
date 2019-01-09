@@ -3,6 +3,8 @@ package clientCommonBounderies;
 import java.io.IOException;
 import java.util.Optional;
 
+import Common.IGUIController;
+import Common.IGUIStartPanel;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
 import clientConrollers.Main;
 import javafx.application.Platform;
@@ -23,6 +25,10 @@ import javafx.stage.StageStyle;
 
 public abstract class AClientCommonUtilities 
 {
+	
+	private static IGUIStartPanel startPanelUser=Main.temp.getController();
+
+
 	/**
 	 * This method opens a new GUI window 
 	 * @param classThatAsk - in the original Class just type: getClass() 
@@ -33,7 +39,7 @@ public abstract class AClientCommonUtilities
 	{
 		try 
 		{
-			if(StartPanelLibrarianController.ActiveWindows==0)
+			if(startPanelUser.getActivateWindows()==0)
 			{
 				Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
 				Stage stage = new Stage(StageStyle.DECORATED);
@@ -43,9 +49,11 @@ public abstract class AClientCommonUtilities
 				stage.setOnCloseRequest(e->
 				{
 					stage.close();
-					StartPanelLibrarianController.ActiveWindows--;
+					int x=startPanelUser.getActivateWindows();
+					startPanelUser.setActivateWindows(--x);
 				});
-				StartPanelLibrarianController.ActiveWindows++;
+				int x=startPanelUser.getActivateWindows();
+				startPanelUser.setActivateWindows(++x);
 			}
 			else
 			{

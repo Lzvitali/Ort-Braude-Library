@@ -14,12 +14,13 @@ import javafx.scene.Scene;
 public class Main extends Application 
 {
 	public static Stage PrimaryStage;
+	public static FXMLLoader temp;
 	@Override
 	public void start(Stage primaryStage) throws IOException
 	{
-		Parent root;
-		 
-		root = FXMLLoader.load(getClass().getResource("/clientBounderiesLibrarian/StartPanelLibrarian.fxml"));
+		
+		 temp=new FXMLLoader(getClass().getResource("/clientBounderiesLibrarian/StartPanelLibrarian.fxml"));
+		Parent root = temp.load();
 			
 		//attach scene graph to scene
 		Scene scene = new Scene(root);
