@@ -5,23 +5,16 @@ import com.jfoenix.controls.JFXTextField;
 
 import Common.IGUIController;
 import Common.ObjectMessage;
-import clientCommonBounderies.ClientCommonUtilities;
+import clientCommonBounderies.AClientCommonUtilities;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 
 /**
@@ -190,33 +183,33 @@ public class StartPanelLibrarianController implements IGUIController
     @FXML
     void openAddBook(ActionEvent event) 
     {
-    	ClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/AddBook.fxml","Add book copy");
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/AddBook.fxml","Add book copy");
     }
 
     @FXML
     void openBorrowBook(ActionEvent event) 
     {
-    	ClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
     }
 
     @FXML
     void openDeleteBookBtn(ActionEvent event) 
     {
-    	ClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/DeleteBook.fxml","Delete book");
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/DeleteBook.fxml","Delete book");
     }
 
     @FXML
     void openRegisterNewAccount(ActionEvent event) 
     {
-    	ClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/RegisterNewAccount.fxml","Registrate new reader account");
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/RegisterNewAccount.fxml","Registrate new reader account");
     }
 
     @FXML
     void openReturnBook(ActionEvent event) 
     {
-    	ClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/ReturnBook.fxml","Return book");
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/ReturnBook.fxml","Return book");
     }
-    
+     
     
     	
 
