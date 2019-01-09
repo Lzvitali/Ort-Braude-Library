@@ -3,6 +3,7 @@ package clientCommonBounderies;
 import java.io.IOException;
 import java.util.Optional;
 
+import clientConrollers.OBLClient;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,8 +20,25 @@ import javafx.stage.StageStyle;
  * This Class contains the common action for the GUIs controllers
  */
 
-public abstract class ACommonActions 
+public class ClientCommonUtilities 
 {
+
+	//Instance variables **********************************************
+
+	/**
+	 * The instance of the OBLClient that created this UIChat.
+	 */
+	OBLClient connToClientController;
+	
+	
+	
+	/*public ClientCommonUtilities(int ip, String port) 
+	{
+		
+		this.connToClientController = new OBLClient(ip, port, this);;
+	}*/
+
+
 	/**
 	 * This method opens a new GUI window 
 	 * @param classThatAsk - in the original Class just type: getClass() 
@@ -88,5 +106,6 @@ public abstract class ACommonActions
 			Optional<ButtonType> result = alert.showAndWait();
 		});
 	}
+
 
 }

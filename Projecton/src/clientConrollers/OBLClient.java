@@ -35,8 +35,7 @@ public class OBLClient extends AbstractClient //Make connection between our IGUI
    * @param clientUI The interface type variable.
    */
   
-  public OBLClient(String host, int port, IGUIController clientUI) 
-    throws IOException 
+  public OBLClient(String host, int port, IGUIController clientUI) throws IOException   
   {
     super(host, port); //Call the superclass constructor
     this.clientUI = clientUI;
