@@ -1,8 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+<AnchorPane minHeight="363.0" prefHeight="363.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="76.0" fitWidth="347.0" layoutX="69.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../icons/LogInTitle.png" />
+         </image>
+      </ImageView>
+      <VBox layoutX="50.0" layoutY="126.0" prefHeight="208.0" prefWidth="288.0" spacing="30.0">
+         <children>
+            <JFXTextField fx:id="logInIDTextField" labelFloat="true" prefHeight="29.0" prefWidth="240.0" promptText="ID">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </JFXTextField>
+            <JFXPasswordField labelFloat="true" promptText="password">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font></JFXPasswordField>
+            <AnchorPane prefHeight="45.0" prefWidth="288.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <JFXButton prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Log in">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></JFXButton>
+                  <AnchorPane prefHeight="82.0" prefWidth="92.0" />
+                  <JFXButton prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Cancel">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></JFXButton>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
 </AnchorPane>
-
