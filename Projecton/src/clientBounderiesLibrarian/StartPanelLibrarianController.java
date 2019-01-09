@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 
 
 /**
@@ -30,7 +31,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	/**
 	 * The instance of the client that created this ConsoleChat.
 	 */
-	OBLClient client;
+	public static OBLClient client;
 
 	private static int numOfActiveWindows=0;  
 	
@@ -134,6 +135,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     private TableColumn<?, ?> borrowsAndReservesColumn; 
     
     
+    private ToggleGroup toggleGroupForBooks; 
+    
+    
     
     //for the Library Director only
     ///////////////////////////////////////////////////////////////////////////////////
@@ -151,16 +155,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     }
     ///////////////////////////////////////////////////////////////////////////////////
     
-    
-    
+
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize(String []connectionDetails) 
+    void initialize(String ip,int port) 
     {
-    	
-    	String ip = connectionDetails[0];
-    	int port = Integer.parseInt(connectionDetails[0]);
-    	
     	try 
         {
           client= new OBLClient(ip, port, this);
@@ -170,9 +169,18 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
         	System.out.println("Error: Can't setup connection!"+ " Terminating client.");
         	System.exit(1);
         }
-    	
-    	
+    	setRedioButtonsForBooksSearch();
     }
+    
+    void setRedioButtonsForBooksSearch()
+    {
+    	toggleGroupForBooks = new ToggleGroup();
+        this.bookNameRB.setToggleGroup(toggleGroupForBooks);
+        this.authorNameRB.setToggleGroup(toggleGroupForBooks);
+        this.topicRB.setToggleGroup(toggleGroupForBooks);
+        this.freeSearchBookRB.setToggleGroup(toggleGroupForBooks);
+    }
+    
     
 
     @FXML

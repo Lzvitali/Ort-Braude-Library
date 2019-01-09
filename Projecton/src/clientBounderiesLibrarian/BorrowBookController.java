@@ -2,13 +2,19 @@ package clientBounderiesLibrarian;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+
+import clientConrollers.OBLClient;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
-public class BorrowBookController {
+public class BorrowBookController 
+{
+	
+	OBLClient client;
 
     @FXML
     private ResourceBundle resources;
@@ -17,7 +23,10 @@ public class BorrowBookController {
     private URL location;
 
     @FXML
-    private JFXTextField CopyIdBtn;
+    private JFXTextField readerAccountID;
+
+    @FXML
+    private JFXTextField CopyIdTextField;
 
     @FXML
     private Text BorrowDateText;
@@ -32,22 +41,27 @@ public class BorrowBookController {
     private JFXButton AproveBtn;
 
     @FXML
-    void aproveBorrowBook(ActionEvent event) {
+    void aproveBorrowBook(ActionEvent event) 
+    {
 
     }
 
     @FXML
-    void cancelBorrrow(ActionEvent event) {
+    void cancelBorrrow(ActionEvent event) 
+    {
 
     }
 
     @FXML
-    void setDateForBorrowBook(ActionEvent event) {
-
+    void setDateForBorrowBook(ActionEvent event) 
+    {
+    	
     }
 
     @FXML
-    void initialize() {
-       
+    void initialize() 
+    {
+    	client=StartPanelLibrarianController.client;
+
     }
 }
