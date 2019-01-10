@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 
 import Common.Book;
 import Common.IGUIController;
+import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import Common.User;
 import clientConrollers.OBLClient;
@@ -28,9 +29,11 @@ import javafx.scene.control.TableView;
  *
  */
 
-public class StartPanelController implements IGUIController
+public class StartPanelController implements IGUIController, IGUIStartPanel
 {
 	//Instance variables **********************************************
+	private static int numOfActiveWindows=0;
+	
 	/**
 	 * this is the details of the current user that we need in all the next controllers 
 	 */
@@ -108,22 +111,32 @@ public class StartPanelController implements IGUIController
     @FXML
     void makeLogIn(ActionEvent event) 
     {
-
+    	String id = logInIDTextField.getText();
+    	String password = logInPasswordTextField.getText();
+    	
+    	System.out.println(id + "  " + password);
+    	
+    	User user = new User(id,password);
+    	ObjectMessage msg = new ObjectMessage(user,"user try to log in");
+    	
+    	System.out.println(msg);
+    	
+    	connToClientController.handleMessageFromClient(msg); 
     }
     //////////////////////////////////////////////////
     
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize(String[] arr) 
-   {
+    public void initialize(String[] arr) 
+    {
     	connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
 
-   }
-    
-    @FXML
-    void makeLogin(ActionEvent event) 
-    {
+    }
 
+    @FXML
+    void openLogin(ActionEvent event) 
+    {
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientCommonBounderies/LogIn.fxml","Log in");
     }
 
     @FXML
@@ -144,6 +157,7 @@ public class StartPanelController implements IGUIController
     
     public  void connect(String ip,int port) //make the connection to ClientController.
     {
+    	System.out.println(ip + "  " + port);
         try 
         {
         	connToClientController= new OBLClient(ip, port,this);
@@ -171,8 +185,22 @@ public class StartPanelController implements IGUIController
     }
 
 	@Override
-	public void display(ObjectMessage msg) {
-		// TODO Auto-generated method stub
+	public void display(ObjectMessage msg) 
+	{
+		
+		
+	}
+
+	@Override
+	public int getActivateWindows() 
+	{
+		return numOfActiveWindows;
+	}
+
+	@Override
+	public void setActivateWindows(int newWindows) 
+	{
+		numOfActiveWindows=newWindows;
 		
 	}
 

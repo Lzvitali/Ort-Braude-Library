@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import Common.Book;
 import Common.ObjectMessage;
+import Common.User;
 import ocsf.server.*;
 
 /**
@@ -51,11 +52,30 @@ public OblServer(int port)
 
 public void handleMessageFromClient(Object msg, ConnectionToClient client)
 {
-	System.out.println(msg + "!!"); // TO_DELETE later
-	ObjectMessage objectMessage=(ObjectMessage)msg;
+	//System.out.println(msg + "!!"); // TO_DELETE later
+
+	
+	ObjectMessage objectMessage = (ObjectMessage)msg;
+	ObjectMessage answer;
+	
+	System.out.println(objectMessage.getMessage() + "!!");
+	
 	if(objectMessage.getObjectList().get(0) instanceof Book)
 	{
-	//	ABookDBController.Selection(objectMessage,connToSQL);
+	//	ABookDBController.selection(objectMessage,connToSQL);
+	}
+	
+	else if(objectMessage.getObjectList().get(0) instanceof User)
+	{
+		answer = AUserDBController.selection(objectMessage,connToSQL);
+		try 
+		{
+			client.sendToClient(answer);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	

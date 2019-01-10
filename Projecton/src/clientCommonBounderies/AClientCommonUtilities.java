@@ -7,6 +7,7 @@ import Common.IGUIController;
 import Common.IGUIStartPanel;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
 import clientConrollers.Main;
+import clientConrollers.Main2;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,7 +27,7 @@ import javafx.stage.StageStyle;
 public abstract class AClientCommonUtilities 
 {
 	
-	private static IGUIStartPanel startPanelUser=Main.temp.getController();
+	private static IGUIStartPanel startPanelUser=Main2.temp.getController();
 
 
 	/**
