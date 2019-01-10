@@ -66,12 +66,15 @@ public class OBLClient extends AbstractClient //Make connection between our IGUI
   {
 	  try 
 	  {
-		sendToServer(msg);
+		  System.out.println(msg + "!!"); // TO_DELETE later
+		  System.out.println(getHost() + "   " + getPort()); // TO_DELETE later
+		  System.out.println(clientUI.getClass()); // TO_DELETE later
+		  sendToServer(msg);
 	  } 
 	  catch (IOException e) 
 	  {
-		System.out.println("Failed to send to server");
-		e.printStackTrace();
+		  System.out.println("Failed to send to server");
+		  e.printStackTrace();
 	  } // Send the Info that come from server to GUIcontroller
 	 
   }
@@ -89,5 +92,13 @@ public class OBLClient extends AbstractClient //Make connection between our IGUI
     catch(IOException e) {}
     System.exit(0);
   }
+
+
+public void setClientUI(IGUIController clientUI) // TO_DELETE later
+{
+	this.clientUI = clientUI;
+}
+  
+  
 }
 //End of OBLClient class

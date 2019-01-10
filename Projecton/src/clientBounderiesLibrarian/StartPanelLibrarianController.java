@@ -160,6 +160,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML // This method is called by the FXMLLoader when initialization is complete
     public void initialize(String[] parameters) 
     {
+    	
     	try 
         {
           client= new OBLClient(parameters[0], Integer.parseInt(parameters[1]), this);
@@ -204,6 +205,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML
     void openBorrowBook(ActionEvent event) 
     {
+    	client.handleMessageFromClient("Button Pressed"); 
     	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
     }
 

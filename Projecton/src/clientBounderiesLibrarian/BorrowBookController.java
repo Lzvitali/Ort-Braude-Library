@@ -3,6 +3,8 @@ package clientBounderiesLibrarian;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
+import Common.IGUIController;
+import Common.ObjectMessage;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
@@ -11,7 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
-public class BorrowBookController 
+public class BorrowBookController implements IGUIController
 {
 	
 	OBLClient client;
@@ -39,11 +41,19 @@ public class BorrowBookController
 
     @FXML
     private JFXButton AproveBtn;
+    
+    
+    @FXML
+    void initialize() 
+    {
+    	client=StartPanelLibrarianController.client;
+    	client.setClientUI(this);
+    }
 
     @FXML
     void aproveBorrowBook(ActionEvent event) 
     {
-
+    	client.handleMessageFromClient("Boooom");
     }
 
     @FXML
@@ -58,10 +68,12 @@ public class BorrowBookController
     	
     }
 
-    @FXML
-    void initialize() 
-    {
-    	client=StartPanelLibrarianController.client;
+    
 
-    }
+	@Override
+	public void display(ObjectMessage msg) 
+	{
+		
+		
+	}
 }
