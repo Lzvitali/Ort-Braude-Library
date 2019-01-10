@@ -43,20 +43,6 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	
 	
 	
-	// attributes for LogIn Only
-    @FXML
-    private JFXTextField logInIDTextField;
-
-    @FXML
-    private JFXPasswordField logInPasswordTextField;
-
-    @FXML
-    private JFXButton LogInBtn;
-
-    @FXML
-    private JFXButton cancelLogInBtn;
-				 
-	
 	// attributes for StartPanel Only
     @FXML 
     private Button loginBtn; 
@@ -100,31 +86,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     @FXML 
     private TableColumn<?, ?> viewIntroColumn; 
 
-    //Functions for logIn Only
-    //////////////////////////////////////////////////
-    @FXML
-    void cancelLogIn(ActionEvent event) 
-    {
 
-    }
-
-    @FXML
-    void makeLogIn(ActionEvent event) 
-    {
-    	String id = logInIDTextField.getText();
-    	String password = logInPasswordTextField.getText();
-    	
-    	System.out.println(id + "  " + password);
-    	
-    	User user = new User(id,password);
-    	ObjectMessage msg = new ObjectMessage(user,"user try to log in");
-    	
-    	System.out.println(msg);
-    	
-    	connToClientController.handleMessageFromClient(msg); 
-    }
-    //////////////////////////////////////////////////
-    
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
     public void initialize(String[] arr) 
