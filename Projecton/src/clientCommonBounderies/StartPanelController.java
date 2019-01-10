@@ -1,21 +1,18 @@
-/**
- * Sample Skeleton for 'StartPanel.fxml' Controller Class
- */
-
 package clientCommonBounderies;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
 import Common.Book;
 import Common.IGUIController;
 import Common.ObjectMessage;
+import Common.User;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -25,58 +22,95 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+/**
+ * This class is a Controller for StartPanel.fxml AND for LogInFxml
+ * @author Vitali
+ *
+ */
+
 public class StartPanelController implements IGUIController
 {
+	//Instance variables **********************************************
+	/**
+	 * this is the details of the current user that we need in all the next controllers 
+	 */
+	public static User user; 
+	
+	OBLClient connToClientController;
+	
+	
+	
+	// attributes for LogIn Only
+    @FXML
+    private JFXTextField logInIDTextField;
 
-    @FXML // ResourceBundle that was given to the FXMLLoader 
-    private ResourceBundle resources;
+    @FXML
+    private JFXPasswordField logInPasswordTextField;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
+    @FXML
+    private JFXButton LogInBtn;
 
-    @FXML // fx:id="loginBtn"
-    private Button loginBtn; // Value injected by FXMLLoader
+    @FXML
+    private JFXButton cancelLogInBtn;
+				 
+	
+	// attributes for StartPanel Only
+    @FXML 
+    private Button loginBtn; 
 
-    @FXML // fx:id="searchTextField"
-    private JFXTextField searchTextField; // Value injected by FXMLLoader
+    @FXML 
+    private JFXTextField searchTextField; 
 
-    @FXML // fx:id="searchBtn"
-    private Button searchBtn; // Value injected by FXMLLoader
+    @FXML 
+    private Button searchBtn; 
 
-    @FXML // fx:id="bookNameRB"
-    private JFXRadioButton bookNameRB; // Value injected by FXMLLoader
+    @FXML 
+    private JFXRadioButton bookNameRB; 
 
-    @FXML // fx:id="authorNameRB"
-    private JFXRadioButton authorNameRB; // Value injected by FXMLLoader
+    @FXML 
+    private JFXRadioButton authorNameRB; 
 
-    @FXML // fx:id="topicRB"
-    private JFXRadioButton topicRB; // Value injected by FXMLLoader
+    @FXML 
+    private JFXRadioButton topicRB; 
 
-    @FXML // fx:id="freeSearchRB"
-    private JFXRadioButton freeSearchRB; // Value injected by FXMLLoader
+    @FXML
+    private JFXRadioButton freeSearchRB; 
 
-    @FXML // fx:id="searchResultTable"
-    private TableView<?> searchResultTable; // Value injected by FXMLLoader
+    @FXML 
+    private TableView<?> searchResultTable; 
 
-    @FXML // fx:id="bookNameColumn"
-    private TableColumn<?, ?> bookNameColumn; // Value injected by FXMLLoader
+    @FXML 
+    private TableColumn<?, ?> bookNameColumn; 
 
-    @FXML // fx:id="authorNameColumn"
-    private TableColumn<?, ?> authorNameColumn; // Value injected by FXMLLoader
+    @FXML 
+    private TableColumn<?, ?> authorNameColumn; 
 
-    @FXML // fx:id="yearColumn"
-    private TableColumn<?, ?> yearColumn; // Value injected by FXMLLoader
+    @FXML 
+    private TableColumn<?, ?> yearColumn; 
 
-    @FXML // fx:id="topicColumn"
-    private TableColumn<?, ?> topicColumn; // Value injected by FXMLLoader
+    @FXML 
+    private TableColumn<?, ?> topicColumn; 
 
-    @FXML // fx:id="isDesiredColumn"
-    private TableColumn<?, ?> isDesiredColumn; // Value injected by FXMLLoader
+    @FXML 
+    private TableColumn<?, ?> isDesiredColumn; 
 
-    @FXML // fx:id="viewIntroColumn"
-    private TableColumn<?, ?> viewIntroColumn; // Value injected by FXMLLoader
+    @FXML 
+    private TableColumn<?, ?> viewIntroColumn; 
 
-    OBLClient connToClientController;
+    //Functions for logIn Only
+    //////////////////////////////////////////////////
+    @FXML
+    void cancelLogIn(ActionEvent event) 
+    {
+
+    }
+
+    @FXML
+    void makeLogIn(ActionEvent event) 
+    {
+
+    }
+    //////////////////////////////////////////////////
     
     
     @FXML // This method is called by the FXMLLoader when initialization is complete

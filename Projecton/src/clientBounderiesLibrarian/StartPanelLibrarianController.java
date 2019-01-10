@@ -12,11 +12,16 @@ import clientConrollers.OBLClient;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 
 /**
@@ -33,7 +38,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	 */
 	public static OBLClient client;
 
-	private static int numOfActiveWindows=0;  
+	private static int numOfActiveWindows=0;
+	
+	
+	
+	//FXML attibutes ****************************************************
 	
     @FXML 
     private Button logOutBtn; 
@@ -136,6 +145,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     
     
     private ToggleGroup toggleGroupForBooks; 
+    private ToggleGroup toggleGroupForAccounts; 
     
     
     
@@ -170,7 +180,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
         	System.out.println("Error: Can't setup connection!"+ " Terminating client.");
         	System.exit(1);
         }
+    	
     	setRedioButtonsForBooksSearch();
+    	setRedioButtonsForAccountsSearch();
     }
     
     void setRedioButtonsForBooksSearch()
@@ -182,18 +194,47 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
         this.freeSearchBookRB.setToggleGroup(toggleGroupForBooks);
     }
     
-    
-
-    @FXML
-    void makeLogOut(ActionEvent event) 
+    void setRedioButtonsForAccountsSearch()
     {
-
+    	toggleGroupForBooks = new ToggleGroup();
+        this.iDRB.setToggleGroup(toggleGroupForBooks);
+        this.firstNameRB.setToggleGroup(toggleGroupForBooks);
+        this.lastNameRB.setToggleGroup(toggleGroupForBooks);
+        this.freeSearchReaderAccountRB.setToggleGroup(toggleGroupForBooks);
+        
     }
-
+    
+    
     @FXML
     void makeSearch(ActionEvent event) 
     {
 
+    }
+    
+    /**
+     * When button Log out will be pressed it will take you to the StartPanel
+     * @param event
+     */
+    @FXML
+    void makeLogOut(ActionEvent event) 
+    {
+    	
+		try 
+		{
+			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+			Stage primaryStage = new Stage();
+			primaryStage.setTitle("Ort Braude Library");
+			Pane root;
+			root = FXMLLoader.load(getClass().getResource("/clientCommonBounderies/StartPanel.fxml"));
+			Scene scene = new Scene(root);
+			primaryStage.setScene(scene);		
+			primaryStage.show();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
     }
 
     @FXML

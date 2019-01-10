@@ -283,7 +283,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchReaderAccountTable" layoutX="6.0" layoutY="137.0" prefHeight="358.0" prefWidth="718.0">
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="22.0" layoutY="137.0" prefHeight="358.0" prefWidth="718.0">
                                       <columns>
                                         <TableColumn fx:id="accountIDColumn" prefWidth="114.0" text="ID" />
                                         <TableColumn prefWidth="127.0" text="First name" />

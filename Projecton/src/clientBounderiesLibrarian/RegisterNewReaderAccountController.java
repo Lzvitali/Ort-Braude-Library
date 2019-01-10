@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 
+import Common.IGUIController;
+import Common.ObjectMessage;
 import clientConrollers.AValidationInput;
 
 import java.net.URL;
@@ -17,7 +19,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
-public class RegisterNewReaderAccountController {
+public class RegisterNewReaderAccountController implements IGUIController
+{
 
     @FXML
     private ResourceBundle resources;
@@ -118,4 +121,10 @@ public class RegisterNewReaderAccountController {
     		Optional<ButtonType> result = alert.showAndWait();
     	});
     }
+
+	@Override
+	public void display(ObjectMessage msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }
