@@ -10,21 +10,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="501.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="501.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesReaderAccount.PersonalDetailsController">
    <children>
       <VBox layoutX="203.0" layoutY="82.0" prefHeight="216.0" prefWidth="220.0" spacing="10.0">
          <children>
+            <TextField fx:id="IDTextField" editable="false">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
             <TextField fx:id="FirstNameTextField" editable="false" prefHeight="26.0" prefWidth="131.0">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
             <TextField fx:id="LastnameTextField" editable="false">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="IDTextField" editable="false">
                <font>
                   <Font size="14.0" />
                </font>
@@ -53,17 +53,17 @@
       </VBox>
       <VBox layoutX="89.0" layoutY="82.0" prefHeight="293.0" prefWidth="110.0" spacing="21.0">
          <children>
+            <Label prefHeight="26.0" prefWidth="131.0" text="ID">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+            </Label>
             <Label prefHeight="26.0" prefWidth="131.0" text="Frist name">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </Label>
             <Label prefHeight="26.0" prefWidth="131.0" text="Last name">
-               <font>
-                  <Font name="System Bold Italic" size="14.0" />
-               </font>
-            </Label>
-            <Label prefHeight="26.0" prefWidth="131.0" text="ID">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>

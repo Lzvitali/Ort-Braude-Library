@@ -10,11 +10,12 @@ import java.util.ArrayList;
 public class ObjectMessage implements Serializable 
 {
 	
-	private static final long serialVersionUID = 1L; // lo yodea im tzarih (Vitali)
+	private static final long serialVersionUID = 1L; 
 	private ArrayList<IEntity> objectList;
 	private ArrayList<IEntity[]> objectListOfArrays; 
 	private String message;
-	private String note;
+	private String note; //for the sorting in OBLServer. Recommended to fill as: User, Book, Copy, ReaderAccont (the entity name)
+						 //by that attribute we will know to witch controller of the Server package to send it
 	//Constructors
 	public ObjectMessage()
 	{
@@ -29,12 +30,13 @@ public class ObjectMessage implements Serializable
 		this.message=message;
 	}
 	
-	public ObjectMessage(IEntity entityOne,String message)
+	public ObjectMessage(IEntity entityOne,String message, String note)
 	{
 		objectList=new ArrayList<IEntity>();
 		objectList.add(entityOne);
 		objectListOfArrays=new ArrayList<IEntity[]>();;
 		this.message=message;
+		this.note=note;
 	}
 	
 	public ObjectMessage(IEntity entityOne,IEntity entityTwo ,String message)
@@ -98,8 +100,18 @@ public class ObjectMessage implements Serializable
 	{
 		return message;
 	}
+
+	public String getNote() 
+	{
+		return note;
+	}
 	
 	
+	
+	public void setNote(String note) 
+	{
+		this.note = note;
+	}
 	public void setMessage(String msg) 
 	{
 		message=msg;

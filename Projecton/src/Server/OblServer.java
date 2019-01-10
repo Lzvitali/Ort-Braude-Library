@@ -52,14 +52,11 @@ public OblServer(int port)
 
 public void handleMessageFromClient(Object msg, ConnectionToClient client)
 {
-	//System.out.println(msg + "!!"); // TO_DELETE later
-
 	
 	ObjectMessage objectMessage = (ObjectMessage)msg;
 	ObjectMessage answer;
-	System.out.println(objectMessage.getMessage() + "!!");
 	
-	if(objectMessage.getObjectList().get(0) instanceof User)
+	if( (objectMessage.getNote()).equals("User") ) 
 	{
 		answer = AUserDBController.selection(objectMessage,connToSQL);
 		try 

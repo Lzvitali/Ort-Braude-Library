@@ -14,17 +14,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.stage.Stage;
 
 public class logInController  implements IGUIController
 {
 	OBLClient client;
 
-	public static int currentID;
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
+	public static String currentID;
+	protected static Object startPanelController;
+	
 
     @FXML
     private JFXTextField logInIDTextField;
@@ -42,6 +40,7 @@ public class logInController  implements IGUIController
     @FXML
     void initialize()
     {
+    	//get the client from the StartPanelController
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     }
@@ -59,10 +58,12 @@ public class logInController  implements IGUIController
     	String id = logInIDTextField.getText();
     	String password = logInPasswordTextField.getText();
     	
+    	currentID=id;
+    	
     	System.out.println(id + "  " + password);
     	
     	User user = new User(id,password);
-    	ObjectMessage msg = new ObjectMessage(user,"user try to log in");
+    	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
     	
     	System.out.println(msg);
     	
@@ -71,8 +72,43 @@ public class logInController  implements IGUIController
 
     
     @Override
-	public void display(ObjectMessage msg) {
-		// TODO Auto-generated method stub
+	public void display(ObjectMessage msg) 
+    {
+    	//if successful go to the relevant start panel
+		if((msg.getMessage()).equals("successful"))
+		{
+			StartPanelController.numOfActiveWindows--;
+			
+			/*Stage stage = (Stage) LogInBtn.getScene().getWindow();
+		    stage.close();*/
+			
+			 // 1 = Library Director , 2 = Librarian , 3 = reader account
+			if((msg.getNote()).equals("1"))
+			{
+				AClientCommonUtilities.loadWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibraryDirector.fxml","Librarian Start Panel");
+			}
+			else if((msg.getNote()).equals("2"))
+			{
+				AClientCommonUtilities.loadWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibrarian.fxml","Librarian Start Panel");
+			}
+			else if((msg.getNote()).equals("2"))
+			{
+				AClientCommonUtilities.loadWindow(startPanelController,"/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml","Librarian Start Panel");
+			}
+		}
+		
+		else
+		{
+			if((msg.getMessage()).equals("unsuccessful"))
+			{
+				
+				AClientCommonUtilities.alertError("User already connected", "Error");
+			}
+			else
+			{
+				AClientCommonUtilities.alertError("ID or Password not match", "Error");
+			}
+		}
 		
 	}
 }

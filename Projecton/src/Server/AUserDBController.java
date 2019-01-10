@@ -24,8 +24,14 @@ public class AUserDBController
 		
 		
 		
+		
+		
 		return null; // TODO: delete it. did it only to escape the error 
 	}
+	
+	
+	
+	
 	
 	/**
 	 * This function attempts to commit the log-in for the user and returns "successful" or "unsuccessful" or "not exist"
@@ -37,14 +43,17 @@ public class AUserDBController
 	{
 		ObjectMessage answer = new ObjectMessage();
 		
+		String permition;
+		
 		PreparedStatement ps = null; 
 		ResultSet rs = null; 
 
 		try 
 		{
 			//get the data of the student from the BD
-			ps = connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ?;");
+			ps = connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? ");
 			ps.setString(1, ((User)msg.getObjectList().get(0)).getId() ); 
+			//ps.setString(2, ((User)msg.getObjectList().get(0)).getPassword() ); 
 			rs =ps.executeQuery();
 
 			if(rs.next())
@@ -65,16 +74,18 @@ public class AUserDBController
 						  e.printStackTrace();
 					  }
 					  
+					  permition = rs.getString(3);
+					  answer.setNote(permition); 
 					  answer.setMessage("successful");
 				}
 				else //if exist but already connected
 				{
-					
+					answer.setMessage("unsuccessful");
 				}
 			}
 			else //if not exist
 			{
-				
+				answer.setMessage("not exist");
 			}
 			
 			 

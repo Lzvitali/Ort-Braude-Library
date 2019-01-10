@@ -45,9 +45,6 @@ public abstract class AClientCommonUtilities
 				Stage stage = new Stage(StageStyle.DECORATED);
 				stage.setTitle(title);
 				
-				//StartPanelController controller=parent.getController(); 	    	
-		    	//controller.initialize(Main2.arr);
-				
 				stage.setScene(new Scene(parent));
 				stage.show();
 				stage.setOnCloseRequest(e->
@@ -92,7 +89,7 @@ public abstract class AClientCommonUtilities
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) 
 			{
-				System.exit(0);
+				//System.exit(0);
 			}
 		});
     }

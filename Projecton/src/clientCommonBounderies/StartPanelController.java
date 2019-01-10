@@ -32,7 +32,7 @@ import javafx.scene.control.TableView;
 public class StartPanelController implements IGUIController, IGUIStartPanel
 {
 	//Instance variables **********************************************
-	private static int numOfActiveWindows=0;
+	protected static int numOfActiveWindows=0; 
 	
 	/**
 	 * this is the details of the current user that we need in all the next controllers 
@@ -88,35 +88,14 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 
 
     
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    @FXML 
     public void initialize(String[] arr) 
     {
     	connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
 
     }
 
-    @FXML
-    void openLogin(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientCommonBounderies/LogIn.fxml","Log in");
-    }
-
-    @FXML
-    void makeSearch(ActionEvent event) 
-    {
-    	//lets example that will be here valdaion for book(still not exist so didnt write)
-    	
-    	//if success do this and if selected book :
-    	
-    	Book book= new Book(searchTextField.getText());
-    	ObjectMessage objectMessage=new ObjectMessage(book,"SearchBook");
-    	connToClientController.handleMessageFromClient(objectMessage);
-    	
-    }
-
-    
-    
-    
+   
     public  void connect(String ip,int port) //make the connection to ClientController.
     {
     	System.out.println(ip + "  " + port);
@@ -130,7 +109,25 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		}
     }
     
+    @FXML
+    void openLogin(ActionEvent event) 
+    {
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientCommonBounderies/LogIn.fxml","Log in");
+    	logInController.startPanelController = getClass(); 
+    }
     
+    @FXML
+    void makeSearch(ActionEvent event) 
+    {
+    	//lets example that will be here valdaion for book(still not exist so didnt write)
+    	
+    	//if success do this and if selected book :
+    	 
+    	Book book= new Book(searchTextField.getText());
+    	ObjectMessage objectMessage=new ObjectMessage(book,"SearchBook","Book");
+    	connToClientController.handleMessageFromClient(objectMessage);
+    	
+    }
     
 
 

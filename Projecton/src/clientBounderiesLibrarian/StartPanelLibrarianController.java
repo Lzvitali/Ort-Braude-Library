@@ -169,7 +169,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    public void initialize(String[] parameters) 
+    public void initialize() 
     {
     	
     	client=StartPanelController.connToClientController;

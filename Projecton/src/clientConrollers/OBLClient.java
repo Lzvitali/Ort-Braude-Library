@@ -66,9 +66,9 @@ public class OBLClient extends AbstractClient //Make connection between our IGUI
   {
 	  try 
 	  {
-		  System.out.println(msg + "!!"); // TO_DELETE later
-		  System.out.println(getHost() + "   " + getPort()); // TO_DELETE later
-		  System.out.println(clientUI.getClass()); // TO_DELETE later
+		  //System.out.println(msg + "!!"); // TO_DELETE later
+		 // System.out.println(getHost() + "   " + getPort()); // TO_DELETE later
+		 // System.out.println(clientUI.getClass()); // TO_DELETE later
 		  sendToServer(msg);
 	  } 
 	  catch (IOException e) 
