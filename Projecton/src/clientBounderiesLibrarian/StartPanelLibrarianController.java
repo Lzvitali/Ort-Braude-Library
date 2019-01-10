@@ -158,11 +158,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize(String ip,int port) 
+    public void initialize(String[] parameters) 
     {
     	try 
         {
-          client= new OBLClient(ip, port, this);
+          client= new OBLClient(parameters[0], Integer.parseInt(parameters[1]), this);
         } 
         catch(IOException exception) 
         {

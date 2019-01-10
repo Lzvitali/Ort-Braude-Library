@@ -31,6 +31,15 @@ public class Main extends Application
 		{ 
 			System.exit(0);
 		});
+		
+		StartPanelLibrarianController libController=temp.getController();
+		
+		String arr[]=new String[2];
+		arr[0]="localhost"; // host
+    	arr[1]="5555";  // port
+    	
+    	libController.initialize(arr);
+		
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Try");
 		primaryStage.show();
