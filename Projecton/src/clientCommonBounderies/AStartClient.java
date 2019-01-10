@@ -18,12 +18,14 @@ import java.util.List;
 public class AStartClient extends Application
 {
 	
+	public static StartPanelController startPanelController;
+	
     @Override
     public void start(Stage primaryStage) throws Exception //start the client (open FXML/Controller)
     {
         FXMLLoader loader=new FXMLLoader(getClass().getResource("/clientCommonBounderies/StartPanel.fxml")); // load the FXML file
         Parent root = (Parent) loader.load();
-        StartPanelController startPanelController = loader.getController();//get the controller of fxml
+        startPanelController = loader.getController();//get the controller of fxml
 		Parameters params = getParameters();
 		List<String> list = params.getRaw(); 
 		String arr[]=new String[2];

@@ -27,7 +27,7 @@ import javafx.stage.StageStyle;
 public abstract class AClientCommonUtilities 
 {
 	
-	private static IGUIStartPanel startPanelUser=Main2.temp.getController();
+	private static IGUIStartPanel startPanelUser = AStartClient.startPanelController;
 
 
 	/**
@@ -42,9 +42,14 @@ public abstract class AClientCommonUtilities
 		{
 			if(startPanelUser.getActivateWindows()==0)
 			{
+				
 				Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
 				Stage stage = new Stage(StageStyle.DECORATED);
 				stage.setTitle(title);
+				
+				//StartPanelController controller=parent.getController(); 	    	
+		    	//controller.initialize(Main2.arr);
+				
 				stage.setScene(new Scene(parent));
 				stage.show();
 				stage.setOnCloseRequest(e->

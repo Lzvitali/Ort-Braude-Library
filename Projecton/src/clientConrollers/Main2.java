@@ -17,11 +17,13 @@ public class Main2 extends Application
 {
 	public static Stage PrimaryStage;
 	public static FXMLLoader temp;
+	public static String arr[]=new String[2]; 
+	
 	@Override
 	public void start(Stage primaryStage) throws IOException
 	{
 		
-		 temp=new FXMLLoader(getClass().getResource("/clientCommonBounderies/StartPanel.fxml"));
+		temp = new FXMLLoader(getClass().getResource("/clientCommonBounderies/StartPanel.fxml"));
 		Parent root = temp.load();
 			
 		//attach scene graph to scene
@@ -35,7 +37,6 @@ public class Main2 extends Application
 		
 		StartPanelController startPanelController=temp.getController(); 
 		
-		String arr[]=new String[2];
 		arr[0]="localhost"; // host
     	arr[1]="5555";  // port
     	
