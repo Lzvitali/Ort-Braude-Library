@@ -1,7 +1,11 @@
 package Common;
 
-public class User implements IEntity
+import java.io.Serializable;
+
+public class User implements IEntity,Serializable
 {
+
+	private static final long serialVersionUID = 1L;
 	private String id; // if server returns here null -> user not exist
 					  // in the Client we will first check this atribute
 	private String password;// user password

@@ -57,15 +57,9 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 	
 	ObjectMessage objectMessage = (ObjectMessage)msg;
 	ObjectMessage answer;
-	
 	System.out.println(objectMessage.getMessage() + "!!");
 	
-	if(objectMessage.getObjectList().get(0) instanceof Book)
-	{
-	//	ABookDBController.selection(objectMessage,connToSQL);
-	}
-	
-	else if(objectMessage.getObjectList().get(0) instanceof User)
+	if(objectMessage.getObjectList().get(0) instanceof User)
 	{
 		answer = AUserDBController.selection(objectMessage,connToSQL);
 		try 
@@ -77,6 +71,9 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 	
 	
 }
@@ -136,11 +133,11 @@ public static void main(String[] args)
 	 {
 		 Scanner reader = new Scanner(System.in);
 		 System.out.println("Enter the username of MYSQL" );
-		 user=reader.nextLine();
+		 user="root";//reader.nextLine();
 		 System.out.println("Enter the password of MYSQL" );
-		 password=reader.nextLine();
+		 password="root";//reader.nextLine();
 		 System.out.println("Enter the name of schema in MYSQL" );
-		 schema=reader.nextLine();
+		 schema="obl";//reader.nextLine();
 		 ConnectToDB(user,password,schema);
 		 reader.close();
 	 }

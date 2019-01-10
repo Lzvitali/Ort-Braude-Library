@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 
 import Common.IGUIController;
 import Common.ObjectMessage;
+import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
@@ -46,14 +47,14 @@ public class BorrowBookController implements IGUIController
     @FXML
     void initialize() 
     {
-    	client=StartPanelLibrarianController.client;
+    	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     }
 
     @FXML
     void aproveBorrowBook(ActionEvent event) 
     {
-    	client.handleMessageFromClient("Boooom");
+    	client.handleMessageFromClient(new ObjectMessage("booooom2"));
     }
 
     @FXML

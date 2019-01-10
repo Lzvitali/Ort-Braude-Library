@@ -55,7 +55,7 @@ public class AUserDBController
 					PreparedStatement updateTime;
 					  try 
 					  {
-						  updateTime = connToSQL.prepareStatement("UPDATE students "+"SET isOnline = ? WHERE ID = ?");
+						  updateTime = connToSQL.prepareStatement("UPDATE user "+"SET isOnline = ? WHERE ID = ?");
 						  updateTime.setString(1, "1");
 						  updateTime.setString(2, ((User)msg.getObjectList().get(0)).getId());
 						  updateTime.executeUpdate();

@@ -7,6 +7,8 @@ import com.jfoenix.controls.JFXTextField;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.User;
+import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientConrollers.OBLClient;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -15,7 +17,9 @@ import javafx.fxml.FXML;
 
 public class logInController  implements IGUIController
 {
+	OBLClient client;
 
+	public static int currentID;
     @FXML
     private ResourceBundle resources;
 
@@ -34,6 +38,15 @@ public class logInController  implements IGUIController
     @FXML
     private JFXButton cancelLogInBtn;
 
+    
+    @FXML
+    void initialize()
+    {
+    	client=StartPanelController.connToClientController;
+    	client.setClientUI(this);
+    }
+    
+    
     @FXML
     void cancelLogIn(ActionEvent event) 
     {
@@ -53,15 +66,9 @@ public class logInController  implements IGUIController
     	
     	System.out.println(msg);
     	
-    	//connToClientController.handleMessageFromClient(msg); 
+    	client.handleMessageFromClient(msg); 
     }
 
-    @FXML
-    void initialize()
-    {
-       
-    }
-    
     
     @Override
 	public void display(ObjectMessage msg) {

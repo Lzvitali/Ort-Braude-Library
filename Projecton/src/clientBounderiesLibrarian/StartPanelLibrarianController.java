@@ -7,6 +7,7 @@ import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	/**
 	 * The instance of the client that created this ConsoleChat.
 	 */
-	public static OBLClient client;
+	OBLClient client;
 
 	private static int numOfActiveWindows=0;
 	
@@ -171,15 +172,8 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     public void initialize(String[] parameters) 
     {
     	
-    	try 
-        {
-          client= new OBLClient(parameters[0], Integer.parseInt(parameters[1]), this);
-        } 
-        catch(IOException exception) 
-        {
-        	System.out.println("Error: Can't setup connection!"+ " Terminating client.");
-        	System.exit(1);
-        }
+    	client=StartPanelController.connToClientController;
+    	client.setClientUI(this);
     	
     	setRedioButtonsForBooksSearch();
     	setRedioButtonsForAccountsSearch();
@@ -247,7 +241,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML
     void openBorrowBook(ActionEvent event) 
     {
-    	client.handleMessageFromClient("Button Pressed"); 
+    	client.handleMessageFromClient(new ObjectMessage("boom")); 
     	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
     }
 

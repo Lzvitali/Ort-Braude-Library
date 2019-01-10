@@ -14,7 +14,7 @@ public class ObjectMessage implements Serializable
 	private ArrayList<IEntity> objectList;
 	private ArrayList<IEntity[]> objectListOfArrays; 
 	private String message;
-
+	private String note;
 	//Constructors
 	public ObjectMessage()
 	{

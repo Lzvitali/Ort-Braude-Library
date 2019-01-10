@@ -39,7 +39,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	 */
 	public static User user; 
 	
-	OBLClient connToClientController;
+	public  static OBLClient connToClientController;
 	
 	
 	
@@ -126,25 +126,13 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		} catch (IOException e) 
         {
 			e.printStackTrace();
-			alertError("Please check server connection","No Server Connection ");
+			AClientCommonUtilities.alertError("Please check server connection","No Server Connection ");
 		}
     }
     
     
     
-    private void alertError(String headerText,String title) // if dont have connection to server print propper message and exit
-    { 
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        ButtonType bttexit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().clear();
-        alert.setHeaderText(headerText);
-        alert.setTitle(title);
-        alert.getButtonTypes().addAll(bttexit);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) {
-            System.exit(0);
-        }
-    }
+
 
 	@Override
 	public void display(ObjectMessage msg) 
