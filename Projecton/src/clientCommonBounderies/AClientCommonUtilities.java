@@ -26,7 +26,7 @@ public abstract class AClientCommonUtilities
 {
 	
 	private static IGUIStartPanel startPanelUser = AStartClient.startPanelController;
-
+	public static Stage stage;
 
 	/**
 	 * This method opens a new GUI window 
@@ -42,9 +42,8 @@ public abstract class AClientCommonUtilities
 			{
 				
 				Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
-				Stage stage = new Stage(StageStyle.DECORATED);
+				stage = new Stage(StageStyle.DECORATED);
 				stage.setTitle(title);
-				
 				stage.setScene(new Scene(parent));
 				stage.show();
 				stage.setOnCloseRequest(e->
@@ -70,6 +69,26 @@ public abstract class AClientCommonUtilities
 
 	}
 	
+	
+	public static void loadStartPanelWindow(Object classThatAsk, String loc, String title)
+	{
+		Platform.runLater(()->
+		{ 
+			try 
+			{
+					Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
+					AStartClient.primaryStagePanel.setTitle(title);
+					AStartClient.primaryStagePanel.setScene(new Scene(parent));
+					AStartClient.primaryStagePanel.show();
+			} 
+			catch (IOException e) 
+			{
+				alertError("An error has accourd. window can't load","Error"); // open error message
+				e.printStackTrace();
+			}
+		});
+
+	}
 	
 	/**
 	 * This method prompts an alert Error Message 

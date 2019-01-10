@@ -22,7 +22,7 @@ import clientBounderiesLibrarian.StartPanelLibrarianController;
 
 public class AStartClient extends Application
 {
-	
+	public static Stage primaryStagePanel;
 	public static IGUIStartPanel startPanelController;
 	private String choosen="/clientBounderiesLibrarian/StartPanelLibrarian.fxml"; //Librarian
 	private String choosen1="/clientCommonBounderies/StartPanel.fxml";
@@ -34,6 +34,7 @@ public class AStartClient extends Application
         FXMLLoader loader=new FXMLLoader(getClass().getResource(choosen1)); // load the FXML file
         Parent root = (Parent) loader.load();
         startPanelController = loader.getController();//get the controller of fxml
+        primaryStagePanel=primaryStage;
 		Parameters params = getParameters();
 		List<String> list = params.getRaw(); 
 		String arr[]=new String[2];

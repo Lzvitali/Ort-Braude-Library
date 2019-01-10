@@ -10,8 +10,11 @@ import Common.User;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
 import clientConrollers.OBLClient;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
@@ -77,23 +80,31 @@ public class logInController  implements IGUIController
     	//if successful go to the relevant start panel
 		if((msg.getMessage()).equals("successful"))
 		{
-			StartPanelController.numOfActiveWindows--;
-			
-			/*Stage stage = (Stage) LogInBtn.getScene().getWindow();
-		    stage.close();*/
-			
+			try 
+			{
+				Platform.runLater(()->
+				{ 
+					AClientCommonUtilities.stage.close();
+				});
+			}
+			catch (Exception e) 
+			{
+		
+				e.printStackTrace();
+			}
 			 // 1 = Library Director , 2 = Librarian , 3 = reader account
 			if((msg.getNote()).equals("1"))
 			{
-				AClientCommonUtilities.loadWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibraryDirector.fxml","Librarian Start Panel");
+				
+				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibraryDirector.fxml","Librarian Start Panel");
 			}
 			else if((msg.getNote()).equals("2"))
 			{
-				AClientCommonUtilities.loadWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibrarian.fxml","Librarian Start Panel");
+				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibrarian.fxml","Librarian Start Panel");
 			}
-			else if((msg.getNote()).equals("2"))
+			else if((msg.getNote()).equals("3"))
 			{
-				AClientCommonUtilities.loadWindow(startPanelController,"/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml","Librarian Start Panel");
+				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml","Librarian Start Panel");
 			}
 		}
 		

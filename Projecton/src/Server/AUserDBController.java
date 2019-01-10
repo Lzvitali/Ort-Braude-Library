@@ -51,9 +51,9 @@ public class AUserDBController
 		try 
 		{
 			//get the data of the student from the BD
-			ps = connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? ");
+			ps = connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? AND password=? ");
 			ps.setString(1, ((User)msg.getObjectList().get(0)).getId() ); 
-			//ps.setString(2, ((User)msg.getObjectList().get(0)).getPassword() ); 
+			ps.setString(2, ((User)msg.getObjectList().get(0)).getPassword()); 
 			rs =ps.executeQuery();
 
 			if(rs.next())
