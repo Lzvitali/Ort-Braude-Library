@@ -1,86 +1,129 @@
-/**
- * Sample Skeleton for 'StartPanelReaderAccount.fxml' Controller Class
- */
-
 package clientBounderiesReaderAccount;
 
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+
+import Common.IGUIController;
+import Common.IGUIStartPanel;
+import Common.ObjectMessage;
+import Common.User;
+import clientCommonBounderies.LogInController;
+import clientCommonBounderies.StartPanelController;
+import clientConrollers.OBLClient;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
-public class StartPanelReaderAccountController 
+public class StartPanelReaderAccountController implements IGUIController,IGUIStartPanel
 {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+	OBLClient client;
+	
+	
+    @FXML
     private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // fx:id="loginBtn"
-    private Button loginBtn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="mainBtn"
-    private Button mainBtn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="myBorrowsAndReserves"
-    private Button myBorrowsAndReserves; // Value injected by FXMLLoader
-
-    @FXML // fx:id="historyBtn"
-    private Button historyBtn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="searchTextField"
-    private JFXTextField searchTextField; // Value injected by FXMLLoader
-
-    @FXML // fx:id="searchBtn"
-    private Button searchBtn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="bookNameRB"
-    private JFXRadioButton bookNameRB; // Value injected by FXMLLoader
-
-    @FXML // fx:id="authorNameRB"
-    private JFXRadioButton authorNameRB; // Value injected by FXMLLoader
-
-    @FXML // fx:id="topicRB"
-    private JFXRadioButton topicRB; // Value injected by FXMLLoader
-
-    @FXML // fx:id="freeSearchRB"
-    private JFXRadioButton freeSearchRB; // Value injected by FXMLLoader
-
-    @FXML // fx:id="searchResultTable"
-    private TableView<?> searchResultTable; // Value injected by FXMLLoader
-
-    @FXML // fx:id="bookNameColumn"
-    private TableColumn<?, ?> bookNameColumn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="authorNameColumn"
-    private TableColumn<?, ?> authorNameColumn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="yearColumn"
-    private TableColumn<?, ?> yearColumn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="topicColumn"
-    private TableColumn<?, ?> topicColumn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="isDesiredColumn"
-    private TableColumn<?, ?> isDesiredColumn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="viewIntroColumn"
-    private TableColumn<?, ?> viewIntroColumn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="reserveBtn"
-    private TableColumn<?, ?> reserveBtn; // Value injected by FXMLLoader
+    @FXML
+    private Button logOutBtn;
 
     @FXML
-    void makeLogin(ActionEvent event) 
-    {
+    private Button myBorrowsAndReserves;
 
+    @FXML
+    private Button historyBtn;
+
+    @FXML
+    private Button historyBtn1;
+
+    @FXML
+    private JFXTextField searchTextField;
+
+    @FXML
+    private Button searchBtn;
+
+    @FXML
+    private JFXRadioButton bookNameRB;
+
+    @FXML
+    private JFXRadioButton authorNameRB;
+
+    @FXML
+    private JFXRadioButton topicRB;
+
+    @FXML
+    private JFXRadioButton freeSearchRB;
+
+    @FXML
+    private TableView<?> searchResultTable;
+
+    @FXML
+    private TableColumn<?, ?> bookNameColumn;
+
+    @FXML
+    private TableColumn<?, ?> authorNameColumn;
+
+    @FXML
+    private TableColumn<?, ?> yearColumn;
+
+    @FXML
+    private TableColumn<?, ?> topicColumn;
+
+    @FXML
+    private TableColumn<?, ?> isDesiredColumn;
+
+    @FXML
+    private TableColumn<?, ?> viewIntroColumn;
+
+    @FXML
+    private TableColumn<?, ?> reserveBtn;
+    
+    
+    
+    @FXML
+    void initialize() 
+    {
+    	client=StartPanelController.connToClientController;
+    	client.setClientUI(this);
+    }
+
+    @FXML
+    void makeLogOut(ActionEvent event) 
+    {
+    	//change the status of that user in the DB
+    	User user = new User(LogInController.currentID);
+    	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+    	client.handleMessageFromClient(msg);
+    	
+    	//got to StartPannel
+		try 
+		{
+			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+			Stage primaryStage = new Stage();
+			primaryStage.setTitle("Ort Braude Library");
+			Pane root;
+			root = FXMLLoader.load(getClass().getResource("/clientCommonBounderies/StartPanel.fxml"));
+			Scene scene = new Scene(root);
+			primaryStage.setScene(scene);		
+			primaryStage.show();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
     }
 
     @FXML
@@ -101,16 +144,23 @@ public class StartPanelReaderAccountController
 
     }
 
-    @FXML
-    void openMain(ActionEvent event) 
-    {
+	@Override
+	public int getActivateWindows() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-    }
+	@Override
+	public void setActivateWindows(int newWindows) {
+		// TODO Auto-generated method stub
+		
+	}
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() 
-    {
-        
+	@Override
+	public void display(ObjectMessage msg) {
+		// TODO Auto-generated method stub
+		
+	}
 
-    }
+
 }

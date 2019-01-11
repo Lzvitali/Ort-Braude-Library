@@ -6,16 +6,25 @@ import com.jfoenix.controls.JFXTextField;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
+import Common.User;
 import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.LogInController;
+import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 
 /**
@@ -32,7 +41,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	 */
 	OBLClient client;
 
-	private static int numOfActiveWindows=0;  
+	private static int numOfActiveWindows=0;
+	
+	
+	
+	//FXML attibutes ****************************************************
 	
     @FXML 
     private Button logOutBtn; 
@@ -134,6 +147,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     private TableColumn<?, ?> borrowsAndReservesColumn; 
     
     
+    private ToggleGroup toggleGroupForBooks; 
+    private ToggleGroup toggleGroupForAccounts; 
+    
+    
     
     //for the Library Director only
     ///////////////////////////////////////////////////////////////////////////////////
@@ -151,40 +168,74 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     }
     ///////////////////////////////////////////////////////////////////////////////////
     
-    
-    
+
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize(String []connectionDetails) 
+    public void initialize() 
     {
     	
-    	String ip = connectionDetails[0];
-    	int port = Integer.parseInt(connectionDetails[0]);
+    	client=StartPanelController.connToClientController;
+    	client.setClientUI(this);
     	
-    	try 
-        {
-          client= new OBLClient(ip, port, this);
-        } 
-        catch(IOException exception) 
-        {
-        	System.out.println("Error: Can't setup connection!"+ " Terminating client.");
-        	System.exit(1);
-        }
-    	
-    	
+    	setRedioButtonsForBooksSearch();
+    	setRedioButtonsForAccountsSearch();
     }
     
-
-    @FXML
-    void makeLogOut(ActionEvent event) 
+    void setRedioButtonsForBooksSearch()
     {
-
+    	toggleGroupForBooks = new ToggleGroup();
+        this.bookNameRB.setToggleGroup(toggleGroupForBooks);
+        this.authorNameRB.setToggleGroup(toggleGroupForBooks);
+        this.topicRB.setToggleGroup(toggleGroupForBooks);
+        this.freeSearchBookRB.setToggleGroup(toggleGroupForBooks);
     }
-
+    
+    void setRedioButtonsForAccountsSearch()
+    {
+    	toggleGroupForBooks = new ToggleGroup();
+        this.iDRB.setToggleGroup(toggleGroupForBooks);
+        this.firstNameRB.setToggleGroup(toggleGroupForBooks);
+        this.lastNameRB.setToggleGroup(toggleGroupForBooks);
+        this.freeSearchReaderAccountRB.setToggleGroup(toggleGroupForBooks);
+        
+    }
+    
+    
     @FXML
     void makeSearch(ActionEvent event) 
     {
 
+    }
+    
+    /**
+     * When button Log out will be pressed it will take you to the StartPanel
+     * @param event
+     */
+    @FXML
+    void makeLogOut(ActionEvent event) 
+    {
+    	//change the status of that user in the DB
+    	User user = new User(LogInController.currentID);
+    	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+    	client.handleMessageFromClient(msg);
+    	
+    	//got to StartPannel
+		try 
+		{
+			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
+			Stage primaryStage = new Stage();
+			primaryStage.setTitle("Ort Braude Library");
+			Pane root;
+			root = FXMLLoader.load(getClass().getResource("/clientCommonBounderies/StartPanel.fxml"));
+			Scene scene = new Scene(root);
+			primaryStage.setScene(scene);		
+			primaryStage.show();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		
     }
 
     @FXML
@@ -196,6 +247,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML
     void openBorrowBook(ActionEvent event) 
     {
+    	client.handleMessageFromClient(new ObjectMessage("boom")); 
     	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
     }
 

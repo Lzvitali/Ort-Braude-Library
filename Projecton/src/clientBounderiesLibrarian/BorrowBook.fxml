@@ -15,12 +15,12 @@
    <children>
       <VBox layoutX="123.0" layoutY="99.0" prefHeight="102.0" prefWidth="253.0" spacing="20.0">
          <children>
-            <JFXTextField labelFloat="true" promptText="Reader Account ID">
+            <JFXTextField fx:id="readerAccountID" labelFloat="true" promptText="Reader Account ID">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </JFXTextField>
-            <JFXTextField fx:id="CopyIdBtn" labelFloat="true" onAction="#setDateForBorrowBook" promptText="Copy ID">
+            <JFXTextField fx:id="CopyIdTextField" labelFloat="true" onAction="#setDateForBorrowBook" promptText="Copy ID">
                <VBox.margin>
                   <Insets />
                </VBox.margin>

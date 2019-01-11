@@ -6,7 +6,6 @@ import java.util.Optional;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
-import clientConrollers.Main;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,15 +18,14 @@ import javafx.stage.StageStyle;
 
 /**
  * 
- * @author Vitali
  * This Class contains the common action for the GUIs controllers
  */
 
 public abstract class AClientCommonUtilities 
 {
 	
-	private static IGUIStartPanel startPanelUser=Main.temp.getController();
-
+	private static IGUIStartPanel startPanelUser = AStartClient.startPanelController;
+	public static Stage stage;
 
 	/**
 	 * This method opens a new GUI window 
@@ -41,8 +39,9 @@ public abstract class AClientCommonUtilities
 		{
 			if(startPanelUser.getActivateWindows()==0)
 			{
+				
 				Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
-				Stage stage = new Stage(StageStyle.DECORATED);
+				stage = new Stage(StageStyle.DECORATED);
 				stage.setTitle(title);
 				stage.setScene(new Scene(parent));
 				stage.show();
@@ -70,6 +69,26 @@ public abstract class AClientCommonUtilities
 	}
 	
 	
+	public static void loadStartPanelWindow(Object classThatAsk, String loc, String title)
+	{
+		Platform.runLater(()->
+		{ 
+			try 
+			{
+					Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
+					AStartClient.primaryStagePanel.setTitle(title);
+					AStartClient.primaryStagePanel.setScene(new Scene(parent));
+					AStartClient.primaryStagePanel.show();
+			} 
+			catch (IOException e) 
+			{
+				alertError("An error has accourd. window can't load","Error"); // open error message
+				e.printStackTrace();
+			}
+		});
+
+	}
+	
 	/**
 	 * This method prompts an alert Error Message 
 	 * @param headerText - the text message to the user
@@ -88,7 +107,7 @@ public abstract class AClientCommonUtilities
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) 
 			{
-				System.exit(0);
+				//System.exit(0);
 			}
 		});
     }
