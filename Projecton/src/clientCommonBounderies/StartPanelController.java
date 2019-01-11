@@ -113,7 +113,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     void openLogin(ActionEvent event) 
     {
     	AClientCommonUtilities.loadWindow(getClass(),"/clientCommonBounderies/LogIn.fxml","Log in");
-    	logInController.startPanelController = getClass(); 
+    	LogInController.startPanelController = getClass(); 
     }
     
     @FXML

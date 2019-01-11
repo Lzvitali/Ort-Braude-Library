@@ -18,7 +18,6 @@ import javafx.stage.StageStyle;
 
 /**
  * 
- * @author Vitali
  * This Class contains the common action for the GUIs controllers
  */
 

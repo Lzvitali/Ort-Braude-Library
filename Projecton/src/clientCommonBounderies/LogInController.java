@@ -19,7 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
-public class logInController  implements IGUIController
+public class LogInController  implements IGUIController
 {
 	OBLClient client;
 
@@ -67,8 +67,6 @@ public class logInController  implements IGUIController
     	
     	User user = new User(id,password);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
-    	
-    	System.out.println(msg);
     	
     	client.handleMessageFromClient(msg); 
     }

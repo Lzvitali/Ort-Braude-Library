@@ -6,7 +6,9 @@ import com.jfoenix.controls.JFXTextField;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
+import Common.User;
 import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
@@ -212,7 +214,12 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML
     void makeLogOut(ActionEvent event) 
     {
+    	//change the status of that user in the DB
+    	User user = new User(LogInController.currentID);
+    	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+    	client.handleMessageFromClient(msg);
     	
+    	//got to StartPannel
 		try 
 		{
 			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
@@ -229,7 +236,6 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			e.printStackTrace();
 		}
 		
-		//TODO: change the status in the DB User Table
     }
 
     @FXML

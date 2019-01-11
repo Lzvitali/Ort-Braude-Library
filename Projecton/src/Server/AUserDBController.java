@@ -20,12 +20,17 @@ public class AUserDBController
 	public static ObjectMessage selection(ObjectMessage msg, Connection connToSQL)
 	{
 		if((msg.getMessage()).equals("user try to log in"))
+		{
 			return tryToLogIn(msg, connToSQL);
+		}
+		else if((msg.getMessage()).equals("user try to log out"))
+		{
+			return tryToLogOut(msg, connToSQL);
+		}
 		
 		
 		
-		
-		
+		 
 		return null; // TODO: delete it. did it only to escape the error 
 	}
 	
@@ -96,6 +101,34 @@ public class AUserDBController
 			e.printStackTrace();
 		}
 		
+		return answer;
+	}
+	
+	
+	/**
+	 * This function commits the log out
+	 * @param msg
+	 * @param connToSQL
+	 * @return a message in ObjectMessage
+	 */
+	private static ObjectMessage tryToLogOut(ObjectMessage msg, Connection connToSQL)
+	{
+		ObjectMessage answer = new ObjectMessage();
+		
+		PreparedStatement updateTime;
+		try 
+		{
+			updateTime = connToSQL.prepareStatement("UPDATE user "+"SET isOnline = ? WHERE ID = ?");
+			updateTime.setString(1, "0");
+			updateTime.setString(2, ((User)msg.getObjectList().get(0)).getId());
+			updateTime.executeUpdate();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+
+		answer.setMessage("successful log out");
 		return answer;
 	}
 
