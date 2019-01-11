@@ -11,7 +11,7 @@ import Common.ReaderAccount;
 
 public class AReaderAccountDBController 
 {
-	
+
 	/**
 	 * This function sorts the request in the 'msg' to the relevant function and returns the answer
 	 * @param msg - the object from the client
@@ -30,7 +30,7 @@ public class AReaderAccountDBController
 		ResultSet rs = null; 
 		ResultSet rs2 = null; 
 		ResultSet rs3 = null; 
-		
+
 		try 
 		{
 			ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
@@ -44,10 +44,11 @@ public class AReaderAccountDBController
 				answer.setMessage("id is already exist in the system");
 			}
 			else
-			{//check if the phone is exist in the DB
+			{
+				//check if the phone is exist in the DB
 				checkPhoneDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE phone = ? ");
 				checkPhoneDB.setString(1,reader.getPhone()); 
-				checkPhoneDB.setString(1,reader.getEmail()); 
+				checkPhoneDB.setString(1,reader.getEmail()); //TODO: ??????????????? Meutar
 				rs2 =checkPhoneDB.executeQuery();
 				if(rs2.next())
 				{
@@ -57,26 +58,26 @@ public class AReaderAccountDBController
 				{
 					//check if the email is exist in the DB
 					checkEmailDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE email = ? ");
-					checkEmailDB.setString(1,reader.getPhone()); 
+					checkEmailDB.setString(1,reader.getPhone()); //TODO: ??????????????? Meutar
 					checkEmailDB.setString(1,reader.getEmail()); 
-					rs2 =checkEmailDB.executeQuery();
+					rs2 =checkEmailDB.executeQuery(); //TODO: should be r3
 					if(rs3.next())
 					{
 						answer.setMessage("email is already exist in the system");
 					}
 				}
-				
+
 			}
 			updateUser = (PreparedStatement) connToSQL.prepareStatement("INSERT INTO user ('ID','password','permission','isOnline') VALUES \r\n" +" (?,?,?,?); "); 
-					
+
 			updateUser.setString(1,reader.getId()); 
 			updateUser.setString(2,reader.getPassword()); 
 			updateUser.setInt(3,reader.getPermission()); 
 			updateUser.setBoolean(4,reader.isOnline()); 
 			updateUser.executeQuery();
-			
+
 			updateReaderAccount = (PreparedStatement) connToSQL.prepareStatement("INSERT INTO readeraccount ('ID','firstName','lastName','phone','email','address','educationYear','status','numOfDelays') VALUES \r\n" +" (?,?,?,?,?,?,?,?,?); "); 
-			
+
 			updateReaderAccount.setString(1,reader.getId()); 
 			updateReaderAccount.setString(2,reader.getFirstName()); 
 			updateReaderAccount.setString(3,reader.getLastName()); 
@@ -88,12 +89,12 @@ public class AReaderAccountDBController
 			updateReaderAccount.setInt(9,reader.getNumOfDelays()); 
 			updateReaderAccount.executeQuery();
 			answer.setMessage("successful registration");
-	}
+		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		
+
 		return answer;
-}
+	}
 }

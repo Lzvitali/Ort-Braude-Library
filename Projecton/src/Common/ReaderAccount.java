@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javafx.scene.control.Button;
 
-public class ReaderAccount extends User implements Serializable
+public class ReaderAccount extends User
 {
 
 	private static final long serialVersionUID = 1L;
@@ -18,8 +18,8 @@ public class ReaderAccount extends User implements Serializable
 	private String educationYear;//add to table column 
 
 	//buttons for the Librarian and for the Library director
-	private Button borrowsAndReserves;
-	private Button freeze;
+	private transient Button borrowsAndReserves;
+	private transient Button freeze;
 	
 	
 	//Constructors
