@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="518.0" prefWidth="391.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.RegisterNewReaderAccountController">
    <children>
-      <VBox layoutX="43.0" layoutY="79.0" prefHeight="294.0" prefWidth="338.0" spacing="15.0">
+      <VBox layoutX="21.0" layoutY="79.0" prefHeight="294.0" prefWidth="338.0" spacing="15.0">
          <children>
             <HBox prefHeight="43.0" prefWidth="335.0">
                <children>
@@ -46,7 +46,7 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <JFXTextField fx:id="EmailTextField2" labelFloat="true" prefHeight="30.0" prefWidth="305.0" promptText="Adress">
+                  <JFXTextField fx:id="AdressTextField" labelFloat="true" prefHeight="30.0" prefWidth="305.0" promptText="Adress">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
@@ -91,7 +91,7 @@
                         <Font name="System Bold Italic" size="18.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="EmailTextField" labelFloat="true" prefHeight="53.0" prefWidth="308.0" promptText="Email">
+                  <JFXTextField fx:id="EmailTextField" labelFloat="true" prefHeight="26.0" prefWidth="240.0" promptText="Email">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
                      </font>
@@ -110,7 +110,7 @@
                   <Font name="System Italic" size="15.0" />
                </font>
             </Label>
-            <JFXComboBox fx:id="EditionYearsCmbBox" prefHeight="21.0" prefWidth="108.0" />
+            <JFXComboBox fx:id="EditionYearsCmbBox" onAction="#combo" prefHeight="21.0" prefWidth="108.0" />
          </children>
       </HBox>
       <Label alignment="CENTER" layoutX="50.0" layoutY="419.0" prefHeight="28.0" prefWidth="10.0" text="*" textFill="#e40a0a">

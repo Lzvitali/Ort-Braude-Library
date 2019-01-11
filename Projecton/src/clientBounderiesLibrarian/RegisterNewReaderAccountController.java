@@ -6,13 +6,21 @@ import com.jfoenix.controls.JFXTextField;
 
 import Common.IGUIController;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
+import Common.User;
+import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
+import clientConrollers.OBLClient;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -21,7 +29,7 @@ import javafx.scene.control.ButtonType;
 
 public class RegisterNewReaderAccountController implements IGUIController
 {
-
+	OBLClient client;
     @FXML
     private ResourceBundle resources;
 
@@ -35,7 +43,7 @@ public class RegisterNewReaderAccountController implements IGUIController
     private JFXTextField LastNameTextField;
 
     @FXML
-    private JFXTextField EmailTextField2;
+    private JFXTextField AdressTextField;
 
     @FXML
     private JFXTextField FirstNameTextField;
@@ -54,6 +62,8 @@ public class RegisterNewReaderAccountController implements IGUIController
 
     @FXML
     private JFXButton SaveBtn;
+    
+    ObservableList<String> list1;
 
     @FXML
     void cancelRegistration(ActionEvent event) 
@@ -67,6 +77,21 @@ public class RegisterNewReaderAccountController implements IGUIController
     	String result=validationResult();
     	if(result.equals("correct"))
     	{
+    		String userID=UserIDTextField.getText();
+    		String phoneNum=PhoneNumberTextField.getText();
+    		String email=EmailTextField.getText();
+    		String firstName=FirstNameTextField.getText();
+    		String lastName=LastNameTextField.getText();
+    		String adress=AdressTextField.getText();
+    		//
+    		Random rand = new Random();
+    		int randPassword = rand.nextInt(10000) + 1;
+    		String password=Integer.toString(randPassword);
+    		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYearsCmbBox.getValue().toString()); 
+    		ObjectMessage msg = new ObjectMessage(reader,"try to register new account","ReaderAccount");
+        	client.handleMessageFromClient(msg); 
+    		
+    		
     		
     	}
     	else
@@ -75,9 +100,22 @@ public class RegisterNewReaderAccountController implements IGUIController
 
     @FXML
     void initialize() {
-       
+    	client=StartPanelController.connToClientController;
+    	client.setClientUI(this);
+       combo();
     }
     
+    
+	public void combo() 
+	  {
+		  ArrayList <String> s=new ArrayList<String>();
+		  s.add("A");
+		  s.add("B");
+		  s.add("C");
+		  s.add("D");
+		  list1 = FXCollections.observableArrayList(s);
+		  EditionYearsCmbBox.setItems((ObservableList) list1);
+	    }
     
     private String validationResult()
     {
