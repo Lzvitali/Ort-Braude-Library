@@ -67,7 +67,7 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 		{
 			e.printStackTrace();
 		}
-	}
+	} 
 	
 	else if( (objectMessage.getNote()).equals("ReaderAccount") ) 
 	{

@@ -417,7 +417,7 @@ public abstract class AValidationInput
 	
 	private static String checkValidationDateOfBook(String context)
 	{
-		if(!onlyNumbers(context))
+		if(!onlyNumbers(context)) // TODO: do new function DONT use the one that checks ID
 		{
 			return "Year must be only numbers";
 		}

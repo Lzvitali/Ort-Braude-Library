@@ -4,13 +4,21 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 
+import Common.Book;
 import Common.IGUIController;
 import Common.ObjectMessage;
+import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,8 +46,6 @@ public class AddBookController implements IGUIController
 	@FXML
 	private JFXTextField EditionTextField;
 
-	@FXML
-	private JFXTextField ShelfNumberTextField;
 
 	@FXML
 	private JFXCheckBox DesiredCheckBox;
@@ -60,34 +66,100 @@ public class AddBookController implements IGUIController
 	private JFXButton SaveBtn;
 
 	
-	//lo asiti
+	//lo asiti the funkziya im nirze lahzor lemasah rashi
 	@FXML
 	void cancelBtnClicked(ActionEvent event) 
 	{
-		client.handleMessageFromClient(new ObjectMessage("booooom2"));
+		//lahzor lemasah rashi
 	}
 
 	//lo asiti
 	@FXML
 	void saveAddNewBook(ActionEvent event) 
-	{
-		client.handleMessageFromClient(new ObjectMessage("booooom2"));
+	{ 
+		/*if(validationFields().equals("correct"))//if all fields correctly
+		{
+			boolean isDesired= DesiredCheckBox.isSelected();
+			Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),EditionTextField.getText(),String.valueOf(isDesired));
+			ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
+			client.handleMessageFromClient(msg);
+		}
+		else
+		{
+			AClientCommonUtilities.alertError("The fields you filled are not correctly.","Error"); // open error message
+		}*/
+		
+		
+		boolean isDesired= DesiredCheckBox.isSelected();
+		Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),EditionTextField.getText(),String.valueOf(isDesired));
+		ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
+		client.handleMessageFromClient(msg);
 	}
-
-	//lo asiti
+	
+	
+	//lo asiti the kashur lhaalat kovetz
 	@FXML
 	void uploadTableOfContents(ActionEvent event) 
 	{
-		client.handleMessageFromClient(new ObjectMessage("booooom2"));
+		
 	}
 
+	//
+	public void choiceBox() 
+	{
+		TopicChoiceBox = new ChoiceBox<String>(FXCollections.observableArrayList("drama", "comdey", "VBA","SQL","PHP","software","Installation","Programmierung","Referenz"));
+	}
 	@FXML
 	void initialize() 
 	{
 		client=StartPanelController.connToClientController;
 		client.setClientUI(this);
+		choiceBox();
 
 	}
+	
+	//check validation
+	 private String validationFields()
+	 {
+		 String result,finalResult="";
+
+		 result=AValidationInput.checkValidationUser("bookName",BookTitleTextField.getText());
+		 if(!result.equals("correct"))
+		 {
+			 finalResult+=result+"\n";
+		 }
+			 
+
+		 result=AValidationInput.checkValidationUser("authorName",BookAuthorTextField.getText());
+		 if(!result.equals("correct"))
+		 {
+			 finalResult+=result+"\n";
+		 }
+
+		 result=AValidationInput.checkValidationUser("dateOfBook",PublishedYearTextField.getText());
+		 if(!result.equals("correct"))
+		 {
+			 finalResult+=result+"\n";
+		 }
+
+		 result=AValidationInput.checkValidationUser("topic",TopicChoiceBox.getAccessibleText());
+		 if(!result.equals("correct"))
+		 {
+			 finalResult+=result+"\n";
+		 }
+	    	
+	
+	    	if(finalResult.equals(""))
+	    	{
+	    		return "correct";
+	    	}
+	    		
+	    	else
+	    	{
+	    		return finalResult;
+	    	}
+	    		
+	    }
 
 	//lo asiti
 	@Override
