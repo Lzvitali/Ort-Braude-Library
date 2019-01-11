@@ -75,6 +75,8 @@ public abstract class AClientCommonUtilities
 		{ 
 			try 
 			{
+				startPanelUser.setActivateWindows(0);
+				stage.close();
 				FXMLLoader loader=new FXMLLoader(((Class<?>)classThatAsk).getResource(loc)); // load the FXML file
 		        Parent parent = (Parent) loader.load();
 		        startPanelUser = loader.getController();//get the controller of fxml
