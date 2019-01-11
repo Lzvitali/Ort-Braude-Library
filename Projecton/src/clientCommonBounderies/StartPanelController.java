@@ -22,6 +22,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 
 /**
  * This class is a Controller for StartPanel.fxml AND for LogInFxml
@@ -86,12 +87,13 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     @FXML 
     private TableColumn<?, ?> viewIntroColumn; 
 
-
+    private ToggleGroup toggleGroupForBooks; 
     
     @FXML 
     public void initialize(String[] arr) 
     {
     	connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
+    	setRedioButtonsForBooksSearch();
 
     }
 
@@ -123,10 +125,27 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     	
     	//if success do this and if selected book :
     	 
-    	Book book= new Book(searchTextField.getText());
-    	ObjectMessage objectMessage=new ObjectMessage(book,"SearchBook","Book");
-    	connToClientController.handleMessageFromClient(objectMessage);
-    	
+    	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
+    	String selectedString = selectedRadioButton.getText();
+    	Book askedBook=new Book();
+    	if(selectedString.equals("Book name"))
+    	{
+    		askedBook.setBookName(searchTextField.getText());
+    	}
+    	if(selectedString.equals("Author name"))
+    	{
+    		askedBook.setAuthorName(searchTextField.getText());
+    	}
+    	if(selectedString.equals("Topic"))
+    	{
+    		askedBook.setTopic(searchTextField.getText());;
+    	}
+    	if(selectedString.equals("Free search"))
+    	{
+    		askedBook.setBookName("needtocheckthis");
+    	}
+    	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+    	connToClientController.handleMessageFromClient(sendToServer);   	
     }
     
 
@@ -150,5 +169,17 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		numOfActiveWindows=newWindows;
 		
 	}
-
+	
+    void setRedioButtonsForBooksSearch()
+    {
+    	toggleGroupForBooks = new ToggleGroup();
+        this.bookNameRB.setToggleGroup(toggleGroupForBooks);
+        this.authorNameRB.setToggleGroup(toggleGroupForBooks);
+        this.topicRB.setToggleGroup(toggleGroupForBooks);
+        this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
+    }
+	
+    
+    
+    
 }

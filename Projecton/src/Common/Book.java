@@ -33,21 +33,23 @@ public class Book implements IEntity, Serializable
 //		Button details= new Button();
 //	}
 	  
-	public static int getNextRow() {
-		return nextRow;
-	}
-
-
-	public static void setNextRow(int nextRow) {
-		Book.nextRow = nextRow;
-	}
-
+	
 
 	public Book(String bookName)
 	{
 		this.bookName = bookName;
 	}
 
+	public Book()
+	{
+			this.bookName = null;
+			this.authorName = null;
+			this.topic = null;
+			this.isDesired = false;
+			this.year=-1;
+			Button reserve = null;
+			Button details= null;
+	}
 
 	public Book( String bookName, String authorName, String year, String topic, String isDesired) 
 	{
@@ -60,6 +62,19 @@ public class Book implements IEntity, Serializable
 		this.year=Integer.parseInt(year);
 		Button reserve = new Button();
 		//reserve.setText("Reservation");
+		Button details= new Button();
+	}
+	
+	
+	public Book( String bookName, String authorName, int year, String topic, Boolean isDesired) 
+	{
+		super();
+		this.bookName = bookName;
+		this.authorName = authorName;
+		this.topic = topic;
+		this.isDesired = isDesired;
+		this.year=year;
+		Button reserve = new Button();
 		Button details= new Button();
 	}
 
@@ -164,6 +179,15 @@ public class Book implements IEntity, Serializable
 	public void setBookName(String bookName) 
 	{
 		this.bookName = bookName;
+	}
+
+	public static int getNextRow() {
+		return nextRow;
+	}
+
+
+	public static void setNextRow(int nextRow) {
+		Book.nextRow = nextRow;
 	}
 
 }
