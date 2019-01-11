@@ -218,23 +218,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     	User user = new User(LogInController.currentID);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
     	client.handleMessageFromClient(msg);
-    	
-    	//got to StartPannel
-		try 
-		{
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			primaryStage.setTitle("Ort Braude Library");
-			Pane root;
-			root = FXMLLoader.load(getClass().getResource("/clientCommonBounderies/StartPanel.fxml"));
-			Scene scene = new Scene(root);
-			primaryStage.setScene(scene);		
-			primaryStage.show();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
+    	AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
 		
     }
 
@@ -247,7 +231,6 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML
     void openBorrowBook(ActionEvent event) 
     {
-    	client.handleMessageFromClient(new ObjectMessage("boom")); 
     	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
     }
 
