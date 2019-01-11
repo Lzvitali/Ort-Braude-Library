@@ -75,10 +75,14 @@ public abstract class AClientCommonUtilities
 		{ 
 			try 
 			{
-					Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
-					AStartClient.primaryStagePanel.setTitle(title);
-					AStartClient.primaryStagePanel.setScene(new Scene(parent));
-					AStartClient.primaryStagePanel.show();
+				FXMLLoader loader=new FXMLLoader(((Class<?>)classThatAsk).getResource(loc)); // load the FXML file
+		        Parent parent = (Parent) loader.load();
+		        startPanelUser = loader.getController();//get the controller of fxml
+
+				//Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
+				AStartClient.primaryStagePanel.setTitle(title);
+				AStartClient.primaryStagePanel.setScene(new Scene(parent));
+				AStartClient.primaryStagePanel.show();
 			} 
 			catch (IOException e) 
 			{
