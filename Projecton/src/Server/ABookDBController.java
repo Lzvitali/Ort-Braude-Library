@@ -29,20 +29,20 @@ public abstract class  ABookDBController
 	 */
 	public static ObjectMessage selection(ObjectMessage msg, Connection connToSQL)
 	{
-//		
-//		if (((msg.getMessage()).equals("addBook")))
-//		{
-//			return tryToAddBook(msg, connToSQL);
-//		}
-		
+
+		if (((msg.getMessage()).equals("addBook")))
+		{
+			return tryToAddBook(msg, connToSQL);
+		}
+
 		if (((msg.getMessage()).equals("SearchBook")))
 		{
 			return searchBook(msg, connToSQL);
 		}
-		
-	return null; // TODO: delete it. did it only to escape the error 
+
+		return null; // TODO: delete it. did it only to escape the error 
 	}
-	
+
 	//Natasha (lo lagaat)!!!!!!!!
 	private static ObjectMessage tryToAddBook(ObjectMessage msg, Connection connToSQL)
 	{
@@ -51,69 +51,69 @@ public abstract class  ABookDBController
 		PreparedStatement addCopy=null ;
 		PreparedStatement addBook=null ;
 		ResultSet rs1 = null; 
-		
-		
+
+
 		Book tempBook=(Book)msg.getObjectList().get(0);
-		
-		
+
 		try 
 		{
-			//
-			checkBook = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM book WHERE bookName = ? AND authorName=? AND year = ?");
+			String query= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? ";
+			checkBook = connToSQL.prepareStatement(query);
 			checkBook.setString(1,tempBook.getBookName()); 
 			checkBook.setString(2, tempBook.getAuthorName());
 			checkBook.setInt(3, tempBook.getDateOfBook());
 			rs1 =checkBook.executeQuery();
-			
-			//
-			
+
+			System.out.println("After Exexcute");
+
 			//add like copy
 			if(rs1.next())
 			{
-				Random rand = new Random();
-	    		int randId= rand.nextInt(50) + 1;
-				addCopy  = (PreparedStatement) connToSQL.prepareStatement("INSERT INTO copy ('copyId','bookId') VALUES \r\n" +" (?,?); "); 
-				addCopy.setInt(1,randId);
-				addCopy.setInt(2,tempBook.getBookID());
-				addCopy.executeQuery();
+				addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
+				addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
+				addCopy.executeUpdate();
 				massegeRes.setMessage("This Book is already exist in the system,so successfully add it like copy.");
 			}
-			
+
 			//add like book
 			else 
-			{    
-				//TODO:add book id
-										
-				addBook=(PreparedStatement) connToSQL.prepareStatement("INSERT INTO book ('bookId','bookName','authorName','year','topic',''isDesired) VALUES \r\n" +" (?,?,?,?,?,?); ");
-				addBook.setInt(1, Book.getNextRow());
-				addBook.setString(2, tempBook.getBookName());
-				addBook.setString(3, tempBook.getAuthorName());
-				addBook.setInt(4, tempBook.getDateOfBook());
-				addBook.setString(5, tempBook.getTopic());
-				addBook.setBoolean(6, tempBook.isDesired());
-				//massegeRes.setMessage("This Book was successfully added.");
-				//
-				Random rand = new Random();
-	    		int randId= rand.nextInt(50) + 1;
-				addCopy  = (PreparedStatement) connToSQL.prepareStatement("INSERT INTO copy ('copyId','bookId') VALUES \r\n" +" (?,?); "); 
-				addCopy.setInt(1,randId);
-				addCopy.setInt(2,tempBook.getBookID());
-				addCopy.executeQuery();
-				massegeRes.setMessage("This Book was successfully added.");
-			}
-				
-		}
-			
-			
+			{   
+				//add new book in table
+				addBook=connToSQL.prepareStatement("INSERT INTO `Book` (`bookName`,`authorName`,`year`,`topic`,`isDesired`) VALUES (?,?,?,?,?)");
+				addBook.setString(1, (String)tempBook.getBookName());
+				addBook.setString(2, (String)tempBook.getAuthorName());
+				addBook.setInt(3, (int)tempBook.getDateOfBook());
+				addBook.setString(4, "somethingTemp");//tempBook.getTopic()
+				addBook.setBoolean(5,true);//(Boolean) tempBook.isDesired()
+				System.out.println(addBook);
+				addBook.executeUpdate();
+
+				//add copy of this book
+				String queryForNewBook= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? ";
+				checkBook = connToSQL.prepareStatement(queryForNewBook);
+				checkBook.setString(1,tempBook.getBookName()); 
+				checkBook.setString(2, tempBook.getAuthorName());
+				checkBook.setInt(3, tempBook.getDateOfBook());
+				rs1 =checkBook.executeQuery();
+
+				if(rs1.next())
+				{
+					addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
+					addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
+					addCopy.executeUpdate();
+					massegeRes.setMessage("This Book was successfully added like book and like copy.");
+				}
+			}	
+		}	
 		catch (SQLException e)
 		{
-			
+
 			e.printStackTrace();
 		}
 		return massegeRes;
 	}
-	
-	
+
+
 	
 	private static ObjectMessage searchBook(ObjectMessage msg, Connection connToSQL)
 	{

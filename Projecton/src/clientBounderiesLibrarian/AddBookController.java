@@ -73,7 +73,7 @@ public class AddBookController implements IGUIController
 		//lahzor lemasah rashi
 	}
 
-	//lo asiti
+	//add new book or only copy
 	@FXML
 	void saveAddNewBook(ActionEvent event) 
 	{ 
