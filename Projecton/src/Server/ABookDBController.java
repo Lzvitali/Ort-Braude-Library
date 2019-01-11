@@ -1,20 +1,22 @@
 package Server;
 
-
-import java.io.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Scanner;
 
-import Common.Book;
 import Common.ObjectMessage;
 
 public abstract class  ABookDBController 
 {
-
+	/**
+	 * This function sorts the request in the 'msg' to the relevant function and returns the answer
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
+	public static ObjectMessage selection(ObjectMessage msg, Connection connToSQL)
+	{
+		
+		
+		return null; //TODO: delete this line
+	}
 
 }

@@ -69,6 +69,45 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 		}
 	}
 	
+	else if( (objectMessage.getNote()).equals("ReaderAccount") ) 
+	{
+		answer = AReaderAccountDBController.selection(objectMessage,connToSQL);
+		try 
+		{
+			client.sendToClient(answer);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	else if( (objectMessage.getNote()).equals("Book") ) 
+	{
+		answer = ABookDBController.selection(objectMessage,connToSQL);
+		try 
+		{
+			client.sendToClient(answer);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	else if( (objectMessage.getNote()).equals("Copy") ) 
+	{
+		answer = ACopyDBController.selection(objectMessage,connToSQL);
+		try 
+		{
+			client.sendToClient(answer);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	
 	
 	
