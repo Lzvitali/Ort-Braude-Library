@@ -1,9 +1,13 @@
 package Common;
 
+import java.io.Serializable;
+
 import javafx.scene.control.Button;
 
-public class ReaderAccount extends User
+public class ReaderAccount extends User implements Serializable
 {
+
+	private static final long serialVersionUID = 1L;
 	private String firstName;
 	private String lastName;
 	private String phone;
@@ -147,6 +151,16 @@ public class ReaderAccount extends User
 
 	public void setFreeze(Button freeze) {
 		this.freeze = freeze;
+	}
+
+
+	@Override
+	public String toString() 
+	{
+		return "ReaderAccount [firstName=" + firstName + ", lastName=" + lastName + ", phone=" + phone + ", email="
+				+ email + ", status=" + status + ", numOfDelays=" + numOfDelays + ", adress=" + adress
+				+ ", educationYear=" + educationYear + ", borrowsAndReserves=" + borrowsAndReserves + ", freeze="
+				+ freeze + "]";
 	}
 	
 	

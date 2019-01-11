@@ -88,6 +88,7 @@ public class RegisterNewReaderAccountController implements IGUIController
     		int randPassword = rand.nextInt(10000) + 1;
     		String password=Integer.toString(randPassword);
     		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYearsCmbBox.getValue().toString()); 
+    		System.out.println(reader);
     		ObjectMessage msg = new ObjectMessage(reader,"try to register new account","ReaderAccount");
         	client.handleMessageFromClient(msg); 
     		

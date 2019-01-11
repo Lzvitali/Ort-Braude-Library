@@ -259,8 +259,7 @@ public abstract class AValidationInput
 	{
 		for(int i=0;i<context.length();i++)
 		{
-			
-			if(!(context.matches("[a-zA-Z]")))
+			if (!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || (context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z')))
 			{
 				return false;
 			}
