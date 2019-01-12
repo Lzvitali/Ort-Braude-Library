@@ -301,8 +301,6 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     	User user = new User(LogInController.currentID);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
     	client.handleMessageFromClient(msg);
-    	
-		
     }
 
     @FXML
