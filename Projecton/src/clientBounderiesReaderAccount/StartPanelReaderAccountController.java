@@ -54,10 +54,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     private Button myBorrowsAndReserves;
 
     @FXML
-    private Button historyBtn;
+    private Button historyBtn; 
 
     @FXML
-    private Button historyBtn1;
+    private Button personalDetailsBtn;
 
     @FXML
     private JFXTextField searchTextField;
@@ -115,7 +115,16 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     @FXML
     void makeLogOut(ActionEvent event) 
     {
+    	
     	//change the status of that user in the DB
+    	User user = new User(LogInController.currentID);
+    	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+    	client.handleMessageFromClient(msg);
+    	   	
+    	
+    	//Old log out:
+    	
+    	/*//change the status of that user in the DB
     	User user = new User(LogInController.currentID);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
     	client.handleMessageFromClient(msg);
@@ -135,7 +144,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		}
+		}*/
     }
 
     @FXML
@@ -167,14 +176,22 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     @FXML
     void openBorrowsAndReserves(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyOrdersAndBorrows.fxml","My orders and borrows");
     }
 
     @FXML
     void openHistory(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyHistory.fxml","My history");
     }
+    
+    @FXML
+    void openPersonalDetails(ActionEvent event) 
+    {
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/PersonalDetails.fxml","Personal details");
+    }
+    
+    
 
 	@Override
 	public int getActivateWindows() {
@@ -194,6 +211,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		if(msg.getMessage().equals("BookSearch"))
 		{
 			searchBookResult(msg);
+		}
+		else if(msg.getMessage().equals("successful log out"))
+		{
+			AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
 		}
 		
 	}
