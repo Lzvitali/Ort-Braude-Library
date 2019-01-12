@@ -105,7 +105,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     
     
     @FXML
-    void initialize() 
+    public void initialize() 
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);

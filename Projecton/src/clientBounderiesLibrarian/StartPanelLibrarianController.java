@@ -296,7 +296,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     	User user = new User(LogInController.currentID);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
     	client.handleMessageFromClient(msg);
-    	AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
+    	
 		
     }
 
@@ -358,6 +358,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		else if(msg.getMessage().equals("ReaderAccountSearch"))
 		{
 			searchReaderAccountResult(msg);
+		}
+		else if(msg.getMessage().equals("successful log out"))
+		{
+			AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
 		}
 		
 	}

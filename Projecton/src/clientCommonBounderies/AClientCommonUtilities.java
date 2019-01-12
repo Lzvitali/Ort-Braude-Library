@@ -6,6 +6,7 @@ import java.util.Optional;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientBounderiesReaderAccount.StartPanelReaderAccountController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -80,7 +81,13 @@ public abstract class AClientCommonUtilities
 				FXMLLoader loader=new FXMLLoader(((Class<?>)classThatAsk).getResource(loc)); // load the FXML file
 		        Parent parent = (Parent) loader.load();
 		        startPanelUser = loader.getController();//get the controller of fxml
-
+		        if(startPanelUser instanceof StartPanelController)
+		        	((StartPanelController)startPanelUser).initialize(new String[2]);
+		        else if(startPanelUser instanceof StartPanelLibrarianController)
+		        	((StartPanelLibrarianController)startPanelUser).initialize();
+		        else if(startPanelUser instanceof StartPanelReaderAccountController)
+		        	((StartPanelReaderAccountController)startPanelUser).initialize();
+		        AStartClient.primaryStagePanel.close();
 				//Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
 				AStartClient.primaryStagePanel.setTitle(title);
 				AStartClient.primaryStagePanel.setScene(new Scene(parent));
