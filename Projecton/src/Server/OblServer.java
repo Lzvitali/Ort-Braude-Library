@@ -120,7 +120,7 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 */
 protected void serverStarted()
 {
-	System.out.println("The server is up ");
+	System.out.println("The server is online ");
 }
 
 public static void ConnectToDB(String user,String password,String schema) // make the connection for DB according the user and password that entered
@@ -151,7 +151,12 @@ protected void serverStopped()
 	System.out.println("Server has stopped listening for connections.");
 }
 
-
+@Override
+public void finalize() 
+{ 
+	 ObjectMessage objectMessage=new ObjectMessage("User","MakeAllOffline");
+	 AUserDBController.selection(objectMessage,connToSQL);
+} 
 
 public static void main(String[] args) 
 {
@@ -168,11 +173,11 @@ public static void main(String[] args)
 	 try //get the username and the password for MYSQL
 	 {
 		 Scanner reader = new Scanner(System.in);
-		 System.out.println("Enter the username of MYSQL" );
+		// System.out.println("Enter the username of MYSQL" );
 		 user="root";//reader.nextLine();
-		 System.out.println("Enter the password of MYSQL" );
+		// System.out.println("Enter the password of MYSQL" );
 		 password="root";//reader.nextLine();
-		 System.out.println("Enter the name of schema in MYSQL" );
+		// System.out.println("Enter the name of schema in MYSQL" );
 		 schema="obl";//reader.nextLine();
 		 ConnectToDB(user,password,schema);
 		 reader.close();
@@ -191,7 +196,10 @@ public static void main(String[] args)
 	 {
 	   System.out.println("ERROR - Could not listen for clients!");
 	 }
+	 
 	}
+
+
 
 
 }

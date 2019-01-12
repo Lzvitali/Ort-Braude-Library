@@ -124,8 +124,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
         	connToClientController= new OBLClient(ip, port,this);
 		} catch (IOException e) 
         {
-			e.printStackTrace();
-			AClientCommonUtilities.alertError("Please check server connection","No Server Connection ");
+			AClientCommonUtilities.alertErrorWithExit("Please check server connection","No Server Connection ");
 		}
     }
     

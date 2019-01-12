@@ -27,7 +27,10 @@ public class AUserDBController
 		{
 			return tryToLogOut(msg, connToSQL);
 		}
-		
+		else if((msg.getMessage()).equals("MakeAllOffline"))
+		{
+			return LogOutAll(msg, connToSQL);
+		}
 		
 		
 		 
@@ -129,6 +132,24 @@ public class AUserDBController
 		}
 
 		answer.setMessage("successful log out");
+		return answer;
+	}
+	
+	
+	private static ObjectMessage LogOutAll(ObjectMessage msg, Connection connToSQL)
+	{
+		ObjectMessage answer = new ObjectMessage();
+		
+		PreparedStatement updateTime;
+		try 
+		{
+			updateTime = connToSQL.prepareStatement("UPDATE user SET isOnline = 0");
+			updateTime.executeUpdate();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
 		return answer;
 	}
 

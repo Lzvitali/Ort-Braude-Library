@@ -82,11 +82,17 @@ public abstract class AClientCommonUtilities
 		        Parent parent = (Parent) loader.load();
 		        startPanelUser = loader.getController();//get the controller of fxml
 		        if(startPanelUser instanceof StartPanelController)
+		        {
 		        	((StartPanelController)startPanelUser).initialize(new String[2]);
+		        }
 		        else if(startPanelUser instanceof StartPanelLibrarianController)
+		        {
 		        	((StartPanelLibrarianController)startPanelUser).initialize();
+		        }
 		        else if(startPanelUser instanceof StartPanelReaderAccountController)
+		        {
 		        	((StartPanelReaderAccountController)startPanelUser).initialize();
+		        }
 		        AStartClient.primaryStagePanel.close();
 				//Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
 				AStartClient.primaryStagePanel.setTitle(title);
@@ -118,9 +124,23 @@ public abstract class AClientCommonUtilities
 			alert.setTitle(title);
 			alert.getButtonTypes().addAll(bttexit);
 			Optional<ButtonType> result = alert.showAndWait();
+		});
+    }
+	
+	public static void alertErrorWithExit(String headerText,String title) 
+    { 
+		Platform.runLater(()->
+		{  
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			ButtonType bttexit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().clear();
+			alert.setHeaderText(headerText);
+			alert.setTitle(title);
+			alert.getButtonTypes().addAll(bttexit);
+			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) 
 			{
-				//System.exit(0);
+				System.exit(0);
 			}
 		});
     }

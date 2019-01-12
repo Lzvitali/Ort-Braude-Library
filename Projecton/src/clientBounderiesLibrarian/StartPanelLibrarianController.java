@@ -11,6 +11,7 @@ import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
 import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
@@ -191,7 +192,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     	
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
-    	
+    	AStartClient.primaryStagePanel.setOnCloseRequest(e->
+    	{ 
+    		makeLogOut(new ActionEvent());
+    		System.exit(0);
+    	});
     	setRedioButtonsForBooksSearch();
     	setRedioButtonsForAccountsSearch();
     }
