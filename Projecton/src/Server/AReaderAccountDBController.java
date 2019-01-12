@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.sql.PreparedStatement;
 
 
@@ -28,16 +29,78 @@ public class AReaderAccountDBController
 		{
 			return searchReaderAccount(msg, connToSQL);
 		}
-		if (((msg.getMessage()).equals("ReaderAccount")))
+		if (((msg.getMessage()).equals("try to register new account")))
 		{
 			return registerNewReaderAccount(msg, connToSQL);
 		}
+		if (((msg.getMessage()).equals("changePersonalDetails")))
+		{
+			return changePersnalDetails(msg, connToSQL);
+		}
+		
 		return answer;
 	}
+	private static ObjectMessage changePersnalDetails(ObjectMessage msg, Connection connToSQL)
+	{
+		ObjectMessage answer = new ObjectMessage(); 
+		PreparedStatement checkPhoneDB = null;
+		PreparedStatement checkEmailDB = null;
+		PreparedStatement updateUser ;
+		PreparedStatement updateReaderAccount ;
+		ResultSet rs2 = null; 
+		ResultSet rs3 = null; 
+
+		try 
+		{
+			ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
+			checkPhoneDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE phone = ? ");
+			checkPhoneDB.setString(1,reader.getPhone()); 
+			rs2 =checkPhoneDB.executeQuery();
+			if(rs2.next())
+			{
+				answer.setMessage("phone is already exist in the system");
+			}
+			else
+			{
+				checkEmailDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE email = ? ");
+				checkEmailDB.setString(1,reader.getEmail()); 
+				rs3 =checkEmailDB.executeQuery(); 
+				if(rs3.next())
+				{
+					answer.setMessage("email is already exist in the system");
+				}
+				else
+				{ 
+					updateReaderAccount = connToSQL.prepareStatement("UPDATE `readeraccount` SET `firstName`=?,`lastName`=?,`phone`=?,`email`=?,`address`=?,`educationYear`=?,`status`=?,`numOfDelays`=? WHERE ID=?");
+					updateReaderAccount.setString(1,(String)reader.getFirstName()); 
+					updateReaderAccount.setString(2,(String)reader.getLastName()); 
+					updateReaderAccount.setString(3,(String)reader.getPhone());
+					updateReaderAccount.setString(4,(String)reader.getEmail());
+					updateReaderAccount.setString(5,(String)reader.getAdress()); 
+					updateReaderAccount.setInt(6,(int)Integer.parseInt(reader.getEducationYear())); 
+					updateReaderAccount.setString(7,(String)reader.getStatus()); 
+					updateReaderAccount.setInt(8,(int)reader.getNumOfDelays()); 
+					updateReaderAccount.setString(9,reader.getId());
+					updateReaderAccount.executeUpdate();
+					answer.setMessage("successful change details");
+					answer.addObject(msg.getObjectList().get(0));
+				}
+			}
+		}
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}	
+			return answer;
+			
+}
+		
+
+	
+	
 	private static ObjectMessage registerNewReaderAccount(ObjectMessage msg, Connection connToSQL)
 	{
 			ObjectMessage answer = new ObjectMessage();
-			String permition;
 			PreparedStatement checkID = null; 
 			PreparedStatement checkPhoneDB = null;
 			PreparedStatement checkEmailDB = null;
@@ -46,11 +109,13 @@ public class AReaderAccountDBController
 			ResultSet rs = null; 
 			ResultSet rs2 = null; 
 			ResultSet rs3 = null; 
-			ResultSet rs4 = null; 
-
+    		Random rand = new Random();
+    		int randPassword = rand.nextInt(10000) + 1;
+    		String password=Integer.toString(randPassword);
 			try 
 			{
 				ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
+				reader.setPassword(password);
 				//get the data of the student from the BD
 				checkID = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? ");
 				checkID.setString(1,reader.getId()); 
@@ -104,6 +169,7 @@ public class AReaderAccountDBController
 				updateReaderAccount.setInt(9,(int)reader.getNumOfDelays()); 
 				updateReaderAccount.executeUpdate();
 				answer.setMessage("successful registration");
+				answer.addObject(msg.getObjectList().get(0));
 			}
 			catch (SQLException e) 
 			{

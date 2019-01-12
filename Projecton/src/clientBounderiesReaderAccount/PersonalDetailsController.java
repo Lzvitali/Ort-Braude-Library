@@ -2,7 +2,10 @@ package clientBounderiesReaderAccount;
 
 import Common.IGUIController;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
+import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
@@ -71,17 +74,65 @@ public class PersonalDetailsController implements IGUIController
     @FXML
     void updatePersonalDetailsClicked(ActionEvent event) 
     {
-
+    	String result=validationResult();
+    	if(result.equals("correct"))
+    	{
+    		String userID=IDTextField.getText();
+    		String phoneNum=PhoneTextField.getText();
+    		String email=EmailTextField.getText();
+    		String firstName=FirstNameTextField.getText();
+    		String lastName=LastnameTextField.getText();
+    		String adress=AdressTextField.getText();
+    		ReaderAccount reader=new ReaderAccount(userID, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress); 
+    		ObjectMessage msg = new ObjectMessage(reader,"changePersonalDetails","ReaderAccount");
+        	client.handleMessageFromClient(msg);
+    	}
+    	else
+    		AClientCommonUtilities.infoAlert(result,"Invaild Input");
     }
 
-
+    private String validationResult()
+    {
+    	String result,finalResult="";
+    	result=AValidationInput.checkValidationUser("UserID",IDTextField.getText());
+    	if(!result.equals("correct"))
+    		finalResult+=result+"\n";
+    	
+    	result=AValidationInput.checkValidationUser("Last Name",LastnameTextField.getText());
+    	if(!result.equals("correct"))
+    		finalResult+=result+"\n";
+    	
+    	result=AValidationInput.checkValidationUser("First Name",FirstNameTextField.getText());
+    	if(!result.equals("correct"))
+    		finalResult+=result+"\n";
+    	
+    	result=AValidationInput.checkValidationUser("Phone Number",PhoneTextField.getText());
+    	if(!result.equals("correct"))
+    		finalResult+=result+"\n";
+    	
+    	result=AValidationInput.checkValidationUser("Email",EmailTextField.getText());
+    	if(!result.equals("correct"))
+    		finalResult+=result+"\n";
+    	if(finalResult.equals(""))
+    		return "correct";
+    	else
+    		return finalResult;
+    }
 
     
     
 	@Override
 	public void display(ObjectMessage msg) 
 	{
-		
+		if(msg.getMessage().equals("successful change details"))
+    	{
+    		String showPassword="successful change details";
+    		AClientCommonUtilities.infoAlert(showPassword,"successful change details");
+    	}
+    	else
+    	{
+    		AClientCommonUtilities.infoAlert(msg.getMessage(),"unsuccessful change details");
+    	}
 		
 	}
 }

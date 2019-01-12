@@ -8,6 +8,7 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
+import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
@@ -83,25 +84,13 @@ public class RegisterNewReaderAccountController implements IGUIController
     		String firstName=FirstNameTextField.getText();
     		String lastName=LastNameTextField.getText();
     		String adress=AdressTextField.getText();
-    		
-    		if(adress.equals(null)) //TODO: ensure that it works AND do the same to the EditionYearsCmbBox(from Vitali) 
-    		{
-    			adress="";
-    		}
-    		
-    		//set a password for the user
-    		Random rand = new Random();
-    		int randPassword = rand.nextInt(10000) + 1;
-    		String password=Integer.toString(randPassword);
-    		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYearsCmbBox.getValue().toString()); 
+    		ReaderAccount reader=new ReaderAccount(userID, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYearsCmbBox.getValue().toString()); 
     		ObjectMessage msg = new ObjectMessage(reader,"try to register new account","ReaderAccount");
-        	client.handleMessageFromClient(msg); 
-    		
-    		
-    		
+        	client.handleMessageFromClient(msg);
     	}
     	else
-    		infoAlert(result,"Invaild Input");
+    		AClientCommonUtilities.infoAlert(result,"Invaild Input");
+        	
     }
 
     @FXML
@@ -167,8 +156,16 @@ public class RegisterNewReaderAccountController implements IGUIController
     }
 
 	@Override
-	public void display(ObjectMessage msg) {
-		// TODO Auto-generated method stub
-		
+	public void display(ObjectMessage msg) 
+	{
+		if(msg.getMessage().equals("successful registration"))
+    	{
+    		String showPassword="successful Registration the new password for the reader is "+ ((ReaderAccount)msg.getObjectList().get(0)).getPassword();
+    		AClientCommonUtilities.infoAlert(showPassword,"Registration successful");
+    	}
+    	else
+    	{
+    		AClientCommonUtilities.infoAlert(msg.getMessage(),"Registration unsuccessful");
+    	}	
 	}
 }

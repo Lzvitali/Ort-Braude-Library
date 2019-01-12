@@ -41,6 +41,41 @@ public class ReaderAccount extends User
 		this.freeze= new Button("Freeze");
 	}
 	
+	public ReaderAccount(String id, int permission, boolean isOnline, String firstName,
+			String lastName, String phone, String email, String status, int numOfDelays, String adress,
+			String educationYear) 
+	{
+		super(id, permission, isOnline);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.email = email;
+		this.status = status;
+		this.numOfDelays = numOfDelays;
+		this.adress = adress;
+		this.educationYear = educationYear;
+		
+		this.borrowsAndReserves= new Button("Open");
+		this.freeze= new Button("Freeze");
+	}
+	public ReaderAccount(String id, int permission, boolean isOnline, String firstName,
+			String lastName, String phone, String email, String status, int numOfDelays, String adress) 
+	{
+		super(id, permission, isOnline);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.email = email;
+		this.status = status;
+		this.numOfDelays = numOfDelays;
+		this.adress = adress;
+		this.educationYear = null;
+		
+		this.borrowsAndReserves= new Button("Open");
+		this.freeze= new Button("Freeze");
+	}
+	
+	
 	public ReaderAccount(String id,String firstName,String lastName, String phone,String status) 
 	{
 		super(id);
