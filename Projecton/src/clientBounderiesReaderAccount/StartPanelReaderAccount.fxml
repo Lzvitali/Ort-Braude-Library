@@ -79,7 +79,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button fx:id="historyBtn1" contentDisplay="TOP" mnemonicParsing="false" onAction="#openHistory" prefHeight="90.0" prefWidth="174.0" text="Personal details">
+                  <Button fx:id="personalDetailsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openPersonalDetails" prefHeight="90.0" prefWidth="174.0" text="Personal details">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
