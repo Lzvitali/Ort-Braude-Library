@@ -191,7 +191,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/PersonalDetails.fxml","Personal details");
     }
     
-    
+     
 
 	@Override
 	public int getActivateWindows() {
