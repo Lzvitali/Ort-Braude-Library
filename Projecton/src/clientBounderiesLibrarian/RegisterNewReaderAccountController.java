@@ -115,10 +115,10 @@ public class RegisterNewReaderAccountController implements IGUIController
 	public void combo() 
 	  {
 		  ArrayList <String> s=new ArrayList<String>();
-		  s.add("A");
-		  s.add("B");
-		  s.add("C");
-		  s.add("D");
+		  s.add("0");
+		  s.add("1");
+		  s.add("2");
+		  s.add("3");
 		  list1 = FXCollections.observableArrayList(s);
 		  EditionYearsCmbBox.setItems((ObservableList) list1);
 	    }
