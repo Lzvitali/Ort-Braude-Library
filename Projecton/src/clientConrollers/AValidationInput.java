@@ -3,6 +3,7 @@ package clientConrollers;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 
@@ -48,6 +49,17 @@ public abstract class AValidationInput
 				break;
 
 			}
+				
+		}
+		return result;
+	}
+	
+	
+	public static String checkValidationBook(String field, String context)
+	{
+		String result="correct";
+		switch(field)
+		{
 			case "bookID":
 			{
 				result=checkValidationBookID(context); 
@@ -68,7 +80,7 @@ public abstract class AValidationInput
 			}
 			case "dateOfBook":
 			{
-				result=checkValidationDateOfBook(context); 
+				result=checkValidationYearOfBook(context); 
 				break;
 
 			}
@@ -82,8 +94,10 @@ public abstract class AValidationInput
 		}
 		return result;
 	}
+	
+	
 	/**
-	 * this method chack if the email adress is valid
+	 * this method check if the email address is valid
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
 	 */
@@ -268,7 +282,7 @@ public abstract class AValidationInput
 		return true;
 	}
 	
-	private static boolean checkDateOfBookBeforeToday(String context)
+	private static boolean checkIfDateOfBookBeforeToday(String context)
 	{
 		
 		
@@ -306,6 +320,29 @@ public abstract class AValidationInput
 			{
 				return false;
 			}
+		}
+		return true;
+	}
+	
+	private static Boolean checkIfYearIsonlyNumbers(String context)
+	{
+		for(int i=0;i<4;i++) 
+		{
+			if(context.charAt(i)<'0' ||context.charAt(i)>'9')
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static Boolean checkIfYearIsBetweenTheRange(String context)
+	{
+		LocalDate currentDate = LocalDate.now();
+		int currentYear = currentDate.getYear();
+		int yearOfBook = Integer.parseInt(context);
+		if((yearOfBook>=currentYear+1)||(yearOfBook<1800)) {
+			return false;
 		}
 		return true;
 	}
@@ -415,16 +452,24 @@ public abstract class AValidationInput
 		return "correct";
 	}
 	
-	private static String checkValidationDateOfBook(String context)
+	private static String checkValidationYearOfBook(String context)
 	{
-		if(!onlyNumbers(context)) // TODO: do new function DONT use the one that checks ID
+		if(context.length()<4)
 		{
-			return "Year must be only numbers";
+			return "Year of book must be 4 digits";
 		}
-		if(!checkDateOfBookBeforeToday(context)) 
+		
+		if(!checkIfYearIsonlyNumbers(context))
 		{
-			return "Date is bigger than the date of today";	
+			return "Year of book must be filled with only numbers";
 		}
+		
+		if(!checkIfYearIsBetweenTheRange(context)) 
+		{
+			return "Year of book must be between 1800 to current year(include it) ";
+		}
+		
 		return "correct";
+	
 	}
 }
