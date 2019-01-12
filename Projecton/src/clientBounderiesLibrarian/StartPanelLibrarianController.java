@@ -3,9 +3,12 @@ package clientBounderiesLibrarian;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
+import Common.Book;
+import Common.IEntity;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
 import Common.User;
 import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.LogInController;
@@ -13,6 +16,11 @@ import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +28,11 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -87,25 +97,25 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     private JFXRadioButton freeSearchBookRB; 
 
     @FXML 
-    private TableView<?> searchResultTable; 
+    private TableView<IEntity> searchResultTable; 
 
     @FXML 
-    private TableColumn<?, ?> bookNameColumn; 
+    private TableColumn<IEntity, String> bookNameColumn; 
 
     @FXML 
-    private TableColumn<?, ?> authorNameColumn; 
+    private TableColumn<IEntity, String> authorNameColumn; 
 
     @FXML
-    private TableColumn<?, ?> bookYearColumn; 
+    private TableColumn<IEntity, Integer> bookYearColumn; 
 
     @FXML
-    private TableColumn<?, ?> BookTopicColumn; 
+    private TableColumn<IEntity, String> BookTopicColumn; 
 
     @FXML
-    private TableColumn<?, ?> isDesiredBookColumn; 
+    private TableColumn<IEntity, Boolean> isDesiredBookColumn; 
 
     @FXML
-    private TableColumn<?, ?> viewIntroColumn; 
+    private TableColumn<IEntity, Button> viewIntroColumn; 
 
     @FXML 
     private Tab searchReaderAccountTab; 
@@ -129,23 +139,28 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     private JFXRadioButton freeSearchReaderAccountRB; 
 
     @FXML 
-    private TableView<?> searchReaderAccountTable; 
+    private TableView<IEntity> searchReaderAccountTable; 
 
     @FXML 
-    private TableColumn<?, ?> accountIDColumn; 
+    private TableColumn<IEntity, String> accountIDColumn; 
 
     @FXML
-    private TableColumn<?, ?> accountLastNameColumn; 
-
-    @FXML
-    private TableColumn<?, ?> accountStatusColumn; 
-
-    @FXML 
-    private TableColumn<?, ?> accountPhoneColumn;
-
-    @FXML 
-    private TableColumn<?, ?> borrowsAndReservesColumn; 
+    private TableColumn<IEntity, String> accountFirstNameColumn;
     
+    @FXML
+    private TableColumn<IEntity, String> accountLastNameColumn; 
+
+    @FXML
+    private TableColumn<IEntity, String> accountStatusColumn; 
+
+    @FXML 
+    private TableColumn<IEntity, String> accountPhoneColumn;
+
+    @FXML 
+    private TableColumn<IEntity, Button> borrowsAndReservesColumn; 
+    
+    @FXML
+    private TabPane TabPaneSelect;
     
     private ToggleGroup toggleGroupForBooks; 
     private ToggleGroup toggleGroupForAccounts; 
@@ -192,11 +207,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     
     void setRedioButtonsForAccountsSearch()
     {
-    	toggleGroupForBooks = new ToggleGroup();
-        this.iDRB.setToggleGroup(toggleGroupForBooks);
-        this.firstNameRB.setToggleGroup(toggleGroupForBooks);
-        this.lastNameRB.setToggleGroup(toggleGroupForBooks);
-        this.freeSearchReaderAccountRB.setToggleGroup(toggleGroupForBooks);
+    	toggleGroupForAccounts = new ToggleGroup();
+        this.iDRB.setToggleGroup(toggleGroupForAccounts);
+        this.firstNameRB.setToggleGroup(toggleGroupForAccounts);
+        this.lastNameRB.setToggleGroup(toggleGroupForAccounts);
+        this.freeSearchReaderAccountRB.setToggleGroup(toggleGroupForAccounts);
         
     }
     
@@ -204,8 +219,71 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML
     void makeSearch(ActionEvent event) 
     {
-
+    	//lets example that will be here valdaion for book(still not exist so didnt write)
+    	
+    	//if success do this and if selected book :
+    	if(TabPaneSelect.getSelectionModel().getSelectedItem().getText().equals("Search book"))
+    	{
+    		searchBookPressed();
+    	}
+    	else
+    	{
+    		searchReaderAccountPressed();
+    	}
+ 	
     }
+    
+   private  void  searchBookPressed()
+   {
+   	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
+   	String selectedString = selectedRadioButton.getText();
+   	Book askedBook=new Book();
+   	if(selectedString.equals("Book name"))
+   	{
+   		askedBook.setBookName(searchBookTextField.getText());
+   	}
+   	else if(selectedString.equals("Author name"))
+   	{
+   		askedBook.setAuthorName(searchBookTextField.getText());
+   	}
+   	else if(selectedString.equals("Topic"))
+   	{
+   		askedBook.setTopic(searchBookTextField.getText());;
+   	}
+   	else
+   	{
+   		askedBook.setBookName("needtocheckthis");
+   	}
+   	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+   	client.handleMessageFromClient(sendToServer); 
+   }
+   
+  
+   private  void searchReaderAccountPressed()
+    {
+    	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForAccounts.getSelectedToggle();
+    	String selectedString = selectedRadioButton.getText();
+    	ReaderAccount askedReader=new ReaderAccount();
+    	if(selectedString.equals("ID"))
+    	{
+    		askedReader.setId(searchReaderAccountSearchField.getText());
+    	}
+    	else if(selectedString.equals("First name"))
+    	{
+    		askedReader.setFirstName(searchReaderAccountSearchField.getText());
+    	}
+    	else if(selectedString.equals("Last name"))
+    	{
+    		askedReader.setLastName(searchReaderAccountSearchField.getText());;
+    	}
+    	else
+    	{
+    		askedReader.setLastName("needtocheckthis");
+    	}
+    	ObjectMessage sendToServer=new ObjectMessage(askedReader,"SearchReader","ReaderAccount");
+    	client.handleMessageFromClient(sendToServer);  
+    }
+
     
     /**
      * When button Log out will be pressed it will take you to the StartPanel
@@ -273,9 +351,74 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	@Override
 	public void display(ObjectMessage msg) 
 	{
-		// TODO Auto-generated method stub
+		if(msg.getMessage().equals("BookSearch"))
+		{
+			searchBookResult(msg);
+		}
+		else if(msg.getMessage().equals("ReaderAccountSearch"))
+		{
+			searchReaderAccountResult(msg);
+		}
 		
 	}
+    private void searchBookResult(ObjectMessage msg)
+	{
+		searchResultTable.getItems().clear();
+		if(msg.getNote().equals("NoBookFound"))
+		{
+			AClientCommonUtilities.infoAlert("No books found , try insert other value", "No books found");
+		}
+		else
+		{
+			Platform.runLater(()->
+			{
+				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
+				bookYearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
+				isDesiredBookColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
+				BookTopicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
+				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+			int i;
+			ArrayList <IEntity> result=msg.getObjectList();
+			for(i=0;i<result.size();i++)
+			{
+				((Book)result.get(i)).setDetails(new Button("Open PDF"));
+				searchResultTable.getItems().add(result.get(i));
+			}
+			});
+			
+		}
+	}
+    
+    private void searchReaderAccountResult(ObjectMessage msg)
+	{
+    	searchReaderAccountTable.getItems().clear();
+		if(msg.getNote().equals("NoReaderFound"))
+		{
+			AClientCommonUtilities.infoAlert("No readers found , try insert other value", "No readers found");
+		}
+		else
+		{
+			Platform.runLater(()->
+			{
+				accountIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+				accountFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+				accountLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+				accountStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+				accountPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+				borrowsAndReservesColumn.setCellValueFactory(new PropertyValueFactory<>("borrowsAndReserves"));
+			int i;
+			ArrayList <IEntity> result=msg.getObjectList();
+			for(i=0;i<result.size();i++)
+			{
+				((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
+				searchReaderAccountTable.getItems().add(result.get(i));
+			}
+			});
+			
+		}
+	}
+
 
    
 }

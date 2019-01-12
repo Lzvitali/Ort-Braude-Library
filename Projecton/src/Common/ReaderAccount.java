@@ -40,6 +40,38 @@ public class ReaderAccount extends User
 		this.borrowsAndReserves= new Button("Open");
 		this.freeze= new Button("Freeze");
 	}
+	
+	public ReaderAccount(String id,String firstName,String lastName, String phone,String status) 
+	{
+		super(id);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.email = null;
+		this.status = status;
+		this.numOfDelays = -1;
+		this.adress = null;
+		this.educationYear = null;
+		this.borrowsAndReserves= null;
+		this.freeze= null;
+	}
+	
+	
+	public ReaderAccount() 
+	{
+		super();
+		this.firstName = null;
+		this.lastName = null;
+		this.phone = null;
+		this.email = null;
+		this.status = null;
+		this.numOfDelays = -1;
+		this.adress = null;
+		this.educationYear = null;
+		
+		this.borrowsAndReserves= null;
+		this.freeze= null;
+	}
 
 	
 	//getters and setters

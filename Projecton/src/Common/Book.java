@@ -12,9 +12,9 @@ public class Book implements IEntity, Serializable
 	private int bookID;
 	private String bookName;
 	private String authorName;
-	private int year;
+	private Integer year;
 	private String topic;
-	private boolean isDesired; 
+	private Boolean isDesired; 
 	//buttons
 	private transient Button reserve;
 	private transient Button details;
@@ -74,10 +74,12 @@ public class Book implements IEntity, Serializable
 		this.topic = topic;
 		this.isDesired = isDesired;
 		this.year=year;
-		Button reserve = new Button();
-		Button details= new Button();
+		Button reserve = null;
+		Button details= null;
 	}
 
+	
+	
 
 	public String getBookName() 
 	{
@@ -140,13 +142,13 @@ public class Book implements IEntity, Serializable
 	}
 
 
-	public boolean isDesired() 
+	public Boolean isDesired() 
 	{
 		return isDesired;
 	}
 
 
-	public void setDesired(boolean isDesired) 
+	public void setDesired(Boolean isDesired) 
 	{
 		this.isDesired = isDesired;
 	}
@@ -185,6 +187,14 @@ public class Book implements IEntity, Serializable
 		return nextRow;
 	}
 
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
 
 	public static void setNextRow(int nextRow) {
 		Book.nextRow = nextRow;

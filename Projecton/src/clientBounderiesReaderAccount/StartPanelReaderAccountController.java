@@ -3,17 +3,25 @@ package clientBounderiesReaderAccount;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
+import Common.Book;
+import Common.IEntity;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import Common.User;
+import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +30,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -68,29 +78,30 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     private JFXRadioButton freeSearchRB;
 
     @FXML
-    private TableView<?> searchResultTable;
+    private TableView<IEntity> searchResultTable;
+
+    @FXML 
+    private TableColumn<IEntity, String> bookNameColumn; 
+
+    @FXML 
+    private TableColumn<IEntity, String> authorNameColumn; 
+
+    @FXML 
+    private TableColumn<IEntity, Integer> yearColumn; 
+
+    @FXML 
+    private TableColumn<IEntity, String> topicColumn; 
+
+    @FXML 
+    private TableColumn<IEntity, Boolean> isDesiredColumn; 
+
+    @FXML 
+    private TableColumn<IEntity, Button> viewIntroColumn; 
 
     @FXML
-    private TableColumn<?, ?> bookNameColumn;
-
-    @FXML
-    private TableColumn<?, ?> authorNameColumn;
-
-    @FXML
-    private TableColumn<?, ?> yearColumn;
-
-    @FXML
-    private TableColumn<?, ?> topicColumn;
-
-    @FXML
-    private TableColumn<?, ?> isDesiredColumn;
-
-    @FXML
-    private TableColumn<?, ?> viewIntroColumn;
-
-    @FXML
-    private TableColumn<?, ?> reserveBtn;
+    private TableColumn<IEntity, Button> reserveBtn;
     
+    private ToggleGroup toggleGroupForBooks; 
     
     
     @FXML
@@ -98,6 +109,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
+    	setRedioButtonsForBooksSearch();
     }
 
     @FXML
@@ -129,7 +141,27 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     @FXML
     void makeSearch(ActionEvent event) 
     {
-
+    	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
+    	String selectedString = selectedRadioButton.getText();
+    	Book askedBook=new Book();
+    	if(selectedString.equals("Book name"))
+    	{
+    		askedBook.setBookName(searchTextField.getText());
+    	}
+    	else if(selectedString.equals("Author name"))
+    	{
+    		askedBook.setAuthorName(searchTextField.getText());
+    	}
+    	else if(selectedString.equals("Topic"))
+    	{
+    		askedBook.setTopic(searchTextField.getText());;
+    	}
+    	else
+    	{
+    		askedBook.setBookName("needtocheckthis");
+    	}
+    	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+    	client.handleMessageFromClient(sendToServer);   
     }
 
     @FXML
@@ -157,10 +189,50 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 	}
 
 	@Override
-	public void display(ObjectMessage msg) {
-		// TODO Auto-generated method stub
+	public void display(ObjectMessage msg) 
+	{
+		if(msg.getMessage().equals("BookSearch"))
+		{
+			searchBookResult(msg);
+		}
 		
 	}
-
-
+	private void searchBookResult(ObjectMessage msg)
+	{
+		searchResultTable.getItems().clear();
+		if(msg.getNote().equals("NoBookFound"))
+		{
+			AClientCommonUtilities.infoAlert("No books found , try insert other value", "No books found");
+		}
+		else
+		{
+			Platform.runLater(()->
+			{
+				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
+				yearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
+				isDesiredColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
+				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
+				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+				reserveBtn.setCellValueFactory(new PropertyValueFactory<>("reserve"));
+			int i;
+			ArrayList <IEntity> result=msg.getObjectList();
+			for(i=0;i<result.size();i++)
+			{
+				((Book)result.get(i)).setDetails(new Button("Open PDF"));
+				((Book)result.get(i)).setReserve(new Button("Reserve"));
+				searchResultTable.getItems().add(result.get(i));
+			}
+			});
+			
+		}
+	}
+    void setRedioButtonsForBooksSearch()
+    {
+    	toggleGroupForBooks = new ToggleGroup();
+        this.bookNameRB.setToggleGroup(toggleGroupForBooks);
+        this.authorNameRB.setToggleGroup(toggleGroupForBooks);
+        this.topicRB.setToggleGroup(toggleGroupForBooks);
+        this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
+    }
 }

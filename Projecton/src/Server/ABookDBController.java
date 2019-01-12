@@ -117,42 +117,47 @@ public abstract class  ABookDBController
 	
 	private static ObjectMessage searchBook(ObjectMessage msg, Connection connToSQL)
 	{
+		PreparedStatement ps;
 		ObjectMessage answer;
 		Book askedBook=(Book)msg.getObjectList().get(0);
-		String asked,input;
+		String input;
 		ArrayList <IEntity> result=new ArrayList<IEntity>();
-		if(askedBook.getAuthorName()!=null)
-		{
-			asked="authorName";
-			input=askedBook.getAuthorName();
-		}
-		else if(askedBook.getBookName()!=null)
-		{
-			asked="bookName";
-			input=askedBook.getBookName();
-		}
-		else
-		{
-			asked="topic";
-			input=askedBook.getTopic();
-		}
-		
-		PreparedStatement ps;
 		try 
 		{
-			ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE ?=?");
-			ps.setString(1,asked);
-			ps.setString(2,input);
+			if(askedBook.getAuthorName()!=null)
+			{
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE authorName=?");
+				input=askedBook.getAuthorName();
+			}
+			else if(askedBook.getBookName()!=null)
+			{
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName=?");
+				input=askedBook.getBookName();
+			}
+			else
+			{
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE topic=?");
+				input=askedBook.getTopic();
+			}
+			ps.setString(1,input);
 			ResultSet rs = ps.executeQuery();
 	 		while(rs.next())
 	 		{
 	 			result.add(new Book(rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6)));
 			} 
-	 		answer=new ObjectMessage(result,"BooksFound");
+	 		if(!result.isEmpty())
+	 		{
+	 			answer=new ObjectMessage(result,"BookSearch","BooksFound");
+	 		}
+	 		else
+	 		{
+	 			answer=new ObjectMessage("BookSearch","NoBookFound");
+	 		}
 		}
 		catch (SQLException e) 
 		{
-			answer=new ObjectMessage("NoBookFound");
+			e.printStackTrace();
+			answer=new ObjectMessage("BookSearch","NoBookFound");
 		}
 		return answer;
 	}

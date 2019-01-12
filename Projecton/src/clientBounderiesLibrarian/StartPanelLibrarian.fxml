@@ -161,7 +161,7 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <TabPane layoutY="24.0" prefHeight="534.0" prefWidth="784.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane fx:id="TabPaneSelect" layoutY="24.0" prefHeight="534.0" prefWidth="784.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab fx:id="searchBookTab" text="Search book">
                         <content>
@@ -286,7 +286,7 @@
                                     <TableView fx:id="searchReaderAccountTable" layoutX="22.0" layoutY="137.0" prefHeight="358.0" prefWidth="718.0">
                                       <columns>
                                         <TableColumn fx:id="accountIDColumn" prefWidth="114.0" text="ID" />
-                                        <TableColumn prefWidth="127.0" text="First name" />
+                                        <TableColumn fx:id="accountFirstNameColumn" prefWidth="127.0" text="First name" />
                                           <TableColumn fx:id="accountLastNameColumn" prefWidth="113.0" text="Last name" />
                                           <TableColumn fx:id="accountStatusColumn" prefWidth="103.0" text="status" />
                                           <TableColumn fx:id="accountPhoneColumn" prefWidth="111.0" text="phone" />

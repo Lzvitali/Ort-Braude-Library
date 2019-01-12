@@ -22,6 +22,14 @@ public class User implements IEntity,Serializable
 		this.permission = permission;
 		this.isOnline = isOnline;
 	}	
+	
+	public User() 
+	{
+		this.id = null;
+		this.password = null;
+		this.permission = -1;
+		this.isOnline = false;
+	}	
 
 	
 	public User(String id, String password) 

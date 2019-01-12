@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
 import Common.Book;
+import Common.IEntity;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
@@ -13,7 +14,14 @@ import Common.User;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
+
+import javafx.application.Platform;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -23,6 +31,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * This class is a Controller for StartPanel.fxml AND for LogInFxml
@@ -67,28 +76,30 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     private JFXRadioButton freeSearchRB; 
 
     @FXML 
-    private TableView<?> searchResultTable; 
+    private TableColumn<IEntity, String> bookNameColumn; 
 
     @FXML 
-    private TableColumn<?, ?> bookNameColumn; 
+    private TableColumn<IEntity, String> authorNameColumn; 
 
     @FXML 
-    private TableColumn<?, ?> authorNameColumn; 
+    private TableColumn<IEntity, Integer> yearColumn; 
 
     @FXML 
-    private TableColumn<?, ?> yearColumn; 
+    private TableColumn<IEntity, String> topicColumn; 
 
     @FXML 
-    private TableColumn<?, ?> topicColumn; 
+    private TableColumn<IEntity, Boolean> isDesiredColumn; 
 
     @FXML 
-    private TableColumn<?, ?> isDesiredColumn; 
+    private TableColumn<IEntity, Button> viewIntroColumn; 
 
     @FXML 
-    private TableColumn<?, ?> viewIntroColumn; 
-
+    private TableView<IEntity> searchResultTable; 
+    
     private ToggleGroup toggleGroupForBooks; 
     
+    
+
     @FXML 
     public void initialize(String[] arr) 
     {
@@ -100,7 +111,6 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
    
     public  void connect(String ip,int port) //make the connection to ClientController.
     {
-    	System.out.println(ip + "  " + port);
         try 
         {
         	connToClientController= new OBLClient(ip, port,this);
@@ -132,15 +142,15 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     	{
     		askedBook.setBookName(searchTextField.getText());
     	}
-    	if(selectedString.equals("Author name"))
+    	else if(selectedString.equals("Author name"))
     	{
     		askedBook.setAuthorName(searchTextField.getText());
     	}
-    	if(selectedString.equals("Topic"))
+    	else if(selectedString.equals("Topic"))
     	{
     		askedBook.setTopic(searchTextField.getText());;
     	}
-    	if(selectedString.equals("Free search"))
+    	else
     	{
     		askedBook.setBookName("needtocheckthis");
     	}
@@ -153,10 +163,43 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	@Override
 	public void display(ObjectMessage msg) 
 	{
-		
+		if(msg.getMessage().equals("BookSearch"))
+		{
+			searchBookResult(msg);
+		}
 		
 	}
 
+	private void searchBookResult(ObjectMessage msg)
+	{
+		searchResultTable.getItems().clear();
+		if(msg.getNote().equals("NoBookFound"))
+		{
+			AClientCommonUtilities.infoAlert("No books found , try insert other value", "No books found");
+		}
+		else
+		{
+			Platform.runLater(()->
+			{
+				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
+				yearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
+				isDesiredColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
+				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
+				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+			int i;
+			ArrayList <IEntity> result=msg.getObjectList();
+			for(i=0;i<result.size();i++)
+			{
+				((Book)result.get(i)).setDetails(new Button("Open PDF"));
+				searchResultTable.getItems().add(result.get(i));
+			}
+			});
+			
+		}
+	}
+	
+	
 	@Override
 	public int getActivateWindows() 
 	{
