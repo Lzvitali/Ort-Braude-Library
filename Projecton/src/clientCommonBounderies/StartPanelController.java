@@ -113,7 +113,6 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     		connToClientController.setClientUI(this);
     	}
     	setRedioButtonsForBooksSearch();
-
     }
 
    

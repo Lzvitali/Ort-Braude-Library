@@ -149,7 +149,7 @@ public class AUserDBController
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-		} //set change
+		} 
 		return answer;
 	}
 

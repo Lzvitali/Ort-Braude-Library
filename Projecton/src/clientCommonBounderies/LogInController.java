@@ -25,8 +25,8 @@ public class LogInController  implements IGUIController
 
 	public static String currentID;
 	protected static Object startPanelController;
+	public static int permission;
 	
-
     @FXML
     private JFXTextField logInIDTextField;
 
@@ -52,7 +52,7 @@ public class LogInController  implements IGUIController
     @FXML
     void cancelLogIn(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.backToStartPanel();
     }
 
     @FXML
@@ -93,15 +93,17 @@ public class LogInController  implements IGUIController
 			 // 1 = Library Director , 2 = Librarian , 3 = reader account
 			if((msg.getNote()).equals("1"))
 			{
-				
+				permission=1;
 				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibraryDirector.fxml","Librarian Start Panel");
 			}
 			else if((msg.getNote()).equals("2"))
 			{
+				permission=2;
 				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibrarian.fxml","Librarian Start Panel");
 			}
 			else if((msg.getNote()).equals("3"))
 			{
+				permission=3;
 				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml","Librarian Start Panel");
 			}
 		}

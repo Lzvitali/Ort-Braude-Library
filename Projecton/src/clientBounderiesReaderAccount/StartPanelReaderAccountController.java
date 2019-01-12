@@ -41,6 +41,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 
 	OBLClient client;
 	
+	private static int numOfActiveWindows=0;
 	
     @FXML
     private ResourceBundle resources;
@@ -199,16 +200,19 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     
      
 
-	@Override
-	public int getActivateWindows() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
 
 	@Override
-	public void setActivateWindows(int newWindows) {
-		// TODO Auto-generated method stub
-		
+	public int getActivateWindows() 
+	{
+		return numOfActiveWindows;
+	}
+
+
+	@Override
+	public void setActivateWindows(int newWindows) 
+	{
+		numOfActiveWindows=newWindows;
 	}
 
 	@Override

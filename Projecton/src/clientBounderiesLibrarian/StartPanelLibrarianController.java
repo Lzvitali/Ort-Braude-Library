@@ -175,7 +175,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     private Button reportBtn; 
     
     @FXML
-    private TableColumn<?, ?> freezeColumn;
+    private TableColumn<IEntity, Button> freezeColumn;
     
     @FXML
     void openReportWindow(ActionEvent event) 
@@ -386,7 +386,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				bookYearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
 				isDesiredBookColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 				BookTopicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
-				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));		
 			int i;
 			ArrayList <IEntity> result=msg.getObjectList();
 			for(i=0;i<result.size();i++)
@@ -416,11 +416,27 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				accountStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 				accountPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
 				borrowsAndReservesColumn.setCellValueFactory(new PropertyValueFactory<>("borrowsAndReserves"));
+				if(LogInController.permission==1)
+				{
+					freezeColumn.setCellValueFactory(new PropertyValueFactory<>("freeze"));
+				}
 			int i;
 			ArrayList <IEntity> result=msg.getObjectList();
 			for(i=0;i<result.size();i++)
 			{
 				((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
+				if(LogInController.permission==1)
+				{
+					if(((ReaderAccount)result.get(i)).getStatus().equals("Activate"))
+					{
+						((ReaderAccount)result.get(i)).setFreeze(new Button("Freeze"));
+					}
+					else
+					{
+						((ReaderAccount)result.get(i)).setFreeze(new Button("Activate"));
+					}
+					
+				}
 				searchReaderAccountTable.getItems().add(result.get(i));
 			}
 			});

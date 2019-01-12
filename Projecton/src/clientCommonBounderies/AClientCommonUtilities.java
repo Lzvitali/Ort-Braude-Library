@@ -48,9 +48,7 @@ public abstract class AClientCommonUtilities
 				stage.show();
 				stage.setOnCloseRequest(e->
 				{
-					stage.close();
-					int x=startPanelUser.getActivateWindows();
-					startPanelUser.setActivateWindows(--x);
+					backToStartPanel();
 				});
 				int x=startPanelUser.getActivateWindows();
 				startPanelUser.setActivateWindows(++x);
@@ -69,7 +67,13 @@ public abstract class AClientCommonUtilities
 
 	}
 	
-	
+	public static void backToStartPanel()
+	{
+		stage.close();
+		int x=startPanelUser.getActivateWindows();
+		startPanelUser.setActivateWindows(--x);
+		StartPanelController.connToClientController.setClientUI((IGUIController)startPanelUser);
+	}
 	public static void loadStartPanelWindow(Object classThatAsk, String loc, String title)
 	{
 		Platform.runLater(()->
