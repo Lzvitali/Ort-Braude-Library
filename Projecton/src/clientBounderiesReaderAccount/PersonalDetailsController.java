@@ -1,30 +1,23 @@
 package clientBounderiesReaderAccount;
 
+import com.jfoenix.controls.JFXButton;
+
 import Common.IGUIController;
 import Common.ObjectMessage;
+import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.jfoenix.controls.JFXButton;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-
+ 
 public class PersonalDetailsController implements IGUIController
 {
-	OBLClient client;
 	
+	OBLClient client;
 
-    @FXML 
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
+	
     @FXML
     private TextField IDTextField;
 
@@ -52,36 +45,36 @@ public class PersonalDetailsController implements IGUIController
     @FXML
     private JFXButton UpdatePersonalDetailsBtn;
     
-    
     @FXML
     void initialize() 
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     }
-    
-    
 
+    
     @FXML
     void cancelBtnClicked(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.backToStartPanel();
     }
 
+    
     @FXML
     void updatePersonalDetailsClicked(ActionEvent event) 
     {
 
     }
 
-
-
-    
-    
 	@Override
 	public void display(ObjectMessage msg) 
 	{
 		
 		
 	}
+
+   
 }
+
+
+

@@ -154,6 +154,8 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		}*/
     }
 
+    
+    //TODO: Ziv-- add comments for JaavaDoc
     @FXML
     void makeSearch(ActionEvent event) 
     {
@@ -228,6 +230,8 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		}
 		
 	}
+	
+	//TODO: Ziv-- add comments for JaavaDoc
 	private void searchBookResult(ObjectMessage msg)
 	{
 		searchResultTable.getItems().clear();
@@ -258,6 +262,8 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 			
 		}
 	}
+	
+	
     void setRedioButtonsForBooksSearch()
     {
     	toggleGroupForBooks = new ToggleGroup();

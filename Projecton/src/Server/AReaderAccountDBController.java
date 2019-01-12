@@ -28,7 +28,7 @@ public class AReaderAccountDBController
 		{
 			return searchReaderAccount(msg, connToSQL);
 		}
-		if (((msg.getMessage()).equals("ReaderAccount")))
+		if (((msg.getMessage()).equals("try to register new account")))
 		{
 			return registerNewReaderAccount(msg, connToSQL);
 		}

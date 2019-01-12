@@ -20,11 +20,6 @@ public class BorrowBookController implements IGUIController
 	
 	OBLClient client;
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private JFXTextField readerAccountID;
@@ -55,7 +50,7 @@ public class BorrowBookController implements IGUIController
     @FXML
     void aproveBorrowBook(ActionEvent event) 
     {
-    	client.handleMessageFromClient(new ObjectMessage("booooom2"));
+    	
     }
 
     @FXML

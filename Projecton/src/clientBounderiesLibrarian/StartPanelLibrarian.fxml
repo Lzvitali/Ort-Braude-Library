@@ -115,18 +115,6 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button fx:id="reportBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openReportWindow" prefHeight="90.0" prefWidth="174.0" text="Reports">
-                     <graphic>
-                        <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../icons/startPanelLibrarian/report11.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Button>
                </children></VBox>
          </right>
          <left>
@@ -218,12 +206,12 @@
                                     </AnchorPane>
                                     <TableView fx:id="searchResultTable" layoutX="21.0" layoutY="136.0" prefHeight="345.0" prefWidth="743.0">
                                       <columns>
-                                        <TableColumn fx:id="bookNameColumn" prefWidth="232.0" text="Book name" />
-                                        <TableColumn fx:id="authorNameColumn" prefWidth="167.0" text="Author name" />
-                                          <TableColumn fx:id="bookYearColumn" prefWidth="87.0" text="Year" />
-                                          <TableColumn fx:id="BookTopicColumn" prefWidth="106.0" text="Topic" />
-                                          <TableColumn fx:id="isDesiredBookColumn" prefWidth="67.0" text="Desired?" />
-                                          <TableColumn fx:id="viewIntroColumn" prefWidth="82.0" text="View intro" />
+                                        <TableColumn fx:id="bookNameColumn" prefWidth="216.0" text="Book name" />
+                                        <TableColumn fx:id="authorNameColumn" prefWidth="176.0" text="Author name" />
+                                          <TableColumn fx:id="bookYearColumn" prefWidth="77.0" text="Year" />
+                                          <TableColumn fx:id="BookTopicColumn" prefWidth="123.0" text="Topic" />
+                                          <TableColumn fx:id="isDesiredBookColumn" prefWidth="69.0" text="Desired?" />
+                                          <TableColumn fx:id="viewIntroColumn" text="View intro" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -283,14 +271,14 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchReaderAccountTable" layoutX="22.0" layoutY="137.0" prefHeight="358.0" prefWidth="718.0">
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="22.0" layoutY="137.0" prefHeight="358.0" prefWidth="759.0">
                                       <columns>
-                                        <TableColumn fx:id="accountIDColumn" prefWidth="114.0" text="ID" />
-                                        <TableColumn fx:id="accountFirstNameColumn" prefWidth="127.0" text="First name" />
-                                          <TableColumn fx:id="accountLastNameColumn" prefWidth="113.0" text="Last name" />
-                                          <TableColumn fx:id="accountStatusColumn" prefWidth="103.0" text="status" />
-                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="111.0" text="phone" />
-                                          <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="148.0" text="Borrows &amp; Reserves" />
+                                        <TableColumn fx:id="accountIDColumn" prefWidth="97.0" text="ID" />
+                                        <TableColumn fx:id="accountFirstNameColumn" prefWidth="138.0" text="First name" />
+                                          <TableColumn fx:id="accountLastNameColumn" prefWidth="118.0" text="Last name" />
+                                          <TableColumn fx:id="accountStatusColumn" prefWidth="154.0" text="status" />
+                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="100.0" text="phone" />
+                                          <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="150.0" text="Borrows &amp; Reserves" />
                                       </columns>
                                     </TableView>
                                  </children>

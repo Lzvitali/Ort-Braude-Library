@@ -74,6 +74,7 @@ public abstract class AClientCommonUtilities
 		startPanelUser.setActivateWindows(--x);
 		StartPanelController.connToClientController.setClientUI((IGUIController)startPanelUser);
 	}
+	
 	public static void loadStartPanelWindow(Object classThatAsk, String loc, String title)
 	{
 		Platform.runLater(()->

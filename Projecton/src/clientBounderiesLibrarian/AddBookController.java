@@ -66,11 +66,11 @@ public class AddBookController implements IGUIController
 	private JFXButton SaveBtn;
 
 	
-	//lo asiti the funkziya im nirze lahzor lemasah rashi
+	//lo asiti the funkziya im nirze lahzor lemasah rashi ------ Vitali did :)
 	@FXML
 	void cancelBtnClicked(ActionEvent event) 
 	{
-		//lahzor lemasah rashi
+		AClientCommonUtilities.backToStartPanel();
 	}
 
 	//add new book or only copy

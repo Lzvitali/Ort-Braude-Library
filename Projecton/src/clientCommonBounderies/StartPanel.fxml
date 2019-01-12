@@ -144,11 +144,11 @@
                                     <TableView fx:id="searchResultTable" layoutX="24.0" layoutY="134.0" prefHeight="369.0" prefWidth="731.0">
                                       <columns>
                                         <TableColumn fx:id="bookNameColumn" prefWidth="218.0" text="Book name" />
-                                        <TableColumn fx:id="authorNameColumn" prefWidth="152.0" text="Author name" />
-                                          <TableColumn fx:id="yearColumn" prefWidth="95.0" text="Year" />
-                                          <TableColumn fx:id="topicColumn" prefWidth="105.0" text="Topic" />
-                                          <TableColumn fx:id="isDesiredColumn" prefWidth="74.0" text="Desired?" />
-                                          <TableColumn fx:id="viewIntroColumn" prefWidth="96.0" text="View intro" />
+                                        <TableColumn fx:id="authorNameColumn" prefWidth="158.0" text="Author name" />
+                                          <TableColumn fx:id="yearColumn" prefWidth="70.0" text="Year" />
+                                          <TableColumn fx:id="topicColumn" prefWidth="139.0" text="Topic" />
+                                          <TableColumn fx:id="isDesiredColumn" prefWidth="66.0" text="Desired?" />
+                                          <TableColumn fx:id="viewIntroColumn" prefWidth="79.0" text="View intro" />
                                       </columns>
                                     </TableView>
                                  </children>

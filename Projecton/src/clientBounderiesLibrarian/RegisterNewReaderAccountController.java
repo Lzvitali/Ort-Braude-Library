@@ -83,17 +83,26 @@ public class RegisterNewReaderAccountController implements IGUIController
     		String firstName=FirstNameTextField.getText();
     		String lastName=LastNameTextField.getText();
     		String adress=AdressTextField.getText();
+    		String EditionYears;
     		
-    		if(adress.equals(null)) //TODO: ensure that it works AND do the same to the EditionYearsCmbBox(from Vitali) 
+    		if(EditionYearsCmbBox.getValue() == null)
     		{
-    			adress="";
+    			EditionYears = "";
+    		}
+    		else if((EditionYearsCmbBox.getValue().toString()).equals(null)) 
+    		{
+    			EditionYears = "";
+    		}
+    		else
+    		{
+    			EditionYears= EditionYearsCmbBox.getValue().toString();
     		}
     		
     		//set a password for the user
     		Random rand = new Random();
     		int randPassword = rand.nextInt(10000) + 1;
     		String password=Integer.toString(randPassword);
-    		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYearsCmbBox.getValue().toString()); 
+    		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYears); 
     		ObjectMessage msg = new ObjectMessage(reader,"try to register new account","ReaderAccount");
         	client.handleMessageFromClient(msg); 
     		
