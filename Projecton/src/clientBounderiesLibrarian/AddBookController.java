@@ -12,6 +12,7 @@ import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -34,8 +35,13 @@ public class AddBookController implements IGUIController
 	@FXML
 	private URL location;
 
-	@FXML
-	private JFXTextField BookTitleTextField;
+    @FXML // fx:id="TopicTextField"
+    private JFXTextField TopicTextField; 
+    @FXML
+    private JFXTextField BookTitleTextField;
+
+    @FXML 
+    private JFXTextField numberOfCopies; 
 
 	@FXML
 	private JFXTextField BookAuthorTextField;
@@ -66,7 +72,7 @@ public class AddBookController implements IGUIController
 	private JFXButton SaveBtn;
 
 	
-	//lo asiti the funkziya im nirze lahzor lemasah rashi ------ Vitali did :)
+	//function for cancel button. if librarian doesn't want  continue to add a book
 	@FXML
 	void cancelBtnClicked(ActionEvent event) 
 	{
@@ -77,23 +83,29 @@ public class AddBookController implements IGUIController
 	@FXML
 	void saveAddNewBook(ActionEvent event) 
 	{ 
-		/*if(validationFields().equals("correct"))//if all fields correctly
+		/*
+		if(validationFields().equals("correct"))//if all fields correctly
 		{
+			System.out.println("all right)))))");
 			boolean isDesired= DesiredCheckBox.isSelected();
-			Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),EditionTextField.getText(),String.valueOf(isDesired));
+			Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText());
+			System.out.println(String.valueOf(isDesired));
 			ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
 			client.handleMessageFromClient(msg);
 		}
 		else
 		{
+			System.out.println("Errorrrrrrr!");
 			AClientCommonUtilities.alertError("The fields you filled are not correctly.","Error"); // open error message
 		}*/
 		
-		
 		boolean isDesired= DesiredCheckBox.isSelected();
-		Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),EditionTextField.getText(),String.valueOf(isDesired));
+		Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText());
+		System.out.println(String.valueOf(isDesired));
 		ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
 		client.handleMessageFromClient(msg);
+		
+		
 	}
 	
 	
@@ -104,17 +116,13 @@ public class AddBookController implements IGUIController
 		
 	}
 
-	//
-	public void choiceBox() 
-	{
-		TopicChoiceBox = new ChoiceBox<String>(FXCollections.observableArrayList("drama", "comdey", "VBA","SQL","PHP","software","Installation","Programmierung","Referenz"));
-	}
+	
 	@FXML
 	void initialize() 
 	{
 		client=StartPanelController.connToClientController;
 		client.setClientUI(this);
-		choiceBox();
+		
 
 	}
 	
@@ -123,26 +131,26 @@ public class AddBookController implements IGUIController
 	 {
 		 String result,finalResult="";
 
-		 result=AValidationInput.checkValidationUser("bookName",BookTitleTextField.getText());
+		 result=AValidationInput.checkValidationBook("bookName",BookTitleTextField.getText());
 		 if(!result.equals("correct"))
 		 {
 			 finalResult+=result+"\n";
 		 }
 			 
 
-		 result=AValidationInput.checkValidationUser("authorName",BookAuthorTextField.getText());
+		 result=AValidationInput.checkValidationBook("authorName",BookAuthorTextField.getText());
 		 if(!result.equals("correct"))
 		 {
 			 finalResult+=result+"\n";
 		 }
 
-		 result=AValidationInput.checkValidationUser("dateOfBook",PublishedYearTextField.getText());
+		 result=AValidationInput.checkValidationBook("dateOfBook",PublishedYearTextField.getText());
 		 if(!result.equals("correct"))
 		 {
 			 finalResult+=result+"\n";
 		 }
 
-		 result=AValidationInput.checkValidationUser("topic",TopicChoiceBox.getAccessibleText());
+		 result=AValidationInput.checkValidationBook("topic",TopicChoiceBox.getAccessibleText());
 		 if(!result.equals("correct"))
 		 {
 			 finalResult+=result+"\n";

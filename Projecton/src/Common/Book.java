@@ -13,12 +13,13 @@ public class Book implements IEntity, Serializable
 	private String bookName;
 	private String authorName;
 	private Integer year;
+	private Integer edition;
 	private String topic;
 	private Boolean isDesired; 
+	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
 	//buttons
 	private transient Button reserve;
 	private transient Button details;
-	static int nextRow=58;
 	
 //	public Book(int bookID, String bookName, String authorName, Date dateOfBook, String topic, boolean isDesired) 
 //	{
@@ -51,7 +52,7 @@ public class Book implements IEntity, Serializable
 			Button details= null;
 	}
 
-	public Book( String bookName, String authorName, String year, String topic, String isDesired) 
+	public Book( String bookName, String authorName, String year, String topic, String isDesired,String edition,String numberOfCopies) 
 	{
 		super();
 	//	this.bookID =Integer.parseInt(bookID);
@@ -60,13 +61,15 @@ public class Book implements IEntity, Serializable
 		this.topic = topic;
 		this.isDesired =  Boolean.parseBoolean(isDesired);
 		this.year=Integer.parseInt(year);
+		this.edition=Integer.parseInt(edition);
+		this.numberOfCopies=Integer.parseInt(numberOfCopies);
 		Button reserve = new Button();
 		//reserve.setText("Reservation");
 		Button details= new Button();
 	}
 	
 	
-	public Book( String bookName, String authorName, int year, String topic, Boolean isDesired) 
+	public Book( String bookName, String authorName, int year, String topic, Boolean isDesired,int edition) 
 	{
 		super();
 		this.bookName = bookName;
@@ -74,6 +77,7 @@ public class Book implements IEntity, Serializable
 		this.topic = topic;
 		this.isDesired = isDesired;
 		this.year=year;
+		this.edition=edition;
 		Button reserve = null;
 		Button details= null;
 	}
@@ -86,18 +90,17 @@ public class Book implements IEntity, Serializable
 		return bookName;
 	}
 
-	@Override
-	public String toString()
-	{
-		return "Book [bookID=" + bookID + ", bookName=" + bookName + ", authorName=" + authorName + ", dateOfBook="
-				+ year + ", topic=" + topic + ", isDesired=" + isDesired + ", reserve=" + reserve + ", details="
-				+ details + "]";
-	}
-
-
+	
 	public int getBookID()
 	{
 		return bookID;
+	}
+
+	@Override
+	public String toString() {
+		return "Book [bookID=" + bookID + ", bookName=" + bookName + ", authorName=" + authorName + ", year=" + year
+				+ ", edition=" + edition + ", topic=" + topic + ", isDesired=" + isDesired + ", reserve=" + reserve
+				+ ", details=" + details + "]";
 	}
 
 	public void setBookID(int bookID) 
@@ -183,21 +186,44 @@ public class Book implements IEntity, Serializable
 		this.bookName = bookName;
 	}
 
-	public static int getNextRow() {
-		return nextRow;
-	}
+	
 
 
-	public Integer getYear() {
+	public Integer getYear() 
+	{
 		return year;
 	}
 
-	public void setYear(Integer year) {
+	public void setYear(Integer year) 
+	{
 		this.year = year;
 	}
 
-	public static void setNextRow(int nextRow) {
-		Book.nextRow = nextRow;
+	public Integer getNumberOfCopies()
+	{
+		return numberOfCopies;
 	}
+	public Integer getEdition()
+	{
+		return edition;
+	}
+
+	
+	public void setEdition(Integer edition)
+	{
+		this.edition = edition;
+	}
+
+	public Boolean getIsDesired() 
+	{
+		return isDesired;
+	}
+
+	public void setIsDesired(Boolean isDesired)
+	{
+		this.isDesired = isDesired;
+	}
+
+	
 
 }

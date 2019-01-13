@@ -17,6 +17,7 @@ import Common.Book;
 import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
+import clientCommonBounderies.AClientCommonUtilities;
 
 
 public abstract class  ABookDBController 
@@ -46,7 +47,7 @@ public abstract class  ABookDBController
 	//Natasha (lo lagaat)!!!!!!!!
 	private static ObjectMessage tryToAddBook(ObjectMessage msg, Connection connToSQL)
 	{
-		ObjectMessage massegeRes = new ObjectMessage();
+		ObjectMessage massegeRes;
 		PreparedStatement checkBook = null; 
 		PreparedStatement addCopy=null ;
 		PreparedStatement addBook=null ;
@@ -57,60 +58,92 @@ public abstract class  ABookDBController
 
 		try 
 		{
-			String query= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? ";
+			String query= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? AND edition = ? ";
 			checkBook = connToSQL.prepareStatement(query);
 			checkBook.setString(1,tempBook.getBookName()); 
 			checkBook.setString(2, tempBook.getAuthorName());
 			checkBook.setInt(3, tempBook.getDateOfBook());
+			checkBook.setInt(4,tempBook.getEdition());
 			rs1 =checkBook.executeQuery();
-
-			System.out.println("After Exexcute");
 
 			//add like copy
 			if(rs1.next())
 			{
-				addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
-				addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
-				addCopy.executeUpdate();
-				massegeRes.setMessage("This Book is already exist in the system,so successfully add it like copy.");
+				if(Boolean.parseBoolean(rs1.getString(6))==(tempBook.isDesired()))//check if same desire
+				{
+					if (rs1.getString(5).equals(tempBook.getTopic()))//if it is same book 
+					{
+						for(int i=0;i<tempBook.getNumberOfCopies();i++)//add copies for book
+						{
+							addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
+							addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
+							addCopy.executeUpdate();
+						}
+
+						AClientCommonUtilities.infoAlert("This Book is already exist in the system,so successfully added it like copy.","Successfull");
+						massegeRes=new ObjectMessage("successful");
+					}
+					//not working window with error!!
+					else //if there is different topics
+					{
+						System.out.println("SameBook but different topics");
+						//if there is same book but different topics
+						AClientCommonUtilities.infoAlert("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
+					}
+
+				}
+				//not working window with error!!
+				else  //different desire
+				{
+					System.out.println("SameBook and different desire");
+					//if there is same book but different desired
+					AClientCommonUtilities.infoAlert("Error!Please change desired choise. There is also book with the same name,author ,year and edition.","Wrong");
+
+				}
 			}
 
 			//add like book
 			else 
 			{   
 				//add new book in table
-				addBook=connToSQL.prepareStatement("INSERT INTO `Book` (`bookName`,`authorName`,`year`,`topic`,`isDesired`) VALUES (?,?,?,?,?)");
+				addBook=connToSQL.prepareStatement("INSERT INTO `Book` (`bookName`,`authorName`,`year`,`topic`,`isDesired`,`edition`) VALUES (?,?,?,?,?,?)");
 				addBook.setString(1, (String)tempBook.getBookName());
 				addBook.setString(2, (String)tempBook.getAuthorName());
 				addBook.setInt(3, (int)tempBook.getDateOfBook());
 				addBook.setString(4, "somethingTemp");//tempBook.getTopic()
-				addBook.setBoolean(5,true);//(Boolean) tempBook.isDesired()
-				System.out.println(addBook);
+				addBook.setBoolean(5,(Boolean) tempBook.isDesired());//(Boolean) tempBook.isDesired()
+				addBook.setInt(6, (int)tempBook.getEdition());
 				addBook.executeUpdate();
 
 				//add copy of this book
-				String queryForNewBook= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? ";
+				String queryForNewBook= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? AND edition = ?";
 				checkBook = connToSQL.prepareStatement(queryForNewBook);
 				checkBook.setString(1,tempBook.getBookName()); 
 				checkBook.setString(2, tempBook.getAuthorName());
 				checkBook.setInt(3, tempBook.getDateOfBook());
+				checkBook.setInt(4,tempBook.getEdition());
 				rs1 =checkBook.executeQuery();
 
 				if(rs1.next())
 				{
-					addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
-					addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
-					addCopy.executeUpdate();
-					massegeRes.setMessage("This Book was successfully added like book and like copy.");
+					for(int i=0;i<tempBook.getNumberOfCopies();i++)//add copies for book
+					{
+						addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
+						addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
+						addCopy.executeUpdate();
+					}
+
 				}
+				AClientCommonUtilities.infoAlert("This Book was successfully added like book and like copy.","Successfull");
+				massegeRes=new ObjectMessage("successful");
 			}	
 		}	
 		catch (SQLException e)
 		{
-
 			e.printStackTrace();
+			massegeRes=new ObjectMessage("unsuccessful");
 		}
-		return massegeRes;
+		return massegeRes=new ObjectMessage("unsuccessful");
 	}
 
 
@@ -143,7 +176,7 @@ public abstract class  ABookDBController
 			ResultSet rs = ps.executeQuery();
 	 		while(rs.next())
 	 		{
-	 			result.add(new Book(rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6)));
+	 			result.add(new Book(rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7)));
 			} 
 	 		if(!result.isEmpty())
 	 		{
