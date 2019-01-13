@@ -99,7 +99,7 @@ public class AReaderAccountDBController
 				updateReaderAccount.setString(4,(String)reader.getPhone());
 				updateReaderAccount.setString(5,(String)reader.getEmail());
 				updateReaderAccount.setString(6,(String)reader.getAdress()); 
-				updateReaderAccount.setInt(7,(int)Integer.parseInt(reader.getEducationYear())); 
+				updateReaderAccount.setString(7,(String)reader.getEducationYear()); 
 				updateReaderAccount.setString(8,(String)reader.getStatus()); 
 				updateReaderAccount.setInt(9,(int)reader.getNumOfDelays()); 
 				updateReaderAccount.executeUpdate();

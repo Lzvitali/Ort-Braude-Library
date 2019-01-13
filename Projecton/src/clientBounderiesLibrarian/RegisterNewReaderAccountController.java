@@ -8,6 +8,7 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
+import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
@@ -68,7 +69,7 @@ public class RegisterNewReaderAccountController implements IGUIController
     @FXML
     void cancelRegistration(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.backToStartPanel();
     }
 
     @FXML
@@ -85,24 +86,30 @@ public class RegisterNewReaderAccountController implements IGUIController
     		String adress=AdressTextField.getText();
     		String EditionYears;
     		
-    		if(EditionYearsCmbBox.getValue() == null)
+    		if(EditionYearsCmbBox.getValue() == null  || (EditionYearsCmbBox.getValue().toString()).equals(null))
     		{
-    			EditionYears = "";
-    		}
-    		else if((EditionYearsCmbBox.getValue().toString()).equals(null)) 
-    		{
-    			EditionYears = "";
+    			EditionYears = " ";
     		}
     		else
     		{
     			EditionYears= EditionYearsCmbBox.getValue().toString();
     		}
     		
+    		if(AdressTextField.getText() == null  || (AdressTextField.getText().toString()).equals(null))
+    		{
+    			adress = " ";
+    		}
+    		else
+    		{
+    			adress=AdressTextField.getText();
+    		}
+    		
+    		
     		//set a password for the user
     		Random rand = new Random();
     		int randPassword = rand.nextInt(10000) + 1;
     		String password=Integer.toString(randPassword);
-    		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYears); 
+    		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName, lastName, phoneNum, email, "Active", 0, adress, EditionYears); 
     		ObjectMessage msg = new ObjectMessage(reader,"try to register new account","ReaderAccount");
         	client.handleMessageFromClient(msg); 
     		
@@ -124,10 +131,10 @@ public class RegisterNewReaderAccountController implements IGUIController
 	public void combo() 
 	  {
 		  ArrayList <String> s=new ArrayList<String>();
-		  s.add("0");
 		  s.add("1");
 		  s.add("2");
 		  s.add("3");
+		  s.add("4");
 		  list1 = FXCollections.observableArrayList(s);
 		  EditionYearsCmbBox.setItems((ObservableList) list1);
 	    }
