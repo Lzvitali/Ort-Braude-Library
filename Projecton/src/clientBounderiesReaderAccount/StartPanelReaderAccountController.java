@@ -10,6 +10,7 @@ import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import Common.User;
 import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
@@ -40,6 +41,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 
 	OBLClient client;
 	
+	private static int numOfActiveWindows=0;
 	
     @FXML
     private ResourceBundle resources;
@@ -54,10 +56,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     private Button myBorrowsAndReserves;
 
     @FXML
-    private Button historyBtn;
+    private Button historyBtn; 
 
     @FXML
-    private Button historyBtn1;
+    private Button personalDetailsBtn;
 
     @FXML
     private JFXTextField searchTextField;
@@ -105,17 +107,31 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     
     
     @FXML
-    void initialize() 
+    public void initialize() 
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
+    	AStartClient.primaryStagePanel.setOnCloseRequest(e->
+    	{ 
+    		makeLogOut(new ActionEvent());
+    		System.exit(0);
+    	});
     	setRedioButtonsForBooksSearch();
     }
 
     @FXML
     void makeLogOut(ActionEvent event) 
     {
+    	
     	//change the status of that user in the DB
+    	User user = new User(LogInController.currentID);
+    	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+    	client.handleMessageFromClient(msg);
+    	   	
+    	
+    	//Old log out:
+    	
+    	/*//change the status of that user in the DB
     	User user = new User(LogInController.currentID);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
     	client.handleMessageFromClient(msg);
@@ -135,9 +151,11 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		catch (IOException e) 
 		{
 			e.printStackTrace();
-		}
+		}*/
     }
 
+    
+    //TODO: Ziv-- add comments for JaavaDoc
     @FXML
     void makeSearch(ActionEvent event) 
     {
@@ -167,25 +185,36 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     @FXML
     void openBorrowsAndReserves(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyOrdersAndBorrows.fxml","My orders and borrows");
     }
 
     @FXML
     void openHistory(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyHistory.fxml","My history");
     }
+    
+    @FXML
+    void openPersonalDetails(ActionEvent event) 
+    {
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/PersonalDetails.fxml","Personal details");
+    }
+    
+     
+
+
 
 	@Override
-	public int getActivateWindows() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getActivateWindows() 
+	{
+		return numOfActiveWindows;
 	}
 
+
 	@Override
-	public void setActivateWindows(int newWindows) {
-		// TODO Auto-generated method stub
-		
+	public void setActivateWindows(int newWindows) 
+	{
+		numOfActiveWindows=newWindows;
 	}
 
 	@Override
@@ -195,8 +224,14 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		{
 			searchBookResult(msg);
 		}
+		else if(msg.getMessage().equals("successful log out"))
+		{
+			AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
+		}
 		
 	}
+	
+	//TODO: Ziv-- add comments for JaavaDoc
 	private void searchBookResult(ObjectMessage msg)
 	{
 		searchResultTable.getItems().clear();
@@ -227,6 +262,8 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 			
 		}
 	}
+	
+	
     void setRedioButtonsForBooksSearch()
     {
     	toggleGroupForBooks = new ToggleGroup();

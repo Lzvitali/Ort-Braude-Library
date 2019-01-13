@@ -1,5 +1,7 @@
 package clientBounderiesReaderAccount;
 
+import com.jfoenix.controls.JFXButton;
+
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -8,26 +10,16 @@ import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.jfoenix.controls.JFXButton;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
-
+ 
 public class PersonalDetailsController implements IGUIController
 {
-	OBLClient client;
 	
+	OBLClient client;
 
-    @FXML 
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
+	
     @FXML
     private TextField IDTextField;
 
@@ -55,26 +47,25 @@ public class PersonalDetailsController implements IGUIController
     @FXML
     private JFXButton UpdatePersonalDetailsBtn;
     
-    
     @FXML
     void initialize() 
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     }
-    
-    
 
+    
     @FXML
     void cancelBtnClicked(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.backToStartPanel();
     }
 
+    
     @FXML
     void updatePersonalDetailsClicked(ActionEvent event) 
     {
-    	String result=validationResult();
+    	String result=validationResultForChangePersonalDetails();
     	if(result.equals("correct"))
     	{
     		String userID=IDTextField.getText();
@@ -83,7 +74,26 @@ public class PersonalDetailsController implements IGUIController
     		String firstName=FirstNameTextField.getText();
     		String lastName=LastnameTextField.getText();
     		String adress=AdressTextField.getText();
-    		ReaderAccount reader=new ReaderAccount(userID, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress); 
+    		String educationYear=EducationYearTextField.getText();
+    		
+    		if(educationYear == null  || (educationYear.equals(null)))
+    		{
+    			educationYear = " ";
+    		}
+    		else
+    		{
+    			educationYear= EducationYearTextField.getText();
+    		}
+    		
+    		if(AdressTextField.getText() == null  || (AdressTextField.getText().toString()).equals(null))
+    		{
+    			adress = " ";
+    		}
+    		else
+    		{
+    			adress=AdressTextField.getText();
+    		}
+    		ReaderAccount reader=new ReaderAccount(userID, 3, true, firstName,lastName,phoneNum,email,adress,educationYear);
     		ObjectMessage msg = new ObjectMessage(reader,"changePersonalDetails","ReaderAccount");
         	client.handleMessageFromClient(msg);
     	}
@@ -91,12 +101,10 @@ public class PersonalDetailsController implements IGUIController
     		AClientCommonUtilities.infoAlert(result,"Invaild Input");
     }
 
-    private String validationResult()
+
+    private String validationResultForChangePersonalDetails()
     {
     	String result,finalResult="";
-    	result=AValidationInput.checkValidationUser("UserID",IDTextField.getText());
-    	if(!result.equals("correct"))
-    		finalResult+=result+"\n";
     	
     	result=AValidationInput.checkValidationUser("Last Name",LastnameTextField.getText());
     	if(!result.equals("correct"))
@@ -121,6 +129,7 @@ public class PersonalDetailsController implements IGUIController
 
     
     
+
 	@Override
 	public void display(ObjectMessage msg) 
 	{
@@ -135,4 +144,9 @@ public class PersonalDetailsController implements IGUIController
     	}
 		
 	}
+
+   
 }
+
+
+

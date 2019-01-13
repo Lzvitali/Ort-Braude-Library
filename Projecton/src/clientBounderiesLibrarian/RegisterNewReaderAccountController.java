@@ -69,7 +69,7 @@ public class RegisterNewReaderAccountController implements IGUIController
     @FXML
     void cancelRegistration(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.backToStartPanel();
     }
 
     @FXML
@@ -84,8 +84,27 @@ public class RegisterNewReaderAccountController implements IGUIController
     		String firstName=FirstNameTextField.getText();
     		String lastName=LastNameTextField.getText();
     		String adress=AdressTextField.getText();
-    		ReaderAccount reader=new ReaderAccount(userID, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYearsCmbBox.getValue().toString()); 
-    		ObjectMessage msg = new ObjectMessage(reader,"try to register new account","ReaderAccount");
+    		String EditionYears;
+    		
+    		if(EditionYearsCmbBox.getValue() == null  || (EditionYearsCmbBox.getValue().toString()).equals(null))
+    		{
+    			EditionYears = " ";
+    		}
+    		else
+    		{
+    			EditionYears= EditionYearsCmbBox.getValue().toString();
+    		}
+    		
+    		if(AdressTextField.getText() == null  || (AdressTextField.getText().toString()).equals(null))
+    		{
+    			adress = " ";
+    		}
+    		else
+    		{
+    			adress=AdressTextField.getText();
+    		}
+    		ReaderAccount reader=new ReaderAccount(userID, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYears);
+    		ObjectMessage msg = new ObjectMessage(reader,"RegistrationNewReaderAccount","ReaderAccount");
         	client.handleMessageFromClient(msg);
     	}
     	else
@@ -104,10 +123,10 @@ public class RegisterNewReaderAccountController implements IGUIController
 	public void combo() 
 	  {
 		  ArrayList <String> s=new ArrayList<String>();
-		  s.add("0");
 		  s.add("1");
 		  s.add("2");
 		  s.add("3");
+		  s.add("4");
 		  list1 = FXCollections.observableArrayList(s);
 		  EditionYearsCmbBox.setItems((ObservableList) list1);
 	    }

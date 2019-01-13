@@ -43,7 +43,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 {
 	//Instance variables **********************************************
 	protected static int numOfActiveWindows=0; 
-	
+	private static int alreadyInitilized=0;
 	/**
 	 * this is the details of the current user that we need in all the next controllers 
 	 */
@@ -103,9 +103,16 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     @FXML 
     public void initialize(String[] arr) 
     {
-    	connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
+    	if(alreadyInitilized==0)
+    	{
+    		connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
+    		alreadyInitilized++;
+    	}
+    	else
+    	{
+    		connToClientController.setClientUI(this);
+    	}
     	setRedioButtonsForBooksSearch();
-
     }
 
    
@@ -116,8 +123,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
         	connToClientController= new OBLClient(ip, port,this);
 		} catch (IOException e) 
         {
-			e.printStackTrace();
-			AClientCommonUtilities.alertError("Please check server connection","No Server Connection ");
+			AClientCommonUtilities.alertErrorWithExit("Please check server connection","No Server Connection ");
 		}
     }
     
@@ -134,28 +140,38 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     	//lets example that will be here valdaion for book(still not exist so didnt write)
     	
     	//if success do this and if selected book :
-    	 
-    	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
-    	String selectedString = selectedRadioButton.getText();
-    	Book askedBook=new Book();
-    	if(selectedString.equals("Book name"))
-    	{
-    		askedBook.setBookName(searchTextField.getText());
-    	}
-    	else if(selectedString.equals("Author name"))
-    	{
-    		askedBook.setAuthorName(searchTextField.getText());
-    	}
-    	else if(selectedString.equals("Topic"))
-    	{
-    		askedBook.setTopic(searchTextField.getText());;
-    	}
-    	else
-    	{
-    		askedBook.setBookName("needtocheckthis");
-    	}
-    	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
-    	connToClientController.handleMessageFromClient(sendToServer);   	
+		Platform.runLater(()->
+		{
+			JFXRadioButton  selectedRadioButton;
+	    	try 
+	    	{
+	    		selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
+	    	}
+	    	catch(NullPointerException e)
+	    	{
+	    		selectedRadioButton=bookNameRB;
+	    	}	
+	    	String selectedString = selectedRadioButton.getText();
+	    	Book askedBook=new Book();
+	    	if(selectedString.equals("Book name"))
+	    	{
+	    		askedBook.setBookName(searchTextField.getText());
+	    	}
+	    	else if(selectedString.equals("Author name"))
+	    	{
+	    		askedBook.setAuthorName(searchTextField.getText());
+	    	}
+	    	else if(selectedString.equals("Topic"))
+	    	{
+	    		askedBook.setTopic(searchTextField.getText());;
+	    	}
+	    	else
+	    	{
+	    		askedBook.setBookName("needtocheckthis");
+	    	}
+	    	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+	    	connToClientController.handleMessageFromClient(sendToServer);   	
+		});
     }
     
 
@@ -210,7 +226,6 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	public void setActivateWindows(int newWindows) 
 	{
 		numOfActiveWindows=newWindows;
-		
 	}
 	
     void setRedioButtonsForBooksSearch()

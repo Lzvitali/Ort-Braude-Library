@@ -29,7 +29,7 @@ public class AReaderAccountDBController
 		{
 			return searchReaderAccount(msg, connToSQL);
 		}
-		if (((msg.getMessage()).equals("try to register new account")))
+		if (((msg.getMessage()).equals("RegistrationNewReaderAccount")))
 		{
 			return registerNewReaderAccount(msg, connToSQL);
 		}
@@ -71,16 +71,14 @@ public class AReaderAccountDBController
 				}
 				else
 				{ 
-					updateReaderAccount = connToSQL.prepareStatement("UPDATE `readeraccount` SET `firstName`=?,`lastName`=?,`phone`=?,`email`=?,`address`=?,`educationYear`=?,`status`=?,`numOfDelays`=? WHERE ID=?");
+					updateReaderAccount = connToSQL.prepareStatement("UPDATE `readeraccount` SET `firstName`=?,`lastName`=?,`phone`=?,`email`=?,`address`=?,`educationYear`=? WHERE ID=?");
 					updateReaderAccount.setString(1,(String)reader.getFirstName()); 
 					updateReaderAccount.setString(2,(String)reader.getLastName()); 
 					updateReaderAccount.setString(3,(String)reader.getPhone());
 					updateReaderAccount.setString(4,(String)reader.getEmail());
 					updateReaderAccount.setString(5,(String)reader.getAdress()); 
 					updateReaderAccount.setInt(6,(int)Integer.parseInt(reader.getEducationYear())); 
-					updateReaderAccount.setString(7,(String)reader.getStatus()); 
-					updateReaderAccount.setInt(8,(int)reader.getNumOfDelays()); 
-					updateReaderAccount.setString(9,reader.getId());
+					updateReaderAccount.setString(7,reader.getId());
 					updateReaderAccount.executeUpdate();
 					answer.setMessage("successful change details");
 					answer.addObject(msg.getObjectList().get(0));
@@ -164,7 +162,7 @@ public class AReaderAccountDBController
 				updateReaderAccount.setString(4,(String)reader.getPhone());
 				updateReaderAccount.setString(5,(String)reader.getEmail());
 				updateReaderAccount.setString(6,(String)reader.getAdress()); 
-				updateReaderAccount.setInt(7,(int)Integer.parseInt(reader.getEducationYear())); 
+				updateReaderAccount.setString(7,(String)reader.getEducationYear()); 
 				updateReaderAccount.setString(8,(String)reader.getStatus()); 
 				updateReaderAccount.setInt(9,(int)reader.getNumOfDelays()); 
 				updateReaderAccount.executeUpdate();

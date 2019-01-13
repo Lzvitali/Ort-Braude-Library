@@ -79,7 +79,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
-                  <Button fx:id="historyBtn1" contentDisplay="TOP" mnemonicParsing="false" onAction="#openHistory" prefHeight="90.0" prefWidth="174.0" text="Personal details">
+                  <Button fx:id="personalDetailsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openPersonalDetails" prefHeight="90.0" prefWidth="174.0" text="Personal details">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -184,11 +184,11 @@
                                       <columns>
                                         <TableColumn fx:id="bookNameColumn" prefWidth="194.0" text="Book name" />
                                         <TableColumn fx:id="authorNameColumn" prefWidth="130.0" text="Author name" />
-                                          <TableColumn fx:id="yearColumn" prefWidth="83.0" text="Year" />
-                                          <TableColumn fx:id="topicColumn" prefWidth="104.0" text="Topic" />
-                                          <TableColumn fx:id="isDesiredColumn" prefWidth="66.0" text="Desired?" />
-                                          <TableColumn fx:id="viewIntroColumn" prefWidth="83.0" text="View intro" />
-                                          <TableColumn fx:id="reserveBtn" prefWidth="63.0" text="Reserve" />
+                                          <TableColumn fx:id="yearColumn" prefWidth="69.0" text="Year" />
+                                          <TableColumn fx:id="topicColumn" prefWidth="121.0" text="Topic" />
+                                          <TableColumn fx:id="isDesiredColumn" prefWidth="67.0" text="Desired?" />
+                                          <TableColumn fx:id="viewIntroColumn" prefWidth="81.0" text="View intro" />
+                                          <TableColumn fx:id="reserveBtn" prefWidth="61.0" text="Reserve" />
                                       </columns>
                                     </TableView>
                                  </children>

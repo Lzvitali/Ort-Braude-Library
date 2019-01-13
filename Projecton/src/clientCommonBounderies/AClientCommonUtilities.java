@@ -6,6 +6,7 @@ import java.util.Optional;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientBounderiesReaderAccount.StartPanelReaderAccountController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -47,9 +48,7 @@ public abstract class AClientCommonUtilities
 				stage.show();
 				stage.setOnCloseRequest(e->
 				{
-					stage.close();
-					int x=startPanelUser.getActivateWindows();
-					startPanelUser.setActivateWindows(--x);
+					backToStartPanel();
 				});
 				int x=startPanelUser.getActivateWindows();
 				startPanelUser.setActivateWindows(++x);
@@ -68,6 +67,13 @@ public abstract class AClientCommonUtilities
 
 	}
 	
+	public static void backToStartPanel()
+	{
+		stage.close();
+		int x=startPanelUser.getActivateWindows();
+		startPanelUser.setActivateWindows(--x);
+		StartPanelController.connToClientController.setClientUI((IGUIController)startPanelUser);
+	}
 	
 	public static void loadStartPanelWindow(Object classThatAsk, String loc, String title)
 	{
@@ -80,7 +86,19 @@ public abstract class AClientCommonUtilities
 				FXMLLoader loader=new FXMLLoader(((Class<?>)classThatAsk).getResource(loc)); // load the FXML file
 		        Parent parent = (Parent) loader.load();
 		        startPanelUser = loader.getController();//get the controller of fxml
-
+		        if(startPanelUser instanceof StartPanelController)
+		        {
+		        	((StartPanelController)startPanelUser).initialize(new String[2]);
+		        }
+		        else if(startPanelUser instanceof StartPanelLibrarianController)
+		        {
+		        	((StartPanelLibrarianController)startPanelUser).initialize();
+		        }
+		        else if(startPanelUser instanceof StartPanelReaderAccountController)
+		        {
+		        	((StartPanelReaderAccountController)startPanelUser).initialize();
+		        }
+		        AStartClient.primaryStagePanel.close();
 				//Parent parent = FXMLLoader.load(((Class<?>)classThatAsk).getResource(loc));
 				AStartClient.primaryStagePanel.setTitle(title);
 				AStartClient.primaryStagePanel.setScene(new Scene(parent));
@@ -111,9 +129,23 @@ public abstract class AClientCommonUtilities
 			alert.setTitle(title);
 			alert.getButtonTypes().addAll(bttexit);
 			Optional<ButtonType> result = alert.showAndWait();
+		});
+    }
+	
+	public static void alertErrorWithExit(String headerText,String title) 
+    { 
+		Platform.runLater(()->
+		{  
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			ButtonType bttexit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().clear();
+			alert.setHeaderText(headerText);
+			alert.setTitle(title);
+			alert.getButtonTypes().addAll(bttexit);
+			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) 
 			{
-				//System.exit(0);
+				System.exit(0);
 			}
 		});
     }

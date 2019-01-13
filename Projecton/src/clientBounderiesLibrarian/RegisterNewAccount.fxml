@@ -30,6 +30,20 @@
                   </JFXTextField>
                </children>
             </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="6.0" text="*" textFill="#e40a0a">
+                     <font>
+                        <Font name="System Bold Italic" size="18.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField fx:id="FirstNameTextField" labelFloat="true" prefHeight="30.0" prefWidth="300.0" promptText="First Name">
+                     <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                     </font>
+                  </JFXTextField>
+               </children>
+            </HBox>
             <HBox prefHeight="41.0" prefWidth="309.0">
                <children>
                   <Label alignment="CENTER" prefHeight="28.0" prefWidth="7.0" text="*" textFill="#e40a0a">
@@ -53,20 +67,6 @@
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
-                  </JFXTextField>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="27.0" prefWidth="6.0" text="*" textFill="#e40a0a">
-                     <font>
-                        <Font name="System Bold Italic" size="18.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField fx:id="FirstNameTextField" labelFloat="true" prefHeight="30.0" prefWidth="300.0" promptText="First Name">
-                     <font>
-                        <Font name="System Bold Italic" size="14.0" />
-                     </font>
                   </JFXTextField>
                </children>
             </HBox>

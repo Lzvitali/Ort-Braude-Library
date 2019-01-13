@@ -216,14 +216,14 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchResultTable" layoutX="21.0" layoutY="136.0" prefHeight="345.0" prefWidth="743.0">
+                                    <TableView fx:id="searchResultTable" layoutX="13.0" layoutY="136.0" prefHeight="345.0" prefWidth="758.0">
                                       <columns>
                                         <TableColumn fx:id="bookNameColumn" prefWidth="232.0" text="Book name" />
                                         <TableColumn fx:id="authorNameColumn" prefWidth="167.0" text="Author name" />
-                                          <TableColumn fx:id="bookYearColumn" prefWidth="87.0" text="Year" />
-                                          <TableColumn fx:id="BookTopicColumn" prefWidth="106.0" text="Topic" />
-                                          <TableColumn fx:id="isDesiredBookColumn" prefWidth="67.0" text="Desired?" />
-                                          <TableColumn fx:id="viewIntroColumn" prefWidth="82.0" text="View intro" />
+                                          <TableColumn fx:id="bookYearColumn" prefWidth="79.0" text="Year" />
+                                          <TableColumn fx:id="BookTopicColumn" prefWidth="134.0" text="Topic" />
+                                          <TableColumn fx:id="isDesiredBookColumn" prefWidth="66.0" text="Desired?" />
+                                          <TableColumn fx:id="viewIntroColumn" prefWidth="79.0" text="View intro" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -285,11 +285,11 @@
                                     </AnchorPane>
                                     <TableView fx:id="searchReaderAccountTable" layoutX="6.0" layoutY="137.0" prefHeight="358.0" prefWidth="778.0">
                                       <columns>
-                                        <TableColumn fx:id="accountIDColumn" prefWidth="114.0" text="ID" />
+                                        <TableColumn fx:id="accountIDColumn" prefWidth="98.0" text="ID" />
                                         <TableColumn prefWidth="127.0" text="First name" />
                                           <TableColumn fx:id="accountLastNameColumn" prefWidth="113.0" text="Last name" />
-                                          <TableColumn fx:id="accountStatusColumn" prefWidth="103.0" text="status" />
-                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="111.0" text="phone" />
+                                          <TableColumn fx:id="accountStatusColumn" prefWidth="124.0" text="status" />
+                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="106.0" text="phone" />
                                           <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="148.0" text="Borrows &amp; Reserves" />
                                           <TableColumn fx:id="freezeColumn" prefWidth="61.0" text="Freeze" />
                                       </columns>
