@@ -88,7 +88,7 @@ public abstract class  ABookDBController
 					{
 						System.out.println("SameBook but different topics");
 						//if there is same book but different topics
-						AClientCommonUtilities.infoAlert("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
+					AClientCommonUtilities.infoAlert("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
 					}
 
 				}
