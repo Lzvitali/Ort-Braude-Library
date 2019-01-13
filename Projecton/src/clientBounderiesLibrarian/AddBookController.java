@@ -15,14 +15,19 @@ import clientConrollers.OBLClient;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 
@@ -173,7 +178,25 @@ public class AddBookController implements IGUIController
 	@Override
 	public void display(ObjectMessage msg)
 	{
-		// TODO Auto-generated method stub
+		if (msg.getNote().equals("Successfull"))
+		{
+			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
+			Platform.runLater(()->
+			{   
+				AClientCommonUtilities.backToStartPanel(); 
+			});
+		
+			
+		}
+		
+		if (msg.getNote().equals("Unsuccessfull"))
+		{
+			AClientCommonUtilities.alertErrorWithExit(msg.getMessage(), msg.getNote());
+		}
+		if (msg.getNote().equals("Wrong"))
+		{
+			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
+		}
 		
 	}
 }

@@ -151,6 +151,20 @@ public abstract class AClientCommonUtilities
     }
 	
 	
+	public static void alertErrorWithOption(String headerText,String title,String btnName) 
+    { 
+		Platform.runLater(()->
+		{  
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			ButtonType bttexit = new ButtonType(btnName, ButtonBar.ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().clear();
+			alert.setHeaderText(headerText);
+			alert.setTitle(title);
+			alert.getButtonTypes().addAll(bttexit);
+			Optional<ButtonType> result = alert.showAndWait();
+		});
+    }
+	
 	/**
 	 * This function prompts an alert message to the user (not the Error one) 
 	 * @param headerText

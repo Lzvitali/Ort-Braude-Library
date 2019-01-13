@@ -80,15 +80,14 @@ public abstract class  ABookDBController
 							addCopy.executeUpdate();
 						}
 
-						AClientCommonUtilities.infoAlert("This Book is already exist in the system,so successfully added it like copy.","Successfull");
-						massegeRes=new ObjectMessage("successful");
+						return new ObjectMessage("This Book is already exist in the system,so successfully added it like copy.","Successfull");
 					}
 					//not working window with error!!
 					else //if there is different topics
 					{
 						System.out.println("SameBook but different topics");
 						//if there is same book but different topics
-					AClientCommonUtilities.infoAlert("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
+						return new ObjectMessage("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
 					}
 
 				}
@@ -97,7 +96,7 @@ public abstract class  ABookDBController
 				{
 					System.out.println("SameBook and different desire");
 					//if there is same book but different desired
-					AClientCommonUtilities.infoAlert("Error!Please change desired choise. There is also book with the same name,author ,year and edition.","Wrong");
+					return new ObjectMessage("Error!Please change desired choise. There is also book with the same name,author ,year and edition.","Wrong");
 
 				}
 			}
@@ -134,16 +133,17 @@ public abstract class  ABookDBController
 					}
 
 				}
-				AClientCommonUtilities.infoAlert("This Book was successfully added like book and like copy.","Successfull");
-				massegeRes=new ObjectMessage("successful");
+				return new ObjectMessage("This Book was successfully added like book and like copy.","Successfull");
+				
 			}	
 		}	
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-			massegeRes=new ObjectMessage("unsuccessful");
+			return new ObjectMessage("Unexpected Error.","Unsucessfull");
+			
 		}
-		return massegeRes=new ObjectMessage("unsuccessful");
+		
 	}
 
 
