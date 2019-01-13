@@ -103,21 +103,13 @@ public class RegisterNewReaderAccountController implements IGUIController
     		{
     			adress=AdressTextField.getText();
     		}
-    		
-    		
-    		//set a password for the user
-    		Random rand = new Random();
-    		int randPassword = rand.nextInt(10000) + 1;
-    		String password=Integer.toString(randPassword);
-    		ReaderAccount reader=new ReaderAccount(userID, password, 3, false, firstName, lastName, phoneNum, email, "Active", 0, adress, EditionYears); 
-    		ObjectMessage msg = new ObjectMessage(reader,"try to register new account","ReaderAccount");
-        	client.handleMessageFromClient(msg); 
-    		
-    		
-    		
+    		ReaderAccount reader=new ReaderAccount(userID, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYears);
+    		ObjectMessage msg = new ObjectMessage(reader,"RegistrationNewReaderAccount","ReaderAccount");
+        	client.handleMessageFromClient(msg);
     	}
     	else
-    		infoAlert(result,"Invaild Input");
+    		AClientCommonUtilities.infoAlert(result,"Invaild Input");
+        	
     }
 
     @FXML
@@ -183,8 +175,16 @@ public class RegisterNewReaderAccountController implements IGUIController
     }
 
 	@Override
-	public void display(ObjectMessage msg) {
-		// TODO Auto-generated method stub
-		
+	public void display(ObjectMessage msg) 
+	{
+		if(msg.getMessage().equals("successful registration"))
+    	{
+    		String showPassword="successful Registration the new password for the reader is "+ ((ReaderAccount)msg.getObjectList().get(0)).getPassword();
+    		AClientCommonUtilities.infoAlert(showPassword,"Registration successful");
+    	}
+    	else
+    	{
+    		AClientCommonUtilities.infoAlert(msg.getMessage(),"Registration unsuccessful");
+    	}	
 	}
 }

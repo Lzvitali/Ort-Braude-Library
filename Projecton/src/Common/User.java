@@ -23,6 +23,14 @@ public class User implements IEntity,Serializable
 		this.isOnline = isOnline;
 	}	
 	
+	public User(String id, int permission, boolean isOnline) 
+	{
+		this.id = id;
+		this.password = null;
+		this.permission = permission;
+		this.isOnline = isOnline;
+	}
+	
 	public User() 
 	{
 		this.id = null;
