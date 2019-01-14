@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.*;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -85,6 +86,43 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 	else if( (objectMessage.getNote()).equals("Book") ) 
 	{
 		answer = ABookDBController.selection(objectMessage,connToSQL);
+		try 
+		{
+			client.sendToClient(answer);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	else if( (objectMessage.getNote()).equals("AddBook") ) 
+	{
+		answer = ABookDBController.selection(objectMessage,connToSQL);
+		if(answer.getNote().equals("Successfull"))
+		{
+			Socket sock;
+			try
+			{
+				sock = new Socket("localhost", 5643);
+				byte[] mybytearray = new byte[1024];
+				InputStream is = sock.getInputStream();
+				FileOutputStream fos = new FileOutputStream("pdfFiles\\v1.pdf");
+				BufferedOutputStream bos = new BufferedOutputStream(fos);
+				int bytesRead = is.read(mybytearray, 0, mybytearray.length);
+				bos.write(mybytearray, 0, bytesRead);
+				bos.close();
+				sock.close();
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
+		  
 		try 
 		{
 			client.sendToClient(answer);

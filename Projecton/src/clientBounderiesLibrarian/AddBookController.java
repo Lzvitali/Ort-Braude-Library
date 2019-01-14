@@ -13,9 +13,12 @@ import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -84,6 +87,9 @@ public class AddBookController implements IGUIController
 
     @FXML
     private Label fileLabel;
+    
+    private boolean isUploaded =false;
+    private static File f;
 	
 	//function for cancel button. if librarian doesn't want  continue to add a book
 	@FXML
@@ -120,8 +126,36 @@ public class AddBookController implements IGUIController
 		boolean isDesired= DesiredCheckBox.isSelected();
 		Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText());
 		System.out.println(String.valueOf(isDesired));
-		ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
-		client.handleMessageFromClient(msg);
+		ObjectMessage msg= new ObjectMessage(book,"addBook","AddBook");
+		
+		if(isUploaded)
+		{
+			//client.handleMessageFromClient(msg);
+
+			File myFile = new File(f.getAbsolutePath());
+			Socket sock;
+			ServerSocket servsock;
+			BufferedInputStream bis;
+			try
+			{
+				servsock = new ServerSocket(5643);
+				client.handleMessageFromClient(msg);
+				sock = servsock.accept();
+				byte[] mybytearray = new byte[(int) myFile.length()];
+				bis = new BufferedInputStream(new FileInputStream(myFile));
+				bis.read(mybytearray, 0, mybytearray.length);
+				OutputStream os = sock.getOutputStream();
+				os.write(mybytearray, 0, mybytearray.length);
+				os.flush();
+				sock.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+
+		}
+
 		
 		
 	}
@@ -133,9 +167,10 @@ public class AddBookController implements IGUIController
 	{
 		FileChooser fc=new FileChooser();
 		fc.getExtensionFilters().add(new ExtensionFilter("PDF Files","*.pdf"));
-		File f=fc.showOpenDialog(null);
+	    f=fc.showOpenDialog(null);
 		if(f!=null)
 		{
+			isUploaded=true;
 			fileLabel.setText("Selected File ::" + f.getAbsolutePath());
 		}
 		
@@ -208,12 +243,8 @@ public class AddBookController implements IGUIController
 		if (msg.getNote().equals("Successfull"))
 		{
 			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
-			Platform.runLater(()->
-			{   
-				AClientCommonUtilities.backToStartPanel(); 
-			});
-		
-			
+			AClientCommonUtilities.backToStartPanel();
+	
 		}
 		
 		if (msg.getNote().equals("Unsuccessfull"))
