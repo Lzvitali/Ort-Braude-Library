@@ -24,12 +24,15 @@ import javafx.stage.StageStyle;
 
 public abstract class AClientCommonUtilities 
 {
-	
-	private static IGUIStartPanel startPanelUser = AStartClient.startPanelController;
-	public static Stage stage;
+	/**
+	 * static attributes for keeping the "way" to the "windows" 
+	 * there can be maximum 2 windows open at one time
+	 */
+	private static IGUIStartPanel startPanelUser = AStartClient.startPanelController; //keeping the StartPannel that currently in use
+	public static Stage stage; //if there is a "small" window- this is it's stage 
 
 	/**
-	 * This method opens a new GUI window 
+	 * This method opens a new GUI "small" window 
 	 * @param classThatAsk - in the original Class just type: getClass() 
 	 * @param loc - is the full location of the fxml file. for example: "/clientBounderiesLibrarian/AddBook.fxml"
 	 * @param title - title is the title of the new window
@@ -67,6 +70,9 @@ public abstract class AClientCommonUtilities
 
 	}
 	
+	/**
+	 * This function is closing the current "small" window and sets the ClientUI in OBLClient to be the current StartPanel
+	 */
 	public static void backToStartPanel()
 	{
 		stage.close();
@@ -75,6 +81,13 @@ public abstract class AClientCommonUtilities
 		StartPanelController.connToClientController.setClientUI((IGUIController)startPanelUser);
 	}
 	
+	
+	/**
+	 * This method opens a GUI "StartPanel" window 
+	 * @param classThatAsk - in the original Class just type: getClass() 
+	 * @param loc - is the full location of the fxml file. 
+	 * @param title - title is the title of the new window
+	 */
 	public static void loadStartPanelWindow(Object classThatAsk, String loc, String title)
 	{
 		Platform.runLater(()->
@@ -132,6 +145,11 @@ public abstract class AClientCommonUtilities
 		});
     }
 	
+	/**
+	 * This method prompts an alert Error Message and exiting from the program 
+	 * @param headerText - the text message to the user
+	 * @param title - the title for the window
+	 */
 	public static void alertErrorWithExit(String headerText,String title) 
     { 
 		Platform.runLater(()->
@@ -150,7 +168,12 @@ public abstract class AClientCommonUtilities
 		});
     }
 	
-	
+	/**
+	 * This method prompts an alert Error Message and exiting from the program 
+	 * @param headerText - the text message to the user
+	 * @param title - the title for the window
+	 * @param btnName - the text that will be on the button
+	 */
 	public static void alertErrorWithOption(String headerText,String title,String btnName) 
     { 
 		Platform.runLater(()->
@@ -162,7 +185,7 @@ public abstract class AClientCommonUtilities
 			alert.setTitle(title);
 			alert.getButtonTypes().addAll(bttexit);
 			Optional<ButtonType> result = alert.showAndWait();
-		});
+		}); 
     }
 	
 	/**

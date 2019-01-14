@@ -82,7 +82,6 @@ public abstract class  ABookDBController
 
 						return new ObjectMessage("This Book is already exist in the system,so successfully added it like copy.","Successfull");
 					}
-					//not working window with error!!
 					else //if there is different topics
 					{
 						System.out.println("SameBook but different topics");
@@ -91,7 +90,6 @@ public abstract class  ABookDBController
 					}
 
 				}
-				//not working window with error!!
 				else  //different desire
 				{
 					System.out.println("SameBook and different desire");

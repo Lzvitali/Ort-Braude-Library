@@ -19,13 +19,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
+/**
+ * This Class is the controller for log in GUI
+ *
+ */
+
 public class LogInController  implements IGUIController
 {
 	OBLClient client;
 
-	public static String currentID;
-	protected static Object startPanelController;
-	public static int permission;
+	public static String currentID; //will keep the ID of the current user 
+	protected static Object startPanelController; //will keep the reference for the current StartPanel stage
+	public static int permission; //will keep who logged in (librarian/ director/ reader account)
 	
     @FXML
     private JFXTextField logInIDTextField;
@@ -107,7 +112,7 @@ public class LogInController  implements IGUIController
 				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml","Librarian Start Panel");
 			}
 		}
-		
+		//if unsuccessful show proper error message
 		else
 		{
 			if((msg.getMessage()).equals("unsuccessful"))
