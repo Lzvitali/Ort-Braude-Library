@@ -1,6 +1,7 @@
 package clientBounderiesLibrarian;
 
 import com.jfoenix.controls.JFXButton;
+import java.net.*;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 
@@ -12,6 +13,7 @@ import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +32,10 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.input.InputMethodEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class AddBookController implements IGUIController
 {
@@ -76,6 +82,8 @@ public class AddBookController implements IGUIController
 	@FXML
 	private JFXButton SaveBtn;
 
+    @FXML
+    private Label fileLabel;
 	
 	//function for cancel button. if librarian doesn't want  continue to add a book
 	@FXML
@@ -83,6 +91,8 @@ public class AddBookController implements IGUIController
 	{
 		AClientCommonUtilities.backToStartPanel();
 	}
+	
+  
 
 	//add new book or only copy
 	@FXML
@@ -101,7 +111,10 @@ public class AddBookController implements IGUIController
 		else
 		{
 			System.out.println("Errorrrrrrr!");
-			AClientCommonUtilities.alertError("The fields you filled are not correctly.","Error"); // open error message
+			ObjectMessage massage=new ObjectMessage("The fields you filled are not correctly.","Wrong") ;
+			AClientCommonUtilities.alertErrorWithOption(massage.getMessage(), massage.getNote(),"Back");
+			
+			
 		}*/
 		
 		boolean isDesired= DesiredCheckBox.isSelected();
@@ -114,10 +127,21 @@ public class AddBookController implements IGUIController
 	}
 	
 	
-	//lo asiti the kashur lhaalat kovetz
+	//function upload file and send it to server/ sending still not writing
 	@FXML
 	void uploadTableOfContents(ActionEvent event) 
 	{
+		FileChooser fc=new FileChooser();
+		fc.getExtensionFilters().add(new ExtensionFilter("PDF Files","*.pdf"));
+		File f=fc.showOpenDialog(null);
+		if(f!=null)
+		{
+			fileLabel.setText("Selected File ::" + f.getAbsolutePath());
+		}
+		
+		
+		
+		
 		
 	}
 
@@ -160,7 +184,10 @@ public class AddBookController implements IGUIController
 		 {
 			 finalResult+=result+"\n";
 		 }
-	    	
+	    	if (fileLabel.getText().equals(null))//check if client upload file 
+	    	{
+	    		finalResult+=result+"\n";
+	    	}
 	
 	    	if(finalResult.equals(""))
 	    	{
@@ -174,7 +201,7 @@ public class AddBookController implements IGUIController
 	    		
 	    }
 
-	//lo asiti
+	
 	@Override
 	public void display(ObjectMessage msg)
 	{

@@ -328,7 +328,7 @@ public abstract class AValidationInput
 	{
 		for(int i=0;i<4;i++) 
 		{
-			if(context.charAt(i)<'0' ||context.charAt(i)>'9')
+			if(context.charAt(i)<'0' ||context.charAt(i)>'9')        
 			{
 				return false;
 			}
@@ -409,7 +409,7 @@ public abstract class AValidationInput
 		{
 			return"Insert Name Of A Book";	
 		}
-		if(context.length()>15)
+		if(context.length()>15)                  //why not? we have book's name longer then 15 chars
 		{
 			return "The Book Name is too long";
 		}
@@ -424,7 +424,7 @@ public abstract class AValidationInput
 		{
 			return "Insert Author Name";	
 		}
-		if(context.length()>15)
+		if(context.length()>15)       //why not?
 		{
 			return "The Author Name is too long";
 		}
@@ -441,20 +441,20 @@ public abstract class AValidationInput
 		{
 			return "Insert Topic";	
 		}
-		if(context.length()>15)
+		if(context.length()>15)          //why not?
 		{
 			return "The Topic is too long"; 
 		}
 		if(!onlyCharacters(context))
 		{
-			return "You must fill only character";
+			return "You must fill only character";     //why not?
 		}
 		return "correct";
 	}
 	
 	private static String checkValidationYearOfBook(String context)
 	{
-		if(context.length()<4)
+		if(context.length()<4)          // <=4
 		{
 			return "Year of book must be 4 digits";
 		}
