@@ -127,7 +127,7 @@ public class AddBookController implements IGUIController
 	}
 	
 	
-	//function upload file and send it to server/ sending still not writing
+	//function upload file and send it to server/ sending- still not writing
 	@FXML
 	void uploadTableOfContents(ActionEvent event) 
 	{

@@ -44,7 +44,13 @@ public abstract class  ABookDBController
 		return null; // TODO: delete it. did it only to escape the error 
 	}
 
-	//Natasha (lo lagaat)!!!!!!!!
+	
+	/**
+	 * This function add book to the DB in MySQL. It is check if it is must be added like new book or copy for book that already exist
+	 * @param msg- the object from the client
+	 * @param connToSQL -the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client if book was added successfully or not or it has wrong .
+	 */
 	private static ObjectMessage tryToAddBook(ObjectMessage msg, Connection connToSQL)
 	{
 		ObjectMessage massegeRes;
