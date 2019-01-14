@@ -126,13 +126,13 @@ public class AddBookController implements IGUIController
 		boolean isDesired= DesiredCheckBox.isSelected();
 		Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText());
 		System.out.println(String.valueOf(isDesired));
-		ObjectMessage msg= new ObjectMessage(book,"addBook","AddBook");
+		ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
 		
 		if(isUploaded)
 		{
-			//client.handleMessageFromClient(msg);
+			client.handleMessageFromClient(msg);
 
-			File myFile = new File(f.getAbsolutePath());
+			/*File myFile = new File(f.getAbsolutePath());
 			Socket sock;
 			ServerSocket servsock;
 			BufferedInputStream bis;
@@ -152,7 +152,7 @@ public class AddBookController implements IGUIController
 			catch (IOException e)
 			{
 				e.printStackTrace();
-			}
+			}*/
 
 		}
 
@@ -242,6 +242,30 @@ public class AddBookController implements IGUIController
 	{
 		if (msg.getNote().equals("Successfull"))
 		{
+			File myFile = new File(f.getAbsolutePath());
+			Socket sock;
+			ServerSocket servsock;
+			BufferedInputStream bis;
+			try
+			{
+				ObjectMessage m = new ObjectMessage();
+				m.setNote("AddPDF");
+				servsock = new ServerSocket(5643);
+				client.handleMessageFromClient(m);
+				sock = servsock.accept();
+				byte[] mybytearray = new byte[(int) myFile.length()];
+				bis = new BufferedInputStream(new FileInputStream(myFile));
+				bis.read(mybytearray, 0, mybytearray.length);
+				OutputStream os = sock.getOutputStream();
+				os.write(mybytearray, 0, mybytearray.length);
+				os.flush();
+				sock.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
 			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
 			AClientCommonUtilities.backToStartPanel();
 	

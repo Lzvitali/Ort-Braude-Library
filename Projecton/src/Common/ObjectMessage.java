@@ -30,6 +30,7 @@ public class ObjectMessage implements Serializable
 		this.message=message;
 	}
 	
+	
 	public ObjectMessage(IEntity entityOne,String message, String note)
 	{
 		objectList=new ArrayList<IEntity>();
