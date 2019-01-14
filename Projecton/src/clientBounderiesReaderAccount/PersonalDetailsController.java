@@ -6,6 +6,7 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
@@ -52,6 +53,11 @@ public class PersonalDetailsController implements IGUIController
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
+    	
+    	ReaderAccount readerAccount=new ReaderAccount();
+    	readerAccount.setId(LogInController.currentID);
+    	ObjectMessage objectMessage=new ObjectMessage(readerAccount,"SearchReader","ReaderAccount");
+    	client.handleMessageFromClient(objectMessage);
     }
 
     
@@ -133,15 +139,30 @@ public class PersonalDetailsController implements IGUIController
 	@Override
 	public void display(ObjectMessage msg) 
 	{
-		if(msg.getMessage().equals("successful change details"))
+		if(msg.getMessage().equals("change details"))
     	{
-    		String showPassword="successful change details";
-    		AClientCommonUtilities.infoAlert(showPassword,"successful change details");
+			if(msg.getNote().equals("successful change details"))
+			{
+	    		String showPassword="successful change details";
+	    		AClientCommonUtilities.infoAlert(showPassword,"successful change details");
+			}
+			else
+			{
+				AClientCommonUtilities.infoAlert(msg.getMessage(),"unsuccessful change details");
+			}
+
     	}
-    	else
-    	{
-    		AClientCommonUtilities.infoAlert(msg.getMessage(),"unsuccessful change details");
-    	}
+		else if(msg.getMessage().equals("ReaderAccountSearch"))
+		{
+			ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
+			IDTextField.setText(reader.getId());
+    		PhoneTextField.setText(reader.getPhone());
+    		EmailTextField.setText(reader.getEmail());
+    		FirstNameTextField.setText(reader.getFirstName());
+    		LastnameTextField.setText(reader.getLastName());
+    		AdressTextField.setText(reader.getAdress());
+    		EducationYearTextField.setText(reader.getEducationYear());
+		}		
 		
 	}
 

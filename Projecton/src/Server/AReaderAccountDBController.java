@@ -43,6 +43,7 @@ public class AReaderAccountDBController
 	private static ObjectMessage changePersnalDetails(ObjectMessage msg, Connection connToSQL)
 	{
 		ObjectMessage answer = new ObjectMessage(); 
+		answer.setMessage("change details");
 		PreparedStatement checkPhoneDB = null;
 		PreparedStatement checkEmailDB = null;
 		PreparedStatement updateUser ;
@@ -58,7 +59,7 @@ public class AReaderAccountDBController
 			rs2 =checkPhoneDB.executeQuery();
 			if(rs2.next())
 			{
-				answer.setMessage("phone is already exist in the system");
+				answer.setNote("phone is already exist in the system");
 			}
 			else
 			{
@@ -67,7 +68,7 @@ public class AReaderAccountDBController
 				rs3 =checkEmailDB.executeQuery(); 
 				if(rs3.next())
 				{
-					answer.setMessage("email is already exist in the system");
+					answer.setNote("email is already exist in the system");
 				}
 				else
 				{ 
@@ -80,7 +81,7 @@ public class AReaderAccountDBController
 					updateReaderAccount.setInt(6,(int)Integer.parseInt(reader.getEducationYear())); 
 					updateReaderAccount.setString(7,reader.getId());
 					updateReaderAccount.executeUpdate();
-					answer.setMessage("successful change details");
+					answer.setNote("successful change details");
 					answer.addObject(msg.getObjectList().get(0));
 				}
 			}
@@ -204,7 +205,7 @@ public class AReaderAccountDBController
 			ResultSet rs = ps.executeQuery();
 	 		while(rs.next())
 	 		{
-	 			result.add(new ReaderAccount(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(8)));
+	 			result.add(new ReaderAccount(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(8),rs.getString(7)));
 			} 
 	 		if(!result.isEmpty())
 	 		{

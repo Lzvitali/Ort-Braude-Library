@@ -92,6 +92,20 @@ public class ReaderAccount extends User
 	}
 	
 	
+	public ReaderAccount(String id,String firstName,String lastName, String phone,String email,String address,String status,String educationYear) 
+	{
+		super(id);
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.email = email;
+		this.status = status;
+		this.numOfDelays = -1;
+		this.adress = address;
+		this.educationYear = educationYear;
+		this.borrowsAndReserves= null;
+		this.freeze= null;
+	}
 	public ReaderAccount(String id,String firstName,String lastName, String phone,String status) 
 	{
 		super(id);
@@ -106,7 +120,6 @@ public class ReaderAccount extends User
 		this.borrowsAndReserves= null;
 		this.freeze= null;
 	}
-	
 	
 	public ReaderAccount() 
 	{
