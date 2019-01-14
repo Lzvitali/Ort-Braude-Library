@@ -54,8 +54,9 @@ public class AReaderAccountDBController
 		try 
 		{
 			ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
-			checkPhoneDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE phone = ? ");
+			checkPhoneDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE phone = ? AND ID NOT LIKE ? ");
 			checkPhoneDB.setString(1,reader.getPhone()); 
+			checkPhoneDB.setString(2,reader.getId()); 
 			rs2 =checkPhoneDB.executeQuery();
 			if(rs2.next())
 			{
@@ -63,8 +64,9 @@ public class AReaderAccountDBController
 			}
 			else
 			{
-				checkEmailDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE email = ? ");
+				checkEmailDB = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE email = ?  AND ID NOT LIKE ?");
 				checkEmailDB.setString(1,reader.getEmail()); 
+				checkEmailDB.setString(2,reader.getId()); 
 				rs3 =checkEmailDB.executeQuery(); 
 				if(rs3.next())
 				{
@@ -72,14 +74,12 @@ public class AReaderAccountDBController
 				}
 				else
 				{ 
-					updateReaderAccount = connToSQL.prepareStatement("UPDATE `readeraccount` SET `firstName`=?,`lastName`=?,`phone`=?,`email`=?,`address`=?,`educationYear`=? WHERE ID=?");
-					updateReaderAccount.setString(1,(String)reader.getFirstName()); 
-					updateReaderAccount.setString(2,(String)reader.getLastName()); 
-					updateReaderAccount.setString(3,(String)reader.getPhone());
-					updateReaderAccount.setString(4,(String)reader.getEmail());
-					updateReaderAccount.setString(5,(String)reader.getAdress()); 
-					updateReaderAccount.setInt(6,(int)Integer.parseInt(reader.getEducationYear())); 
-					updateReaderAccount.setString(7,reader.getId());
+					updateReaderAccount = connToSQL.prepareStatement("UPDATE `readeraccount` SET `phone`=?,`email`=?,`address`=?,`educationYear`=? WHERE ID=?");
+					updateReaderAccount.setString(1,(String)reader.getPhone());
+					updateReaderAccount.setString(2,(String)reader.getEmail());
+					updateReaderAccount.setString(3,(String)reader.getAdress()); 
+					updateReaderAccount.setString(4,reader.getEducationYear()); 
+					updateReaderAccount.setString(5,reader.getId());
 					updateReaderAccount.executeUpdate();
 					answer.setNote("successful change details");
 					answer.addObject(msg.getObjectList().get(0));

@@ -75,7 +75,15 @@ public abstract class AClientCommonUtilities
 	 */
 	public static void backToStartPanel()
 	{
-		stage.close();
+		try 
+		{
+			stage.close();
+		} catch (Exception e) { 
+			Platform.runLater(()->
+			{
+				stage.close();
+			});
+		}
 		int x=startPanelUser.getActivateWindows();
 		startPanelUser.setActivateWindows(--x);
 		StartPanelController.connToClientController.setClientUI((IGUIController)startPanelUser);
