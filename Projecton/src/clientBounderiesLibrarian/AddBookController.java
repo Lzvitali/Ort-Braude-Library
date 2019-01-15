@@ -88,6 +88,9 @@ public class AddBookController implements IGUIController
     @FXML
     private Label fileLabel;
     
+    @FXML
+    private Button cancelUploadBtn;
+    
     private boolean isUploaded =false;
     private static File f;
 	
@@ -97,6 +100,15 @@ public class AddBookController implements IGUIController
 	{
 		AClientCommonUtilities.backToStartPanel();
 	}
+	
+	
+	@FXML
+    void cancelUpload(ActionEvent event)
+	{
+		isUploaded=false;
+		fileLabel.setText(" " );
+		cancelUploadBtn.setVisible(false);
+    }
 	
   
 
@@ -128,11 +140,13 @@ public class AddBookController implements IGUIController
 		System.out.println(String.valueOf(isDesired));
 		ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
 		
-		if(isUploaded)
+		book.setFileIsLoaded(isUploaded);
+		client.handleMessageFromClient(msg);
+		
+		/*if(isUploaded)
 		{
-			client.handleMessageFromClient(msg);
-
-			/*File myFile = new File(f.getAbsolutePath());
+			
+			File myFile = new File(f.getAbsolutePath());
 			Socket sock;
 			ServerSocket servsock;
 			BufferedInputStream bis;
@@ -152,9 +166,9 @@ public class AddBookController implements IGUIController
 			catch (IOException e)
 			{
 				e.printStackTrace();
-			}*/
+			}
 
-		}
+		}*/
 
 		
 		
@@ -171,12 +185,10 @@ public class AddBookController implements IGUIController
 		if(f!=null)
 		{
 			isUploaded=true;
-			fileLabel.setText("Selected File ::" + f.getAbsolutePath());
+			fileLabel.setText("Selected File::" + f.getAbsolutePath());
+			cancelUploadBtn.setVisible(true);
 		}
-		
-		
-		
-		
+	
 		
 	}
 

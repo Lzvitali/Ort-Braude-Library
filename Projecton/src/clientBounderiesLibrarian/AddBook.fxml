@@ -96,7 +96,20 @@
                   </Button>
                </children>
             </HBox>
-            <Label fx:id="fileLabel" prefHeight="46.0" prefWidth="321.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="fileLabel" prefHeight="39.0" prefWidth="271.0" />
+                  <Button fx:id="cancelUploadBtn" mnemonicParsing="false" onAction="#cancelUpload" visible="false">
+                     <graphic>
+                        <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/cancel.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
             <HBox prefHeight="24.0" prefWidth="355.0" spacing="125.0">
                <children>
                   <JFXButton fx:id="CancelBtn" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">

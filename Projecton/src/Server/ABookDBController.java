@@ -75,33 +75,40 @@ public abstract class  ABookDBController
 			//add like copy
 			if(rs1.next())
 			{
-				if(Boolean.parseBoolean(rs1.getString(6))==(tempBook.isDesired()))//check if same desire
+				if(tempBook.isFileIsLoaded())
 				{
-					if (rs1.getString(5).equals(tempBook.getTopic()))//if it is same book 
+					return new ObjectMessage("Error! You can't add file to existing book","Wrong");
+				}
+				else
+				{
+					if(Boolean.parseBoolean(rs1.getString(6))==(tempBook.isDesired()))//check if same desire
 					{
-						for(int i=0;i<tempBook.getNumberOfCopies();i++)//add copies for book
+						if (rs1.getString(5).equals(tempBook.getTopic()))//if it is same book 
 						{
-							addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
-							addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
-							addCopy.executeUpdate();
+							for(int i=0;i<tempBook.getNumberOfCopies();i++)//add copies for book
+							{
+								addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
+								addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
+								addCopy.executeUpdate();
+							}
+
+							return new ObjectMessage("This Book is already exist in the system,so successfully added it like copy.","Successfull");
+						}
+						else //if there is different topics
+						{
+							System.out.println("SameBook but different topics");
+							//if there is same book but different topics
+							return new ObjectMessage("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
 						}
 
-						return new ObjectMessage("This Book is already exist in the system,so successfully added it like copy.","Successfull");
 					}
-					else //if there is different topics
+					else  //different desire
 					{
-						System.out.println("SameBook but different topics");
-						//if there is same book but different topics
-						return new ObjectMessage("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
+						System.out.println("SameBook and different desire");
+						//if there is same book but different desired
+						return new ObjectMessage("Error!Please change desired choise. There is also book with the same name,author ,year and edition.","Wrong");
+
 					}
-
-				}
-				else  //different desire
-				{
-					System.out.println("SameBook and different desire");
-					//if there is same book but different desired
-					return new ObjectMessage("Error!Please change desired choise. There is also book with the same name,author ,year and edition.","Wrong");
-
 				}
 			}
 

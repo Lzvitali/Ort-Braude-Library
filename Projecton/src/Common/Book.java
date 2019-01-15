@@ -17,6 +17,7 @@ public class Book implements IEntity, Serializable
 	private String topic;
 	private Boolean isDesired; 
 	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
+	private boolean fileIsLoaded;
 	//buttons
 	private transient Button reserve;
 	private transient Button details;
@@ -95,6 +96,20 @@ public class Book implements IEntity, Serializable
 	{
 		return bookID;
 	}
+	
+	
+
+	public boolean isFileIsLoaded()
+	{
+		return fileIsLoaded;
+	}
+
+	public void setFileIsLoaded(boolean fileIsLoaded) 
+	{
+		this.fileIsLoaded = fileIsLoaded;
+	}
+	
+	
 
 	@Override
 	public String toString() {
