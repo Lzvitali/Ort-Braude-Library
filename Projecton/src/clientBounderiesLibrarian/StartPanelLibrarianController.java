@@ -180,7 +180,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     @FXML
     void openReportWindow(ActionEvent event) 
     {
-
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/Reports.fxml","Reporst");
     }
     ///////////////////////////////////////////////////////////////////////////////////
     

@@ -17,6 +17,8 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 /**
@@ -74,6 +76,16 @@ public class LogInController  implements IGUIController
     	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
     	
     	client.handleMessageFromClient(msg); 
+    }
+    
+    
+    @FXML
+    void makeLoginWithEnterBtn(KeyEvent event)
+    {
+    	if(event.getCode().equals(KeyCode.ENTER))
+    	{
+    		makeLogIn(new ActionEvent());
+       }
     }
 
     

@@ -24,7 +24,7 @@
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXTextField>
-            <JFXPasswordField fx:id="logInPasswordTextField" labelFloat="true" promptText="password">
+            <JFXPasswordField fx:id="logInPasswordTextField" labelFloat="true" onKeyPressed="#makeLoginWithEnterBtn" promptText="password">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font></JFXPasswordField>
