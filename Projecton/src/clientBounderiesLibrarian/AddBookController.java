@@ -269,6 +269,7 @@ public class AddBookController implements IGUIController
 		{
 			ObjectMessage m = new ObjectMessage();
 			m.setNote("AddPDF");
+			m.setMessage(Integer.toString((int) myFile.length()));
 			servsock = new ServerSocket(5643);
 			client.handleMessageFromClient(m);
 			sock = servsock.accept();
