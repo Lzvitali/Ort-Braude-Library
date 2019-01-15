@@ -103,12 +103,26 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 		try
 		{
 			sock = new Socket("localhost", 5643);
-			byte[] mybytearray = new byte[1024];
+			byte[] mybytearray = new byte[Integer.parseInt(objectMessage.getMessage())];
 			InputStream is = sock.getInputStream();
 			FileOutputStream fos = new FileOutputStream("pdfFiles\\v2.pdf");
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			int bytesRead = is.read(mybytearray, 0, mybytearray.length);
-			bos.write(mybytearray, 0, bytesRead);
+			int bytesRead = is.read(mybytearray,0, Integer.parseInt(objectMessage.getMessage()));
+			int current = bytesRead; 
+
+			do 
+			{
+				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
+				if(bytesRead >= 0) 
+				{
+					current += bytesRead;
+				}
+			} while(bytesRead > -1);
+
+			bos.write(mybytearray, 0 , current);
+			bos.flush();
+
+			fos.close();
 			bos.close();
 			sock.close();
 		} 

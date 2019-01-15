@@ -242,29 +242,7 @@ public class AddBookController implements IGUIController
 	{
 		if (msg.getNote().equals("Successfull"))
 		{
-			File myFile = new File(f.getAbsolutePath());
-			Socket sock;
-			ServerSocket servsock;
-			BufferedInputStream bis;
-			try
-			{
-				ObjectMessage m = new ObjectMessage();
-				m.setNote("AddPDF");
-				servsock = new ServerSocket(5643);
-				client.handleMessageFromClient(m);
-				sock = servsock.accept();
-				byte[] mybytearray = new byte[(int) myFile.length()];
-				bis = new BufferedInputStream(new FileInputStream(myFile));
-				bis.read(mybytearray, 0, mybytearray.length);
-				OutputStream os = sock.getOutputStream();
-				os.write(mybytearray, 0, mybytearray.length);
-				os.flush();
-				sock.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			 sendFile();
 			
 			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
 			AClientCommonUtilities.backToStartPanel();
@@ -279,6 +257,33 @@ public class AddBookController implements IGUIController
 		{
 			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
 		}
-		
+
 	}
+	public void sendFile()
+	{
+		File myFile = new File(f.getAbsolutePath());
+		Socket sock;
+		ServerSocket servsock;
+		BufferedInputStream bis;
+		try
+		{
+			ObjectMessage m = new ObjectMessage();
+			m.setNote("AddPDF");
+			servsock = new ServerSocket(5643);
+			client.handleMessageFromClient(m);
+			sock = servsock.accept();
+			byte[] mybytearray = new byte[(int) myFile.length()];
+			bis = new BufferedInputStream(new FileInputStream(myFile));
+			bis.read(mybytearray, 0, mybytearray.length);
+			OutputStream os = sock.getOutputStream();
+			os.write(mybytearray, 0, mybytearray.length);
+			os.flush();
+			sock.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
 }
