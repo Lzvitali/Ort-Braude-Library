@@ -254,7 +254,11 @@ public class AddBookController implements IGUIController
 	{
 		if (msg.getNote().equals("Successfull"))
 		{
-			 sendFile();
+			//if file was uploaded and the "BookAdd" was successful add the file
+			if(isUploaded)
+			{
+				sendFile();
+			}
 			
 			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
 			AClientCommonUtilities.backToStartPanel();
