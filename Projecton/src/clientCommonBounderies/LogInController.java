@@ -8,6 +8,7 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.User;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import java.io.IOException;
@@ -68,6 +69,28 @@ public class LogInController  implements IGUIController
     	String id = logInIDTextField.getText();
     	String password = logInPasswordTextField.getText();
     	
+    	String checkResult = AValidationInput.checkValidationUser("UserID", id);
+    	
+    	/*if(id.equals("") || password.equals(""))
+    	{
+    		AClientCommonUtilities.alertErrorWithOption("Please fill both: ID and Password", "Wrong input", "Ok");
+    	}    	
+    	else if(checkResult.equals("correct"))
+		{
+    		currentID=id;
+        	
+        	System.out.println(id + "  " + password);
+
+        	User user = new User(id,password);
+        	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
+
+        	client.handleMessageFromClient(msg); 
+		}
+    	else
+    	{
+    		AClientCommonUtilities.alertErrorWithOption(checkResult, "Wrong input", "Ok");
+    	}*/
+    	
     	currentID=id;
     	
     	System.out.println(id + "  " + password);
@@ -76,10 +99,12 @@ public class LogInController  implements IGUIController
     	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
     	
     	client.handleMessageFromClient(msg); 
+    	
     }
     
-    
-    @FXML
+
+
+	@FXML
     void makeLoginWithEnterBtn(KeyEvent event)
     {
     	if(event.getCode().equals(KeyCode.ENTER))
