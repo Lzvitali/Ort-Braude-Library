@@ -54,6 +54,8 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
 	private static int numOfActiveWindows=0;
 	
+	public static String readerAccountID; //when the librarian wants to access into the borrows and reserves of a reader account after a search 
+	
 	
 	
 	//FXML attibutes ****************************************************

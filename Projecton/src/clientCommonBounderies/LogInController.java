@@ -34,6 +34,7 @@ public class LogInController  implements IGUIController
 	public static String currentID; //will keep the ID of the current user 
 	protected static Object startPanelController; //will keep the reference for the current StartPanel stage
 	public static int permission; //will keep who logged in (librarian/ director/ reader account)
+								 // 1 = Library Director , 2 = Librarian , 3 = reader account
 	
     @FXML
     private JFXTextField logInIDTextField;

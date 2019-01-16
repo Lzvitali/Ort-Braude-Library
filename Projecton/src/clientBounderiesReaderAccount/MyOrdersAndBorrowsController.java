@@ -1,61 +1,97 @@
-/**
- * Sample Skeleton for 'MyOrdersAndBorrows.fxml' Controller Class
- */
-
 package clientBounderiesReaderAccount;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import Common.IGUIController;
+import Common.ObjectMessage;
+import Common.ReaderAccount;
+import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientCommonBounderies.LogInController;
+import clientCommonBounderies.StartPanelController;
+import clientConrollers.OBLClient;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 
-public class MyOrdersAndBorrowsController {
+public class MyOrdersAndBorrowsController implements IGUIController
+{
+	
+	OBLClient client;
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
+    @FXML
+    private TableColumn<?, ?> BookNameBorrowColumn;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
-    private URL location;
+    @FXML
+    private TableColumn<?, ?> AuthorNameBorrowColumn;
 
-    @FXML // fx:id="BookNameBorrowColumn"
-    private TableColumn<?, ?> BookNameBorrowColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> YearBorrowColumn;
 
-    @FXML // fx:id="AuthorNameBorrowColumn"
-    private TableColumn<?, ?> AuthorNameBorrowColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> TopicBorrowColumn;
 
-    @FXML // fx:id="YearBorrowColumn"
-    private TableColumn<?, ?> YearBorrowColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> BorrowDateColumn;
 
-    @FXML // fx:id="TopicBorrowColumn"
-    private TableColumn<?, ?> TopicBorrowColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> ReturnDateColumn;
 
-    @FXML // fx:id="BorrowDateColumn"
-    private TableColumn<?, ?> BorrowDateColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> btnForBorrows;
 
-    @FXML // fx:id="ReturnDateColumn"
-    private TableColumn<?, ?> ReturnDateColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> BookNameReservColumn;
 
-    @FXML // fx:id="DelayBorrowButtonColumn"
-    private TableColumn<?, ?> DelayBorrowButtonColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> AuthorNameReservColumn;
 
-    @FXML // fx:id="BookNameReservColumn"
-    private TableColumn<?, ?> BookNameReservColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> YeareReservColumn;
 
-    @FXML // fx:id="AuthorNameReservColumn"
-    private TableColumn<?, ?> AuthorNameReservColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> TopicReservColumn;
 
-    @FXML // fx:id="YeareReservColumn"
-    private TableColumn<?, ?> YeareReservColumn; // Value injected by FXMLLoader
+    @FXML
+    private TableColumn<?, ?> BtnForOrders;
 
-    @FXML // fx:id="TopicReservColumn"
-    private TableColumn<?, ?> TopicReservColumn; // Value injected by FXMLLoader
-
-    @FXML // fx:id="ButtonOrderColumn"
-    private TableColumn<?, ?> ButtonOrderColumn; // Value injected by FXMLLoader
-
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
-        
-
+    @FXML
+    void initialize() 
+    {
+    	client=StartPanelController.connToClientController;
+    	client.setClientUI(this);
+    	
+    	ReaderAccount reader = new ReaderAccount();
+    	
+    	// 1 = Library Director , 2 = Librarian , 3 = reader account
+    	
+    	//if the reader account opening the window
+    	if(LogInController.permission == 3)
+    	{
+        	reader.setId(LogInController.currentID);
+    	}
+    	
+    	//if the librarian or the library director opening the window
+    	else 
+    	{
+    		if(LogInController.permission == 2 || LogInController.permission == 2)
+        	{
+            	reader.setId(StartPanelLibrarianController.readerAccountID);
+        	}
+    	}
+    	
+    	ObjectMessage msg = new ObjectMessage(reader, "get borrows and reserves", "Copy");
+    	client.handleMessageFromClient(msg); 
+    	
+    	
     }
+    
+    
+    
+
+	@Override
+	public void display(ObjectMessage msg) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
