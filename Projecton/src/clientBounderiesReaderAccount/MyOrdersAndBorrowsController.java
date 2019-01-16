@@ -18,7 +18,7 @@ public class MyOrdersAndBorrowsController implements IGUIController
 	
 	OBLClient client;
 
-    @FXML
+	@FXML
     private TableColumn<?, ?> BookNameBorrowColumn;
 
     @FXML
@@ -29,6 +29,12 @@ public class MyOrdersAndBorrowsController implements IGUIController
 
     @FXML
     private TableColumn<?, ?> TopicBorrowColumn;
+
+    @FXML
+    private TableColumn<?, ?> isDesiredBorrowColumn;
+
+    @FXML
+    private TableColumn<?, ?> EditionBorrowColumn;
 
     @FXML
     private TableColumn<?, ?> BorrowDateColumn;
@@ -52,7 +58,14 @@ public class MyOrdersAndBorrowsController implements IGUIController
     private TableColumn<?, ?> TopicReservColumn;
 
     @FXML
+    private TableColumn<?, ?> isDesiredReserveColumn;
+
+    @FXML
+    private TableColumn<?, ?> editionReserveColumn;
+
+    @FXML
     private TableColumn<?, ?> BtnForOrders;
+
 
     @FXML
     void initialize() 
@@ -79,9 +92,9 @@ public class MyOrdersAndBorrowsController implements IGUIController
         	}
     	}
     	
-    	ObjectMessage msg = new ObjectMessage(reader, "get borrows and reserves", "Copy");
+    	ObjectMessage msg = new ObjectMessage(reader, "get borrows", "Copy");
     	client.handleMessageFromClient(msg); 
-    	
+    	//TODO: get the reserves in the display
     	
     }
     
@@ -91,7 +104,15 @@ public class MyOrdersAndBorrowsController implements IGUIController
 	@Override
 	public void display(ObjectMessage msg) 
 	{
-		// TODO Auto-generated method stub
+		if((msg.getMessage()).equals("TheBorrows"))
+		{
+			//TODO: deal also with "no-results"
+			
+			//TODO show the table of the result
+		}
+		
+		
+		//TODO: do the reserves also
 		
 	}
 }

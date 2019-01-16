@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import Common.Book;
 import Common.Copy;
+import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
@@ -27,9 +29,9 @@ public abstract class ACopyDBController
 		{
 			return checkIfAllBorrowed(msg, connToSQL);
 		}
-		else if (((msg.getMessage()).equals("get borrows and reserves")))
+		else if (((msg.getMessage()).equals("get borrows")))
 		{
-			return getBorrowsAndReserves(msg, connToSQL);
+			return getBorrows(msg, connToSQL);
 		}
 		else
 		{
@@ -65,63 +67,56 @@ public abstract class ACopyDBController
 	}
 	
 	
-	public static ObjectMessage getBorrowsAndReserves(ObjectMessage msg, Connection connToSQL)
+	public static ObjectMessage getBorrows(ObjectMessage msg, Connection connToSQL)
 	{
-		ObjectMessage answer = new ObjectMessage();
+		ObjectMessage answer = null; 
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		
-		PreparedStatement ps = null; 
-		ResultSet rs = null; 
+		PreparedStatement getCopies = null; 
+		PreparedStatement getBook = null;
+		ResultSet rs1 = null; 
+		ResultSet rs2 = null; 
 
 		try 
 		{
 			//get the copies that the reader account borrowed 
-			ps = connToSQL.prepareStatement("SELECT * FROM Copy WHERE borrowerId = ? ");
-			ps.setString(1, reader.getId() ); 
-			rs =ps.executeQuery();
-
-			while(rs.next())
+			getCopies = connToSQL.prepareStatement("SELECT * FROM Copy WHERE borrowerId = ? ");
+			getCopies.setString(1, reader.getId() ); 
+			rs1 =getCopies.executeQuery();
+			
+			ArrayList <IEntity[]> result=new ArrayList<IEntity[]>();
+			
+			while(rs1.next())
 			{
+				IEntity []CopyAndBook = new IEntity[2];
 				
-				int bookID = rs.getInt(2);
+				CopyAndBook[0]=(new Copy(rs1.getInt(1), rs1.getInt(2), rs1.getString(3), rs1.getDate(4), rs1.getDate(5)));
 				
+				int bookId = rs1.getInt(2);
+				ArrayList <Book> books=new ArrayList<Book>();
 				
-				
-				//if exist and not connected
-				if(rs.getString(4).equals("0"))
+				//get the book of that copy
+				getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+				getBook.setInt(1, bookId ); 
+				rs2 =getBook.executeQuery();
+				if(rs2.next())
 				{
-					PreparedStatement updateTime;
-					  try 
-					  {
-						  updateTime = connToSQL.prepareStatement("UPDATE user "+"SET isOnline = ? WHERE ID = ?");
-						  updateTime.setString(1, "1");
-						  updateTime.setString(2, ((User)msg.getObjectList().get(0)).getId());
-						  updateTime.executeUpdate();
-					  } 
-					  catch (SQLException e) 
-					  {
-						  e.printStackTrace();
-					  }
-					  
-
+					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), rs2.getString(6)) );
 				}
-				else //if exist but already connected
-				{
-					answer.setMessage("unsuccessful");
-				}
+				
+				result.add(CopyAndBook);
 			}
-			 
-			//client.sendToClient(askedStudent);
+			
+			answer = new ObjectMessage(result,"TheBorrows");
+			
+			//TODO: deal also with "no-results"
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
 		
-		
-		
-		
-		
+
 		return answer;
 	}
 

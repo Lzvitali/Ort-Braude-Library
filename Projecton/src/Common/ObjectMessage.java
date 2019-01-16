@@ -72,6 +72,15 @@ public class ObjectMessage implements Serializable
 		this.note=note;
 	}
 	
+	
+	
+	public ObjectMessage(ArrayList<IEntity[]> objectListOfArrays, String message) 
+	{
+		this.objectListOfArrays = objectListOfArrays;
+		this.message = message;
+	}
+	
+	
 	//Private Methods
 	
 	

@@ -91,6 +91,15 @@ public class Book implements IEntity, Serializable
 	
 	
 
+	public Book(String bookName, String authorName, String year, String topic, String isDesired) 
+	{
+		this.bookName = bookName;
+		this.authorName = authorName;
+		this.year = Integer.parseInt(year);
+		this.topic = topic;
+		this.isDesired =  Boolean.parseBoolean(isDesired);
+	}
+
 	public String getBookName() 
 	{
 		return bookName;
