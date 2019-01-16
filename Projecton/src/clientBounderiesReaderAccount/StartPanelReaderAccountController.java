@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
 import Common.Book;
+import Common.Copy;
 import Common.IEntity;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
@@ -250,15 +251,17 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
 				reserveBtn.setCellValueFactory(new PropertyValueFactory<>("reserve"));
+			});
 			int i;
 			ArrayList <IEntity> result=msg.getObjectList();
 			for(i=0;i<result.size();i++)
 			{
+				
 				((Book)result.get(i)).setDetails(new Button("Open PDF"));
-				((Book)result.get(i)).setReserve(new Button("Reserve"));
+				if(((Book)result.get(i)).getAvailableCopy()==0)((Book)result.get(i)).setReserve(new Button("Reserve"));
 				searchResultTable.getItems().add(result.get(i));
 			}
-			});
+			
 			
 		}
 	}
@@ -271,5 +274,13 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
         this.authorNameRB.setToggleGroup(toggleGroupForBooks);
         this.topicRB.setToggleGroup(toggleGroupForBooks);
         this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
+    }
+    
+    public void availableBook(int ID)
+    {
+    	ObjectMessage objectMessage;
+    	Copy copy=new Copy(-1,ID,null);
+    	objectMessage=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
+    	client.handleMessageFromClient(objectMessage);
     }
 }

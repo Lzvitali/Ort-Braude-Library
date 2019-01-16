@@ -16,6 +16,8 @@ public class Book implements IEntity, Serializable
 	private Integer edition;
 	private String topic;
 	private Boolean isDesired; 
+	
+	private int availableCopy;
 	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
 	private boolean fileIsLoaded;
 	//buttons
@@ -53,7 +55,7 @@ public class Book implements IEntity, Serializable
 			Button details= null;
 	}
 
-	public Book( String bookName, String authorName, String year, String topic, String isDesired,String edition,String numberOfCopies) 
+	public Book(String bookName, String authorName, String year, String topic, String isDesired,String edition,String numberOfCopies) 
 	{
 		super();
 	//	this.bookID =Integer.parseInt(bookID);
@@ -70,9 +72,10 @@ public class Book implements IEntity, Serializable
 	}
 	
 	
-	public Book( String bookName, String authorName, int year, String topic, Boolean isDesired,int edition) 
+	public Book( String bookID,String bookName, String authorName, int year, String topic, Boolean isDesired,int edition) 
 	{
 		super();
+		this.bookID =Integer.parseInt(bookID);
 		this.bookName = bookName;
 		this.authorName = authorName;
 		this.topic = topic;
@@ -237,6 +240,14 @@ public class Book implements IEntity, Serializable
 	public void setIsDesired(Boolean isDesired)
 	{
 		this.isDesired = isDesired;
+	}
+
+	public int getAvailableCopy() {
+		return availableCopy;
+	}
+
+	public void setAvailableCopy(int availableCopy) {
+		this.availableCopy = availableCopy;
 	}
 
 	

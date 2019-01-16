@@ -12,4 +12,34 @@ public class Copy implements IEntity
 	
 	private Date borrowDate;
 	private Date returnDate;
+	
+	
+	public Copy(int copyID,int bookID,String borrowerID)
+	{
+		this.copyID=copyID;
+		this.bookID=bookID;
+		this.borrowerID=borrowerID;
+	}
+
+
+	public int getCopyID() {
+		return copyID;
+	}
+
+
+	public void setCopyID(int copyID) {
+		this.copyID = copyID;
+	}
+
+
+	public int getBookID() {
+		return bookID;
+	}
+
+
+	public void setBookID(int bookID) {
+		this.bookID = bookID;
+	}
+	
+	
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 
 import Common.Book;
+import Common.Copy;
 import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -187,7 +188,15 @@ public abstract class  ABookDBController
 			ResultSet rs = ps.executeQuery();
 	 		while(rs.next())
 	 		{
-	 			result.add(new Book(rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7)));
+	 			result.add(new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7)));
+	 			Book book=(Book)result.get(result.size()-1);
+	 			Copy copy=new Copy(-1,rs.getInt(1),null);
+	 			ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
+	 			ObjectMessage resultofCopy=ACopyDBController.selection(message,connToSQL);
+	 			if(resultofCopy.getNote().equals("FoundBook"))
+	 				book.setAvailableCopy(1);
+	 			else
+	 				book.setAvailableCopy(0);
 			} 
 	 		if(!result.isEmpty())
 	 		{
