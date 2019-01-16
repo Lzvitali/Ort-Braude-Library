@@ -20,6 +20,8 @@ public class Book implements IEntity, Serializable
 	private int availableCopy;
 	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
 	private boolean fileIsLoaded;
+	private boolean isReserved;
+	
 	//buttons
 	private transient Button reserve;
 	private transient Button details;
@@ -113,13 +115,6 @@ public class Book implements IEntity, Serializable
 	}
 	
 	
-
-	@Override
-	public String toString() {
-		return "Book [bookID=" + bookID + ", bookName=" + bookName + ", authorName=" + authorName + ", year=" + year
-				+ ", edition=" + edition + ", topic=" + topic + ", isDesired=" + isDesired + ", reserve=" + reserve
-				+ ", details=" + details + "]";
-	}
 
 	public void setBookID(int bookID) 
 	{
@@ -242,14 +237,32 @@ public class Book implements IEntity, Serializable
 		this.isDesired = isDesired;
 	}
 
-	public int getAvailableCopy() {
+	public int getAvailableCopy()
+	{
 		return availableCopy;
 	}
 
-	public void setAvailableCopy(int availableCopy) {
+	public void setAvailableCopy(int availableCopy)
+	{
 		this.availableCopy = availableCopy;
 	}
+	
+	public boolean isReserved()
+	{
+		return isReserved;
+	}
 
+	public void setReserved(boolean isReserved)
+	{
+		this.isReserved = isReserved;
+	}
+
+	@Override
+	public String toString() {
+		return "Book [bookID=" + bookID + ", bookName=" + bookName + ", authorName=" + authorName + ", year=" + year
+				+ ", edition=" + edition + ", topic=" + topic + ", isDesired=" + isDesired + ", reserve=" + reserve
+				+ ", details=" + details + "]";
+	}
 	
 
 }
