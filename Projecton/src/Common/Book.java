@@ -44,6 +44,11 @@ public class Book implements IEntity, Serializable
 	{
 		this.bookName = bookName;
 	}
+	
+	public Book(int idBook)
+	{
+		this.bookID = idBook;
+	}
 
 	public Book()
 	{

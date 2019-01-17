@@ -49,6 +49,11 @@ public abstract class  ABookDBController
 			return reserveBook(msg, connToSQL);
 		}
 
+		if (((msg.getMessage()).equals("DeleteBook")))
+		{
+			return deleteBook(msg, connToSQL);
+		}
+
 		else
 			return null; 
 	}
@@ -314,6 +319,50 @@ public abstract class  ABookDBController
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	
+	
+	
+	private static ObjectMessage deleteBook(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		ObjectMessage answer;
+		Copy askedCopy=(Copy)msg.getObjectList().get(0);
+		try 
+		{
+			ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
+			ps.setInt(1,askedCopy.getCopyID());
+			ps.executeQuery();
+			int idBook=askedCopy.getBookID();
+			Book bookOfCopy=new Book(idBook);
+			int numOfCopiesBefore=bookOfCopy.getNumberOfCopies();
+			int numOfCopiesAfter=numOfCopiesBefore--; //after deleting a copy of the book
+			
+			//there is no copies from the book
+			if(numOfCopiesAfter==0)
+			{
+				try 
+				{
+					ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
+					ps.setInt(1,idBook);
+					ps.executeQuery();
+				}
+				catch (SQLException e) 
+				{
+					e.printStackTrace();
+					answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
+				}
+			}
+			answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
+			
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			answer=new ObjectMessage("Unexpected Error.","Unsucessfull");
+		}
+		return answer;
 	}
 	
 	

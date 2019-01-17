@@ -23,6 +23,10 @@ public class Copy implements IEntity
 		this.borrowerID=borrowerID;
 	}
 	
+	public Copy(int copyID)
+	{
+		this.copyID=copyID;
+	}
 	
 
 
