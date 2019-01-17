@@ -33,11 +33,16 @@ public abstract class ACopyDBController
 		{
 			return getBorrows(msg, connToSQL);
 		}
+		else if (((msg.getMessage()).equals("DeleteBook")))
+		{
+			return deleteBook(msg, connToSQL);
+		}
 		else
 		{
 			return null; 
 		}
 	}
+	
 	
 	public static ObjectMessage checkIfAllBorrowed(ObjectMessage msg, Connection connToSQL)
 	{
@@ -130,6 +135,58 @@ public abstract class ACopyDBController
 		}
 		
 
+		return answer;
+	}
+	
+	
+	private static ObjectMessage deleteBook(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		PreparedStatement getBook = null;
+		ObjectMessage answer;
+		ResultSet rs2 = null; 
+		Copy askedCopy=(Copy)msg.getObjectList().get(0);
+		
+		
+		try 
+		{
+			//get id of the book of the copy
+			getBook = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE copyId = ? ");
+			getBook.setInt(1, askedCopy.getCopyID()); 
+			rs2 =getBook.executeQuery();
+			rs2.next();
+			int bookOfCopyID=rs2.getInt(2);
+			
+			ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
+			ps.setInt(1,askedCopy.getCopyID());
+			ps.executeUpdate();
+			int numOfCopiesBefore=bookOfCopyID;
+			numOfCopiesBefore--;
+			int numOfCopiesAfter=numOfCopiesBefore; //after deleting a copy of the book
+			
+			//there is no copies from the book
+			if(numOfCopiesAfter==0)
+			{
+				try 
+				{
+					ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
+					ps.setInt(1,bookOfCopyID);
+					ps.executeUpdate();
+				}
+				catch (SQLException e) 
+				{
+					e.printStackTrace();
+					answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
+				}
+			}
+			answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
+			
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			answer=new ObjectMessage("Unexpected Error.","Unsucessfull");
+		}
 		return answer;
 	}
 
