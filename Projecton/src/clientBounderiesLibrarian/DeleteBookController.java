@@ -22,7 +22,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
-public abstract class DeleteBookController implements IGUIController {
+public class DeleteBookController implements IGUIController 
+{
 	OBLClient client;
     @FXML
     private ResourceBundle resources;
@@ -93,5 +94,11 @@ public abstract class DeleteBookController implements IGUIController {
     		Optional<ButtonType> result = alert.showAndWait();
     	});
     }
+
+	@Override
+	public void display(ObjectMessage msg) {
+		// TODO Auto-generated method stub
+		
+	}
     
 }
