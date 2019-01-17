@@ -53,11 +53,19 @@ public abstract class  ABookDBController
 		{
 			return deleteBook(msg, connToSQL);
 		}
+		if(((msg.getMessage()).equals("ReturnCopy")))
+		{
+			return tryToReturnBook(msg, connToSQL);
+		}
 
 		else
 			return null; 
 	}
 
+	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL)
+	{
+		return msg;
+	}
 	
 	/**
 	 * This function add book to the DB in MySQL. It is check if it is must be added like new book or copy for book that already exist
