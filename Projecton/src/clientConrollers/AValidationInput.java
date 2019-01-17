@@ -314,7 +314,7 @@ public abstract class AValidationInput
 	 */
 	private static Boolean onlyNumbers(String context)
 	{
-		for(int i=0;i<9;i++) 
+		for(int i=0;i<context.length();i++) 
 		{
 			if(context.charAt(i)<'0' ||context.charAt(i)>'9')
 			{
@@ -391,9 +391,9 @@ public abstract class AValidationInput
 		{
 			return"Insert 9 digit book id";	
 		}
-		if(context.length()<9)
+		if(context.length()>9)
 		{
-			return "Insert 9 digit book id or fill zero before";
+			return "Insert no more then 9 digit book id ";
 		}
 		if(!onlyNumbers(context))
 		{
