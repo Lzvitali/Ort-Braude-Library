@@ -34,6 +34,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.InputMethodEvent;
@@ -90,6 +91,13 @@ public class AddBookController implements IGUIController
     
     @FXML
     private Button cancelUploadBtn;
+    
+    @FXML
+    private ComboBox<?> bookLocationLetter;
+
+    @FXML
+    private ComboBox<?> BookLocationNumber;
+    
     
     private boolean isUploaded =false;
     private static File f;

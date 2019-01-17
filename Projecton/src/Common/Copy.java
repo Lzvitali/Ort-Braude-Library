@@ -1,17 +1,18 @@
 package Common;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javafx.scene.control.Button;
 
-public class Copy implements IEntity  
+public class Copy implements IEntity, Serializable  
 {
 	private int copyID;
 	private int bookID;
 	private String borrowerID;
 	
-	private Date borrowDate;
-	private Date returnDate;
+	private String borrowDate;
+	private String returnDate;
 	
 	private Button askForDelay;
 	
@@ -44,7 +45,7 @@ public class Copy implements IEntity
 
 
 
-	public Copy(int copyID, int bookID, String borrowerID, Date borrowDate, Date returnDate) 
+	public Copy(int copyID, int bookID, String borrowerID, String borrowDate, String returnDate) 
 	{
 		this.copyID = copyID;
 		this.bookID = bookID;
@@ -92,28 +93,28 @@ public class Copy implements IEntity
 
 
 
-	public Date getBorrowDate() {
+	public String getBorrowDate() {
 		return borrowDate;
 	}
 
 
 
 
-	public void setBorrowDate(Date borrowDate) {
+	public void setBorrowDate(String borrowDate) {
 		this.borrowDate = borrowDate;
 	}
 
 
 
 
-	public Date getReturnDate() {
+	public String getReturnDate() {
 		return returnDate;
 	}
 
 
 
 
-	public void setReturnDate(Date returnDate) {
+	public void setReturnDate(String returnDate) {
 		this.returnDate = returnDate;
 	}
 	

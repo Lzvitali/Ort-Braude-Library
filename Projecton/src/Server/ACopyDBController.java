@@ -94,7 +94,7 @@ public abstract class ACopyDBController
 				
 				IEntity []CopyAndBook = new IEntity[2];
 				
-				CopyAndBook[0]=(new Copy(rs1.getInt(1), rs1.getInt(2), rs1.getString(3), rs1.getDate(4), rs1.getDate(5)));
+				CopyAndBook[0]=(new Copy(rs1.getInt(1), rs1.getInt(2), rs1.getString(3), rs1.getString(4), rs1.getString(5)));
 				
 				System.out.println( ((Copy)CopyAndBook[0]).getBorrowDate() + " ---" + ((Copy)CopyAndBook[0]).getReturnDate());
 				

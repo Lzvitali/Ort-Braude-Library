@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import Common.Book;
+import Common.Copy;
 import Common.IEntity;
 import Common.IGUIController;
 import Common.ObjectMessage;
@@ -16,9 +17,11 @@ import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MyOrdersAndBorrowsController implements IGUIController
@@ -73,6 +76,12 @@ public class MyOrdersAndBorrowsController implements IGUIController
 
     @FXML
     private TableColumn<IEntity, Button> BtnForOrders;
+    
+    @FXML
+    private TableView<IEntity> borrowsTable;
+    
+    @FXML
+    private TableView<IEntity> ordersTable;
 
 
     @FXML
@@ -122,23 +131,31 @@ public class MyOrdersAndBorrowsController implements IGUIController
 			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 			TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 			EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+			
 			btnForBorrows.setCellValueFactory(new PropertyValueFactory<>("askForDelay"));
+			//BorrowDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(( (Copy)cellData.getValue()).getBorrowDate() ).asObject());
 		
 			
 			ArrayList <IEntity[]> result=msg.getObjectArray();
 			
-			/*for(int i=0;i<result.size();i++)
+			for(int i=0;i<result.size();i++)
 			{
 				
-				((Book)result.get(i)).setDetails(new Button("Open PDF"));
+				IEntity[] tempArray;
+				tempArray = result.get(i);
 				
-				if(((Book)result.get(i)).getNumberOfCopies()==0)((Book)result.get(i)).setReserve(new Button("Reserve"));
+				( (Copy)tempArray[0] ).setAskForDelay(new Button(" "));
+				
+				/*
 				if(((Book)result.get(i)).getReserve()!=null)
 				{
 					((Book)result.get(i)).getReserve().setOnAction(e -> AskToReserve(e));
 				}
-				searchResultTable.getItems().add(result.get(i));
-			}*/
+				searchResultTable.getItems().add(result.get(i));*/
+				
+				borrowsTable.getItems().add(tempArray[1]);
+				//borrowsTable.getItems().add(tempArray[0]);
+			}
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
