@@ -50,13 +50,13 @@ public class AddBookController implements IGUIController
 	@FXML
 	private URL location;
 
-    @FXML // fx:id="TopicTextField"
-    private JFXTextField TopicTextField; 
-    @FXML
-    private JFXTextField BookTitleTextField;
+	@FXML 
+	private JFXTextField TopicTextField; 
+	@FXML
+	private JFXTextField BookTitleTextField;
 
-    @FXML 
-    private JFXTextField numberOfCopies; 
+	@FXML 
+	private JFXTextField numberOfCopies; 
 
 	@FXML
 	private JFXTextField BookAuthorTextField;
@@ -72,9 +72,6 @@ public class AddBookController implements IGUIController
 	private JFXCheckBox DesiredCheckBox;
 
 	@FXML
-	private ChoiceBox<String> TopicChoiceBox;
-
-	@FXML
 	private DatePicker PurchaseDateDatePicker;
 
 	@FXML
@@ -86,74 +83,104 @@ public class AddBookController implements IGUIController
 	@FXML
 	private JFXButton SaveBtn;
 
-    @FXML
-    private Label fileLabel;
-    
-    @FXML
-    private Button cancelUploadBtn;
-    
-    @FXML
-    private ComboBox<?> bookLocationLetter;
+	@FXML
+	private Label fileLabel;
 
-    @FXML
-    private ComboBox<?> BookLocationNumber;
-    
-    
-    private boolean isUploaded =false;
-    private static File f;
+	@FXML
+	private Button cancelUploadBtn;
+
+	@FXML
+	private ComboBox<String> bookLocationLetter;
+
+	@FXML
+	private ComboBox<String> BookLocationNumber;
+
+	ObservableList<String> list1;
+	ObservableList<String> list2;
 	
+	private boolean isUploaded =false;
+	private static File f;
+
 	//function for cancel button. if librarian doesn't want  continue to add a book
 	@FXML
 	void cancelBtnClicked(ActionEvent event) 
 	{
 		AClientCommonUtilities.backToStartPanel();
 	}
-	
-	
+
+
 	@FXML
-    void cancelUpload(ActionEvent event)
+	void cancelUpload(ActionEvent event)
 	{
 		isUploaded=false;
 		fileLabel.setText(" " );
 		cancelUploadBtn.setVisible(false);
-    }
-	
-  
+	}
+	 
+	public void combo() 
+	{
+		ArrayList <String> s=new ArrayList<String>();
+		
+		for(int i=1; i<=6; i++)
+		{
+			s.add(Integer.toString(i));
+		}
+			
+		list1 = FXCollections.observableArrayList(s);
+		BookLocationNumber.setItems( list1);
+		
+		ArrayList <String> b=new ArrayList<String>();
+		char ch = 'A';
+		
+		for(int i= 0; i<= ('Z'- 'A'); i++)
+		{
+			b.add(String.valueOf(ch));
+			ch++;
+		}
+		list2 = FXCollections.observableArrayList(b);
+		bookLocationLetter.setItems((ObservableList) list2);
+	}
+
 
 	//add new book or only copy
 	@FXML
 	void saveAddNewBook(ActionEvent event) 
 	{ 
-		/*
-		if(validationFields().equals("correct"))//if all fields correctly
+		String checkResult = validationFields();
+
+		if(checkResult.equals("correct"))//if all fields correctly
 		{
-			System.out.println("all right)))))");
+			String bookLocation;
+			
+			if( ( bookLocationLetter.getValue() == null  || (bookLocationLetter.getValue().toString()).equals(null) ) 
+					|| ( BookLocationNumber.getValue() == null  || (BookLocationNumber.getValue().toString()).equals(null) ) )
+			{
+				bookLocation = "";
+			}
+			else
+			{
+				bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
+			}
+			
+			
 			boolean isDesired= DesiredCheckBox.isSelected();
-			Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText());
+			Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText(), bookLocation);
 			System.out.println(String.valueOf(isDesired));
 			ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
+
+			book.setFileIsLoaded(isUploaded);
 			client.handleMessageFromClient(msg);
 		}
 		else
 		{
-			System.out.println("Errorrrrrrr!");
-			ObjectMessage massage=new ObjectMessage("The fields you filled are not correctly.","Wrong") ;
-			AClientCommonUtilities.alertErrorWithOption(massage.getMessage(), massage.getNote(),"Back");
-			
-			
-		}*/
-		
-		boolean isDesired= DesiredCheckBox.isSelected();
-		Book book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText());
-		System.out.println(String.valueOf(isDesired));
-		ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
-		
-		book.setFileIsLoaded(isUploaded);
-		client.handleMessageFromClient(msg);
-		
+			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");		
+		}
+
+
+
 		/*if(isUploaded)
 		{
-			
+
 			File myFile = new File(f.getAbsolutePath());
 			Socket sock;
 			ServerSocket servsock;
@@ -178,85 +205,120 @@ public class AddBookController implements IGUIController
 
 		}*/
 
-		
-		
+
+
 	}
-	
-	
+
+
 	//function upload file and send it to server/ sending- still not writing
 	@FXML
 	void uploadTableOfContents(ActionEvent event) 
 	{
 		FileChooser fc=new FileChooser();
 		fc.getExtensionFilters().add(new ExtensionFilter("PDF Files","*.pdf"));
-	    f=fc.showOpenDialog(null);
+		f=fc.showOpenDialog(null);
 		if(f!=null)
 		{
 			isUploaded=true;
 			fileLabel.setText("Selected File::" + f.getAbsolutePath());
 			cancelUploadBtn.setVisible(true);
 		}
-	
-		
+
+
 	}
 
-	
+
 	@FXML
 	void initialize() 
 	{
 		client=StartPanelController.connToClientController;
 		client.setClientUI(this);
-		
+		combo();
 
 	}
-	
+
 	//check validation
-	 private String validationFields()
-	 {
-		 String result,finalResult="";
+	private String validationFields()
+	{
+		String result,finalResult="";
 
-		 result=AValidationInput.checkValidationBook("bookName",BookTitleTextField.getText());
-		 if(!result.equals("correct"))
-		 {
-			 finalResult+=result+"\n";
-		 }
-			 
+		result=AValidationInput.checkValidationBook("bookName",BookTitleTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
 
-		 result=AValidationInput.checkValidationBook("authorName",BookAuthorTextField.getText());
-		 if(!result.equals("correct"))
-		 {
-			 finalResult+=result+"\n";
-		 }
 
-		 result=AValidationInput.checkValidationBook("dateOfBook",PublishedYearTextField.getText());
-		 if(!result.equals("correct"))
-		 {
-			 finalResult+=result+"\n";
-		 }
+		result=AValidationInput.checkValidationBook("authorName",BookAuthorTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
 
-		 result=AValidationInput.checkValidationBook("topic",TopicChoiceBox.getAccessibleText());
-		 if(!result.equals("correct"))
-		 {
-			 finalResult+=result+"\n";
-		 }
-	    	if (fileLabel.getText().equals(null))//check if client upload file 
-	    	{
-	    		finalResult+=result+"\n";
-	    	}
-	
-	    	if(finalResult.equals(""))
-	    	{
-	    		return "correct";
-	    	}
-	    		
-	    	else
-	    	{
-	    		return finalResult;
-	    	}
-	    		
-	    }
+		result=AValidationInput.checkValidationBook("dateOfBook",PublishedYearTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
 
-	
+		result=AValidationInput.checkValidationBook("topic",TopicTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
+
+		if(EditionTextField.getText().equals("") || null == EditionTextField.getText())
+		{
+			finalResult+="Insert number of edition";
+
+		}
+		else
+		{
+			for(int i=0;i<EditionTextField.getText().length();i++)//check validation for edition text field
+			{
+
+				if(EditionTextField.getText().charAt(i)<'0' ||EditionTextField.getText().charAt(i)>'9')        
+				{
+					finalResult+="Edition must contain only numbers";
+					break;
+				}
+
+			}
+		}
+
+		if(numberOfCopies.getText().equals("") || null == numberOfCopies.getText())
+		{
+			finalResult+="Insert number of copies";
+
+		}
+		else
+		{
+			for(int i=0;i<numberOfCopies.getText().length();i++)//check validation for number of copies text field
+			{
+
+				if(numberOfCopies.getText().charAt(i)<'0' ||numberOfCopies.getText().charAt(i)>'9')        
+				{
+					finalResult+="Edition must contain only numbers";
+					break;
+				}
+
+			}
+		}
+
+
+		if(finalResult.equals(""))
+		{
+			return "correct";
+		}
+
+		else
+		{
+			return finalResult;
+		}
+
+	}
+
+
 	@Override
 	public void display(ObjectMessage msg)
 	{
@@ -267,12 +329,12 @@ public class AddBookController implements IGUIController
 			{
 				sendFile();
 			}
-			
+
 			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
 			AClientCommonUtilities.backToStartPanel();
-	
+
 		}
-		
+
 		if (msg.getNote().equals("Unsuccessfull"))
 		{
 			AClientCommonUtilities.alertErrorWithExit(msg.getMessage(), msg.getNote());

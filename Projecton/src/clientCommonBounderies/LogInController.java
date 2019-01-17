@@ -27,7 +27,7 @@ import javafx.stage.Stage;
  *
  */
 
-public class LogInController  implements IGUIController
+public class LogInController  implements IGUIController 
 {
 	OBLClient client;
 

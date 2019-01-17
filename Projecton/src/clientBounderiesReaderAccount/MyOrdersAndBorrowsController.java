@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import Common.Book;
+import Common.BorrowsTable;
 import Common.Copy;
 import Common.IEntity;
 import Common.IGUIController;
@@ -15,9 +16,12 @@ import clientBounderiesLibrarian.StartPanelLibrarianController;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -78,10 +82,13 @@ public class MyOrdersAndBorrowsController implements IGUIController
     private TableColumn<IEntity, Button> BtnForOrders;
     
     @FXML
-    private TableView<IEntity> borrowsTable;
+    private TableView<BorrowsTable> borrowsTable;
     
     @FXML
     private TableView<IEntity> ordersTable;
+    
+    ObservableList<IEntity> list1;
+    ObservableList<IEntity> list2;
 
 
     @FXML
@@ -103,7 +110,7 @@ public class MyOrdersAndBorrowsController implements IGUIController
     	//if the librarian or the library director opening the window
     	else 
     	{
-    		if(LogInController.permission == 2 || LogInController.permission == 2)
+    		if(LogInController.permission == 1 || LogInController.permission == 2)
         	{
             	reader.setId(StartPanelLibrarianController.readerAccountID);
         	}
@@ -123,39 +130,54 @@ public class MyOrdersAndBorrowsController implements IGUIController
 	{
 		if((msg.getMessage()).equals("TheBorrows"))
 		{
-			//TODO show the table of the result
-			
-			BookNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
-			AuthorNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
-			YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
-			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
-			TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
-			EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
-			
-			btnForBorrows.setCellValueFactory(new PropertyValueFactory<>("askForDelay"));
-			//BorrowDateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(( (Copy)cellData.getValue()).getBorrowDate() ).asObject());
-		
-			
-			ArrayList <IEntity[]> result=msg.getObjectArray();
-			
-			for(int i=0;i<result.size();i++)
+			Platform.runLater(()->
 			{
-				
-				IEntity[] tempArray;
-				tempArray = result.get(i);
-				
-				( (Copy)tempArray[0] ).setAskForDelay(new Button(" "));
-				
-				/*
-				if(((Book)result.get(i)).getReserve()!=null)
+				BookNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+				AuthorNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
+				YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((BorrowsTable)cellData.getValue()).getYear()).asObject());
+				isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((BorrowsTable)cellData.getValue()).isDesired()).asObject());
+				TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
+				EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+
+				btnForBorrows.setCellValueFactory(new PropertyValueFactory<>("askForDelay"));
+				BorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+				ReturnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
+
+
+				ArrayList <IEntity[]> result=msg.getObjectArray();
+
+				for(int i=0;i<result.size();i++)
+				{
+
+					IEntity[] tempArray;
+					tempArray = result.get(i);
+					
+					System.out.println(((Copy)tempArray[0]).getBorrowDate()  + "---" + ((Copy)tempArray[0]).getReturnDate()  );
+
+					( (Copy)tempArray[0] ).setAskForDelay(new Button("delay"));
+
+					/*
+				if(((Book)result.get(i)).getReserve()!=null) 
 				{
 					((Book)result.get(i)).getReserve().setOnAction(e -> AskToReserve(e));
 				}
 				searchResultTable.getItems().add(result.get(i));*/
-				
-				borrowsTable.getItems().add(tempArray[1]);
-				//borrowsTable.getItems().add(tempArray[0]);
-			}
+
+					//list1 = FXCollections.observableArrayList(tempArray[1]);
+					//list2 = FXCollections.observableArrayList(tempArray[0]);
+
+					BorrowsTable borrowsTableList = new BorrowsTable( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
+							((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
+							((Copy)tempArray[0]).getBorrowDate(), ((Copy)tempArray[0]).getReturnDate(), ((Copy)tempArray[0]).getAskForDelay());
+					
+					/*BorrowsTable borrowsTableList = new BorrowsTable( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
+							((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition());*/
+					System.out.println(borrowsTableList );
+
+					borrowsTable.getItems().add(borrowsTableList); 
+					//borrowsTable.getItems().add(tempArray[1]);
+				}
+			});
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{

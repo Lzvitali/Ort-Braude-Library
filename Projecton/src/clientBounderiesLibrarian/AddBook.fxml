@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="623.0" prefWidth="441.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.AddBookController">
+<AnchorPane prefHeight="668.0" prefWidth="441.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.AddBookController">
    <children>
-      <VBox layoutX="64.0" layoutY="56.0" prefHeight="567.0" prefWidth="333.0" spacing="20.0">
+      <VBox layoutX="64.0" layoutY="56.0" prefHeight="578.0" prefWidth="333.0" spacing="20.0">
          <children>
             <JFXTextField fx:id="BookTitleTextField" labelFloat="true" prefHeight="28.0" prefWidth="351.0" promptText="Book Title" unFocusColor="#6f6e6e">
                <padding>
@@ -97,18 +97,12 @@
                   </Button>
                </children>
             </HBox>
-            <HBox prefHeight="45.0" prefWidth="313.0" spacing="15.0">
+            <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label prefHeight="21.0" prefWidth="104.0" text="Book location">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
-                  <ComboBox fx:id="bookLocationLetter" prefHeight="30.0" prefWidth="30.0" />
-                  <ComboBox fx:id="BookLocationNumber" prefHeight="30.0" prefWidth="30.0" />
-                  <Button fx:id="cancelUploadBtn" mnemonicParsing="false" onAction="#cancelUpload" visible="false">
+                  <Label fx:id="fileLabel" prefHeight="35.0" prefWidth="257.0" />
+                  <Button fx:id="cancelUploadBtn" mnemonicParsing="false" onAction="#cancelUpload" prefHeight="41.0" prefWidth="47.0" visible="false">
                      <graphic>
-                        <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="26.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../icons/cancel.png" />
                            </image>
@@ -117,7 +111,18 @@
                   </Button>
                </children>
             </HBox>
-            <HBox prefHeight="0.0" prefWidth="313.0" />
+            <HBox prefHeight="45.0" prefWidth="313.0" spacing="15.0">
+               <children>
+                  <Label prefHeight="21.0" prefWidth="104.0" text="Book location">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="bookLocationLetter" prefHeight="31.0" prefWidth="65.0" />
+                  <ComboBox fx:id="BookLocationNumber" prefHeight="31.0" prefWidth="65.0" />
+               </children>
+            </HBox>
+            <AnchorPane prefHeight="129.0" prefWidth="313.0" />
             <HBox prefHeight="24.0" prefWidth="355.0" spacing="125.0">
                <children>
                   <JFXButton fx:id="CancelBtn" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">

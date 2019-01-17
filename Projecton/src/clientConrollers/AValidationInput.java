@@ -341,7 +341,7 @@ public abstract class AValidationInput
 		LocalDate currentDate = LocalDate.now();
 		int currentYear = currentDate.getYear();
 		int yearOfBook = Integer.parseInt(context);
-		if((yearOfBook>=currentYear+1)||(yearOfBook<1800)) {
+		if((yearOfBook>=currentYear+1)||(yearOfBook<1500)) {
 			return false;
 		}
 		return true;
@@ -387,7 +387,7 @@ public abstract class AValidationInput
 	
 	private static String checkValidationBookID(String context)
 	{
-		if(context.equals(""))
+		if(context.equals("") || null == context)
 		{
 			return"Insert 9 digit book id";	
 		}
@@ -405,14 +405,14 @@ public abstract class AValidationInput
 	
 	private static String checkValidationBookName(String context)
 	{
-		if(context.equals(""))
+		if(context.equals("") || null == context)
 		{
 			return"Insert Name Of A Book";	
 		}
-		if(context.length()>15)                  //why not? we have book's name longer then 15 chars
+		/*if(context.length()>15)                  //why not? we have book's name longer then 15 chars
 		{
 			return "The Book Name is too long";
-		}
+		}*/
 		
 		return "correct";
 	}
@@ -420,14 +420,14 @@ public abstract class AValidationInput
 	
 	private static String checkValidationAuthorName(String context)
 	{
-		if(context.equals(""))
+		if(context.equals("") || null == context)
 		{
 			return "Insert Author Name";	
 		}
-		if(context.length()>15)       //why not?
+		/*if(context.length()>15)       //why not?
 		{
 			return "The Author Name is too long";
-		}
+		}*/
 		if(!onlyCharacters(context))
 		{
 			return "You must fill only character";
@@ -437,24 +437,29 @@ public abstract class AValidationInput
 	
 	private static String checkValidationTopic(String context)
 	{
-		if(context.equals(""))
+		if(context.equals("") || null == context)
 		{
 			return "Insert Topic";	
 		}
-		if(context.length()>15)          //why not?
+		/*if(context.length()>15)          //why not?
 		{
 			return "The Topic is too long"; 
-		}
-		if(!onlyCharacters(context))
+		}*/
+		/*if(!onlyCharacters(context))
 		{
 			return "You must fill only character";     //why not?
-		}
+		}*/
 		return "correct";
 	}
 	
 	private static String checkValidationYearOfBook(String context)
 	{
-		if(context.length()<4)          // <=4
+		if(context.equals("") || null == context)
+		{
+			return "Insert year";	
+		}
+		
+		if(context.length() != 4)        
 		{
 			return "Year of book must be 4 digits";
 		}

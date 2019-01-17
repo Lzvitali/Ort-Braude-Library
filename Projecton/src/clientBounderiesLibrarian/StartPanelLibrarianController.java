@@ -53,290 +53,290 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	OBLClient client;
 
 	private static int numOfActiveWindows=0;
-	
+
 	public static String readerAccountID; //when the librarian wants to access into the borrows and reserves of a reader account after a search 
-	
-	
-	
+
+
+
 	//FXML attibutes ****************************************************
-	
-    @FXML 
-    private Button logOutBtn; 
 
-    @FXML 
-    private Button borrowBookBtn; 
+	@FXML 
+	private Button logOutBtn; 
 
-    @FXML 
-    private Button returnBookBtn;
+	@FXML 
+	private Button borrowBookBtn; 
 
-    @FXML 
-    private Button addBookBtn; 
+	@FXML 
+	private Button returnBookBtn;
 
-    @FXML 
-    private Button deleteBookBtn; 
+	@FXML 
+	private Button addBookBtn; 
 
-    @FXML
-    private Button registerNewAccountBtn; 
+	@FXML 
+	private Button deleteBookBtn; 
 
-    @FXML 
-    private Tab searchBookTab; 
+	@FXML
+	private Button registerNewAccountBtn; 
 
-    @FXML 
-    private JFXTextField searchBookTextField; 
+	@FXML 
+	private Tab searchBookTab; 
 
-    @FXML 
-    private Button searchBookBtn; 
+	@FXML 
+	private JFXTextField searchBookTextField; 
 
-    @FXML 
-    private JFXRadioButton bookNameRB; 
+	@FXML 
+	private Button searchBookBtn; 
 
-    @FXML 
-    private JFXRadioButton authorNameRB; 
+	@FXML 
+	private JFXRadioButton bookNameRB; 
 
-    @FXML 
-    private JFXRadioButton topicRB; 
+	@FXML 
+	private JFXRadioButton authorNameRB; 
 
-    @FXML 
-    private JFXRadioButton freeSearchBookRB; 
+	@FXML 
+	private JFXRadioButton topicRB; 
 
-    @FXML 
-    private TableView<IEntity> searchResultTable; 
+	@FXML 
+	private JFXRadioButton freeSearchBookRB; 
 
-    @FXML 
-    private TableColumn<IEntity, String> bookNameColumn; 
+	@FXML 
+	private TableView<IEntity> searchResultTable; 
 
-    @FXML 
-    private TableColumn<IEntity, String> authorNameColumn; 
+	@FXML 
+	private TableColumn<IEntity, String> bookNameColumn; 
 
-    @FXML
-    private TableColumn<IEntity, Integer> bookYearColumn; 
+	@FXML 
+	private TableColumn<IEntity, String> authorNameColumn; 
 
-    @FXML
-    private TableColumn<IEntity, String> BookTopicColumn; 
+	@FXML
+	private TableColumn<IEntity, Integer> bookYearColumn; 
 
-    @FXML
-    private TableColumn<IEntity, Boolean> isDesiredBookColumn; 
+	@FXML
+	private TableColumn<IEntity, String> BookTopicColumn; 
 
-    @FXML
-    private TableColumn<IEntity, Button> viewIntroColumn; 
+	@FXML
+	private TableColumn<IEntity, Boolean> isDesiredBookColumn; 
 
-    @FXML 
-    private Tab searchReaderAccountTab; 
+	@FXML
+	private TableColumn<IEntity, Button> viewIntroColumn; 
 
-    @FXML 
-    private JFXTextField searchReaderAccountSearchField; 
+	@FXML 
+	private Tab searchReaderAccountTab; 
 
-    @FXML 
-    private Button searchReaderAccountBtn; 
+	@FXML 
+	private JFXTextField searchReaderAccountSearchField; 
 
-    @FXML 
-    private JFXRadioButton iDRB; 
+	@FXML 
+	private Button searchReaderAccountBtn; 
 
-    @FXML 
-    private JFXRadioButton firstNameRB; 
+	@FXML 
+	private JFXRadioButton iDRB; 
 
-    @FXML 
-    private JFXRadioButton lastNameRB; 
+	@FXML 
+	private JFXRadioButton firstNameRB; 
 
-    @FXML 
-    private JFXRadioButton freeSearchReaderAccountRB; 
+	@FXML 
+	private JFXRadioButton lastNameRB; 
 
-    @FXML 
-    private TableView<IEntity> searchReaderAccountTable; 
+	@FXML 
+	private JFXRadioButton freeSearchReaderAccountRB; 
 
-    @FXML 
-    private TableColumn<IEntity, String> accountIDColumn; 
+	@FXML 
+	private TableView<IEntity> searchReaderAccountTable; 
 
-    @FXML
-    private TableColumn<IEntity, String> accountFirstNameColumn;
-    
-    @FXML
-    private TableColumn<IEntity, String> accountLastNameColumn; 
+	@FXML 
+	private TableColumn<IEntity, String> accountIDColumn; 
 
-    @FXML
-    private TableColumn<IEntity, String> accountStatusColumn; 
+	@FXML
+	private TableColumn<IEntity, String> accountFirstNameColumn;
 
-    @FXML 
-    private TableColumn<IEntity, String> accountPhoneColumn;
+	@FXML
+	private TableColumn<IEntity, String> accountLastNameColumn; 
 
-    @FXML 
-    private TableColumn<IEntity, Button> borrowsAndReservesColumn; 
-    
-    @FXML
-    private TabPane TabPaneSelect;
-    
-    private ToggleGroup toggleGroupForBooks; 
-    private ToggleGroup toggleGroupForAccounts; 
-    
-    
-    
-    //for the Library Director only
-    ///////////////////////////////////////////////////////////////////////////////////
-  
-    @FXML // fx:id="reportBtn"
-    private Button reportBtn; 
-    
-    @FXML
-    private TableColumn<IEntity, Button> freezeColumn;
-    
-    @FXML
-    void openReportWindow(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/Reports.fxml","Reporst");
-    }
-    ///////////////////////////////////////////////////////////////////////////////////
-    
+	@FXML
+	private TableColumn<IEntity, String> accountStatusColumn; 
 
-    
-    @FXML // This method is called by the FXMLLoader when initialization is complete
-    public void initialize() 
-    {
-    	
-    	client=StartPanelController.connToClientController;
-    	client.setClientUI(this);
-    	AStartClient.primaryStagePanel.setOnCloseRequest(e->
-    	{ 
-    		makeLogOut(new ActionEvent());
-    		System.exit(0);
-    	});
-    	setRedioButtonsForBooksSearch();
-    	setRedioButtonsForAccountsSearch();
-    }
-    
-    void setRedioButtonsForBooksSearch()
-    {
-    	toggleGroupForBooks = new ToggleGroup();
-        this.bookNameRB.setToggleGroup(toggleGroupForBooks);
-        this.authorNameRB.setToggleGroup(toggleGroupForBooks);
-        this.topicRB.setToggleGroup(toggleGroupForBooks);
-        this.freeSearchBookRB.setToggleGroup(toggleGroupForBooks);
-    }
-    
-    void setRedioButtonsForAccountsSearch()
-    {
-    	toggleGroupForAccounts = new ToggleGroup();
-        this.iDRB.setToggleGroup(toggleGroupForAccounts);
-        this.firstNameRB.setToggleGroup(toggleGroupForAccounts);
-        this.lastNameRB.setToggleGroup(toggleGroupForAccounts);
-        this.freeSearchReaderAccountRB.setToggleGroup(toggleGroupForAccounts);
-        
-    }
-    
-    
-    @FXML
-    void makeSearch(ActionEvent event) 
-    {
-    	//lets example that will be here valdaion for book(still not exist so didnt write)
-    	
-    	//if success do this and if selected book :
-    	if(TabPaneSelect.getSelectionModel().getSelectedItem().getText().equals("Search book"))
-    	{
-    		searchBookPressed();
-    	}
-    	else
-    	{
-    		searchReaderAccountPressed();
-    	}
- 	
-    }
-    
-   private  void  searchBookPressed()
-   {
-   	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
-   	String selectedString = selectedRadioButton.getText();
-   	Book askedBook=new Book();
-   	if(selectedString.equals("Book name"))
-   	{
-   		askedBook.setBookName(searchBookTextField.getText());
-   	}
-   	else if(selectedString.equals("Author name"))
-   	{
-   		askedBook.setAuthorName(searchBookTextField.getText());
-   	}
-   	else if(selectedString.equals("Topic"))
-   	{
-   		askedBook.setTopic(searchBookTextField.getText());;
-   	}
-   	else
-   	{
-   		askedBook.setBookName("needtocheckthis");
-   	}
-   	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
-   	client.handleMessageFromClient(sendToServer); 
-   }
-   
-  
-   private  void searchReaderAccountPressed()
-    {
-    	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForAccounts.getSelectedToggle();
-    	String selectedString = selectedRadioButton.getText();
-    	ReaderAccount askedReader=new ReaderAccount();
-    	if(selectedString.equals("ID"))
-    	{
-    		askedReader.setId(searchReaderAccountSearchField.getText());
-    	}
-    	else if(selectedString.equals("First name"))
-    	{
-    		askedReader.setFirstName(searchReaderAccountSearchField.getText());
-    	}
-    	else if(selectedString.equals("Last name"))
-    	{
-    		askedReader.setLastName(searchReaderAccountSearchField.getText());;
-    	}
-    	else
-    	{
-    		askedReader.setLastName("needtocheckthis");
-    	}
-    	ObjectMessage sendToServer=new ObjectMessage(askedReader,"SearchReader","ReaderAccount");
-    	client.handleMessageFromClient(sendToServer);  
-    }
+	@FXML 
+	private TableColumn<IEntity, String> accountPhoneColumn;
 
-    
-    /**
-     * When button Log out will be pressed it will take you to the StartPanel
-     * @param event
-     */
-    @FXML
-    void makeLogOut(ActionEvent event) 
-    {
-    	//change the status of that user in the DB
-    	User user = new User(LogInController.currentID);
-    	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
-    	client.handleMessageFromClient(msg);
-    }
+	@FXML 
+	private TableColumn<IEntity, Button> borrowsAndReservesColumn; 
 
-    @FXML
-    void openAddBook(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/AddBook.fxml","Add book copy");
-    }
+	@FXML
+	private TabPane TabPaneSelect;
 
-    @FXML
-    void openBorrowBook(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
-    }
+	private ToggleGroup toggleGroupForBooks; 
+	private ToggleGroup toggleGroupForAccounts; 
 
-    @FXML
-    void openDeleteBookBtn(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/DeleteBook.fxml","Delete book");
-    }
 
-    @FXML
-    void openRegisterNewAccount(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/RegisterNewAccount.fxml","Registrate new reader account");
-    }
 
-    @FXML
-    void openReturnBook(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/ReturnBook.fxml","Return book");
-    }
-     
-    
-    	
+	//for the Library Director only
+	///////////////////////////////////////////////////////////////////////////////////
+
+	@FXML // fx:id="reportBtn"
+	private Button reportBtn; 
+
+	@FXML
+	private TableColumn<IEntity, Button> freezeColumn;
+
+	@FXML
+	void openReportWindow(ActionEvent event) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/Reports.fxml","Reporst");
+	}
+	///////////////////////////////////////////////////////////////////////////////////
+
+
+
+	@FXML // This method is called by the FXMLLoader when initialization is complete
+	public void initialize() 
+	{
+
+		client=StartPanelController.connToClientController;
+		client.setClientUI(this);
+		AStartClient.primaryStagePanel.setOnCloseRequest(e->
+		{ 
+			makeLogOut(new ActionEvent());
+			System.exit(0);
+		});
+		setRedioButtonsForBooksSearch();
+		setRedioButtonsForAccountsSearch();
+	}
+
+	void setRedioButtonsForBooksSearch()
+	{
+		toggleGroupForBooks = new ToggleGroup();
+		this.bookNameRB.setToggleGroup(toggleGroupForBooks);
+		this.authorNameRB.setToggleGroup(toggleGroupForBooks);
+		this.topicRB.setToggleGroup(toggleGroupForBooks);
+		this.freeSearchBookRB.setToggleGroup(toggleGroupForBooks);
+	}
+
+	void setRedioButtonsForAccountsSearch()
+	{
+		toggleGroupForAccounts = new ToggleGroup();
+		this.iDRB.setToggleGroup(toggleGroupForAccounts);
+		this.firstNameRB.setToggleGroup(toggleGroupForAccounts);
+		this.lastNameRB.setToggleGroup(toggleGroupForAccounts);
+		this.freeSearchReaderAccountRB.setToggleGroup(toggleGroupForAccounts);
+
+	}
+
+
+	@FXML
+	void makeSearch(ActionEvent event) 
+	{
+		//lets example that will be here valdaion for book(still not exist so didnt write)
+
+		//if success do this and if selected book :
+		if(TabPaneSelect.getSelectionModel().getSelectedItem().getText().equals("Search book"))
+		{
+			searchBookPressed();
+		}
+		else
+		{
+			searchReaderAccountPressed(); 
+		}
+
+	}
+
+	private  void  searchBookPressed()
+	{
+		JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
+		String selectedString = selectedRadioButton.getText();
+		Book askedBook=new Book();
+		if(selectedString.equals("Book name"))
+		{
+			askedBook.setBookName(searchBookTextField.getText());
+		}
+		else if(selectedString.equals("Author name"))
+		{
+			askedBook.setAuthorName(searchBookTextField.getText());
+		}
+		else if(selectedString.equals("Topic"))
+		{
+			askedBook.setTopic(searchBookTextField.getText());;
+		}
+		else
+		{
+			askedBook.setBookName("needtocheckthis");
+		}
+		ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+		client.handleMessageFromClient(sendToServer); 
+	}
+
+
+	private  void searchReaderAccountPressed()
+	{
+		JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForAccounts.getSelectedToggle();
+		String selectedString = selectedRadioButton.getText();
+		ReaderAccount askedReader=new ReaderAccount();
+		if(selectedString.equals("ID"))
+		{
+			askedReader.setId(searchReaderAccountSearchField.getText());
+		}
+		else if(selectedString.equals("First name"))
+		{
+			askedReader.setFirstName(searchReaderAccountSearchField.getText());
+		}
+		else if(selectedString.equals("Last name"))
+		{
+			askedReader.setLastName(searchReaderAccountSearchField.getText());;
+		}
+		else
+		{
+			askedReader.setLastName("needtocheckthis");
+		}
+		ObjectMessage sendToServer=new ObjectMessage(askedReader,"SearchReader","ReaderAccount");
+		client.handleMessageFromClient(sendToServer);  
+	}
+
+
+	/**
+	 * When button Log out will be pressed it will take you to the StartPanel
+	 * @param event
+	 */
+	@FXML
+	void makeLogOut(ActionEvent event) 
+	{
+		//change the status of that user in the DB
+		User user = new User(LogInController.currentID);
+		ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+		client.handleMessageFromClient(msg);
+	}
+
+	@FXML
+	void openAddBook(ActionEvent event) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/AddBook.fxml","Add book copy");
+	}
+
+	@FXML
+	void openBorrowBook(ActionEvent event) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/BorrowBook.fxml","Borrow book");
+	}
+
+	@FXML
+	void openDeleteBookBtn(ActionEvent event) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/DeleteBook.fxml","Delete book");
+	}
+
+	@FXML
+	void openRegisterNewAccount(ActionEvent event) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/RegisterNewAccount.fxml","Registrate new reader account");
+	}
+
+	@FXML
+	void openReturnBook(ActionEvent event) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/ReturnBook.fxml","Return book");
+	}
+
+
+
 
 
 	@Override
@@ -351,8 +351,8 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	{
 		numOfActiveWindows=newWindows;
 	}
-	
-	
+
+
 	@Override
 	public void display(ObjectMessage msg) 
 	{
@@ -368,9 +368,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
 		}
-		
+
 	}
-    private void searchBookResult(ObjectMessage msg)
+	private void searchBookResult(ObjectMessage msg)
 	{
 		searchResultTable.getItems().clear();
 		if(msg.getNote().equals("NoBookFound"))
@@ -387,21 +387,21 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				isDesiredBookColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 				BookTopicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));		
-			int i;
-			ArrayList <IEntity> result=msg.getObjectList();
-			for(i=0;i<result.size();i++)
-			{
-				((Book)result.get(i)).setDetails(new Button("Open PDF"));
-				searchResultTable.getItems().add(result.get(i));
-			}
+				int i;
+				ArrayList <IEntity> result=msg.getObjectList();
+				for(i=0;i<result.size();i++)
+				{
+					((Book)result.get(i)).setDetails(new Button("Open PDF"));
+					searchResultTable.getItems().add(result.get(i));
+				}
 			});
-			
+
 		}
 	}
-    
-    private void searchReaderAccountResult(ObjectMessage msg)
+
+	private void searchReaderAccountResult(ObjectMessage msg)
 	{
-    	searchReaderAccountTable.getItems().clear();
+		searchReaderAccountTable.getItems().clear();
 		if(msg.getNote().equals("NoReaderFound"))
 		{
 			AClientCommonUtilities.infoAlert("No readers found , try insert other value", "No readers found");
@@ -420,31 +420,42 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				{
 					freezeColumn.setCellValueFactory(new PropertyValueFactory<>("freeze"));
 				}
-			int i;
-			ArrayList <IEntity> result=msg.getObjectList();
-			for(i=0;i<result.size();i++)
-			{
-				((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
-				if(LogInController.permission==1)
+				int i;
+				ArrayList <IEntity> result=msg.getObjectList();
+				for(i=0;i<result.size();i++)
 				{
-					if(((ReaderAccount)result.get(i)).getStatus().equals("Activate"))
-					{
-						((ReaderAccount)result.get(i)).setFreeze(new Button("Freeze"));
-					}
-					else
-					{
-						((ReaderAccount)result.get(i)).setFreeze(new Button("Activate"));
-					}
+
+					((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
 					
+					readerAccountID = ((ReaderAccount)result.get(i)).getId();
+					((ReaderAccount)result.get(i)).getBorrowsAndReserves().setOnAction(e -> openBorrowsAndReserves(e));
+					
+					if(LogInController.permission==1)
+					{
+						if(((ReaderAccount)result.get(i)).getStatus().equals("Activate"))
+						{
+							((ReaderAccount)result.get(i)).setFreeze(new Button("Freeze"));
+						}
+						else
+						{
+							((ReaderAccount)result.get(i)).setFreeze(new Button("Activate"));
+						}
+
+					}
+					searchReaderAccountTable.getItems().add(result.get(i));
 				}
-				searchReaderAccountTable.getItems().add(result.get(i));
-			}
 			});
-			
+
 		}
+	}
+	
+	void openBorrowsAndReserves(ActionEvent e) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyOrdersAndBorrows.fxml","My orders and borrows");
+		
 	}
 
 
-   
+
 }
 

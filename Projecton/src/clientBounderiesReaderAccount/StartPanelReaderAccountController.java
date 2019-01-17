@@ -45,7 +45,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 
 	OBLClient client;
 	
-	private static int numOfActiveWindows=0;
+	private static int numOfActiveWindows=0; 
 	
     @FXML
     private ResourceBundle resources;
