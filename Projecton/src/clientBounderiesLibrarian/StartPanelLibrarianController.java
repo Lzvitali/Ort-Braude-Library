@@ -163,7 +163,17 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	private TableColumn<IEntity, Button> borrowsAndReservesColumn; 
 
 	@FXML
-	private TabPane TabPaneSelect;
+	private TableColumn<?, ?> locationColumn;
+
+	@FXML
+	private TableColumn<?, ?> inTheLibraryColumn;
+
+	@FXML
+	private TableColumn<?, ?> ClosestReturnColumn;
+
+
+    @FXML
+    private TabPane TabPaneSelect;
 
 	private ToggleGroup toggleGroupForBooks; 
 	private ToggleGroup toggleGroupForAccounts; 

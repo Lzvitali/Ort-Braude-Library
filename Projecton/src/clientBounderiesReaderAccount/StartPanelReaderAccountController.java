@@ -107,6 +107,15 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     @FXML
     private TableColumn<IEntity, Button> reserveBtn;
     
+    @FXML
+    private TableColumn<?, ?> locationColumn;
+
+    @FXML
+    private TableColumn<?, ?> inTheLibraryColumn;
+
+    @FXML
+    private TableColumn<?, ?> ClosestReturnColumn;
+    
     private ToggleGroup toggleGroupForBooks; 
     
     
