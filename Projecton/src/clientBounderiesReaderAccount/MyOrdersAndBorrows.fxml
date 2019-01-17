@@ -34,19 +34,19 @@
             <TableColumn fx:id="BtnForOrders" prefWidth="139.0" text="Cancel reservation" />
          </columns>
       </TableView>
-      <Label layoutX="36.0" layoutY="49.0" prefHeight="35.0" prefWidth="74.0" text="Borrows" textFill="#0e3178">
+      <Label layoutX="36.0" layoutY="49.0" prefHeight="35.0" prefWidth="74.0" text="Borrows" textFill="#070aa4">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="36.0" layoutY="266.0" prefHeight="35.0" prefWidth="113.0" text="Reservations" textFill="#0e3178">
+      <Label layoutX="36.0" layoutY="266.0" prefHeight="35.0" prefWidth="63.0" text="Orders" textFill="#070aa4">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="63.0" fitWidth="461.0" layoutX="324.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="45.0" fitWidth="387.0" layoutX="332.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../icons/borrowsReservesTitle.png" />
+            <Image url="@../../icons/borrowsAndReservesTitle.png" />
          </image>
       </ImageView>
    </children>

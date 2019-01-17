@@ -201,7 +201,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     @FXML
     void openBorrowsAndReserves(ActionEvent event) 
     {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyBorrowsAndReserves.fxml","My orders and borrows");
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyOrdersAndBorrows.fxml","My orders and borrows");
     }
 
     @FXML
