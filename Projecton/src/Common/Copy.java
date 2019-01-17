@@ -13,6 +13,8 @@ public class Copy implements IEntity
 	private Date borrowDate;
 	private Date returnDate;
 	
+	private Button askForDelay;
+	
 	
 	public Copy(int copyID,int bookID,String borrowerID)
 	{
@@ -22,6 +24,20 @@ public class Copy implements IEntity
 	}
 	
 	
+
+
+	public Button getAskForDelay() {
+		return askForDelay;
+	}
+
+
+
+
+	public void setAskForDelay(Button askForDelay) {
+		this.askForDelay = askForDelay;
+	}
+
+
 
 
 	public Copy(int copyID, int bookID, String borrowerID, Date borrowDate, Date returnDate) 
@@ -54,6 +70,49 @@ public class Copy implements IEntity
 	public void setBookID(int bookID) {
 		this.bookID = bookID;
 	}
+
+
+
+
+	public String getBorrowerID() {
+		return borrowerID;
+	}
+
+
+
+
+	public void setBorrowerID(String borrowerID) {
+		this.borrowerID = borrowerID;
+	}
+
+
+
+
+	public Date getBorrowDate() {
+		return borrowDate;
+	}
+
+
+
+
+	public void setBorrowDate(Date borrowDate) {
+		this.borrowDate = borrowDate;
+	}
+
+
+
+
+	public Date getReturnDate() {
+		return returnDate;
+	}
+
+
+
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
+	
 	
 	
 }

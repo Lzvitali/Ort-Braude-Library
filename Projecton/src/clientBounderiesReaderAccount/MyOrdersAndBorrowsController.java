@@ -1,8 +1,12 @@
 package clientBounderiesReaderAccount;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
+import Common.Book;
+import Common.IEntity;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -10,8 +14,12 @@ import clientBounderiesLibrarian.StartPanelLibrarianController;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MyOrdersAndBorrowsController implements IGUIController
 {
@@ -19,52 +27,52 @@ public class MyOrdersAndBorrowsController implements IGUIController
 	OBLClient client;
 
 	@FXML
-    private TableColumn<?, ?> BookNameBorrowColumn;
+    private TableColumn<IEntity, String> BookNameBorrowColumn;
 
     @FXML
-    private TableColumn<?, ?> AuthorNameBorrowColumn;
+    private TableColumn<IEntity, String> AuthorNameBorrowColumn;
 
     @FXML
-    private TableColumn<?, ?> YearBorrowColumn;
+    private TableColumn<IEntity, Integer> YearBorrowColumn;
 
     @FXML
-    private TableColumn<?, ?> TopicBorrowColumn;
+    private TableColumn<IEntity, String> TopicBorrowColumn;
 
     @FXML
-    private TableColumn<?, ?> isDesiredBorrowColumn;
+    private TableColumn<IEntity, Boolean> isDesiredBorrowColumn;
 
     @FXML
-    private TableColumn<?, ?> EditionBorrowColumn;
+    private TableColumn<IEntity, Integer> EditionBorrowColumn;
 
     @FXML
-    private TableColumn<?, ?> BorrowDateColumn;
+    private TableColumn<IEntity, Date> BorrowDateColumn;
 
     @FXML
-    private TableColumn<?, ?> ReturnDateColumn;
+    private TableColumn<IEntity, Date> ReturnDateColumn;
 
     @FXML
-    private TableColumn<?, ?> btnForBorrows;
+    private TableColumn<IEntity, Button> btnForBorrows;
 
     @FXML
-    private TableColumn<?, ?> BookNameReservColumn;
+    private TableColumn<IEntity, String> BookNameReservColumn;
 
     @FXML
-    private TableColumn<?, ?> AuthorNameReservColumn;
+    private TableColumn<IEntity, String> AuthorNameReservColumn;
 
     @FXML
-    private TableColumn<?, ?> YeareReservColumn;
+    private TableColumn<IEntity, Integer> YeareReservColumn;
 
     @FXML
-    private TableColumn<?, ?> TopicReservColumn;
+    private TableColumn<IEntity, String> TopicReservColumn;
 
     @FXML
-    private TableColumn<?, ?> isDesiredReserveColumn;
+    private TableColumn<IEntity, Boolean> isDesiredReserveColumn;
 
     @FXML
-    private TableColumn<?, ?> editionReserveColumn;
+    private TableColumn<IEntity, Integer> editionReserveColumn;
 
     @FXML
-    private TableColumn<?, ?> BtnForOrders;
+    private TableColumn<IEntity, Button> BtnForOrders;
 
 
     @FXML
@@ -106,9 +114,35 @@ public class MyOrdersAndBorrowsController implements IGUIController
 	{
 		if((msg.getMessage()).equals("TheBorrows"))
 		{
-			//TODO: deal also with "no-results"
-			
 			//TODO show the table of the result
+			
+			BookNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+			AuthorNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
+			YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
+			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
+			TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
+			EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+			btnForBorrows.setCellValueFactory(new PropertyValueFactory<>("askForDelay"));
+		
+			
+			ArrayList <IEntity[]> result=msg.getObjectArray();
+			
+			/*for(int i=0;i<result.size();i++)
+			{
+				
+				((Book)result.get(i)).setDetails(new Button("Open PDF"));
+				
+				if(((Book)result.get(i)).getNumberOfCopies()==0)((Book)result.get(i)).setReserve(new Button("Reserve"));
+				if(((Book)result.get(i)).getReserve()!=null)
+				{
+					((Book)result.get(i)).getReserve().setOnAction(e -> AskToReserve(e));
+				}
+				searchResultTable.getItems().add(result.get(i));
+			}*/
+		}
+		else if((msg.getMessage()).equals("NoBorrows"))
+		{
+			//TODO: deal also with "no-results"
 		}
 		
 		
