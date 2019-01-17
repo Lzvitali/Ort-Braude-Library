@@ -50,6 +50,7 @@ public abstract class ACopyDBController
 			ps.setInt(1,askedBook.getBookID());
 			ResultSet rs = ps.executeQuery();
 			rs.next();
+			int x =rs.getInt(1);
 			if(rs.getInt(1)!= 0)
 			{
 				return new ObjectMessage("checkIfAllBorrowed","FoundBook");

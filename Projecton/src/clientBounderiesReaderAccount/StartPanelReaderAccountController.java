@@ -9,6 +9,7 @@ import Common.IEntity;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
 import Common.User;
 import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.AStartClient;
@@ -18,6 +19,7 @@ import clientConrollers.OBLClient;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -25,6 +27,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -229,6 +232,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		{
 			AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
 		}
+		else if(msg.getMessage().equals("reserveBook"))
+		{
+			reserveBookResult(msg);
+		}
 		
 	}
 	
@@ -242,8 +249,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		}
 		else
 		{
-			Platform.runLater(()->
-			{
+		
 				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
 				yearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
@@ -251,19 +257,35 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
 				reserveBtn.setCellValueFactory(new PropertyValueFactory<>("reserve"));
-			});
-			int i;
-			ArrayList <IEntity> result=msg.getObjectList();
-			for(i=0;i<result.size();i++)
-			{
-				
-				((Book)result.get(i)).setDetails(new Button("Open PDF"));
-				if(((Book)result.get(i)).getAvailableCopy()==0)((Book)result.get(i)).setReserve(new Button("Reserve"));
-				searchResultTable.getItems().add(result.get(i));
-			}
 			
-			
+				int i;
+				ArrayList <IEntity> result=msg.getObjectList();
+				for(i=0;i<result.size();i++)
+				{
+					
+					((Book)result.get(i)).setDetails(new Button("Open PDF"));
+					if(((Book)result.get(i)).getNumberOfCopies()==0)((Book)result.get(i)).setReserve(new Button("Reserve"));
+					if(((Book)result.get(i)).getReserve()!=null)
+					{
+						((Book)result.get(i)).getReserve().setOnAction(e -> AskToReserve(e));
+					}
+					searchResultTable.getItems().add(result.get(i));
+				}	
 		}
+	
+	}
+	@FXML
+	void AskToReserve(ActionEvent event)
+	{
+		String id=((Button)event.getSource()).getAccessibleText();
+    	ObjectMessage objectMessage;
+    	Book book=new Book();
+    	book.setBookID(Integer.parseInt(id));
+    	objectMessage=new ObjectMessage(book,"reserveBook","Book");
+    	ReaderAccount readerAccount=new ReaderAccount();
+    	readerAccount.setId(LogInController.currentID);
+    	objectMessage.addObject(readerAccount);
+    	client.handleMessageFromClient(objectMessage);
 	}
 	
 	
@@ -282,5 +304,24 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	Copy copy=new Copy(-1,ID,null);
     	objectMessage=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
     	client.handleMessageFromClient(objectMessage);
+    }
+    
+    
+    private void reserveBookResult(ObjectMessage msg)
+    {
+    	if(msg.getNote().equals("HaveAvailableCopy"))
+    	{
+    		AClientCommonUtilities.infoAlert("Have available copys, ask librarain to borrow", "Have Available Copy");
+    	}
+    	else if(msg.getNote().equals("ExistReserve"))
+    	{
+    		AClientCommonUtilities.infoAlert("You already reserved this book", "Already Reserved");
+    	}
+    	else
+    	{
+    		searchResultTable.getItems().clear();
+    		searchTextField.clear();
+    		AClientCommonUtilities.infoAlert("You reserve this book", "Reserved");
+    	}
     }
 }

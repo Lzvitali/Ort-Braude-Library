@@ -17,7 +17,6 @@ public class Book implements IEntity, Serializable
 	private String topic;
 	private Boolean isDesired; 
 	
-	private int availableCopy;
 	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
 	private boolean fileIsLoaded;
 	private boolean isReserved;
@@ -188,6 +187,7 @@ public class Book implements IEntity, Serializable
 	public void setReserve(Button reserve) 
 	{
 		this.reserve = reserve;
+		this.reserve.setAccessibleText(String.valueOf(bookID));
 	}
 
 
@@ -230,6 +230,10 @@ public class Book implements IEntity, Serializable
 		return edition;
 	}
 
+	public void setNumberOfCopies(Integer numberOfCopies) 
+	{
+		this.numberOfCopies = numberOfCopies;
+	}
 	
 	public void setEdition(Integer edition)
 	{
@@ -246,16 +250,6 @@ public class Book implements IEntity, Serializable
 		this.isDesired = isDesired;
 	}
 
-	public int getAvailableCopy()
-	{
-		return availableCopy;
-	}
-
-	public void setAvailableCopy(int availableCopy)
-	{
-		this.availableCopy = availableCopy;
-	}
-	
 	public boolean isReserved()
 	{
 		return isReserved;

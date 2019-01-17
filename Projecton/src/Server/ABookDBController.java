@@ -10,8 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Date;
 
 import Common.Book;
 import Common.Copy;
@@ -19,6 +21,7 @@ import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.LogInController;
 
 
 public abstract class  ABookDBController 
@@ -37,12 +40,17 @@ public abstract class  ABookDBController
 			return tryToAddBook(msg, connToSQL);
 		}
 
-		if (((msg.getMessage()).equals("SearchBook")))
+		else if (((msg.getMessage()).equals("SearchBook")))
 		{
 			return searchBook(msg, connToSQL);
 		}
+		else if (((msg.getMessage()).equals("reserveBook")))
+		{
+			return reserveBook(msg, connToSQL);
+		}
 
-		return null; // TODO: delete it. did it only to escape the error 
+		else
+			return null; 
 	}
 
 	
@@ -188,15 +196,19 @@ public abstract class  ABookDBController
 			ResultSet rs = ps.executeQuery();
 	 		while(rs.next())
 	 		{
-	 			result.add(new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7)));
-	 			Book book=(Book)result.get(result.size()-1);
+	 			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7));
 	 			Copy copy=new Copy(-1,rs.getInt(1),null);
 	 			ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
 	 			ObjectMessage resultofCopy=ACopyDBController.selection(message,connToSQL);
 	 			if(resultofCopy.getNote().equals("FoundBook"))
-	 				book.setAvailableCopy(1);
+	 			{
+	 				book.setNumberOfCopies(1);
+	 			}
 	 			else
-	 				book.setAvailableCopy(0);
+	 			{
+	 				book.setNumberOfCopies(0);
+	 			}
+	 			result.add(book);
 			} 
 	 		if(!result.isEmpty())
 	 		{
@@ -214,5 +226,95 @@ public abstract class  ABookDBController
 		}
 		return answer;
 	}
+	
+	private static ObjectMessage reserveBook(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		ObjectMessage answer;
+		Book askedBook=(Book)msg.getObjectList().get(0);
+		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(1);
+		Copy copy=new Copy(-1,askedBook.getBookID(),null);
+		ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
+		ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
+		if(resultOfCopy.getNote().equals("FoundBook"))
+		{
+				answer=new ObjectMessage("reserveBook","HaveAvailableCopy");
+				return answer;
+		}
+ 		else
+ 		{
+ 			message=new ObjectMessage();
+ 			message.addObject(msg.getObjectList().get(0), msg.getObjectList().get(1));
+ 			ObjectMessage resultOfExistReserve=ABookDBController.alreadyReserveBook(message,connToSQL);
+ 			if(resultOfExistReserve.getNote().equals("FoundReserve"))
+ 			{
+				answer=new ObjectMessage("reserveBook","ExistReserve");
+				return answer;
+ 			}
+ 			else
+ 			{
+ 				try 
+ 				{
+ 					Date date = new Date();
+ 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+ 					String currentTime = sdf.format(date);
+ 					try 
+ 					{
+						date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currentTime);
+					} 
+ 					catch (ParseException e) 
+ 					{
+
+						e.printStackTrace();
+					}
+ 					java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
+					ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`,`Date`) VALUES (?,?,?)");
+					ps.setInt(1,askedBook.getBookID());
+					ps.setString(2,askedReaderAccount.getId());
+					ps.setDate(3, sqlDate);
+					ps.executeUpdate();
+					answer=new ObjectMessage("reserveBook","Reserved");
+					return answer;
+				} 
+ 				catch (SQLException e) 
+ 				{
+					e.printStackTrace();
+					return null;
+				}
+ 			}	
+ 		}
+		
+	}
+	
+	private static ObjectMessage alreadyReserveBook(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		ObjectMessage answer;
+		Book askedBook=(Book)msg.getObjectList().get(0);
+		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(1);
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM obl.Reservations WHERE bookId=? AND readerAccountID=?");
+			ps.setInt(1,askedBook.getBookID());
+			ps.setString(2,askedReaderAccount.getId());
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			int x =rs.getInt(1);
+			if(rs.getInt(1)!= 0)
+			{
+				return new ObjectMessage("alreadyReserveBook","FoundReserve");
+			}
+			else
+			{
+				return new ObjectMessage("alreadyReserveBook","NoFoundReserve");
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 }
