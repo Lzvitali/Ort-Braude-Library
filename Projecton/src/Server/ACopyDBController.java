@@ -72,7 +72,12 @@ public abstract class ACopyDBController
 		}
 	}
 	
-	
+	/**
+	 * This function will return all the borrows of specific reader account
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	public static ObjectMessage getBorrows(ObjectMessage msg, Connection connToSQL)
 	{
 		ObjectMessage answer = null; 
@@ -91,20 +96,19 @@ public abstract class ACopyDBController
 			getCopies.setString(1, reader.getId() ); 
 			rs1 =getCopies.executeQuery();
 			
-			ArrayList <IEntity[]> result=new ArrayList<IEntity[]>();
+			ArrayList <IEntity[]> result=new ArrayList<IEntity[]>(); 
 			
+			//go by all the copies the the reader account borrowing and get the boot of each one
 			while(rs1.next())
 			{
 				resultExist = true;
 				
-				IEntity []CopyAndBook = new IEntity[2];
+				IEntity []CopyAndBook = new IEntity[2]; //CopyAndBook[0]->the Copy info , CopyAndBook[1]->the Book info
 				
+				//set the copy info from the first query
 				CopyAndBook[0]=(new Copy(rs1.getInt(1), rs1.getInt(2), rs1.getString(3), rs1.getString(4), rs1.getString(5)));
 				
-				System.out.println( ((Copy)CopyAndBook[0]).getBorrowDate() + " ---" + ((Copy)CopyAndBook[0]).getReturnDate());
-				
-				int bookId = rs1.getInt(2);
-				ArrayList <Book> books=new ArrayList<Book>();
+				int bookId = rs1.getInt(2); //the bookID of the current copy
 				
 				//get the book of that copy
 				getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
@@ -112,6 +116,7 @@ public abstract class ACopyDBController
 				rs2 =getBook.executeQuery();
 				if(rs2.next())
 				{
+					//set the book info from the second query
 					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7)) );
 				}
 				
@@ -127,7 +132,6 @@ public abstract class ACopyDBController
 				answer = new ObjectMessage(result,"NoBorrows");
 			}
 			
-			//TODO: deal also with "no-results"
 		} 
 		catch (SQLException e) 
 		{

@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import Common.Book;
-import Common.BorrowsTable;
+import Common.Borrows;
 import Common.Copy;
 import Common.IEntity;
 import Common.IGUIController;
@@ -28,7 +28,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class MyOrdersAndBorrowsController implements IGUIController
+public class MyBorrowsAndReservesController implements IGUIController
 {
 	
 	OBLClient client;
@@ -82,13 +82,15 @@ public class MyOrdersAndBorrowsController implements IGUIController
     private TableColumn<IEntity, Button> BtnForOrders;
     
     @FXML
-    private TableView<BorrowsTable> borrowsTable;
+    private TableView<Borrows> borrowsTable;
     
     @FXML
     private TableView<IEntity> ordersTable;
     
     ObservableList<IEntity> list1;
     ObservableList<IEntity> list2;
+    
+    private ReaderAccount reader;
 
 
     @FXML
@@ -97,7 +99,7 @@ public class MyOrdersAndBorrowsController implements IGUIController
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     	
-    	ReaderAccount reader = new ReaderAccount();
+    	reader = new ReaderAccount();
     	
     	// 1 = Library Director , 2 = Librarian , 3 = reader account
     	
@@ -130,62 +132,67 @@ public class MyOrdersAndBorrowsController implements IGUIController
 	{
 		if((msg.getMessage()).equals("TheBorrows"))
 		{
-			Platform.runLater(()->
-			{
-				BookNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
-				AuthorNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
-				YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((BorrowsTable)cellData.getValue()).getYear()).asObject());
-				isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((BorrowsTable)cellData.getValue()).isDesired()).asObject());
-				TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
-				EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
-
-				btnForBorrows.setCellValueFactory(new PropertyValueFactory<>("askForDelay"));
-				BorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
-				ReturnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
-
-
-				ArrayList <IEntity[]> result=msg.getObjectArray();
-
-				for(int i=0;i<result.size();i++)
-				{
-
-					IEntity[] tempArray;
-					tempArray = result.get(i);
-					
-					System.out.println(((Copy)tempArray[0]).getBorrowDate()  + "---" + ((Copy)tempArray[0]).getReturnDate()  );
-
-					( (Copy)tempArray[0] ).setAskForDelay(new Button("delay"));
-
-					/*
-				if(((Book)result.get(i)).getReserve()!=null) 
-				{
-					((Book)result.get(i)).getReserve().setOnAction(e -> AskToReserve(e));
-				}
-				searchResultTable.getItems().add(result.get(i));*/
-
-					//list1 = FXCollections.observableArrayList(tempArray[1]);
-					//list2 = FXCollections.observableArrayList(tempArray[0]);
-
-					BorrowsTable borrowsTableList = new BorrowsTable( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
-							((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
-							((Copy)tempArray[0]).getBorrowDate(), ((Copy)tempArray[0]).getReturnDate(), ((Copy)tempArray[0]).getAskForDelay());
-					
-					/*BorrowsTable borrowsTableList = new BorrowsTable( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
-							((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition());*/
-					System.out.println(borrowsTableList );
-
-					borrowsTable.getItems().add(borrowsTableList); 
-					//borrowsTable.getItems().add(tempArray[1]);
-				}
-			});
+			setBorrowsResukts(msg);
+			
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg); 
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			//TODO: deal also with "no-results"
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);
+		}
+		else if((msg.getMessage()).equals("TheReserves"))
+		{
+			//TODO: add function to add the reserves to the table
+			//consider the user (reader account/librarian)
+		}
+		else if((msg.getMessage()).equals("NoeReserves"))
+		{
+			//do nothing...
 		}
 		
-		
-		//TODO: do the reserves also
-		
+	}
+	
+	/**
+	 * this function sets the borrows of the reader account to the table
+	 * (same for the reader account and the librarian)
+	 * @param msg- received answer from the server
+	 */
+	void setBorrowsResukts(ObjectMessage msg)
+	{
+		Platform.runLater(()->
+		{
+			//set columns
+			BookNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+			AuthorNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
+			YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Borrows)cellData.getValue()).getYear()).asObject());
+			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Borrows)cellData.getValue()).isDesired()).asObject());
+			TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
+			EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+
+			btnForBorrows.setCellValueFactory(new PropertyValueFactory<>("askForDelay"));
+			BorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
+			ReturnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
+
+
+			ArrayList <IEntity[]> result=msg.getObjectArray(); //get the array list received from the server
+
+			//set to the results to the table
+			for(int i=0;i<result.size();i++)
+			{
+
+				IEntity[] tempArray;
+				tempArray = result.get(i);
+
+				( (Copy)tempArray[0] ).setAskForDelay(new Button("delay"));
+
+				Borrows borrowsTableList = new Borrows( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
+						((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
+						((Copy)tempArray[0]).getBorrowDate(), ((Copy)tempArray[0]).getReturnDate(), ((Copy)tempArray[0]).getAskForDelay());
+
+				borrowsTable.getItems().add(borrowsTableList); 
+			}
+		});
 	}
 }

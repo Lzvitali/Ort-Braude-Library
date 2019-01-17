@@ -159,6 +159,19 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 		}
 	}
 	
+	else if( (objectMessage.getNote()).equals("Reservation") ) 
+	{
+		answer = AReservationDBController.selection(objectMessage,connToSQL);
+		try 
+		{
+			client.sendToClient(answer);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	
 	
 	
