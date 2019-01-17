@@ -4,7 +4,11 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
 import Common.Copy;
+import Common.IGUIController;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
+import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
@@ -12,7 +16,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-public class ReturnBookController {
+public class ReturnBookController implements IGUIController {
 
 	OBLClient client;
     @FXML
@@ -31,7 +35,9 @@ public class ReturnBookController {
     private JFXButton CancelBtn;
 
     @FXML
-    void CancelBtnClicked(ActionEvent event) {
+    void CancelBtnClicked(ActionEvent event) 
+    {
+    	AClientCommonUtilities.backToStartPanel();
 
     }
 
@@ -46,8 +52,23 @@ public class ReturnBookController {
     }
 
     @FXML
-    void initialize() {
-        
+    void initialize() 
+    {
+    	client=StartPanelController.connToClientController;
+    	client.setClientUI(this);
 
     }
+    
+	public void display(ObjectMessage msg) 
+	{
+		if(msg.getMessage().equals("successful ReturnCopy"))
+    	{
+			String successful="successful ReturnCopy";
+    		AClientCommonUtilities.infoAlert(successful,"successful ReturnCopy");
+    	}
+    	else
+    	{
+    		AClientCommonUtilities.infoAlert(msg.getMessage(),"Return book is unsuccessful");
+    	}	
+	}
 }

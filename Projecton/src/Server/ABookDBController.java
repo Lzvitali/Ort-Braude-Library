@@ -57,14 +57,67 @@ public abstract class  ABookDBController
 		{
 			return tryToReturnBook(msg, connToSQL);
 		}
-
 		else
 			return null; 
 	}
 
-	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL)
+	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL) 
 	{
-		return msg;
+
+		ObjectMessage answer=new ObjectMessage();
+		PreparedStatement checkCopy=null;
+		PreparedStatement updateCopy=null;
+		PreparedStatement checkReaderAccountDelays=null;
+		PreparedStatement updateReaderAccount=null;
+		
+		ResultSet query1 = null;
+		ResultSet query2 = null;
+		ResultSet query3=null;
+		int numOfDelay;
+
+		Copy tempCopy=(Copy)msg.getObjectList().get(0);
+		try
+		{
+
+			checkCopy= (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM copy WHERE copyId = ? AND borrowerId IS NOT NULL");
+			checkCopy.setInt(1,tempCopy.getCopyID());
+			query1 =checkCopy.executeQuery();
+			Boolean temp=query1.next();
+			if(temp==false)
+			{
+				answer.setNote("The copyID is wrong or the copyID does not borrowed");
+			}
+			else
+			{
+				checkCopy=(PreparedStatement) connToSQL.prepareStatement("SELECT * FROM copy WHERE copyId = ?");
+				checkCopy.setInt(1,tempCopy.getCopyID());
+				query2=checkCopy.executeQuery();
+				
+				checkReaderAccountDelays=(PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ?");
+				checkReaderAccountDelays.setString(1,query2.getString(3));
+				query3=checkReaderAccountDelays.executeQuery();
+				
+				if(query3.getInt(0)<3 && query3.getString(1).equals("Frozen"))
+				{
+					String active="Active";
+					updateReaderAccount = connToSQL.prepareStatement("UPDATE `readeraccount` SET `status`=? WHERE ID=?");
+					updateReaderAccount.setString(1,active);
+					updateReaderAccount.setString(2,query2.getString(1));
+				}
+				updateCopy = connToSQL.prepareStatement("UPDATE `copy` SET `borrowerId`=NULL WHERE copyId=?");
+				updateCopy.setInt(1,tempCopy.getCopyID());
+				updateCopy.executeUpdate();
+				answer.setNote("successful ReturnCopy");
+				answer.addObject(msg.getObjectList().get(0));
+			}
+
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return new ObjectMessage("Unexpected Error.","Unsucessfull");		
+		}	 
+		return answer;
 	}
 	
 	/**
