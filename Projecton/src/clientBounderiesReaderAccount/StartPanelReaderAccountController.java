@@ -117,6 +117,9 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     private TableColumn<?, ?> ClosestReturnColumn;
     
     private ToggleGroup toggleGroupForBooks; 
+
+    @FXML
+    private TableColumn<?, ?> editionColumn;
     
     
     @FXML

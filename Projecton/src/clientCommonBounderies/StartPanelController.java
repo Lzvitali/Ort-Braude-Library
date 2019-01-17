@@ -105,6 +105,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     @FXML
     private TableColumn<?, ?> ClosestReturnColumn;
     
+    @FXML
+    private TableColumn<?, ?> editionColumn;
+    
+    
     private ToggleGroup toggleGroupForBooks; 
     
     

@@ -144,15 +144,16 @@
                                     </AnchorPane>
                                     <TableView fx:id="searchResultTable" layoutX="12.0" layoutY="134.0" prefHeight="369.0" prefWidth="1094.0">
                                       <columns>
-                                        <TableColumn fx:id="bookNameColumn" prefWidth="248.00003051757812" text="Book name" />
-                                        <TableColumn fx:id="authorNameColumn" prefWidth="160.0" text="Author name" />
-                                          <TableColumn fx:id="yearColumn" prefWidth="64.0" text="Year" />
-                                          <TableColumn fx:id="topicColumn" prefWidth="188.0" text="Topic" />
-                                          <TableColumn fx:id="isDesiredColumn" prefWidth="69.0" text="Desired?" />
-                                          <TableColumn fx:id="locationColumn" prefWidth="72.0" text="Location" />
-                                          <TableColumn fx:id="inTheLibraryColumn" prefWidth="106.0" text="In the library?" />
+                                        <TableColumn fx:id="bookNameColumn" prefWidth="224.00003051757812" text="Book name" />
+                                        <TableColumn fx:id="authorNameColumn" prefWidth="153.0" text="Author name" />
+                                          <TableColumn fx:id="yearColumn" prefWidth="59.0" text="Year" />
+                                          <TableColumn fx:id="topicColumn" prefWidth="169.0" text="Topic" />
+                                          <TableColumn fx:id="isDesiredColumn" prefWidth="66.0" text="Desired?" />
+                                          <TableColumn fx:id="editionColumn" prefWidth="58.0" text="Edition" />
+                                          <TableColumn fx:id="locationColumn" prefWidth="67.0" text="Location" />
+                                          <TableColumn fx:id="inTheLibraryColumn" prefWidth="107.0" text="In the library?" />
                                           <TableColumn fx:id="ClosestReturnColumn" prefWidth="105.0" text="Closest return" />
-                                          <TableColumn fx:id="viewIntroColumn" prefWidth="81.0" text="View intro" />
+                                          <TableColumn fx:id="viewIntroColumn" prefWidth="86.0" text="View intro" />
                                       </columns>
                                     </TableView>
                                  </children>

@@ -170,6 +170,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
 	@FXML
 	private TableColumn<?, ?> ClosestReturnColumn;
+	
+    @FXML
+    private TableColumn<?, ?> editionColumn;
 
 
     @FXML
