@@ -234,8 +234,20 @@ public class AddBookController implements IGUIController
 		client=StartPanelController.connToClientController;
 		client.setClientUI(this);
 		combo();
+		
+		//fillFileds();
 
 	}
+
+	private void fillFileds() 
+	{
+		BookTitleTextField.setText("");
+		BookAuthorTextField.setText("");
+		PublishedYearTextField.setText("");
+		EditionTextField.setText("");
+		
+	}
+
 
 	//check validation
 	private String validationFields()
@@ -318,10 +330,64 @@ public class AddBookController implements IGUIController
 
 	}
 
+	/**
+	 * @param event
+	 */
+	@FXML
+	void checkLocation(ActionEvent  event) 
+	{
+		System.out.println("here1");
+		String bookName, authorName; 
+		int year, edition;
+		
+		if(BookTitleTextField.getText().equals("") || null == BookTitleTextField.getText())
+		{
+			bookName= " ";
+		}
+		else
+		{
+			bookName=BookTitleTextField.getText();
+		}
+		
+		if(BookTitleTextField.getText().equals("") || null == BookTitleTextField.getText())
+		{
+			authorName= " ";
+		}
+		else
+		{
+			authorName=BookAuthorTextField.getText();
+		}
+		
+		if(BookTitleTextField.getText().equals("") || null == BookTitleTextField.getText())
+		{
+			year=0;
+		}
+		else
+		{
+			year=Integer.parseInt(PublishedYearTextField.getText());
+		}
+		
+		if(BookTitleTextField.getText().equals("") || null == BookTitleTextField.getText())
+		{
+			edition=0;
+		}
+		else
+		{
+			edition=Integer.parseInt(EditionTextField.getText());
+		}
+		
+		Book book = new Book(bookName, authorName, year,edition );
+		System.out.println(book);
+		ObjectMessage msg= new ObjectMessage(book,"setLocation","Book");
+		client.handleMessageFromClient(msg);
+		
+		
+	}
 
 	@Override
 	public void display(ObjectMessage msg)
 	{
+		
 		if (msg.getNote().equals("Successfull"))
 		{
 			//if file was uploaded and the "BookAdd" was successful add the file
@@ -335,16 +401,41 @@ public class AddBookController implements IGUIController
 
 		}
 
-		if (msg.getNote().equals("Unsuccessfull"))
+		else if (msg.getNote().equals("Unsuccessfull"))
 		{
 			AClientCommonUtilities.alertErrorWithExit(msg.getMessage(), msg.getNote());
 		}
-		if (msg.getNote().equals("Wrong"))
+		
+		else if (msg.getNote().equals("Wrong"))
 		{
 			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
 		}
+		
+		else if(msg.getNote().equals("LocationFound")) 
+		{
+			System.out.println("here2");
+			setLocation(msg);
+			
+		}
+		
+		else if(msg.getNote().equals("LocationNotFound")) 
+		{
+			System.out.println("here3");
+			bookLocationLetter.setDisable(false);
+			BookLocationNumber.setDisable(false);
+		}
 
 	}
+	private void setLocation(ObjectMessage msg)
+	{
+		
+		bookLocationLetter.setValue(String.valueOf(msg.getMessage().charAt(0)));
+		BookLocationNumber.setValue(String.valueOf(msg.getMessage().charAt(2)));
+		bookLocationLetter.setDisable(true);
+		BookLocationNumber.setDisable(true);
+	}
+
+
 	public void sendFile()
 	{
 		File myFile = new File(f.getAbsolutePath());

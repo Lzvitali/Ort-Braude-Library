@@ -123,6 +123,16 @@ public class Book implements IEntity, Serializable
 		this.edition = edition;
 	}
 
+	
+	
+	public Book(String bookName, String authorName, Integer year, Integer edition)
+	{
+		this.bookName = bookName;
+		this.authorName = authorName;
+		this.year = year;
+		this.edition = edition;
+	}
+
 	public String getBookName() 
 	{
 		return bookName;

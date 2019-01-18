@@ -48,12 +48,58 @@ public abstract class  ABookDBController
 		{
 			return reserveBook(msg, connToSQL);
 		}
+		else if((msg.getMessage()).equals("setLocation"))
+		{
+			return tryToSetLocationOfBook(msg, connToSQL);
+		}
 		else
 			return null; 
 	}
 
 	
 	
+	private static ObjectMessage tryToSetLocationOfBook(ObjectMessage msg, Connection connToSQL) 
+	{
+
+		ObjectMessage massegeRes;
+		PreparedStatement checkBook = null; 
+		ResultSet rs1 = null;
+		Book tempBook=(Book)msg.getObjectList().get(0);
+		try 
+		{
+			String query= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? AND edition = ? ";
+			checkBook = connToSQL.prepareStatement(query);
+			checkBook.setString(1,tempBook.getBookName()); 
+			checkBook.setString(2, tempBook.getAuthorName());
+			checkBook.setInt(3, tempBook.getDateOfBook());
+			checkBook.setInt(4,tempBook.getEdition());
+			rs1 =checkBook.executeQuery();
+
+			//add like copy
+			if(rs1.next())
+			{
+				System.out.println("here4");
+				return new ObjectMessage(rs1.getString(8),"LocationFound");
+				
+			}
+			else
+			{
+				System.out.println("here5");
+				return new ObjectMessage(" ","LocationNotFound");
+			}
+			
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+			return new ObjectMessage("Unexpected Error.","Unsucessfull");
+			
+		}
+		
+	}
+
+
+
 	/**
 	 * This function add book to the DB in MySQL. It is check if it is must be added like new book or copy for book that already exist
 	 * @param msg- the object from the client
