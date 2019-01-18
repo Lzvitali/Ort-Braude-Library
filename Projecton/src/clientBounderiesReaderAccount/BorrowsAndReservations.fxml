@@ -34,14 +34,14 @@
             <TableColumn fx:id="BtnForOrders" prefWidth="138.0" text="Cancel reservation" />
         </columns>
       </TableView>
-      <Label layoutX="20.0" layoutY="58.0" prefHeight="21.0" prefWidth="128.0" text="Borrows" textFill="#1405a6">
+      <Label layoutX="20.0" layoutY="66.0" prefHeight="21.0" prefWidth="128.0" text="Borrows" textFill="#0e3178">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="20.0" layoutY="301.0" text="Reservations" textFill="#1405a6">
+      <Label layoutX="20.0" layoutY="309.0" text="Reservations" textFill="#0e3178">
          <font>
-            <Font name="System Bold" size="24.0" />
+            <Font name="System Bold" size="18.0" />
          </font>
       </Label>
       <ImageView fitHeight="75.0" fitWidth="635.0" layoutX="259.0" pickOnBounds="true" preserveRatio="true">

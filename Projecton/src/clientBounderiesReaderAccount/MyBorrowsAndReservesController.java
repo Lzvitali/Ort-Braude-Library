@@ -137,13 +137,13 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			setBorrowsResukts(msg);
 			
-			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg); 
+			/*ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);*/ 
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);
+			/*ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);*/
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
 		{
