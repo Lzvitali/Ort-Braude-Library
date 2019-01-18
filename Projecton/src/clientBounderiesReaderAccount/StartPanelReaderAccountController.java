@@ -293,7 +293,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	ObjectMessage objectMessage;
     	Book book=new Book();
     	book.setBookID(Integer.parseInt(id));
-    	objectMessage=new ObjectMessage(book,"reserveBook","Book");
+    	objectMessage=new ObjectMessage(book,"reserveBook","Reservation");
     	ReaderAccount readerAccount=new ReaderAccount();
     	readerAccount.setId(LogInController.currentID);
     	objectMessage.addObject(readerAccount);
