@@ -239,10 +239,9 @@ public abstract class ACopyDBController
 			//get number of copies of this bookID
 			getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
 			getNumOfCopies.setInt(1, bookOfCopyID); 
-			rs3 =getBook.executeQuery();
+			rs3 =getNumOfCopies.executeQuery();
 			rs3.next();
 			countNumOfCopies=rs3.getInt(1);
-			
 			
 			//delete the copy
 			ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
