@@ -98,10 +98,10 @@ public class AddBookController implements IGUIController
 
 	ObservableList<String> list1;
 	ObservableList<String> list2;
-	
+
 	private boolean isUploaded =false;
 	private static File f;
-	
+
 	private static Book book;
 
 	//function for cancel button. if librarian doesn't want  continue to add a book
@@ -119,22 +119,22 @@ public class AddBookController implements IGUIController
 		fileLabel.setText(" " );
 		cancelUploadBtn.setVisible(false);
 	}
-	 
+
 	public void combo() 
 	{
 		ArrayList <String> s=new ArrayList<String>();
-		
+
 		for(int i=1; i<=6; i++)
 		{
 			s.add(Integer.toString(i));
 		}
-			
+
 		list1 = FXCollections.observableArrayList(s);
 		BookLocationNumber.setItems( list1);
-		
+
 		ArrayList <String> b=new ArrayList<String>();
 		char ch = 'A';
-		
+
 		for(int i= 0; i<= ('Z'- 'A'); i++)
 		{
 			b.add(String.valueOf(ch));
@@ -154,7 +154,7 @@ public class AddBookController implements IGUIController
 		if(checkResult.equals("correct"))//if all fields correctly
 		{
 			String bookLocation;
-			
+
 			if( ( bookLocationLetter.getValue() == null  || (bookLocationLetter.getValue().toString()).equals(null) ) 
 					|| ( BookLocationNumber.getValue() == null  || (BookLocationNumber.getValue().toString()).equals(null) ) )
 			{
@@ -164,8 +164,8 @@ public class AddBookController implements IGUIController
 			{
 				bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
 			}
-			
-			
+
+
 			boolean isDesired= DesiredCheckBox.isSelected();
 			book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText(), bookLocation);
 			ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
@@ -243,7 +243,7 @@ public class AddBookController implements IGUIController
 		BookAuthorTextField.setText("");
 		PublishedYearTextField.setText("");
 		EditionTextField.setText("");
-		
+
 	}
 
 
@@ -341,56 +341,58 @@ public class AddBookController implements IGUIController
 	@FXML
 	void checkLocation(KeyEvent event) 
 	{
-		String bookName, authorName; 
-		int year, edition;
-		
-		if(BookTitleTextField.getText().equals("") || null == BookTitleTextField.getText())
-		{
-			bookName= " ";
-		}
-		else
-		{
-			bookName=BookTitleTextField.getText();
-		}
-		
-		if(BookAuthorTextField.getText().equals("") || null == BookAuthorTextField.getText())
-		{
-			authorName= " ";
-		}
-		else
-		{
-			authorName=BookAuthorTextField.getText();
-		}
-		
-		if(PublishedYearTextField.getText().equals("") || null == PublishedYearTextField.getText())
-		{
-			year=0;
-		}
-		else
-		{
-			year=Integer.parseInt(PublishedYearTextField.getText());
-		}
-		
-		if(EditionTextField.getText().equals("") || null == EditionTextField.getText())
-		{
-			edition=0;
-		}
-		else
-		{
-			edition=Integer.parseInt(EditionTextField.getText());
-		}
-//
-		bookForSend = new Book(bookName, authorName, year,edition );
-		ObjectMessage msg= new ObjectMessage(bookForSend,"setLocation","Book");
-		client.handleMessageFromClient(msg);
-		
-		
+		Platform.runLater(()->
+		{ 
+			String bookName, authorName; 
+			int year, edition;	
+
+			if(BookTitleTextField.getText().equals("") || null == BookTitleTextField.getText())
+			{
+				bookName= " ";
+			}
+			else
+			{
+				bookName=BookTitleTextField.getText();
+			}
+
+			if(BookAuthorTextField.getText().equals("") || null == BookAuthorTextField.getText())
+			{
+				authorName= " ";
+			}
+			else
+			{
+				authorName=BookAuthorTextField.getText();
+			}
+
+			if(PublishedYearTextField.getText().equals("") || null == PublishedYearTextField.getText())
+			{
+				year=0;
+			}
+			else
+			{
+				year=Integer.parseInt(PublishedYearTextField.getText());
+			}
+
+			if(EditionTextField.getText().equals("") || null == EditionTextField.getText())
+			{
+				edition=0;
+			}
+			else
+			{
+				edition=Integer.parseInt(EditionTextField.getText());
+			}
+			//
+			bookForSend = new Book(bookName, authorName, year,edition );
+			ObjectMessage msg= new ObjectMessage(bookForSend,"setLocation","Book");
+			client.handleMessageFromClient(msg);
+		});
+
 	}
 
 	@Override
 	public void display(ObjectMessage msg)
 	{
-		
+
 		if (msg.getNote().equals("Successfull"))
 		{
 			//if file was uploaded and the "BookAdd" was successful add the file
@@ -408,44 +410,49 @@ public class AddBookController implements IGUIController
 		{
 			AClientCommonUtilities.alertErrorWithExit(msg.getMessage(), msg.getNote());
 		}
-		
+
 		else if (msg.getNote().equals("Wrong"))
 		{
 			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
 		}
-		
+
 		else if(msg.getNote().equals("LocationFound")) 
 		{
 			setLocation(msg);//set location  for exist book in the gui window
-			
+
 		}
-		
+
 		else if(msg.getNote().equals("LocationNotFound")) 
 		{
-			bookLocationLetter.setDisable(false);
-			BookLocationNumber.setDisable(false);
+			Platform.runLater(()->
+			{ 
+				bookLocationLetter.setDisable(false);
+				BookLocationNumber.setDisable(false);
+			});
 		}
 
 	}
-	
+
 	//the function set location of exists book in gui window for client
 	private void setLocation(ObjectMessage msg)
 	{
-		
-		bookLocationLetter.setValue(String.valueOf(msg.getMessage().charAt(0)));
-		BookLocationNumber.setValue(String.valueOf(msg.getMessage().charAt(2)));
-		bookLocationLetter.setDisable(true);
-		BookLocationNumber.setDisable(true);
+		Platform.runLater(()->
+		{ 
+			bookLocationLetter.setValue(String.valueOf(msg.getMessage().charAt(0)));
+			BookLocationNumber.setValue(String.valueOf(msg.getMessage().charAt(2)));
+			bookLocationLetter.setDisable(true);
+			BookLocationNumber.setDisable(true);
+		});
 	}
 
-    //the function send uploaded file from client to server
+	//the function send uploaded file from client to server
 	public void sendFile()
 	{
 		File myFile = new File(f.getAbsolutePath());
 		Socket sock;
 		ServerSocket servsock;
 		BufferedInputStream bis;
-		
+
 		String fileName= bookForSend.getBookName() + " " + bookForSend.getAuthorName() + " " + bookForSend.getDateOfBook();
 
 		try
