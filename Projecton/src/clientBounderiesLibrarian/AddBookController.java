@@ -150,6 +150,7 @@ public class AddBookController implements IGUIController
 
 		if(checkResult.equals("correct"))//if all fields correctly
 		{
+			String bookLocation;
 			
 			if( ( bookLocationLetter.getValue() == null  || (bookLocationLetter.getValue().toString()).equals(null) ) 
 					|| ( BookLocationNumber.getValue() == null  || (BookLocationNumber.getValue().toString()).equals(null) ) )
