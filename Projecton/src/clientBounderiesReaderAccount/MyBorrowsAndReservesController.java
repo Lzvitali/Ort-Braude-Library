@@ -13,6 +13,8 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
@@ -98,6 +100,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
+    	
     	
     	reader = new ReaderAccount();
     	
