@@ -37,9 +37,65 @@ public class AReaderAccountDBController
 		{
 			return changePersnalDetails(msg, connToSQL);
 		}
+		else if(((msg.getMessage()).equals("CheckIfExist")))
+		{
+			return checkIfExistID(msg, connToSQL);
+		}
 		
 		return answer;
 	}
+	
+	
+	private static ObjectMessage checkIfExistID(ObjectMessage msg, Connection connToSQL) 
+	{
+		try 
+		{
+			
+			ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
+			//get the data of the student from the BD
+			PreparedStatement checkID = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? ");
+			checkID.setString(1,reader.getId()); 
+			ResultSet rs = checkID.executeQuery();
+			
+			//check if the id is exist in the DB
+			if(rs.next())
+			{
+				if(rs.getString(8).equals("Active"))//check if status of reader is Active
+				{
+					if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("Desired")))//copy available and book desired
+					{
+						return new ObjectMessage("The book was successfuly borrowed.","ExistAndAvailable");
+					}
+				/*	else if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("NotDesired"))) //copy available and book NOT desired
+					{
+						
+					}
+					else if()
+					{
+						
+					}*/
+					
+				}
+				else 
+				{
+					return new ObjectMessage("Status of the reader account is NOT active. You can't borrow book! ","ExistButNotActive");
+				}
+				
+			}
+			else
+			{
+				return new ObjectMessage("Reader account with this ID does not exist in DB. ","NotExist");
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return new ObjectMessage("Reader account with this ID does not exist in DB.","NotExist");
+	}
+
+			
+			
 	private static ObjectMessage changePersnalDetails(ObjectMessage msg, Connection connToSQL)
 	{
 		ObjectMessage answer = new ObjectMessage(); 

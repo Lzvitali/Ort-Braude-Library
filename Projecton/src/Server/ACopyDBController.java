@@ -279,4 +279,64 @@ public abstract class ACopyDBController
 		return answer;
 	}
 
+	public static String checkIfBookIsAvailable(ObjectMessage msg, Connection connToSQL, String readerId) 
+	{
+		
+		try 
+		{
+			//get the copies that the reader account want to borrow
+			PreparedStatement getCopy = connToSQL.prepareStatement("SELECT * FROM Copy WHERE copyId = ? ");
+			getCopy.setString(1, msg.getNote()); 
+			ResultSet rs1 = getCopy.executeQuery();
+			
+			if(rs1.next())//if there is copy with this id exist in DB
+			{
+				if(rs1.getString(3)==null)
+				{  
+					//get book id
+					PreparedStatement getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+					getBook.setString(1, rs1.getString(2));
+					ResultSet rs2 = getBook.executeQuery();
+					
+					//set borrower id to the table copies
+					PreparedStatement setBorroweID =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowerId`=?  WHERE `copyId` = ?");	
+					setBorroweID.setString(1, readerId);
+					setBorroweID.setString(2, msg.getNote()); 
+					setBorroweID.executeUpdate();
+					
+////////////check if desire or not
+					if(rs2.getBoolean(6)!=true)
+					{
+						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ?, `returnDate` = ? WHERE `copyId` = ?");
+						setReturnDay.setString(1, readerId);
+						setReturnDay.setString(2, readerId);
+						setReturnDay.setString(2, readerId);
+						setReturnDay.executeUpdate();
+						return "NotDesired";// Success borrowed not desired book
+					}
+					
+					PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ?, `returnDate` = ? WHERE `copyId` = ?");
+					setReturnDay.setString(1, readerId);
+					setReturnDay.setString(2, readerId);
+					setReturnDay.setString(2, readerId);
+					setReturnDay.executeUpdate();
+					return "Desired";// Success borrowed desired book
+					
+				}
+				else //this copy was already borrowed
+				{
+				 return "CopyAlreadyBorrowed";
+				}
+			}
+			
+			
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			new ObjectMessage("Unexpected Error.","Unsucessfull");
+		}
+		return "CopyNotExist";
+	}
+
 }
