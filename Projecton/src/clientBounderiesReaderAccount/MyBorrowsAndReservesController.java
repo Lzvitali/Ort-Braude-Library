@@ -201,6 +201,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 		    	{
 		    		if(LogInController.permission == 1 || LogInController.permission == 2)
 		        	{
+		    			BtnForOrders.setText("Implement reservation"); 
 		    			((Reservation)result.get(i)).setReservationTableBtn(new Button("Implement"));
 		    			((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> implementReservation(e));
 		        	}
