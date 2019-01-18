@@ -46,6 +46,7 @@ public abstract class ACopyDBController
 			return null; 
 		}
 	}
+	 
 	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL) 
 	{
 
