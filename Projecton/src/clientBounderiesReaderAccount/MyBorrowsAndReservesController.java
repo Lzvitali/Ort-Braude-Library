@@ -13,6 +13,8 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientCommonBounderies.AClientCommonUtilities;
+import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
@@ -99,6 +101,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     	
+    	
     	reader = new ReaderAccount();
     	
     	// 1 = Library Director , 2 = Librarian , 3 = reader account
@@ -134,13 +137,13 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			setBorrowsResukts(msg);
 			
-			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg); 
+			/*ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);*/ 
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);
+			/*ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);*/
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
 		{
