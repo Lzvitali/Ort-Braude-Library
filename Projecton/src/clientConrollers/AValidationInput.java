@@ -49,6 +49,12 @@ public abstract class AValidationInput
 				break;
 
 			}
+			case "EducationYear":
+			{
+				result=checkValidationEducationYear(context);
+				break;
+			}
+			
 				
 		}
 		return result;
@@ -94,7 +100,18 @@ public abstract class AValidationInput
 		}
 		return result;
 	}
-	
+
+	private static String checkValidationEducationYear(String context)
+	{
+		if(context.equals(1)||context.equals(2)||context.equals(3)||context.equals(4))
+		{
+			return "correct";
+		}
+		else
+		{
+			return "Enter please numbers between 1 to 4";
+		}
+	}
 	
 	/**
 	 * this method check if the email address is valid

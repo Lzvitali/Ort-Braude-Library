@@ -123,7 +123,11 @@ public class PersonalDetailsController implements IGUIController
     	result=AValidationInput.checkValidationUser("Phone Number",PhoneTextField.getText());
     	if(!result.equals("correct"))
     		finalResult+=result+"\n";
-    	
+		result=AValidationInput.checkValidationUser("Education Year",EducationYearTextField.getText());
+		if(!result.equals("correct"))
+    		finalResult+=result+"\n";
+    	if(finalResult.equals(""))
+    		return "correct";
     	result=AValidationInput.checkValidationUser("Email",EmailTextField.getText());
     	if(!result.equals("correct"))
     		finalResult+=result+"\n";
