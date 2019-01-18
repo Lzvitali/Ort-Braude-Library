@@ -17,7 +17,7 @@ public class Book implements IEntity, Serializable
 	private String topic;
 	private Boolean isDesired; 
 	private String bookLocation;
-	
+
 	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
 	private boolean fileIsLoaded;
 	private boolean isReserved;
@@ -294,6 +294,16 @@ public class Book implements IEntity, Serializable
 		this.isReserved = isReserved;
 	}
 
+	
+	public String getBookLocation()
+	{
+		return bookLocation;
+	}
+
+	public void setBookLocation(String bookLocation)
+	{
+		this.bookLocation = bookLocation;
+	}
 	@Override
 	public String toString() {
 		return "Book [bookID=" + bookID + ", bookName=" + bookName + ", authorName=" + authorName + ", year=" + year

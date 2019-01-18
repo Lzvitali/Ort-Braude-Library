@@ -71,16 +71,13 @@ public abstract class  ABookDBController
 			checkBook.setInt(4,tempBook.getEdition());
 			rs1 =checkBook.executeQuery();
 
-			//add like copy
+			//send to client answer if there is book already exist in db and have location
 			if(rs1.next())
 			{
-				System.out.println("here4");
 				return new ObjectMessage(rs1.getString(8),"LocationFound");
-				
 			}
 			else
 			{
-				System.out.println("here5");
 				return new ObjectMessage(" ","LocationNotFound");
 			}
 			
@@ -128,7 +125,7 @@ public abstract class  ABookDBController
 			{
 				if(tempBook.isFileIsLoaded())
 				{
-					return new ObjectMessage("Error! You can't add file to existing book","Wrong");
+					return new ObjectMessage("Error! You can't add file to existing book. Delete file.","Wrong");
 				}
 				else
 				{
@@ -147,17 +144,14 @@ public abstract class  ABookDBController
 						}
 						else //if there is different topics
 						{
-							System.out.println("SameBook but different topics");
-							//if there is same book but different topics
 							return new ObjectMessage("Error!Please change topic. There is also book with the same name,author ,year and edition.","Wrong");
 						}
 
 					}
-					else  //different desire
+					else  
 					{
-						System.out.println("SameBook and different desire");
 						//if there is same book but different desired
-						return new ObjectMessage("Error!Please change desired choise. There is also book with the same name,author ,year and edition.","Wrong");
+						return new ObjectMessage("Error!Please change desired choise. There is book with the same name, author, year and edition.","Wrong");
 
 					}
 				}
@@ -166,28 +160,46 @@ public abstract class  ABookDBController
 			//add like book
 			else 
 			{   
-				//add new book in table
-				addBook=connToSQL.prepareStatement("INSERT INTO `Book` (`bookName`,`authorName`,`year`,`topic`,`isDesired`,`edition`) VALUES (?,?,?,?,?,?)");
-				addBook.setString(1, (String)tempBook.getBookName());
-				addBook.setString(2, (String)tempBook.getAuthorName());
-				addBook.setInt(3, (int)tempBook.getDateOfBook());
-				addBook.setString(4, "somethingTemp");//tempBook.getTopic()
-				addBook.setBoolean(5,(Boolean) tempBook.isDesired());//(Boolean) tempBook.isDesired()
-				addBook.setInt(6, (int)tempBook.getEdition());
-				addBook.executeUpdate();
+				if (tempBook.getBookLocation()==null ||tempBook.getBookLocation().equals(""))
+				{
+					
+					return new ObjectMessage("Error!Please enter book`s location.","Wrong");
+				}
+				else
+				{
+					if(!tempBook.isFileIsLoaded()) 
+					{
+						return new ObjectMessage("Error!You need upload table of contekst for new book.","Wrong");
+					}
+					else 
+					{  //add new book in to the table
+						addBook=connToSQL.prepareStatement("INSERT INTO `Book` (`bookName`,`authorName`,`year`,`topic`,`isDesired`,`edition`,`bookLocation`) VALUES (?,?,?,?,?,?,?)");
+						addBook.setString(1, (String)tempBook.getBookName());
+						addBook.setString(2, (String)tempBook.getAuthorName());
+						addBook.setInt(3, (int)tempBook.getDateOfBook());
+						addBook.setString(4, tempBook.getTopic());//tempBook.getTopic()
+						addBook.setBoolean(5,(Boolean) tempBook.isDesired());//(Boolean) tempBook.isDesired()
+						addBook.setInt(6, (int)tempBook.getEdition());
+						addBook.setString(7, tempBook.getBookLocation());//tempBook.getTopic()
+						addBook.executeUpdate();
 
-				//add copy of this book
-				String queryForNewBook= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? AND edition = ?";
-				checkBook = connToSQL.prepareStatement(queryForNewBook);
-				checkBook.setString(1,tempBook.getBookName()); 
-				checkBook.setString(2, tempBook.getAuthorName());
-				checkBook.setInt(3, tempBook.getDateOfBook());
-				checkBook.setInt(4,tempBook.getEdition());
-				rs1 =checkBook.executeQuery();
+						//add copy of this book
+						String queryForNewBook= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? AND edition = ?";
+						checkBook = connToSQL.prepareStatement(queryForNewBook);
+						checkBook.setString(1,tempBook.getBookName()); 
+						checkBook.setString(2, tempBook.getAuthorName());
+						checkBook.setInt(3, tempBook.getDateOfBook());
+						checkBook.setInt(4,tempBook.getEdition());
+						rs1 =checkBook.executeQuery();
+					}
+					
+					
+				}
+				
 
 				if(rs1.next())
 				{
-					for(int i=0;i<tempBook.getNumberOfCopies();i++)//add copies for book
+					for(int i=0; i<tempBook.getNumberOfCopies(); i++)//add copies for book
 					{
 						addCopy  = connToSQL.prepareStatement(" INSERT INTO `Copy` (`bookId`) VALUES (?)"); 
 						addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));

@@ -186,7 +186,7 @@ public abstract class ACopyDBController
 					//set the book info from the second query
 					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7)) );
 				}
-				
+
 				result.add(CopyAndBook);
 			}
 			
@@ -229,7 +229,8 @@ public abstract class ACopyDBController
 			getBook = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE copyId = ? ");
 			getBook.setInt(1, askedCopy.getCopyID()); 
 			rs2 =getBook.executeQuery();
-			if(!rs2.next()) {
+			if(!rs2.next())
+			{
 				answer= new ObjectMessage("The copy is not exist in obl,you can not delete it","Unsucessfull");
 			}
 			

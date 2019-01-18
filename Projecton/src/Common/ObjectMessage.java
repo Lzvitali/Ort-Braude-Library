@@ -16,6 +16,8 @@ public class ObjectMessage implements Serializable
 	private String message;
 	private String note; //for the sorting in OBLServer. Recommended to fill as: User, Book, Copy, ReaderAccont (the entity name)
 						 //by that attribute we will know to witch controller of the Server package to send it
+	private String extra;
+	
 	//Constructors
 	public ObjectMessage()
 	{
@@ -72,6 +74,14 @@ public class ObjectMessage implements Serializable
 		this.note=note;
 	}
 	
+	public ObjectMessage(String message,String note,String extra)
+	{
+		objectList=new ArrayList<IEntity>();
+		objectListOfArrays=new ArrayList<IEntity[]>();
+		this.message=message;
+		this.note=note;
+		this.extra=extra;
+	}
 	
 	
 	public ObjectMessage(ArrayList<IEntity[]> objectListOfArrays, String message) 
@@ -79,9 +89,6 @@ public class ObjectMessage implements Serializable
 		this.objectListOfArrays = objectListOfArrays;
 		this.message = message;
 	}
-	
-	
-	//Private Methods
 	
 	
 	//Public Methods 
@@ -141,7 +148,16 @@ public class ObjectMessage implements Serializable
 		message=msg;
 	}
 	
+
+	public String getExtra()
+	{
+		return extra;
+	}
 	
+	public void setExtra(String extra) 
+	{
+		this.extra = extra;
+	}
 	//toString
 	@Override
 	public String toString() 
