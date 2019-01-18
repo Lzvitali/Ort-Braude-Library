@@ -464,8 +464,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	
 	void openBorrowsAndReserves(ActionEvent e) 
 	{
+		Platform.runLater(()->
+		{
 		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/MyOrdersAndBorrows.fxml","Orders and borrows");
-		
+		});
 	}
 
 
