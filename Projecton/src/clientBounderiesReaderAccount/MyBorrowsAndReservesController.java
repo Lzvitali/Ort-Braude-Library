@@ -12,6 +12,7 @@ import Common.IEntity;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
+import Common.Reservation;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
 import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.AStartClient;
@@ -24,6 +25,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -89,6 +91,9 @@ public class MyBorrowsAndReservesController implements IGUIController
     @FXML
     private TableView<IEntity> ordersTable;
     
+    @FXML
+    private TableColumn<?, ?> reservationDateColumn;
+    
     ObservableList<IEntity> list1;
     ObservableList<IEntity> list2;
     
@@ -137,26 +142,96 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			setBorrowsResukts(msg);
 			
-			/*ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);*/ 
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			/*ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);*/
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
 		{
 			//TODO: add function to add the reserves to the table
 			//consider the user (reader account/librarian)
+			setReservationsTable(msg); 
 		}
-		else if((msg.getMessage()).equals("NoeReserves"))
+		else if((msg.getMessage()).equals("NoReserves"))
 		{
 			//do nothing...
 		}
 		
 	}
 	
+	
+	/**
+	 * this function sets the reserves of the reader account to the table
+	 * @param msg- received answer from the server
+	 */
+	private void setReservationsTable(ObjectMessage msg) 
+	{
+		Platform.runLater(()->
+		{
+			//set columns 
+			BookNameReservColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
+			AuthorNameReservColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
+			YeareReservColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Reservation)cellData.getValue()).getYear()).asObject());
+			isDesiredReserveColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Reservation)cellData.getValue()).getIsDesired()).asObject());
+			TopicReservColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
+			editionReserveColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+
+			BtnForOrders.setCellValueFactory(new PropertyValueFactory<>("reservationTableBtn"));
+			reservationDateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+
+			ArrayList <IEntity> result = msg.getObjectList(); //get the array list received from the server
+
+			//set to the results to the table
+			for(int i=0;i<result.size();i++)
+			{
+				//if the reader account opening the window
+				if(LogInController.permission == 3)
+		    	{
+					((Reservation)result.get(i)).setReservationTableBtn(new Button("Cancel"));
+					((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> cancelReservation(e));
+		    	}
+		    	
+		    	//if the librarian or the library director opening the window
+		    	else 
+		    	{
+		    		if(LogInController.permission == 1 || LogInController.permission == 2)
+		        	{
+		    			BtnForOrders.setText("Implement reservation"); 
+		    			((Reservation)result.get(i)).setReservationTableBtn(new Button("Implement"));
+		    			((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> implementReservation(e));
+		        	}
+		    	}
+
+				ordersTable.getItems().add(result.get(i)); 
+			}
+		});
+		
+	}
+
+
+	private Object implementReservation(ActionEvent e) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+	private Object cancelReservation(ActionEvent e) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
 	/**
 	 * this function sets the borrows of the reader account to the table
 	 * (same for the reader account and the librarian)

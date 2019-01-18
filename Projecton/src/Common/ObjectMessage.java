@@ -74,6 +74,7 @@ public class ObjectMessage implements Serializable
 		this.message=message;
 		this.note=note;
 	}
+	
 	public ObjectMessage(String message,String note)
 	{
 		objectList=new ArrayList<IEntity>();

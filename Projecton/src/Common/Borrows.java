@@ -16,7 +16,7 @@ public class Borrows implements IEntity , Serializable
 	private String borrowDate;
 	private String returnDate;
 	
-	private Button askForDelay;
+	private Button askForDelay; 
 
 	public Borrows(String bookName, String authorName, Integer year, String topic,
 			Boolean isDesired, Integer edition, String borrowDate, String returnDate, Button askForDelay) 
