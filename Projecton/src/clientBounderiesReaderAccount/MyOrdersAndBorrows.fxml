@@ -23,7 +23,7 @@
             <TableColumn fx:id="btnForBorrows" prefWidth="110.0" text="Delay borrow" />
         </columns>
       </TableView>
-      <TableView fx:id="ordersTable" layoutX="36.0" layoutY="301.0" prefHeight="140.0" prefWidth="841.0">
+      <TableView fx:id="ordersTable" layoutX="36.0" layoutY="339.0" prefHeight="151.0" prefWidth="969.0">
          <columns>
             <TableColumn fx:id="BookNameReservColumn" prefWidth="195.0" text="Book name" />
             <TableColumn fx:id="AuthorNameReservColumn" prefWidth="131.0" text="Author name" />
@@ -31,7 +31,8 @@
             <TableColumn fx:id="TopicReservColumn" prefWidth="148.0" text="Topic" />
             <TableColumn fx:id="isDesiredReserveColumn" prefWidth="87.0" text="is desired?" />
             <TableColumn fx:id="editionReserveColumn" prefWidth="63.0" text="Edition" />
-            <TableColumn fx:id="BtnForOrders" prefWidth="139.0" text="Cancel reservation" />
+            <TableColumn prefWidth="126.0" text="Reservation date" />
+            <TableColumn fx:id="BtnForOrders" prefWidth="141.0" text="Cancel reservation" />
          </columns>
       </TableView>
       <Label layoutX="36.0" layoutY="49.0" prefHeight="35.0" prefWidth="74.0" text="Borrows" textFill="#070aa4">
@@ -39,7 +40,7 @@
             <Font name="System Bold Italic" size="18.0" />
          </font>
       </Label>
-      <Label layoutX="36.0" layoutY="266.0" prefHeight="35.0" prefWidth="63.0" text="Orders" textFill="#070aa4">
+      <Label layoutX="36.0" layoutY="304.0" prefHeight="35.0" prefWidth="63.0" text="Orders" textFill="#070aa4">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>

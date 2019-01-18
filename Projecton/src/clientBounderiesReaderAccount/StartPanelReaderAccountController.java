@@ -333,7 +333,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	{
     		searchResultTable.getItems().clear();
     		searchTextField.clear();
-    		AClientCommonUtilities.infoAlert("You reserve this book", "Reserved");
+    		AClientCommonUtilities.infoAlert("You reserved this book", "Reserved");
     	}
     }
 }

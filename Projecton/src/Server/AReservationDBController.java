@@ -6,12 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import Common.Book;
 import Common.Copy;
+import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
+import Common.Reservation;
 
 public abstract class AReservationDBController 
 {
@@ -39,10 +42,70 @@ public abstract class AReservationDBController
 		}
 	}
 
+	/**
+	 * This function returns the list of reservation of the reader account
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage getReserves(ObjectMessage msg, Connection connToSQL) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		ObjectMessage answer = null;  
+		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
+		boolean resultExist = false;
+		
+		PreparedStatement getReserves = null;  
+		PreparedStatement getBook = null;
+		ResultSet rs1 = null; 
+		ResultSet rs2 = null; 
+
+		try 
+		{
+			//get the copies that the reader account borrowed 
+			getReserves = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE readerAccountID = ? ");
+			getReserves.setString(1, reader.getId() ); 
+			rs1 =getReserves.executeQuery();
+			
+			ArrayList <IEntity> result=new ArrayList<IEntity>(); 
+			
+			//go by all the reservations that the reader account reserved and get the book of each one
+			while(rs1.next())
+			{
+				resultExist = true;
+				 
+				int bookId = rs1.getInt(1); //the bookID of the current copy
+				String date = rs1.getString(3);
+				
+				//get the book of that reserve
+				getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+				getBook.setInt(1, bookId ); 
+				rs2 =getBook.executeQuery();
+				if(rs2.next())
+				{					
+					//set the reservation info from the both queries
+					Reservation reservation = new Reservation(date, rs2.getString(2), rs2.getString(3), rs2.getString(4),rs2.getString(5), rs2.getString(6), rs2.getString(7)); 
+					result.add(reservation);  
+				}
+				
+			}
+			
+			if(resultExist)
+			{
+				answer = new ObjectMessage(result,"TheReserves"," ");
+			}
+			else
+			{
+				answer = new ObjectMessage(result,"NoReserves"," ");
+			}
+			
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+
+		return answer;
 	}
 	
 	private static ObjectMessage reserveBook(ObjectMessage msg, Connection connToSQL)
@@ -112,7 +175,7 @@ public abstract class AReservationDBController
 		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(1);
 		try 
 		{
-			ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM obl.Reservations WHERE bookId=? AND readerAcID=?");
+			ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM obl.Reservations WHERE bookId=? AND readerAccountID=?");
 			ps.setInt(1,askedBook.getBookID());
 			ps.setString(2,askedReaderAccount.getId());
 			ResultSet rs = ps.executeQuery();
