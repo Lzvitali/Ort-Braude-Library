@@ -46,7 +46,7 @@ public class ReturnBookController implements IGUIController {
     {
     	int copyID=Integer.parseInt(CopyIdTextFielf.getText());
     	Copy copy=new Copy(copyID);
-    	ObjectMessage msg = new ObjectMessage(copy,"ReturnCopy","Book");
+    	ObjectMessage msg = new ObjectMessage(copy,"ReturnCopy","Copy");
     	client.handleMessageFromClient(msg);
     	
     }
@@ -61,7 +61,7 @@ public class ReturnBookController implements IGUIController {
     
 	public void display(ObjectMessage msg) 
 	{
-		if(msg.getMessage().equals("successful ReturnCopy"))
+		if(msg.getNote().equals("successful ReturnCopy"))
     	{
 			String successful="successful ReturnCopy";
     		AClientCommonUtilities.infoAlert(successful,"successful ReturnCopy");
