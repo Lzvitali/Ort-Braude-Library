@@ -250,7 +250,7 @@ public abstract class  ABookDBController
 			ResultSet rs = ps.executeQuery();
 	 		while(rs.next())
 	 		{
-	 			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7));
+	 			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
 	 			Copy copy=new Copy(-1,rs.getInt(1),null);
 	 			ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
 	 			ObjectMessage resultofCopy=ACopyDBController.selection(message,connToSQL);

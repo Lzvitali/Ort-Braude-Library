@@ -21,6 +21,7 @@ public class Book implements IEntity, Serializable
 	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
 	private boolean fileIsLoaded;
 	private boolean isReserved;
+	private Boolean inLibrary; 
 	
 	//buttons
 	private transient Button reserve;
@@ -73,6 +74,10 @@ public class Book implements IEntity, Serializable
 		this.year=Integer.parseInt(year);
 		this.edition=Integer.parseInt(edition);
 		this.numberOfCopies=Integer.parseInt(numberOfCopies);
+		if(this.numberOfCopies>0)
+			inLibrary=true;
+		else
+			inLibrary=false;
 		Button reserve = new Button();
 		//reserve.setText("Reservation");
 		Button details= new Button();
@@ -89,6 +94,10 @@ public class Book implements IEntity, Serializable
 		this.year=Integer.parseInt(year);
 		this.edition=Integer.parseInt(edition);
 		this.numberOfCopies=Integer.parseInt(numberOfCopies);
+		if(this.numberOfCopies>0)
+			inLibrary=true;
+		else
+			inLibrary=false;
 		Button reserve = new Button();
 		//reserve.setText("Reservation");
 		Button details= new Button();
@@ -96,7 +105,7 @@ public class Book implements IEntity, Serializable
 	}
 	
 	
-	public Book( String bookID,String bookName, String authorName, int year, String topic, Boolean isDesired,int edition) 
+	public Book( String bookID,String bookName, String authorName, int year, String topic, Boolean isDesired,int edition,String bookLocation) 
 	{
 		super();
 		this.bookID =Integer.parseInt(bookID);
@@ -106,6 +115,7 @@ public class Book implements IEntity, Serializable
 		this.isDesired = isDesired;
 		this.year=year;
 		this.edition=edition;
+		this.bookLocation=bookLocation;
 		Button reserve = null;
 		Button details= null;
 	}
@@ -237,6 +247,14 @@ public class Book implements IEntity, Serializable
 	}
 
 
+	public Boolean getInLibrary() {
+		return inLibrary;
+	}
+
+	public void setInLibrary(Boolean inLibrary) {
+		this.inLibrary = inLibrary;
+	}
+
 	public void setBookName(String bookName) 
 	{
 		this.bookName = bookName;
@@ -267,6 +285,10 @@ public class Book implements IEntity, Serializable
 	public void setNumberOfCopies(Integer numberOfCopies) 
 	{
 		this.numberOfCopies = numberOfCopies;
+		if(this.numberOfCopies>0)
+			inLibrary=true;
+		else
+			inLibrary=false;
 	}
 	
 	public void setEdition(Integer edition)

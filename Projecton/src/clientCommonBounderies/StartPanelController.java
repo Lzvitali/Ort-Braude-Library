@@ -15,6 +15,7 @@ import clientConrollers.OBLClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -97,16 +98,16 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     private TableView<IEntity> searchResultTable; 
     
     @FXML
-    private TableColumn<?, ?> locationColumn;
+    private TableColumn<IEntity, String> locationColumn;
 
     @FXML
-    private TableColumn<?, ?> inTheLibraryColumn;
+    private TableColumn<IEntity, Boolean> inTheLibraryColumn;
 
     @FXML
-    private TableColumn<?, ?> ClosestReturnColumn;
+    private TableColumn<IEntity, Date> ClosestReturnColumn;
     
     @FXML
-    private TableColumn<?, ?> editionColumn;
+    private TableColumn<IEntity, Integer> editionColumn;
     
     
     private ToggleGroup toggleGroupForBooks; 
@@ -216,6 +217,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 				isDesiredColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+				editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+				locationColumn.setCellValueFactory(new PropertyValueFactory<>("bookLocation"));
+				inTheLibraryColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).getInLibrary()).asObject());
+				
 			int i;
 			ArrayList <IEntity> result=msg.getObjectList();
 			for(i=0;i<result.size();i++)
