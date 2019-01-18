@@ -294,7 +294,7 @@ public abstract class  ABookDBController
 		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(1);
 		try 
 		{
-			ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM obl.Reservations WHERE bookId=? AND readerAccountID=?");
+			ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM obl.Reservations WHERE bookId=? AND readerAcID=?");
 			ps.setInt(1,askedBook.getBookID());
 			ps.setString(2,askedReaderAccount.getId());
 			ResultSet rs = ps.executeQuery();

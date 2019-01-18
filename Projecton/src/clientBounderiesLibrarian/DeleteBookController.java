@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import Common.Copy;
 import Common.IGUIController;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
 import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.AValidationInput;
@@ -97,9 +98,18 @@ public class DeleteBookController implements IGUIController
     }
 
 	@Override
-	public void display(ObjectMessage msg) {
-		// TODO Auto-generated method stub
-		
+	public void display(ObjectMessage msg) 
+	{
+		if(msg.getMessage().equals("This Book was successfully deleted "))
+		{
+			
+			AClientCommonUtilities.infoAlert(msg.getMessage(),"A successful deleleting book");
+		}
+		else
+		{
+			AClientCommonUtilities.infoAlert(msg.getMessage(),"Unsuccessful deleleting book");
+		}	
+		AClientCommonUtilities.backToStartPanel();
 	}
-    
 }
+

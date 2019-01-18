@@ -214,29 +214,45 @@ public abstract class ACopyDBController
 	{
 		PreparedStatement ps;
 		PreparedStatement getBook = null;
+		PreparedStatement getNumOfCopies = null;
 		ObjectMessage answer;
 		ResultSet rs2 = null; 
+		ResultSet rs3 = null;
 		Copy askedCopy=(Copy)msg.getObjectList().get(0);
+		int countNumOfCopies;
 		
 		
 		try 
 		{
+			
 			//get id of the book of the copy
 			getBook = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE copyId = ? ");
 			getBook.setInt(1, askedCopy.getCopyID()); 
 			rs2 =getBook.executeQuery();
-			rs2.next();
+			if(!rs2.next()) {
+				answer= new ObjectMessage("The copy is not exist in obl,you can not delete it","Unsucessfull");
+			}
+			
+			else{
 			int bookOfCopyID=rs2.getInt(2);
 			
+			//get number of copies of this bookID
+			getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
+			getNumOfCopies.setInt(1, bookOfCopyID); 
+			rs3 =getBook.executeQuery();
+			rs3.next();
+			countNumOfCopies=rs3.getInt(1);
+			
+			
+			//delete the copy
 			ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
 			ps.setInt(1,askedCopy.getCopyID());
 			ps.executeUpdate();
-			int numOfCopiesBefore=bookOfCopyID;
-			numOfCopiesBefore--;
-			int numOfCopiesAfter=numOfCopiesBefore; //after deleting a copy of the book
+			countNumOfCopies--;
+		
 			
 			//there is no copies from the book
-			if(numOfCopiesAfter==0)
+			if(countNumOfCopies==0)
 			{
 				try 
 				{
@@ -251,6 +267,7 @@ public abstract class ACopyDBController
 				}
 			}
 			answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
+			}
 			
 		} 
 		catch (SQLException e) 
@@ -258,6 +275,7 @@ public abstract class ACopyDBController
 			e.printStackTrace();
 			answer=new ObjectMessage("Unexpected Error.","Unsucessfull");
 		}
+		
 		return answer;
 	}
 
