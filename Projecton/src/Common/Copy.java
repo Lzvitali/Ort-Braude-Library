@@ -14,7 +14,7 @@ public class Copy implements IEntity, Serializable
 	private String borrowDate;
 	private String returnDate;
 	
-	private Button askForDelay;
+	private transient Button askForDelay;
 	
 	private boolean canDelay;
 	

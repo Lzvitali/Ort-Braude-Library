@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -58,8 +59,34 @@ public abstract class ACopyDBController
 	 
 	private static ObjectMessage askForDelay(ObjectMessage msg, Connection connToSQL) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		ObjectMessage answer = new ObjectMessage("Delayed"); 
+		Copy copy=(Copy) msg.getObjectList().get(0);
+
+		PreparedStatement setDate = null; 
+
+		try 
+		{			
+			LocalDate nowPlus7 = LocalDate.now().plusDays(7);
+			Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
+		    
+			setDate = connToSQL.prepareStatement("UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?");
+			setDate.setDate(1, (java.sql.Date) nowPlus7Date ); 
+			setDate.setInt(2, copy.getCopyID() ); 
+			setDate.executeUpdate(); 
+		}
+
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+		LocalDateTime now = LocalDateTime.now();  
+		LocalDateTime newDate = LocalDateTime.now().plusDays(7); 
+		
+		answer.setNote(dtf.format(newDate));
+		return answer;
+			
 	}
 
 	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL) 

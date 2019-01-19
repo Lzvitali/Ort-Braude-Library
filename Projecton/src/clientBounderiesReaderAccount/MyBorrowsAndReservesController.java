@@ -100,6 +100,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     private ReaderAccount reader;
     
     private Copy tempCopy;
+    private static int cnt = 0;
 
 
     @FXML
@@ -144,13 +145,19 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			setBorrowsResukts(msg);
 			
-			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);
+			if(0 == cnt)
+			{
+				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+		    	client.handleMessageFromClient(newMsg);	
+			}
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);
+			if(0 == cnt)
+			{
+				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+		    	client.handleMessageFromClient(newMsg);	
+			}
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
 		{
@@ -160,6 +167,16 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			//do nothing...
 		}
+		else if((msg.getMessage()).equals("Delayed"))
+		{
+			AClientCommonUtilities.infoAlert("The borrow successfully delayed", "Success");
+			//tempCopy.setReturnDate(msg.getNote());
+			
+			//set again the table view
+			borrowsTable.getItems().clear();	
+			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
+	    	client.handleMessageFromClient(msg2); 
+		} 
 		
 	}
 	
@@ -266,13 +283,13 @@ public class MyBorrowsAndReservesController implements IGUIController
 				tempCopy = new Copy((Copy)tempArray[0]);
 
 				( (Copy)tempArray[0] ).setAskForDelay(new Button("delay"));
-				( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> askForDelay(e, tempCopy));
+				( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> askForDelay(e, (Copy)tempArray[0]));
 				
 				//if reader account can't delay that copy, don't show the button
-				if( !((Copy)tempArray[0]).isCanDelay() )
+				/*if( !((Copy)tempArray[0]).isCanDelay() )
 				{
 					( (Copy)tempArray[0] ).getAskForDelay().setVisible(false);
-				}
+				}*/
 
 				Borrows borrowsTableList = new Borrows( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
 						((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
@@ -288,9 +305,22 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	private void askForDelay(ActionEvent e, Copy copy) 
 	{ 
-		Copy theCopy = copy;
-		ObjectMessage msg = new ObjectMessage(theCopy, "ask for delay", "Copy");
-    	client.handleMessageFromClient(msg);
+		//Copy theCopy = copy;
 		
+		if( !copy.isCanDelay() )
+		{
+			//System.out.println(copy.getBookID() + " - nononono"); 
+			AClientCommonUtilities.alertErrorWithOption("you can't delay the return date for this book", "Rejection", "Ok");
+		}
+		else
+		{
+			Copy msgCopy = new Copy(copy);
+			ObjectMessage msg = new ObjectMessage(msgCopy, "ask for delay", "Copy");
+			tempCopy=copy;
+			
+	    	client.handleMessageFromClient(msg);
+	    	
+		}
+	
 	}
 }
