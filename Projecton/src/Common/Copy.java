@@ -16,7 +16,22 @@ public class Copy implements IEntity, Serializable
 	
 	private Button askForDelay;
 	
+	private boolean canDelay;
 	
+	
+	
+	
+
+	public Copy(Copy copy) 
+	{
+		this.copyID = copy.getCopyID();
+		this.bookID = copy.getBookID();
+		this.borrowerID = copy.getBorrowerID();
+		this.borrowDate = copy.getBorrowDate();
+		this.returnDate = copy.getReturnDate();
+		this.askForDelay = copy.getAskForDelay();
+	}
+
 	public Copy(int copyID,int bookID,String borrowerID)
 	{
 		this.copyID=copyID;
@@ -120,6 +135,14 @@ public class Copy implements IEntity, Serializable
 
 	public void setReturnDate(String returnDate) {
 		this.returnDate = returnDate;
+	}
+
+	public boolean isCanDelay() {
+		return canDelay;
+	}
+
+	public void setCanDelay(boolean canDelay) {
+		this.canDelay = canDelay;
 	}
 	
 	

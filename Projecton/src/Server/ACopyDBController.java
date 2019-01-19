@@ -4,9 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Common.Book;
 import Common.Copy;
@@ -43,12 +46,22 @@ public abstract class ACopyDBController
 		{
 			return tryToReturnBook(msg, connToSQL);
 		} 
+		else if(((msg.getMessage()).equals("ask for delay")))
+		{
+			return askForDelay(msg, connToSQL);
+		} 
 		else
 		{
 			return null; 
 		}
 	}
 	 
+	private static ObjectMessage askForDelay(ObjectMessage msg, Connection connToSQL) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL) 
 	{
 
@@ -143,6 +156,7 @@ public abstract class ACopyDBController
 	
 	/**
 	 * This function will return all the borrows of specific reader account
+	 * also it will provide whether the reader account can ask for delay for each one of his borrows
 	 * @param msg - the object from the client
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return ObjectMessage with the answer to the client
@@ -152,11 +166,16 @@ public abstract class ACopyDBController
 		ObjectMessage answer = null; 
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		boolean resultExist = false;
+		boolean canDelay = false;
 		
 		PreparedStatement getCopies = null; 
 		PreparedStatement getBook = null;
+		PreparedStatement getReaderAccount = null;
+		PreparedStatement getReservs = null;
 		ResultSet rs1 = null; 
 		ResultSet rs2 = null; 
+		ResultSet rs3 = null;
+		ResultSet rs4 = null; 
 
 		try 
 		{
@@ -167,7 +186,7 @@ public abstract class ACopyDBController
 			
 			ArrayList <IEntity[]> result=new ArrayList<IEntity[]>(); 
 			
-			//go by all the copies the the reader account borrowing and get the boot of each one
+			//go by all the copies the reader account borrowing and get the book of each one
 			while(rs1.next())
 			{
 				resultExist = true;
@@ -189,6 +208,78 @@ public abstract class ACopyDBController
 					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7)) );
 				}
 
+				
+				//////////////////////////////////////////////////////////
+				//check if the reader account can ask for delay this book
+				//////////////////////////////////////////////////////////
+				
+				//check if the book is desired
+				if(rs2.getBoolean(8))
+				{
+					canDelay = false;
+				}
+				else
+				{
+					
+					//check if it reserved by someone
+					getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
+					getReservs.setInt(1, rs1.getInt(2) ); 
+					rs4 =getReservs.executeQuery();
+					
+					if(rs4.next())
+					{
+						canDelay = false;
+					}
+					else
+					{
+						//check if he is not already in delay
+						Date dateOfReturn =  rs1.getDate(5);
+						
+						//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+						LocalDateTime now = LocalDateTime.now();
+						
+						Instant instant = now.toInstant(ZoneOffset.UTC);
+					    Date today = Date.from(instant);
+							
+						if( today.after(dateOfReturn) )
+						{
+							canDelay = false;
+						}
+						else
+						{
+							//check if reader account is active
+							getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
+							getReaderAccount.setString(1, reader.getId() ); 
+							rs3 =getReaderAccount.executeQuery();
+							
+							if(rs3.next())
+							{
+								//if the reader account is active
+								if(!rs3.getString(8).equals("Active"))
+								{
+									canDelay = false;	
+								}
+								else
+								{
+									canDelay = true;
+								}
+							}
+						}	
+					}
+	
+				}
+				
+				if(canDelay)
+				{
+					((Copy)(CopyAndBook[0])).setCanDelay(true);
+					//answer.setExtra("canDelay");
+				}
+				else
+				{
+					((Copy)(CopyAndBook[0])).setCanDelay(false);
+					//answer.setExtra("canNotDelay");
+				}
+				
 				result.add(CopyAndBook);
 			}
 			

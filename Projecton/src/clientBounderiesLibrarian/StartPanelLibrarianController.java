@@ -55,7 +55,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	private static int numOfActiveWindows=0;
 
 	public static String readerAccountID; //when the librarian wants to access into the borrows and reserves of a reader account after a search 
-
+	private static String tempReaderAccountID;
 
 
 	//FXML attibutes ****************************************************
@@ -440,8 +440,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
 					((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
 					
-					readerAccountID = ((ReaderAccount)result.get(i)).getId();
-					((ReaderAccount)result.get(i)).getBorrowsAndReserves().setOnAction(e -> openBorrowsAndReserves(e));
+					//readerAccountID = ((ReaderAccount)result.get(i)).getId();
+					tempReaderAccountID = ((ReaderAccount)result.get(i)).getId();
+					((ReaderAccount)result.get(i)).getBorrowsAndReserves().setOnAction(e -> openBorrowsAndReserves(e,tempReaderAccountID));
 					
 					if(LogInController.permission==1)
 					{
@@ -462,8 +463,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		}
 	}
 	
-	void openBorrowsAndReserves(ActionEvent e) 
+	void openBorrowsAndReserves(ActionEvent e, String readerID) 
 	{
+		readerAccountID = readerID;
 		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/BorrowsAndReservations.fxml","Orders and borrows");
 	}
 

@@ -98,6 +98,8 @@ public class MyBorrowsAndReservesController implements IGUIController
     ObservableList<IEntity> list2;
     
     private ReaderAccount reader;
+    
+    private Copy tempCopy;
 
 
     @FXML
@@ -152,8 +154,6 @@ public class MyBorrowsAndReservesController implements IGUIController
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
 		{
-			//TODO: add function to add the reserves to the table
-			//consider the user (reader account/librarian)
 			setReservationsTable(msg); 
 		}
 		else if((msg.getMessage()).equals("NoReserves"))
@@ -214,19 +214,19 @@ public class MyBorrowsAndReservesController implements IGUIController
 	}
 
 
-	private Object implementReservation(ActionEvent e) 
+	private void implementReservation(ActionEvent e) 
 	{
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 
 
 
-	private Object cancelReservation(ActionEvent e) 
+	private void cancelReservation(ActionEvent e) 
 	{
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 
@@ -262,8 +262,17 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 				IEntity[] tempArray;
 				tempArray = result.get(i);
+				
+				tempCopy = new Copy((Copy)tempArray[0]);
 
 				( (Copy)tempArray[0] ).setAskForDelay(new Button("delay"));
+				( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> askForDelay(e, tempCopy));
+				
+				//if reader account can't delay that copy, don't show the button
+				if( !((Copy)tempArray[0]).isCanDelay() )
+				{
+					( (Copy)tempArray[0] ).getAskForDelay().setVisible(false);
+				}
 
 				Borrows borrowsTableList = new Borrows( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
 						((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
@@ -272,5 +281,16 @@ public class MyBorrowsAndReservesController implements IGUIController
 				borrowsTable.getItems().add(borrowsTableList); 
 			}
 		});
+	}
+
+
+
+
+	private void askForDelay(ActionEvent e, Copy copy) 
+	{ 
+		Copy theCopy = copy;
+		ObjectMessage msg = new ObjectMessage(theCopy, "ask for delay", "Copy");
+    	client.handleMessageFromClient(msg);
+		
 	}
 }
