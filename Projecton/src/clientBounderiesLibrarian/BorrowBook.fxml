@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="268.0" prefWidth="477.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.BorrowBookController">
+<AnchorPane prefHeight="297.0" prefWidth="477.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.BorrowBookController">
    <children>
       <VBox layoutX="123.0" layoutY="66.0" prefHeight="111.0" prefWidth="253.0" spacing="20.0">
          <children>
@@ -19,32 +20,47 @@
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </JFXTextField>
-            <JFXTextField fx:id="CopyIdTextField" labelFloat="true" onAction="#setDateForBorrowBook" promptText="Copy ID">
+            <JFXTextField fx:id="CopyIdTextField" labelFloat="true" onKeyTyped="#setDateForBorrowBook" promptText="Copy ID">
                <font>
                   <Font name="System Bold Italic" size="14.0" />
                </font>
             </JFXTextField>
          </children></VBox>
-      <Text fx:id="BorrowDateText" layoutX="133.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrow date" />
-      <Text fx:id="ReturnDateText" layoutX="286.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Return date" />
-      <ImageView fitHeight="54.0" fitWidth="337.0" layoutX="92.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="54.0" fitWidth="337.0" layoutX="91.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../icons/titles-librarian/borrowBook.gif" />
          </image>
       </ImageView>
-      <HBox layoutX="108.0" layoutY="213.0" prefHeight="47.0" prefWidth="303.0">
+      <HBox layoutX="110.0" layoutY="236.0" prefHeight="47.0" prefWidth="303.0">
          <children>
             <JFXButton fx:id="CancelBtn" onAction="#cancelBorrrow" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </JFXButton>
-            <AnchorPane prefHeight="47.0" prefWidth="26.0" />
+            <AnchorPane prefHeight="47.0" prefWidth="39.0" />
             <JFXButton fx:id="AproveBtn" onAction="#aproveBorrowBook" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Aprove">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </JFXButton>
+         </children>
+      </HBox>
+      <HBox layoutX="116.0" layoutY="171.0" prefHeight="47.0" prefWidth="269.0">
+         <children>
+            <VBox prefHeight="47.0" prefWidth="89.0" spacing="5.0">
+               <children>
+                  <Text fx:id="BorrowDateText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="78.99999683350325" />
+                  <Label prefHeight="17.0" prefWidth="71.0" text="Borrow date" />
+               </children>
+            </VBox>
+            <AnchorPane prefHeight="47.0" prefWidth="95.0" />
+            <VBox prefHeight="47.0" prefWidth="89.0" spacing="5.0">
+               <children>
+                  <Text fx:id="ReturnDateText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="78.99999683350325" />
+                  <Label prefHeight="17.0" prefWidth="71.0" text="Return date" />
+               </children>
+            </VBox>
          </children>
       </HBox>
    </children>

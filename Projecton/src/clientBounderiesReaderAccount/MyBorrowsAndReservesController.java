@@ -149,6 +149,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 			{
 				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 		    	client.handleMessageFromClient(newMsg);	
+		    	cnt++;
 			}
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
@@ -157,6 +158,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 			{
 				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 		    	client.handleMessageFromClient(newMsg);	
+		    	cnt++;
 			}
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
@@ -210,7 +212,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 				if(LogInController.permission == 3)
 		    	{
 					((Reservation)result.get(i)).setReservationTableBtn(new Button("Cancel"));
-					((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> cancelReservation(e));
+					Reservation resevation = (Reservation)result.get(i);
+					((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> cancelReservation(e,resevation ));
 		    	}
 		    	
 		    	//if the librarian or the library director opening the window
@@ -220,8 +223,9 @@ public class MyBorrowsAndReservesController implements IGUIController
 		        	{
 		    			BtnForOrders.setText("Implement reservation"); 
 		    			((Reservation)result.get(i)).setReservationTableBtn(new Button("Implement"));
-		    			((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> implementReservation(e));
-		        	}
+		    			Reservation resevation = (Reservation)result.get(i);
+		    			((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> implementReservation(e, resevation));
+		        	} 
 		    	}
 
 				ordersTable.getItems().add(result.get(i)); 
@@ -231,7 +235,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	}
 
 
-	private void implementReservation(ActionEvent e) 
+	private void implementReservation(ActionEvent e, Reservation reservation) 
 	{
 		// TODO Auto-generated method stub
 
@@ -240,7 +244,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 
 
-	private void cancelReservation(ActionEvent e) 
+	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
 		// TODO Auto-generated method stub
 

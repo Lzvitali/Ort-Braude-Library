@@ -65,16 +65,18 @@ public class AReaderAccountDBController
 								
 				if(rs.getString(8).equals("Active"))//check if status of reader is Active
 				{
-					if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("Desired"))||(ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("NotDesired")))//copy available and book desired
+					String massege=ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId());
+					
+					if(massege.equals("Desired")|| massege.equals("NotDesired"))//copy available and book desired
 					{
 						return new ObjectMessage("The book was successfuly borrowed.","ExistAndAvailable");
 					}
 					
-					else if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("CopyNotExist")))
+					else if(massege.equals("CopyNotExist"))
 					{
 						return new ObjectMessage("The book with this copyId is not Exist in DB.","NotExistCopy");
 					}
-					else if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("CopyAlreadyBorrowed")))
+					else if(massege.equals("CopyAlreadyBorrowed"))
 					{
 						return new ObjectMessage("The book with this copyId is already borrowed.","CopyAlreadyBorrowed");
 					}

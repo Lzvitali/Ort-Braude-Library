@@ -51,12 +51,58 @@ public abstract class ACopyDBController
 		{
 			return askForDelay(msg, connToSQL);
 		} 
+		else if(((msg.getMessage()).equals("CheckReturnDate")))
+		{
+			return checkReturnDate(msg, connToSQL);
+		} 
+		
 		else
 		{
 			return null; 
 		}
 	}
 	 
+	private static ObjectMessage checkReturnDate(ObjectMessage msg, Connection connToSQL) 
+	{
+		Copy copy=(Copy)msg.getObjectList().get(0);
+		
+		try 
+		{
+			//get the copies that the reader account want to borrow
+			PreparedStatement getCopy = connToSQL.prepareStatement("SELECT * FROM Copy WHERE copyId = ? ");
+			System.out.println();
+			getCopy.setInt(1, copy.getCopyID()); 
+			ResultSet rs1 = getCopy.executeQuery();
+			
+			if(rs1.next())//if there is copy with this id exist in DB
+			{
+				//get book id
+				PreparedStatement getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+				getBook.setInt(1, rs1.getInt(2));
+				ResultSet rs2 = getBook.executeQuery();
+				
+				rs2.next();
+				if(rs2.getBoolean(6))
+				{
+					return new ObjectMessage("Desire book");
+				}
+				else 
+				{
+					return new ObjectMessage("Not Desire book");
+				}
+			}
+			else
+			{
+				return new ObjectMessage("Not exist book");
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return new ObjectMessage("Not exist book");
+	}
+
 	private static ObjectMessage askForDelay(ObjectMessage msg, Connection connToSQL) 
 	{
 		ObjectMessage answer = new ObjectMessage("Delayed"); 
@@ -241,7 +287,7 @@ public abstract class ACopyDBController
 				//////////////////////////////////////////////////////////
 				
 				//check if the book is desired
-				if(rs2.getBoolean(8))
+				if(rs2.getBoolean(6))
 				{
 					canDelay = false;
 				}
@@ -403,15 +449,23 @@ public abstract class ACopyDBController
 	{
 		ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
 		Copy copy=(Copy)msg.getObjectList().get(1);
-		String borrowDate,returnDateDesire,returnDateNotDesire;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
-		LocalDateTime now = LocalDateTime.now();  
-		LocalDateTime desireDate = LocalDateTime.now().plusDays(3);  
-		LocalDateTime notDesireDate = LocalDateTime.now().plusDays(7); 
-		borrowDate= dtf.format(now);
-		returnDateNotDesire=dtf.format(now);
-		returnDateDesire=dtf.format(desireDate);
-		returnDateNotDesire=dtf.format(notDesireDate);
+//		String borrowDate,returnDateDesire,returnDateNotDesire;
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+		
+		
+		LocalDate now = LocalDate.now();  
+		LocalDate desireDate = LocalDate.now().plusDays(3);  
+		LocalDate notDesireDate = LocalDate.now().plusDays(7);
+		
+		Date today = java.sql.Date.valueOf(now);
+		Date todayPlus3 = java.sql.Date.valueOf(desireDate);
+		Date todayPlus7 = java.sql.Date.valueOf(notDesireDate);
+	    
+		
+//		borrowDate= dtf.format(now);
+//		returnDateNotDesire=dtf.format(now);
+//		returnDateDesire=dtf.format(desireDate);
+//		returnDateNotDesire=dtf.format(notDesireDate);
 		
 		try 
 		{
@@ -438,17 +492,15 @@ public abstract class ACopyDBController
 					setBorroweID.executeUpdate();
 					
 ////////////check if desire or not
+					rs2.next();
 					if(!rs2.getBoolean(6))
 					{
-						System.out.println("Here1");
-						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ? AND `returnDate` = ? WHERE `copyId` = ?");
-						System.out.println("Here3");
-						setReturnDay.setString(1, borrowDate);
-						System.out.println("Here4");
-						setReturnDay.setString(2,returnDateNotDesire);
-						System.out.println("Here5");
+						//"UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?"
+						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE copy "+"SET borrowDate = ? , returnDate = ? WHERE copyId = ?");
+						//PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ? AND `returnDate` = ? WHERE `copyId` = ?");
+						setReturnDay.setDate(1, (java.sql.Date) today);
+						setReturnDay.setDate(2,(java.sql.Date) todayPlus7);
 						setReturnDay.setInt(3, copy.getCopyID());
-						System.out.println("Here6");
 						setReturnDay.executeUpdate();
 						return "NotDesired";// Success borrowed not desired book
 					}
@@ -456,8 +508,8 @@ public abstract class ACopyDBController
 					{
 						System.out.println("Here2");
 						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ? AND `returnDate` = ? WHERE `copyId` = ?");
-						setReturnDay.setString(1, borrowDate);
-						setReturnDay.setString(2, returnDateDesire);
+						setReturnDay.setDate(1, (java.sql.Date) today);
+						setReturnDay.setDate(2,(java.sql.Date) todayPlus3);
 						setReturnDay.setInt(3, copy.getCopyID());
 						setReturnDay.executeUpdate();
 						
