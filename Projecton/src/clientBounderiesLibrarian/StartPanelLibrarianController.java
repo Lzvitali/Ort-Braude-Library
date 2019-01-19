@@ -18,6 +18,7 @@ import clientConrollers.OBLClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -162,17 +163,17 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	@FXML 
 	private TableColumn<IEntity, Button> borrowsAndReservesColumn; 
 
-	@FXML
-	private TableColumn<?, ?> locationColumn;
-
-	@FXML
-	private TableColumn<?, ?> inTheLibraryColumn;
-
-	@FXML
-	private TableColumn<?, ?> ClosestReturnColumn;
-	
     @FXML
-    private TableColumn<?, ?> editionColumn;
+    private TableColumn<IEntity, String> locationColumn;
+
+    @FXML
+    private TableColumn<IEntity, Boolean> inTheLibraryColumn;
+
+    @FXML
+    private TableColumn<IEntity, Date> ClosestReturnColumn;
+    
+    @FXML
+    private TableColumn<IEntity, Integer> editionColumn;
 
 
     @FXML
@@ -400,6 +401,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				isDesiredBookColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 				BookTopicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));		
+				editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+				locationColumn.setCellValueFactory(new PropertyValueFactory<>("bookLocation"));
+				inTheLibraryColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).getInLibrary()).asObject());
+				ClosestReturnColumn.setCellValueFactory(new PropertyValueFactory<>("closetReturn"));
 				int i;
 				ArrayList <IEntity> result=msg.getObjectList();
 				for(i=0;i<result.size();i++)
@@ -446,7 +451,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 					
 					if(LogInController.permission==1)
 					{
-						if(((ReaderAccount)result.get(i)).getStatus().equals("Activate"))
+						if(((ReaderAccount)result.get(i)).getStatus().equals("Active"))
 						{
 							((ReaderAccount)result.get(i)).setFreeze(new Button("Freeze"));
 						}

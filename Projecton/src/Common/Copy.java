@@ -76,6 +76,15 @@ public class Copy implements IEntity, Serializable
 
 
 
+	public Copy() 
+	{
+		this.copyID = -1;
+		this.bookID = -1;
+		this.borrowerID = null;
+		this.borrowDate = null;
+		this.returnDate = null;
+	}
+
 	public int getCopyID() {
 		return copyID;
 	}

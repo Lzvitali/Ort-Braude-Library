@@ -220,6 +220,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 				editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
 				locationColumn.setCellValueFactory(new PropertyValueFactory<>("bookLocation"));
 				inTheLibraryColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).getInLibrary()).asObject());
+				ClosestReturnColumn.setCellValueFactory(new PropertyValueFactory<>("closetReturn"));
 				
 			int i;
 			ArrayList <IEntity> result=msg.getObjectList();

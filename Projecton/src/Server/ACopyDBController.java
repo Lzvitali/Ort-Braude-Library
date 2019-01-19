@@ -55,7 +55,10 @@ public abstract class ACopyDBController
 		{
 			return checkReturnDate(msg, connToSQL);
 		} 
-		
+		else if(((msg.getMessage()).equals("closetReturnDate")))
+		{
+			return closetReturnDate(msg, connToSQL);
+		} 
 		else
 		{
 			return null; 
@@ -534,4 +537,31 @@ public abstract class ACopyDBController
 		return "CopyNotExist";
 	}
 
+	private static ObjectMessage closetReturnDate(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		Copy askedBook=(Copy)msg.getObjectList().get(0);
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE bookId=? order by returnDate");
+			ps.setInt(1,askedBook.getBookID());
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			Copy askedDate=new Copy();
+			if(rs.getDate(5).equals(null))
+			{
+				return new ObjectMessage("closetReturnDate","HaveAvaiableBook");
+			}
+			else
+			{
+				askedDate.setReturnDate(rs.getDate(5).toString());
+				return new ObjectMessage(askedDate,"closetReturnDate","ReturnTheCloset");
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

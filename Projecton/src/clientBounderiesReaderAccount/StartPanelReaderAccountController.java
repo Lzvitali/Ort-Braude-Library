@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -108,19 +109,19 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     private TableColumn<IEntity, Button> reserveBtn;
     
     @FXML
-    private TableColumn<?, ?> locationColumn;
+    private TableColumn<IEntity, String> locationColumn;
 
     @FXML
-    private TableColumn<?, ?> inTheLibraryColumn;
+    private TableColumn<IEntity, Boolean> inTheLibraryColumn;
 
     @FXML
-    private TableColumn<?, ?> ClosestReturnColumn;
+    private TableColumn<IEntity, Date> ClosestReturnColumn;
+    
+    @FXML
+    private TableColumn<IEntity, Integer> editionColumn;
+    
     
     private ToggleGroup toggleGroupForBooks; 
-
-    @FXML
-    private TableColumn<?, ?> editionColumn;
-    
     
     @FXML
     public void initialize() 
@@ -268,6 +269,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 				isDesiredColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+				editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+				locationColumn.setCellValueFactory(new PropertyValueFactory<>("bookLocation"));
+				inTheLibraryColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).getInLibrary()).asObject());
+				ClosestReturnColumn.setCellValueFactory(new PropertyValueFactory<>("closetReturn"));
 				reserveBtn.setCellValueFactory(new PropertyValueFactory<>("reserve"));
 			
 				int i;
