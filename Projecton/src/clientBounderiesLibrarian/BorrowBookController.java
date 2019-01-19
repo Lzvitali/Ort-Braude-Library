@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 
 import Common.Book;
+import Common.Copy;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -57,24 +58,29 @@ public class BorrowBookController implements IGUIController
 	@FXML
 	void aproveBorrowBook(ActionEvent event) 
 	{
-		String checkResult =checkInputValidation();
-
-		if(checkResult.equals("correct"))//if all fields correctly
-		{
-			ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
-			ObjectMessage msg = new ObjectMessage(reader,"CheckIfExist");
-			msg.setNote(reader.getId());
-			client.handleMessageFromClient(msg);
-			/*bookForSend = new (bookName, authorName, year,edition );
-			ObjectMessage msg= new ObjectMessage(bookForSend,"setLocation","Book");
-			client.handleMessageFromClient(msg);*/
-			//returnDate=BookTitleTextField.getText();
-			
-		}
-		else 
-		{
-			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");	
-		}
+//		String checkResult =checkInputValidation();
+//
+//		if(checkResult.equals("correct"))//if all fields correctly
+//		{
+//			ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
+//			ObjectMessage msg = new ObjectMessage(reader,"CheckIfExist","ReaderAccount",reader.getId());
+//			client.handleMessageFromClient(msg);
+//			/*bookForSend = new (bookName, authorName, year,edition );
+//			ObjectMessage msg= new ObjectMessage(bookForSend,"setLocation","Book");
+//			client.handleMessageFromClient(msg);*/
+//			//returnDate=BookTitleTextField.getText();
+//			
+//		}
+//		else 
+//		{
+//			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");	
+//		}
+		
+		
+		ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
+		Copy copy=new Copy(CopyIdTextField.getText());
+		ObjectMessage msg = new ObjectMessage(reader,copy,"CheckIfExist","ReaderAccount",reader.getId());
+		client.handleMessageFromClient(msg);
 	}
 
 	//func to check validation input
@@ -139,18 +145,20 @@ public class BorrowBookController implements IGUIController
 		if (msg.getNote().equals("ExistAndAvailable"))
 		{
 			//the User is Exist in DB 'status is active and the copy of book is available 
-			
+			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
+			AClientCommonUtilities.backToStartPanel();
 		}
 	
-		else if (msg.getNote().equals("ExistButNotActive"))
+		else if (msg.getNote().equals("ExistButNotActive")|| msg.getNote().equals("CopyAlreadyBorrowed"))
 		{
 			AClientCommonUtilities.alertErrorWithExit(msg.getMessage(), msg.getNote());
 			AClientCommonUtilities.backToStartPanel();
 		}
-		else if (msg.getNote().equals("NotExist"))
+		else if (msg.getNote().equals("ReaderNotExist")||msg.getNote().equals("CopyNotExist"))
 		{
-			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
+			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
 		}
+		
 
 	}
 }

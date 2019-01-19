@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 
 
 import Common.Book;
+import Common.Copy;
 import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -52,28 +53,31 @@ public class AReaderAccountDBController
 		{
 			
 			ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
+			Copy copy=(Copy)msg.getObjectList().get(1);
 			//get the data of the student from the BD
-			PreparedStatement checkID = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? ");
+			PreparedStatement checkID = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ? ");
 			checkID.setString(1,reader.getId()); 
 			ResultSet rs = checkID.executeQuery();
 			
 			//check if the id is exist in the DB
 			if(rs.next())
 			{
+								
 				if(rs.getString(8).equals("Active"))//check if status of reader is Active
 				{
-					if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("Desired")))//copy available and book desired
+					if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("Desired"))||(ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("NotDesired")))//copy available and book desired
 					{
 						return new ObjectMessage("The book was successfuly borrowed.","ExistAndAvailable");
 					}
-				/*	else if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("NotDesired"))) //copy available and book NOT desired
+					
+					else if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("CopyNotExist")))
 					{
-						
+						return new ObjectMessage("The book with this copyId is not Exist in DB.","NotExistCopy");
 					}
-					else if()
+					else if((ACopyDBController.checkIfBookIsAvailable(msg, connToSQL,reader.getId()).equals("CopyAlreadyBorrowed")))
 					{
-						
-					}*/
+						return new ObjectMessage("The book with this copyId is already borrowed.","CopyAlreadyBorrowed");
+					}
 					
 				}
 				else 
@@ -84,14 +88,14 @@ public class AReaderAccountDBController
 			}
 			else
 			{
-				return new ObjectMessage("Reader account with this ID does not exist in DB. ","NotExist");
+				return new ObjectMessage("Reader account with this ID does not exist in DB. ","ReaderNotExist");
 			}
 		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		return new ObjectMessage("Reader account with this ID does not exist in DB.","NotExist");
+		return new ObjectMessage("Reader account with this ID does not exist in DB.","ReaderNotExist");
 	}
 
 			

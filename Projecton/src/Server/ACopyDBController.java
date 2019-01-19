@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import Common.Book;
@@ -281,12 +283,24 @@ public abstract class ACopyDBController
 
 	public static String checkIfBookIsAvailable(ObjectMessage msg, Connection connToSQL, String readerId) 
 	{
+		ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
+		Copy copy=(Copy)msg.getObjectList().get(1);
+		String borrowDate,returnDateDesire,returnDateNotDesire;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+		LocalDateTime now = LocalDateTime.now();  
+		LocalDateTime desireDate = LocalDateTime.now().plusDays(3);  
+		LocalDateTime notDesireDate = LocalDateTime.now().plusDays(7); 
+		borrowDate= dtf.format(now);
+		returnDateNotDesire=dtf.format(now);
+		returnDateDesire=dtf.format(desireDate);
+		returnDateNotDesire=dtf.format(notDesireDate);
 		
 		try 
 		{
 			//get the copies that the reader account want to borrow
 			PreparedStatement getCopy = connToSQL.prepareStatement("SELECT * FROM Copy WHERE copyId = ? ");
-			getCopy.setString(1, msg.getNote()); 
+			System.out.println();
+			getCopy.setInt(1, copy.getCopyID()); 
 			ResultSet rs1 = getCopy.executeQuery();
 			
 			if(rs1.next())//if there is copy with this id exist in DB
@@ -295,32 +309,43 @@ public abstract class ACopyDBController
 				{  
 					//get book id
 					PreparedStatement getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
-					getBook.setString(1, rs1.getString(2));
+					getBook.setInt(1, rs1.getInt(2));
 					ResultSet rs2 = getBook.executeQuery();
 					
 					//set borrower id to the table copies
 					PreparedStatement setBorroweID =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowerId`=?  WHERE `copyId` = ?");	
 					setBorroweID.setString(1, readerId);
-					setBorroweID.setString(2, msg.getNote()); 
+					setBorroweID.setInt(2,copy.getCopyID()); 
+					
 					setBorroweID.executeUpdate();
 					
 ////////////check if desire or not
-					if(rs2.getBoolean(6)!=true)
+					if(!rs2.getBoolean(6))
 					{
-						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ?, `returnDate` = ? WHERE `copyId` = ?");
-						setReturnDay.setString(1, readerId);
-						setReturnDay.setString(2, readerId);
-						setReturnDay.setString(2, readerId);
+						System.out.println("Here1");
+						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ? AND `returnDate` = ? WHERE `copyId` = ?");
+						System.out.println("Here3");
+						setReturnDay.setString(1, borrowDate);
+						System.out.println("Here4");
+						setReturnDay.setString(2,returnDateNotDesire);
+						System.out.println("Here5");
+						setReturnDay.setInt(3, copy.getCopyID());
+						System.out.println("Here6");
 						setReturnDay.executeUpdate();
 						return "NotDesired";// Success borrowed not desired book
 					}
-					
-					PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ?, `returnDate` = ? WHERE `copyId` = ?");
-					setReturnDay.setString(1, readerId);
-					setReturnDay.setString(2, readerId);
-					setReturnDay.setString(2, readerId);
-					setReturnDay.executeUpdate();
-					return "Desired";// Success borrowed desired book
+					else
+					{
+						System.out.println("Here2");
+						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ? AND `returnDate` = ? WHERE `copyId` = ?");
+						setReturnDay.setString(1, borrowDate);
+						setReturnDay.setString(2, returnDateDesire);
+						setReturnDay.setInt(3, copy.getCopyID());
+						setReturnDay.executeUpdate();
+						
+						return "Desired";// Success borrowed desired book
+					}
+				
 					
 				}
 				else //this copy was already borrowed

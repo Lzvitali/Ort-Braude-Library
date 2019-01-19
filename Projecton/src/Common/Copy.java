@@ -29,6 +29,10 @@ public class Copy implements IEntity, Serializable
 		this.copyID=copyID;
 	}
 	
+	public Copy(String copyID)
+	{
+		this.copyID=Integer.parseInt(copyID);
+	}
 
 
 	public Button getAskForDelay() {
