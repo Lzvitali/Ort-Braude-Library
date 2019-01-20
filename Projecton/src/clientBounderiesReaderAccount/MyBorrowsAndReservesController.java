@@ -189,6 +189,15 @@ public class MyBorrowsAndReservesController implements IGUIController
 			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 	    	client.handleMessageFromClient(newMsg);	
 		}
+		else if((msg.getMessage()).equals("ReservationImplemented"))
+		{
+			AClientCommonUtilities.infoAlert("The reservation was successfully implemented", "Success");
+			
+			//set again the table view
+			ordersTable.getItems().clear();
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);	
+		}
 		
 	}
 	
@@ -247,8 +256,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	private void implementReservation(ActionEvent e, Reservation reservation) 
 	{
-		// TODO Auto-generated method stub
-		
+		//ObjectMessage newMsg = new ObjectMessage(reader, reservation, "implement reservation", "Reservation");
+    	//client.handleMessageFromClient(newMsg);
 	}
 
 

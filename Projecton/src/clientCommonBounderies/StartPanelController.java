@@ -254,8 +254,8 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	private void openPDF(ActionEvent e, Book book)
 	{
 		String bookName = book.getBookName() + " " + book.getAuthorName() + " " + book.getYear() + " " + book.getEdition();
-		System.out.print(book.getBookName());
-		System.out.print(bookName);
+		System.out.println(book.getBookName());
+		System.out.println(bookName);
 
 		FileChooser fc=new FileChooser();
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File","*.pdf"));
@@ -265,14 +265,13 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		
 		String str = null; 
 		
-		if (null!=file)
+		if (null != file)
 		{
 			str = file.getAbsolutePath();
+			ObjectMessage sendToServer=new ObjectMessage(bookName, "getPDF");
+			sendToServer.setExtra(str);
+			connToClientController.handleMessageFromClient(sendToServer); 
 		}
-
-		ObjectMessage sendToServer=new ObjectMessage(bookName, "getPDF");
-		sendToServer.setExtra(str);
-		connToClientController.handleMessageFromClient(sendToServer); 
 
 	}
 
