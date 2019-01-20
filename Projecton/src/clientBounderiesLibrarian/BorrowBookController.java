@@ -61,29 +61,25 @@ public class BorrowBookController implements IGUIController
 	@FXML
 	void aproveBorrowBook(ActionEvent event) 
 	{
-		//		String checkResult =checkInputValidation();
-		//
-		//		if(checkResult.equals("correct"))//if all fields correctly
-		//		{
-		//			ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
-		//			ObjectMessage msg = new ObjectMessage(reader,"CheckIfExist","ReaderAccount",reader.getId());
-		//			client.handleMessageFromClient(msg);
-		//			/*bookForSend = new (bookName, authorName, year,edition );
-		//			ObjectMessage msg= new ObjectMessage(bookForSend,"setLocation","Book");
-		//			client.handleMessageFromClient(msg);*/
-		//			//returnDate=BookTitleTextField.getText();
-		//			
-		//		}
-		//		else 
-		//		{
-		//			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");	
-		//		}
+	/*	String checkResult =checkInputValidation();
 
-
+		if(checkResult.equals("correct"))//if all fields correctly
+		{
+			ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
+			Copy copy=new Copy(CopyIdTextField.getText());
+			ObjectMessage msg = new ObjectMessage(reader,copy,"CheckIfExist","ReaderAccount",reader.getId());
+			client.handleMessageFromClient(msg);	
+		}
+		else 
+		{
+			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");	
+		}*/
 		ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
 		Copy copy=new Copy(CopyIdTextField.getText());
 		ObjectMessage msg = new ObjectMessage(reader,copy,"CheckIfExist","ReaderAccount",reader.getId());
-		client.handleMessageFromClient(msg);
+		client.handleMessageFromClient(msg);	
+
+
 	}
 
 	//func to check validation input
@@ -92,13 +88,13 @@ public class BorrowBookController implements IGUIController
 
 		String result,finalResult="";
 
-		result=AValidationInput.checkValidationUser("UserID",readerAccountID.getText());
+	/*	result=AValidationInput.checkValidationUser("UserID",readerAccountID.getText());
 		if(!result.equals("correct"))
 		{
 			finalResult+=result+'\n';
-		}
+		}*/
 
-		result=AValidationInput.checkValidationBook("bookID",CopyIdTextField.getText());
+		result=AValidationInput.checkValidationBook("copyID",CopyIdTextField.getText());
 		if(!result.equals("correct"))
 		{
 			finalResult+=result+'\n';

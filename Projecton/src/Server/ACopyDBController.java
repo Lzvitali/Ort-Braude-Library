@@ -449,23 +449,15 @@ public abstract class ACopyDBController
 	{
 		ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
 		Copy copy=(Copy)msg.getObjectList().get(1);
-//		String borrowDate,returnDateDesire,returnDateNotDesire;
-//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
-		
-		
+
 		LocalDate now = LocalDate.now();  
 		LocalDate desireDate = LocalDate.now().plusDays(3);  
-		LocalDate notDesireDate = LocalDate.now().plusDays(7);
+		LocalDate notDesireDate = LocalDate.now().plusDays(14);
 		
 		Date today = java.sql.Date.valueOf(now);
 		Date todayPlus3 = java.sql.Date.valueOf(desireDate);
 		Date todayPlus7 = java.sql.Date.valueOf(notDesireDate);
-	    
-		
-//		borrowDate= dtf.format(now);
-//		returnDateNotDesire=dtf.format(now);
-//		returnDateDesire=dtf.format(desireDate);
-//		returnDateNotDesire=dtf.format(notDesireDate);
+
 		
 		try 
 		{
@@ -490,14 +482,13 @@ public abstract class ACopyDBController
 					setBorroweID.setInt(2,copy.getCopyID()); 
 					
 					setBorroweID.executeUpdate();
-					
-////////////check if desire or not
 					rs2.next();
-					if(!rs2.getBoolean(6))
+					
+					if(!rs2.getBoolean(6)) //check if desire or not
 					{
 						//"UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?"
 						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE copy "+"SET borrowDate = ? , returnDate = ? WHERE copyId = ?");
-						//PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ? AND `returnDate` = ? WHERE `copyId` = ?");
+						
 						setReturnDay.setDate(1, (java.sql.Date) today);
 						setReturnDay.setDate(2,(java.sql.Date) todayPlus7);
 						setReturnDay.setInt(3, copy.getCopyID());
@@ -506,24 +497,21 @@ public abstract class ACopyDBController
 					}
 					else
 					{
-						System.out.println("Here2");
-						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowDate` = ? AND `returnDate` = ? WHERE `copyId` = ?");
+						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE copy "+"SET borrowDate = ? , returnDate = ? WHERE copyId = ?");
 						setReturnDay.setDate(1, (java.sql.Date) today);
 						setReturnDay.setDate(2,(java.sql.Date) todayPlus3);
 						setReturnDay.setInt(3, copy.getCopyID());
 						setReturnDay.executeUpdate();
-						
+
 						return "Desired";// Success borrowed desired book
-					}
-				
-					
+					}		
 				}
 				else //this copy was already borrowed
 				{
-				 return "CopyAlreadyBorrowed";
+					return "CopyAlreadyBorrowed";
 				}
 			}
-			
+
 			
 		}
 		catch (SQLException e) 

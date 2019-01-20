@@ -72,6 +72,11 @@ public abstract class AValidationInput
 				break;
 
 			}
+			case  "copyID":
+			{
+				result=checkValidationCopyID(context);
+				break;
+			}
 			case "bookName":
 			{
 				result=checkValidationBookName(context);
@@ -406,12 +411,29 @@ public abstract class AValidationInput
 	{
 		if(context.equals("") || null == context)
 		{
-			return"Insert 9 digit book id";	
+			return "Insert book id";	
 		}
-		if(context.length()>9)
+	/*	if(context.length()>9)
 		{
 			return "Insert no more then 9 digit book id ";
+		}*/
+		if(!onlyNumbers(context))
+		{
+			return "You must fill only numbers";
 		}
+		
+		return "correct";
+	}
+	private static String checkValidationCopyID(String context)
+	{
+		if(context.equals("") || null == context)
+		{
+			return "Insert copy id";	
+		}
+	/*	if(context.length()>9)
+		{
+			return "Insert no more then 9 digit book id ";
+		}*/
 		if(!onlyNumbers(context))
 		{
 			return "You must fill only numbers";
