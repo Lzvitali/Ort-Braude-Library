@@ -225,10 +225,10 @@ public abstract class AValidationInput
 		{
 			return "You must be fill only numbers";
 		}
-		if(!chackDigit(context))
+	/*	if(!chackDigit(context))
 		{
 			return "Insert correct user id";
-		}
+		}*/
 		return "correct";
 	}
 	/**

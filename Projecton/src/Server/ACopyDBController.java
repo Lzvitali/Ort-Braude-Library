@@ -482,7 +482,6 @@ public abstract class ACopyDBController
 		{
 			//get the copies that the reader account want to borrow
 			PreparedStatement getCopy = connToSQL.prepareStatement("SELECT * FROM Copy WHERE copyId = ? ");
-			System.out.println();
 			getCopy.setInt(1, copy.getCopyID()); 
 			ResultSet rs1 = getCopy.executeQuery();
 			
@@ -530,7 +529,10 @@ public abstract class ACopyDBController
 					return "CopyAlreadyBorrowed";
 				}
 			}
-
+			else //this copy was already borrowed
+			{
+				return "CopyNotExist";
+			}
 			
 		}
 		catch (SQLException e) 
@@ -539,6 +541,7 @@ public abstract class ACopyDBController
 			new ObjectMessage("Unexpected Error.","Unsucessfull");
 		}
 		return "CopyNotExist";
+	
 	}
 
 	private static ObjectMessage closetReturnDate(ObjectMessage msg, Connection connToSQL)

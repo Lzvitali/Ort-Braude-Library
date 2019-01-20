@@ -185,7 +185,7 @@ public abstract class AClientCommonUtilities
 	public static void alertErrorWithOption(String headerText,String title,String btnName) 
     { 
 		Platform.runLater(()->
-		{  
+		{ 
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			ButtonType bttexit = new ButtonType(btnName, ButtonBar.ButtonData.CANCEL_CLOSE);
 			alert.getButtonTypes().clear();

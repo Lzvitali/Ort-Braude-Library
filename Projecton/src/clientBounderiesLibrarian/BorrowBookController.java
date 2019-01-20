@@ -61,8 +61,7 @@ public class BorrowBookController implements IGUIController
 	@FXML
 	void aproveBorrowBook(ActionEvent event) 
 	{
-	/*	String checkResult =checkInputValidation();
-
+		String checkResult =checkInputValidation();
 		if(checkResult.equals("correct"))//if all fields correctly
 		{
 			ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
@@ -73,11 +72,12 @@ public class BorrowBookController implements IGUIController
 		else 
 		{
 			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");	
-		}*/
-		ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
+			
+		}
+	/*	ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
 		Copy copy=new Copy(CopyIdTextField.getText());
 		ObjectMessage msg = new ObjectMessage(reader,copy,"CheckIfExist","ReaderAccount",reader.getId());
-		client.handleMessageFromClient(msg);	
+		client.handleMessageFromClient(msg);	*/
 
 
 	}
@@ -88,18 +88,28 @@ public class BorrowBookController implements IGUIController
 
 		String result,finalResult="";
 
-	/*	result=AValidationInput.checkValidationUser("UserID",readerAccountID.getText());
-		if(!result.equals("correct"))
-		{
-			finalResult+=result+'\n';
-		}*/
-
-		result=AValidationInput.checkValidationBook("copyID",CopyIdTextField.getText());
+	result=AValidationInput.checkValidationUser("UserID",readerAccountID.getText());//user id validation
 		if(!result.equals("correct"))
 		{
 			finalResult+=result+'\n';
 		}
-		return finalResult;
+
+		result=AValidationInput.checkValidationBook("copyID",CopyIdTextField.getText());//copy id validation
+		if(!result.equals("correct"))
+		{
+		    finalResult+=result+'\n';
+		}
+		
+		if(finalResult.equals(""))
+		{
+			return "correct";
+		}
+
+		else
+		{
+			return finalResult;
+		
+		}
 	}
 
 
@@ -124,7 +134,7 @@ public class BorrowBookController implements IGUIController
 			else
 			{
 				boolean onlyDigits = true;
-				for(int i=0;i<CopyIdTextField.getText().length();i++) 
+				for(int i=0; i<CopyIdTextField.getText().length(); i++) 
 				{
 					if(CopyIdTextField.getText().charAt(i)<'0' ||CopyIdTextField.getText().charAt(i)>'9')
 					{
@@ -163,6 +173,7 @@ public class BorrowBookController implements IGUIController
 	@Override
 	public void display(ObjectMessage msg) 
 	{
+		
 		if (msg.getMessage().equals("Desire book"))
 		{
 			String returnDate;
@@ -177,7 +188,7 @@ public class BorrowBookController implements IGUIController
 		{
 			String returnDate;
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
-			LocalDateTime now = LocalDateTime.now().plusDays(7);  
+			LocalDateTime now = LocalDateTime.now().plusDays(14);  
 			returnDate= dtf.format(now);
 			ReturnDateText.setText(returnDate);
 		}
@@ -192,11 +203,20 @@ public class BorrowBookController implements IGUIController
 			AClientCommonUtilities.backToStartPanel();
 		}
 
-		else if (msg.getNote().equals("ExistButNotActive")|| msg.getNote().equals("CopyAlreadyBorrowed"))
+		else if (msg.getNote().equals("ExistButNotActive") )
 		{
 			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
 		}
-		else if (msg.getNote().equals("ReaderNotExist")||msg.getNote().equals("NotExistCopy"))
+		else if(msg.getNote().equals("CopyAlreadyBorrowed"))
+		{
+			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
+		}
+		else if (msg.getNote().equals("ReaderNotExist"))
+		{
+			
+			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
+		}
+		else if(msg.getNote().equals("NotExistCopy"))
 		{
 			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
 		}
