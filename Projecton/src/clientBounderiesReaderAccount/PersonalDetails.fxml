@@ -34,17 +34,17 @@
                   <Font size="14.0" />
                </font>
             </TextField>
+            <TextField fx:id="EmailTextField" style="-fx-background-color: ccecff;">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
             <TextField fx:id="AdressTextField" style="-fx-background-color: ccecff;">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="EducationYearTextField" style="-fx-background-color: ccecff;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="EmailTextField" editable="false">
+            <TextField fx:id="EducationYearTextField" editable="false">
                <font>
                   <Font size="14.0" />
                </font>
