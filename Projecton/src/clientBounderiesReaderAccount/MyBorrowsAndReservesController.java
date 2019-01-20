@@ -109,6 +109,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     	
+    	cnt = 0;
     	
     	reader = new ReaderAccount();
     	
@@ -238,7 +239,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private void implementReservation(ActionEvent e, Reservation reservation) 
 	{
 		// TODO Auto-generated method stub
-
+		
 	}
 
 
@@ -247,7 +248,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
 		// TODO Auto-generated method stub
-
+		
 	}
 
 
@@ -314,7 +315,14 @@ public class MyBorrowsAndReservesController implements IGUIController
 		if( !copy.isCanDelay() )
 		{
 			//System.out.println(copy.getBookID() + " - nononono"); 
-			AClientCommonUtilities.alertErrorWithOption("you can't delay the return date for this book", "Rejection", "Ok");
+			if(copy.getReasonForCantDelay().equals("The date of return is the most updated"))
+			{
+				AClientCommonUtilities.alertErrorWithOption("The date of return is the most updated", "Rejection", "Ok");
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption("you can't delay the return date for this book", "Rejection", "Ok");
+			}		
 		}
 		else
 		{

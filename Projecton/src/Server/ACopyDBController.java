@@ -289,61 +289,77 @@ public abstract class ACopyDBController
 				//check if the reader account can ask for delay this book
 				//////////////////////////////////////////////////////////
 				
-				//check if the book is desired
-				if(rs2.getBoolean(6))
+				String reason=" ";
+				
+				//check if the return date is the most updated
+				LocalDate nowPlus7 = LocalDate.now().plusDays(7);
+				Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
+				Date dateOfReturn = rs1.getDate(5); 
+				if(dateOfReturn.equals(nowPlus7Date))
 				{
 					canDelay = false;
+					reason = "The date of return is the most updated";
 				}
 				else
 				{
-					
-					//check if it reserved by someone
-					getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
-					getReservs.setInt(1, rs1.getInt(2) ); 
-					rs4 =getReservs.executeQuery();
-					
-					if(rs4.next())
+					//check if the book is desired
+					if(rs2.getBoolean(6))
 					{
 						canDelay = false;
 					}
 					else
 					{
-						//check if he is not already in delay
-						Date dateOfReturn =  rs1.getDate(5);
 						
-						//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
-						LocalDateTime now = LocalDateTime.now();
+						//check if it reserved by someone
+						getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
+						getReservs.setInt(1, rs1.getInt(2) ); 
+						rs4 =getReservs.executeQuery();
 						
-						Instant instant = now.toInstant(ZoneOffset.UTC);
-					    Date today = Date.from(instant);
-							
-						if( today.after(dateOfReturn) )
+						if(rs4.next())
 						{
 							canDelay = false;
 						}
 						else
 						{
-							//check if reader account is active
-							getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
-							getReaderAccount.setString(1, reader.getId() ); 
-							rs3 =getReaderAccount.executeQuery();
+							//check if he is not already in delay
+							//Date dateOfReturn =  rs1.getDate(5);
 							
-							if(rs3.next())
+							//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+							LocalDateTime now = LocalDateTime.now();
+							
+							Instant instant = now.toInstant(ZoneOffset.UTC);
+						    Date today = Date.from(instant);
+								
+							if( today.after(dateOfReturn) )
 							{
-								//if the reader account is active
-								if(!rs3.getString(8).equals("Active"))
-								{
-									canDelay = false;	
-								}
-								else
-								{
-									canDelay = true;
-								}
+								canDelay = false;
 							}
-						}	
+							else
+							{
+								//check if reader account is active
+								getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
+								getReaderAccount.setString(1, reader.getId() ); 
+								rs3 =getReaderAccount.executeQuery();
+								
+								if(rs3.next())
+								{
+									//if the reader account is active
+									if(!rs3.getString(8).equals("Active"))
+									{
+										canDelay = false;	
+									}
+									else
+									{
+										canDelay = true;
+									}
+								}
+							}	
+						}
+		
 					}
-	
 				}
+				
+				((Copy)(CopyAndBook[0])).setReasonForCantDelay(reason);
 				
 				if(canDelay)
 				{
@@ -352,7 +368,7 @@ public abstract class ACopyDBController
 				}
 				else
 				{
-					((Copy)(CopyAndBook[0])).setCanDelay(false);
+					((Copy)(CopyAndBook[0])).setCanDelay(false); 
 					//answer.setExtra("canNotDelay");
 				}
 				
