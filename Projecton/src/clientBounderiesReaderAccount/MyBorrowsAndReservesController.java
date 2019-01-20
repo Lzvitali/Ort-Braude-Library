@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import Common.Book;
-import Common.Borrows;
+import Common.Borrow;
 import Common.Copy;
 import Common.IEntity;
 import Common.IGUIController;
@@ -86,7 +86,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     private TableColumn<IEntity, Button> BtnForOrders;
     
     @FXML
-    private TableView<Borrows> borrowsTable;
+    private TableView<Borrow> borrowsTable;
     
     @FXML
     private TableView<IEntity> ordersTable;
@@ -266,8 +266,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 			//set columns
 			BookNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 			AuthorNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
-			YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Borrows)cellData.getValue()).getYear()).asObject());
-			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Borrows)cellData.getValue()).isDesired()).asObject());
+			YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Borrow)cellData.getValue()).getYear()).asObject());
+			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Borrow)cellData.getValue()).isDesired()).asObject());
 			TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 			EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
 
@@ -296,7 +296,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 					( (Copy)tempArray[0] ).getAskForDelay().setVisible(false);
 				}*/
 
-				Borrows borrowsTableList = new Borrows( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
+				Borrow borrowsTableList = new Borrow( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
 						((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
 						((Copy)tempArray[0]).getBorrowDate(), ((Copy)tempArray[0]).getReturnDate(), ((Copy)tempArray[0]).getAskForDelay());
 

@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="jfoenix-9.0.8.jar"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.47.jar"/>
 	<classpathentry kind="lib" path="javax.mail.jar"/>
+	<classpathentry kind="lib" path="activation.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

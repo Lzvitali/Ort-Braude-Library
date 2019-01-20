@@ -22,7 +22,7 @@
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="109.0" fitWidth="136.0" onMouseClicked="#testEmail" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="109.0" fitWidth="136.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../icons/OBL_logo2.gif" />
                      </image>

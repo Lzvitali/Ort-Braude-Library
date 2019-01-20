@@ -11,6 +11,8 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import Common.Mail;
 import Common.ObjectMessage;
 
 public abstract class ADailyDBController 
@@ -33,9 +35,10 @@ public abstract class ADailyDBController
 	
 	private static ObjectMessage sendMail(ObjectMessage msg, Connection connToSQL) 
 	{
-			String[] to = { "ziper02@gmail.com" }; // list of recipient email addresses
-	        String subject = "Java send mail example";
-	        String body = "Welcome to JavaMail!";
+			Mail mail=((Mail)((ObjectMessage)msg).getObjectList().get(0));
+			String[] to = { mail.getTo() }; // list of recipient email addresses
+	        String subject = mail.getSubject();
+	        String body = mail.getBody();
 		    Properties props = System.getProperties();
 	        String host = "smtp.gmail.com";
 	        props.put("mail.smtp.starttls.enable", "true");
@@ -45,7 +48,7 @@ public abstract class ADailyDBController
 	        props.put("mail.smtp.port", "587");
 	        props.put("mail.smtp.auth", "true");
 
-	        Session session = Session.getDefaultInstance(props);
+	        Session session = Session.getInstance(props);
 	        MimeMessage message;
 	        try 
 	        {
