@@ -46,8 +46,16 @@ public abstract class ADailyDBController
 	        props.put("mail.smtp.auth", "true");
 
 	        Session session = Session.getDefaultInstance(props);
-	        MimeMessage message = new MimeMessage(session);
-
+	        MimeMessage message;
+	        try 
+	        {
+	        	message = new MimeMessage(session);
+	        }
+	        catch (Exception me) 
+	        {
+	            me.printStackTrace();
+	            message = null;
+	        }
 	        try 
 	        {
 	            message.setFrom(new InternetAddress(userName));
