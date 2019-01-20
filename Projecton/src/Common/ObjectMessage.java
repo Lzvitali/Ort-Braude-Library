@@ -58,6 +58,15 @@ public class ObjectMessage implements Serializable
 		objectListOfArrays=new ArrayList<IEntity[]>();
 		this.message=message;
 	}
+	public ObjectMessage(IEntity entityOne,IEntity entityTwo ,String message, String note)
+	{
+		objectList=new ArrayList<IEntity>();
+		objectList.add(entityOne);
+		objectList.add(entityTwo);
+		objectListOfArrays=new ArrayList<IEntity[]>();
+		this.message=message;
+		this.note=note;
+	}
 	
 	public ObjectMessage(IEntity entityOne,IEntity entityTwo,String message,String note,String extra)
 	{

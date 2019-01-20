@@ -115,8 +115,8 @@ public abstract class ACopyDBController
 
 		try 
 		{			
-			LocalDate nowPlus7 = LocalDate.now().plusDays(7);
-			Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
+			LocalDate nowPlus14 = LocalDate.now().plusDays(14);
+			Date nowPlus7Date = java.sql.Date.valueOf(nowPlus14);
 		    
 			setDate = connToSQL.prepareStatement("UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?");
 			setDate.setDate(1, (java.sql.Date) nowPlus7Date ); 
@@ -291,11 +291,11 @@ public abstract class ACopyDBController
 				
 				String reason=" ";
 				
-				//check if the return date is the most updated
+				//check if the return date is the most updated 20    28
 				LocalDate nowPlus7 = LocalDate.now().plusDays(7);
 				Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
 				Date dateOfReturn = rs1.getDate(5); 
-				if(dateOfReturn.equals(nowPlus7Date))
+				if(dateOfReturn.after(nowPlus7Date))
 				{
 					canDelay = false;
 					reason = "The date of return is the most updated";

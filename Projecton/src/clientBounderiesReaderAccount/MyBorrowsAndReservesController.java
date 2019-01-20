@@ -100,8 +100,8 @@ public class MyBorrowsAndReservesController implements IGUIController
     private ReaderAccount reader;
     
     private Copy tempCopy;
-    private static int cnt = 0;
-
+    private static int cntForBorrowsTable = 0; 
+    private static int cntForReservationsTable = 0;
 
     @FXML
     void initialize() 
@@ -109,7 +109,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     	
-    	cnt = 0;
+    	cntForBorrowsTable = 0;
     	
     	reader = new ReaderAccount();
     	
@@ -146,20 +146,20 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			setBorrowsResukts(msg);
 			
-			if(0 == cnt)
+			if(0 == cntForBorrowsTable)
 			{
 				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 		    	client.handleMessageFromClient(newMsg);	
-		    	cnt++;
+		    	cntForBorrowsTable++;
 			}
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			if(0 == cnt)
+			if(0 == cntForBorrowsTable)
 			{
 				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 		    	client.handleMessageFromClient(newMsg);	
-		    	cnt++;
+		    	cntForBorrowsTable++;
 			}
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
@@ -180,6 +180,15 @@ public class MyBorrowsAndReservesController implements IGUIController
 			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
 	    	client.handleMessageFromClient(msg2); 
 		} 
+		else if((msg.getMessage()).equals("ReservationCanceled"))
+		{
+			AClientCommonUtilities.infoAlert("The reservation was successfully canceled", "Success");
+			
+			//set again the table view
+			ordersTable.getItems().clear();
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);	
+		}
 		
 	}
 	
@@ -247,8 +256,10 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
-		// TODO Auto-generated method stub
-		
+		// TODO in: reader, reservation you have all the info you need for the server
+		// TODO after you got the answer from the server, clear and update the table view
+		//ObjectMessage newMsg = new ObjectMessage(reader, reservation, "cancel reservation", "Reservation");
+    	//client.handleMessageFromClient(newMsg);
 	}
 
 
