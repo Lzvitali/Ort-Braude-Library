@@ -55,7 +55,10 @@ public abstract class ACopyDBController
 		{
 			return checkReturnDate(msg, connToSQL);
 		} 
-		
+		else if(((msg.getMessage()).equals("closetReturnDate")))
+		{
+			return closetReturnDate(msg, connToSQL);
+		} 
 		else
 		{
 			return null; 
@@ -112,8 +115,8 @@ public abstract class ACopyDBController
 
 		try 
 		{			
-			LocalDate nowPlus7 = LocalDate.now().plusDays(7);
-			Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
+			LocalDate nowPlus14 = LocalDate.now().plusDays(14);
+			Date nowPlus7Date = java.sql.Date.valueOf(nowPlus14);
 		    
 			setDate = connToSQL.prepareStatement("UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?");
 			setDate.setDate(1, (java.sql.Date) nowPlus7Date ); 
@@ -286,61 +289,77 @@ public abstract class ACopyDBController
 				//check if the reader account can ask for delay this book
 				//////////////////////////////////////////////////////////
 				
-				//check if the book is desired
-				if(rs2.getBoolean(6))
+				String reason=" ";
+				
+				//check if the return date is the most updated 20    28
+				LocalDate nowPlus7 = LocalDate.now().plusDays(7);
+				Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
+				Date dateOfReturn = rs1.getDate(5); 
+				if(dateOfReturn.after(nowPlus7Date))
 				{
 					canDelay = false;
+					reason = "The date of return is the most updated";
 				}
 				else
 				{
-					
-					//check if it reserved by someone
-					getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
-					getReservs.setInt(1, rs1.getInt(2) ); 
-					rs4 =getReservs.executeQuery();
-					
-					if(rs4.next())
+					//check if the book is desired
+					if(rs2.getBoolean(6))
 					{
 						canDelay = false;
 					}
 					else
 					{
-						//check if he is not already in delay
-						Date dateOfReturn =  rs1.getDate(5);
 						
-						//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
-						LocalDateTime now = LocalDateTime.now();
+						//check if it reserved by someone
+						getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
+						getReservs.setInt(1, rs1.getInt(2) ); 
+						rs4 =getReservs.executeQuery();
 						
-						Instant instant = now.toInstant(ZoneOffset.UTC);
-					    Date today = Date.from(instant);
-							
-						if( today.after(dateOfReturn) )
+						if(rs4.next())
 						{
 							canDelay = false;
 						}
 						else
 						{
-							//check if reader account is active
-							getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
-							getReaderAccount.setString(1, reader.getId() ); 
-							rs3 =getReaderAccount.executeQuery();
+							//check if he is not already in delay
+							//Date dateOfReturn =  rs1.getDate(5);
 							
-							if(rs3.next())
+							//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+							LocalDateTime now = LocalDateTime.now();
+							
+							Instant instant = now.toInstant(ZoneOffset.UTC);
+						    Date today = Date.from(instant);
+								
+							if( today.after(dateOfReturn) )
 							{
-								//if the reader account is active
-								if(!rs3.getString(8).equals("Active"))
-								{
-									canDelay = false;	
-								}
-								else
-								{
-									canDelay = true;
-								}
+								canDelay = false;
 							}
-						}	
+							else
+							{
+								//check if reader account is active
+								getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
+								getReaderAccount.setString(1, reader.getId() ); 
+								rs3 =getReaderAccount.executeQuery();
+								
+								if(rs3.next())
+								{
+									//if the reader account is active
+									if(!rs3.getString(8).equals("Active"))
+									{
+										canDelay = false;	
+									}
+									else
+									{
+										canDelay = true;
+									}
+								}
+							}	
+						}
+		
 					}
-	
 				}
+				
+				((Copy)(CopyAndBook[0])).setReasonForCantDelay(reason);
 				
 				if(canDelay)
 				{
@@ -349,7 +368,7 @@ public abstract class ACopyDBController
 				}
 				else
 				{
-					((Copy)(CopyAndBook[0])).setCanDelay(false);
+					((Copy)(CopyAndBook[0])).setCanDelay(false); 
 					//answer.setExtra("canNotDelay");
 				}
 				
@@ -522,4 +541,31 @@ public abstract class ACopyDBController
 		return "CopyNotExist";
 	}
 
+	private static ObjectMessage closetReturnDate(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		Copy askedBook=(Copy)msg.getObjectList().get(0);
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE bookId=? order by returnDate");
+			ps.setInt(1,askedBook.getBookID());
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			Copy askedDate=new Copy();
+			if(rs.getDate(5).equals(null))
+			{
+				return new ObjectMessage("closetReturnDate","HaveAvaiableBook");
+			}
+			else
+			{
+				askedDate.setReturnDate(rs.getDate(5).toString());
+				return new ObjectMessage(askedDate,"closetReturnDate","ReturnTheCloset");
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

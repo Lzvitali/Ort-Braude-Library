@@ -22,6 +22,7 @@ public class Book implements IEntity, Serializable
 	private boolean fileIsLoaded;
 	private boolean isReserved;
 	private Boolean inLibrary; 
+	private String closetReturn;
 	
 	//buttons
 	private transient Button reserve;
@@ -227,6 +228,14 @@ public class Book implements IEntity, Serializable
 		return reserve;
 	}
 
+
+	public String getClosetReturn() {
+		return closetReturn;
+	}
+
+	public void setClosetReturn(String closetReturn) {
+		this.closetReturn = closetReturn;
+	}
 
 	public void setReserve(Button reserve) 
 	{

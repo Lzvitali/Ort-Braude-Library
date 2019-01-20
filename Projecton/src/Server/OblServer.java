@@ -108,6 +108,18 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 			e.printStackTrace();
 		}
 	}
+	else if( (objectMessage.getNote()).equals("Daily") ) 
+	{
+		answer = ADailyDBController.selection(objectMessage,connToSQL);
+		try 
+		{
+			client.sendToClient(answer);
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
 	else if( (objectMessage.getNote()).equals("AddPDF") ) 
 	{
 		

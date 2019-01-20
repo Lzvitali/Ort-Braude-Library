@@ -29,22 +29,22 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="PhoneTextField">
+            <TextField fx:id="PhoneTextField" style="-fx-background-color: ccecff;">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="AdressTextField">
+            <TextField fx:id="EmailTextField" style="-fx-background-color: ccecff;">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="EducationYearTextField">
+            <TextField fx:id="AdressTextField" style="-fx-background-color: ccecff;">
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="EmailTextField" editable="false">
+            <TextField fx:id="EducationYearTextField" editable="false">
                <font>
                   <Font size="14.0" />
                </font>
@@ -111,5 +111,6 @@
             <Image url="@../../icons/personalDetailsTitle.png" />
          </image>
       </ImageView>
+      <Label layoutX="206.0" layoutY="369.0" text="change the marks fields" />
    </children>
 </AnchorPane>

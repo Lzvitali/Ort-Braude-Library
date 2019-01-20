@@ -253,14 +253,24 @@ public abstract class  ABookDBController
 	 			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
 	 			Copy copy=new Copy(-1,rs.getInt(1),null);
 	 			ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
-	 			ObjectMessage resultofCopy=ACopyDBController.selection(message,connToSQL);
-	 			if(resultofCopy.getNote().equals("FoundBook"))
+	 			ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
+	 			if(resultOfCopy.getNote().equals("FoundBook"))
 	 			{
 	 				book.setNumberOfCopies(1);
 	 			}
 	 			else
 	 			{
 	 				book.setNumberOfCopies(0);
+	 				message=new ObjectMessage(copy,"closetReturnDate","Copy");
+	 				resultOfCopy=ACopyDBController.selection(message,connToSQL);
+	 				try 
+	 				{
+	 					book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
+	 				}
+	 				catch(Exception e)
+	 				{
+	 					e.printStackTrace();
+	 				}
 	 			}
 	 			result.add(book);
 			} 

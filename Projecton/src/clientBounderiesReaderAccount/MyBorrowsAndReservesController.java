@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 import Common.Book;
-import Common.Borrows;
+import Common.Borrow;
 import Common.Copy;
 import Common.IEntity;
 import Common.IGUIController;
@@ -86,7 +86,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     private TableColumn<IEntity, Button> BtnForOrders;
     
     @FXML
-    private TableView<Borrows> borrowsTable;
+    private TableView<Borrow> borrowsTable;
     
     @FXML
     private TableView<IEntity> ordersTable;
@@ -100,8 +100,8 @@ public class MyBorrowsAndReservesController implements IGUIController
     private ReaderAccount reader;
     
     private Copy tempCopy;
-    private static int cnt = 0;
-
+    private static int cntForBorrowsTable = 0; 
+    private static int cntForReservationsTable = 0;
 
     @FXML
     void initialize() 
@@ -109,6 +109,7 @@ public class MyBorrowsAndReservesController implements IGUIController
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     	
+    	cntForBorrowsTable = 0;
     	
     	reader = new ReaderAccount();
     	
@@ -145,20 +146,20 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			setBorrowsResukts(msg);
 			
-			if(0 == cnt)
+			if(0 == cntForBorrowsTable)
 			{
 				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 		    	client.handleMessageFromClient(newMsg);	
-		    	cnt++;
+		    	cntForBorrowsTable++;
 			}
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			if(0 == cnt)
+			if(0 == cntForBorrowsTable)
 			{
 				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 		    	client.handleMessageFromClient(newMsg);	
-		    	cnt++;
+		    	cntForBorrowsTable++;
 			}
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
@@ -179,6 +180,15 @@ public class MyBorrowsAndReservesController implements IGUIController
 			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
 	    	client.handleMessageFromClient(msg2); 
 		} 
+		else if((msg.getMessage()).equals("ReservationCanceled"))
+		{
+			AClientCommonUtilities.infoAlert("The reservation was successfully canceled", "Success");
+			
+			//set again the table view
+			ordersTable.getItems().clear();
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+	    	client.handleMessageFromClient(newMsg);	
+		}
 		
 	}
 	
@@ -238,7 +248,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private void implementReservation(ActionEvent e, Reservation reservation) 
 	{
 		// TODO Auto-generated method stub
-
+		
 	}
 
 
@@ -246,8 +256,10 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
-		// TODO Auto-generated method stub
-
+		// TODO in: reader, reservation you have all the info you need for the server
+		// TODO after you got the answer from the server, clear and update the table view
+		//ObjectMessage newMsg = new ObjectMessage(reader, reservation, "cancel reservation", "Reservation");
+    	//client.handleMessageFromClient(newMsg);
 	}
 
 
@@ -265,8 +277,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 			//set columns
 			BookNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 			AuthorNameBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
-			YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Borrows)cellData.getValue()).getYear()).asObject());
-			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Borrows)cellData.getValue()).isDesired()).asObject());
+			YearBorrowColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Borrow)cellData.getValue()).getYear()).asObject());
+			isDesiredBorrowColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Borrow)cellData.getValue()).isDesired()).asObject());
 			TopicBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 			EditionBorrowColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
 
@@ -295,7 +307,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 					( (Copy)tempArray[0] ).getAskForDelay().setVisible(false);
 				}*/
 
-				Borrows borrowsTableList = new Borrows( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
+				Borrow borrowsTableList = new Borrow( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
 						((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
 						((Copy)tempArray[0]).getBorrowDate(), ((Copy)tempArray[0]).getReturnDate(), ((Copy)tempArray[0]).getAskForDelay());
 
@@ -314,7 +326,14 @@ public class MyBorrowsAndReservesController implements IGUIController
 		if( !copy.isCanDelay() )
 		{
 			//System.out.println(copy.getBookID() + " - nononono"); 
-			AClientCommonUtilities.alertErrorWithOption("you can't delay the return date for this book", "Rejection", "Ok");
+			if(copy.getReasonForCantDelay().equals("The date of return is the most updated"))
+			{
+				AClientCommonUtilities.alertErrorWithOption("The date of return is the most updated", "Rejection", "Ok");
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption("you can't delay the return date for this book", "Rejection", "Ok");
+			}		
 		}
 		else
 		{

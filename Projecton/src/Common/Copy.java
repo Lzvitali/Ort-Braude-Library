@@ -17,6 +17,7 @@ public class Copy implements IEntity, Serializable
 	private transient Button askForDelay;
 	
 	private boolean canDelay;
+	private String reasonForCantDelay;
 	
 	
 	
@@ -75,6 +76,15 @@ public class Copy implements IEntity, Serializable
 
 
 
+
+	public Copy() 
+	{
+		this.copyID = -1;
+		this.bookID = -1;
+		this.borrowerID = null;
+		this.borrowDate = null;
+		this.returnDate = null;
+	}
 
 	public int getCopyID() {
 		return copyID;
@@ -143,6 +153,14 @@ public class Copy implements IEntity, Serializable
 
 	public void setCanDelay(boolean canDelay) {
 		this.canDelay = canDelay;
+	}
+
+	public String getReasonForCantDelay() {
+		return reasonForCantDelay;
+	}
+
+	public void setReasonForCantDelay(String reasonForCantDelay) {
+		this.reasonForCantDelay = reasonForCantDelay;
 	}
 	
 	

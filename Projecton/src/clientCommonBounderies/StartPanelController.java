@@ -33,6 +33,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 /**
  * This class is a Controller for StartPanel.fxml AND for LogInFxml
@@ -220,6 +221,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 				editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
 				locationColumn.setCellValueFactory(new PropertyValueFactory<>("bookLocation"));
 				inTheLibraryColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).getInLibrary()).asObject());
+				ClosestReturnColumn.setCellValueFactory(new PropertyValueFactory<>("closetReturn"));
 				
 			int i;
 			ArrayList <IEntity> result=msg.getObjectList();
@@ -256,6 +258,11 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
     }
 	
     
-    
+    @FXML
+    void testEmail(MouseEvent event) 
+    {
+    	ObjectMessage sendToServer=new ObjectMessage("sendMail","Daily");
+    	connToClientController.handleMessageFromClient(sendToServer);   
+    }
     
 }
