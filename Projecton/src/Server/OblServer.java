@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -156,6 +157,38 @@ public void handleMessageFromClient(Object msg, ConnectionToClient client)
 		}
 		  
 		
+	}
+	else if( (objectMessage.getNote()).equals("getPDF") ) 
+	{
+		String bookName = (objectMessage.getMessage());
+		//A Guide to the SQL Standard.pdf
+		//pdfFiles\\"+bookName+".pdf
+		File myFile = new File("pdfFiles\\"+bookName+".pdf");
+		
+		Socket sock;
+		ServerSocket servsock;
+		BufferedInputStream bis;
+		
+		try
+		{
+
+			servsock = new ServerSocket(5643);
+			ObjectMessage obj = new ObjectMessage("pfdRecieve", Integer.toString(((int) myFile.length())));
+			obj.setExtra(objectMessage.getExtra());
+			client.sendToClient(obj);
+			sock = servsock.accept();
+			byte[] mybytearray = new byte[(int) myFile.length()];
+			bis = new BufferedInputStream(new FileInputStream(myFile));
+			bis.read(mybytearray, 0, mybytearray.length);
+			OutputStream os = sock.getOutputStream();
+			os.write(mybytearray, 0, mybytearray.length);
+			os.flush();
+			sock.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	else if( (objectMessage.getNote()).equals("Copy") ) 

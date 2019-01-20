@@ -453,7 +453,7 @@ public class AddBookController implements IGUIController
 		ServerSocket servsock;
 		BufferedInputStream bis;
 
-		String fileName= bookForSend.getBookName() + " " + bookForSend.getAuthorName() + " " + bookForSend.getDateOfBook();
+		String fileName= bookForSend.getBookName() + " " + bookForSend.getAuthorName() + " " + bookForSend.getDateOfBook() + " " + bookForSend.getEdition();
 
 		try
 		{
