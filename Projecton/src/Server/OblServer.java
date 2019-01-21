@@ -183,6 +183,10 @@ public class OblServer extends AbstractServer
 				OutputStream os = sock.getOutputStream();
 				os.write(mybytearray, 0, mybytearray.length);
 				os.flush();
+				
+				servsock.close();
+				os.close();
+				bis.close();
 				sock.close();
 			}
 			catch (IOException e)
