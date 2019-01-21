@@ -37,7 +37,7 @@ public abstract class AReservationDBController
 		{
 			return reserveBook(msg, connToSQL);
 		}
-		else if (((msg.getMessage()).equals("implementReserveBook")))
+		else if (((msg.getMessage()).equals("implement reservation")))
 		{
 			return implementReserveBook(msg, connToSQL);
 		}
