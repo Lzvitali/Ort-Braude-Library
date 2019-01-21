@@ -36,10 +36,97 @@ public abstract class AReservationDBController
 		{
 			return reserveBook(msg, connToSQL);
 		}
+		else if (((msg.getMessage()).equals("implementReserveBook")))
+		{
+			return implementReserveBook(msg, connToSQL);
+		}
+		
 		else
 		{
 			return null; 
 		}
+	}
+	private static ObjectMessage implementReserveBook(ObjectMessage msg, Connection connToSQL) 
+	{
+		ObjectMessage answer = null;  
+		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
+		Reservation reserve=(Reservation) msg.getObjectList().get(1);
+
+		PreparedStatement isActive = null;
+		ResultSet rs1 = null;
+		PreparedStatement numOfCopyAvailable = null;
+		PreparedStatement whoIstheFirst=null;
+		ResultSet rs2 = null;
+		ResultSet rs3 = null;
+		ResultSet rs4 = null;
+		int copyAvailable, numOfBookReserve;
+
+		try
+		{
+			isActive = connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE readerAccountID = ? ");
+			isActive.setString(1, reader.getId()); 
+			rs1 =isActive.executeQuery();
+			rs1.next();
+			String status=rs1.getString(8);
+			if(!(status.equals("Active")))
+			{
+				answer.setNote("The reader account is not active");
+				answer.addObject(msg.getObjectList().get(0));
+			}
+			else
+			{
+				numOfCopyAvailable = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookId=? AND borrowerId='NULL'"); 
+				numOfCopyAvailable.setInt(1, reserve.getBookID());
+				rs2 =numOfCopyAvailable.executeQuery();
+				rs2.next();
+				copyAvailable=rs2.getInt(1);
+				if(copyAvailable==0)
+				{
+					answer.setNote("No copy available");
+					answer.addObject(msg.getObjectList().get(0));
+				}
+				else
+				{
+					numOfCopyAvailable = connToSQL.prepareStatement("SELECT COUNT(*) FROM reservations WHERE bookId=?"); 
+					numOfCopyAvailable.setInt(1, reserve.getBookID());
+					rs3 =numOfCopyAvailable.executeQuery();
+					rs3.next();
+					numOfBookReserve=rs2.getInt(1);
+					if(copyAvailable>=numOfBookReserve)
+					{
+						/// implement the borrow 
+						answer.setNote("ReservationImplemented");
+						answer.addObject(msg.getObjectList().get(0));
+					}
+					else
+					{						
+						whoIstheFirst = connToSQL.prepareStatement("SELECT * FROM reservations WHERE bookId=? order by Date"); 
+						numOfCopyAvailable.setInt(1, reserve.getBookID());
+						rs4 =numOfCopyAvailable.executeQuery();
+						rs4.next();
+						if(reader.getId().equals(rs4.getString(1)))//the first in the queue
+						{
+							//borrow book call the function; 
+							answer.setNote("ReservationImplemented");
+							answer.addObject(msg.getObjectList().get(0));
+						}
+						else
+						{
+							answer.setNote("ReservationNotImplemented");
+							answer.addObject(msg.getObjectList().get(0));
+						}
+					}
+				}
+			}
+			
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
+		return answer;
 	}
 
 	/**
