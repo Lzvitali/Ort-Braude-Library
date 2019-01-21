@@ -265,8 +265,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	private void implementReservation(ActionEvent e, Reservation reservation) 
 	{
-		//ObjectMessage newMsg = new ObjectMessage(reader, reservation, "implement reservation", "Reservation");
-    	//client.handleMessageFromClient(newMsg);
+		ObjectMessage newMsg = new ObjectMessage(reader, reservation, "implement reservation", "Reservation");
+		client.handleMessageFromClient(newMsg);
 	}
 
 
