@@ -223,7 +223,7 @@ public abstract class AReservationDBController
 				if(rs2.next())
 				{					
 					//set the reservation info from the both queries
-					Reservation reservation = new Reservation(date, rs2.getString(2), rs2.getString(3), rs2.getString(4),rs2.getString(5), rs2.getString(6), rs2.getString(7)); 
+					Reservation reservation = new Reservation(bookId, date, rs2.getString(2), rs2.getString(3), rs2.getString(4),rs2.getString(5), rs2.getString(6), rs2.getString(7)); 
 					result.add(reservation);  
 				}
 				
