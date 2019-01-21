@@ -113,7 +113,13 @@ public abstract class ACopyDBController
 	}
 
 	
-	
+	/**
+	 * This function make the change of the 'delay borrowed book' in the DB
+	 * and sends back to the client the new date
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage askForDelay(ObjectMessage msg, Connection connToSQL) 
 	{
 		ObjectMessage answer = new ObjectMessage("Delayed"); 
@@ -124,10 +130,10 @@ public abstract class ACopyDBController
 		try 
 		{			
 			LocalDate nowPlus14 = LocalDate.now().plusDays(14);
-			Date nowPlus7Date = java.sql.Date.valueOf(nowPlus14);
+			Date nowPlus14Date = java.sql.Date.valueOf(nowPlus14); 
 		    
 			setDate = connToSQL.prepareStatement("UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?");
-			setDate.setDate(1, (java.sql.Date) nowPlus7Date ); 
+			setDate.setDate(1, (java.sql.Date) nowPlus14Date ); 
 			setDate.setInt(2, copy.getCopyID() ); 
 			setDate.executeUpdate(); 
 		}
@@ -139,7 +145,7 @@ public abstract class ACopyDBController
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 		LocalDateTime now = LocalDateTime.now();  
-		LocalDateTime newDate = LocalDateTime.now().plusDays(7); 
+		LocalDateTime newDate = LocalDateTime.now().plusDays(14); 
 		
 		answer.setNote(dtf.format(newDate));
 		return answer;
