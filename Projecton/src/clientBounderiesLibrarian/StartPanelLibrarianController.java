@@ -16,7 +16,12 @@ import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -36,6 +41,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 
@@ -382,7 +388,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			AClientCommonUtilities.loadStartPanelWindow(getClass(),"/clientCommonBounderies/StartPanel.fxml","Start Panel");
 		}
-
+		else if(msg.getMessage().equals("pfdRecieve"))
+		{
+			getPDF(msg);
+		}
 	}
 	private void searchBookResult(ObjectMessage msg)
 	{
@@ -410,10 +419,78 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				for(i=0;i<result.size();i++)
 				{
 					((Book)result.get(i)).setDetails(new Button("Open PDF"));
+					Book book = ((Book)result.get(i));
+					((Book)result.get(i)).getDetails().setOnAction(e -> openPDF(e,book));
 					searchResultTable.getItems().add(result.get(i));
 				}
 			});
 
+		}
+	}
+	
+	/**
+	 * this function displays to the user file chooser and sends to the server the request for the pdf
+	 * @param e -event
+	 * @param book - the book instance
+	 */
+	private void openPDF(ActionEvent e, Book book)
+	{
+		String bookName = book.getBookName() + " " + book.getAuthorName() + " " + book.getYear() + " " + book.getEdition();
+
+		FileChooser fc=new FileChooser();
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File","*.pdf"));
+		fc.setTitle("Save to PDF");
+		fc.setInitialFileName(bookName+".pdf");
+		File file =fc.showSaveDialog(null);
+
+		String str = null; 
+
+		if (null != file)
+		{
+			str = file.getAbsolutePath();
+			ObjectMessage sendToServer=new ObjectMessage(bookName, "getPDF");
+			sendToServer.setExtra(str);
+			client.handleMessageFromClient(sendToServer); 
+		}
+
+	}
+
+	/**
+	 * this function manages the connection with the server for file transfer
+	 * @param msg - contains the size and the name of the file
+	 */
+	private void getPDF(ObjectMessage msg)
+	{
+		Socket sock;
+		try
+		{
+			sock = new Socket("localhost", 5643);
+			byte[] mybytearray = new byte[Integer.parseInt(msg.getNote())];
+			InputStream is = sock.getInputStream();
+			FileOutputStream fos = new FileOutputStream(msg.getExtra());
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
+			int current = bytesRead; 
+
+			do 
+			{
+				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
+				if(bytesRead >= 0) 
+				{
+					current += bytesRead;
+				}
+			} while(bytesRead < -1);
+
+			bos.write(mybytearray, 0 , current);
+			bos.flush();
+
+			fos.close();
+			bos.close();
+			sock.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
 		}
 	}
 

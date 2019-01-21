@@ -250,21 +250,25 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		}
 	}
 
-
+	/**
+	 * this function displays to the user file chooser and sends to the server the request for the pdf
+	 * @param e -event
+	 * @param book - the book instance
+	 */
 	private void openPDF(ActionEvent e, Book book)
 	{
 		String bookName = book.getBookName() + " " + book.getAuthorName() + " " + book.getYear() + " " + book.getEdition();
-		System.out.println(book.getBookName());
-		System.out.println(bookName);
+		/*System.out.println(book.getBookName());
+		System.out.println(bookName);*/
 
 		FileChooser fc=new FileChooser();
 		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File","*.pdf"));
 		fc.setTitle("Save to PDF");
 		fc.setInitialFileName(bookName+".pdf");
 		File file =fc.showSaveDialog(AStartClient.primaryStagePanel);
-		
+
 		String str = null; 
-		
+
 		if (null != file)
 		{
 			str = file.getAbsolutePath();
@@ -275,6 +279,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 
 	}
 
+	/**
+	 * this function manages the connection with the server for file transfer
+	 * @param msg - contains the size and the name of the file
+	 */
 	private void getPDF(ObjectMessage msg)
 	{
 		Socket sock;
@@ -308,7 +316,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		{
 			e.printStackTrace();
 		}
-}
+	}
 
 
 @Override

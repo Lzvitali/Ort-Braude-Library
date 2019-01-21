@@ -32,6 +32,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+/**
+ * This class is the controller class for the window of 'borrows and reserves' of the reader account
+ * same window will be displayed for both reader account, librarian and library director
+ */
+
 public class MyBorrowsAndReservesController implements IGUIController
 {
 	
@@ -198,6 +203,10 @@ public class MyBorrowsAndReservesController implements IGUIController
 			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
 	    	client.handleMessageFromClient(newMsg);	
 		}
+		else if((msg.getMessage()).equals("ReservationNotImplemented"))
+		{
+			AClientCommonUtilities.alertErrorWithOption(msg.getNote(), "Unuccessfull", "Ok"); 	
+		}
 		
 	}
 	
@@ -327,7 +336,11 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 
 
-
+	/**
+	 * this function handles the event for pressing the button of 'ask for delay' for both reader account, librarian and library director
+	 * @param e-the event
+	 * @param copy-the copy instance 
+	 */
 	private void askForDelay(ActionEvent e, Copy copy) 
 	{ 
 		//Copy theCopy = copy;
