@@ -37,7 +37,7 @@ public abstract class AReservationDBController
 		{
 			return reserveBook(msg, connToSQL);
 		}
-		else if (((msg.getMessage()).equals("implementReserveBook")))
+		else if (((msg.getMessage()).equals("implement reservation")))
 		{
 			return implementReserveBook(msg, connToSQL);
 		}
@@ -66,7 +66,7 @@ public abstract class AReservationDBController
 
 		try
 		{
-			isActive = connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE readerAccountID = ? ");
+			isActive = connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ? ");
 			isActive.setString(1, reader.getId()); 
 			rs1 =isActive.executeQuery();
 			rs1.next();
