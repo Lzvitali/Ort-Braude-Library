@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -53,12 +54,14 @@ public abstract class AReservationDBController
 		Reservation reserve=(Reservation) msg.getObjectList().get(1);
 
 		PreparedStatement isActive = null;
-		ResultSet rs1 = null;
 		PreparedStatement numOfCopyAvailable = null;
 		PreparedStatement whoIstheFirst=null;
+		PreparedStatement numOfCopy=null;
+		ResultSet rs1 = null;
 		ResultSet rs2 = null;
 		ResultSet rs3 = null;
 		ResultSet rs4 = null;
+		ResultSet temp1 = null;
 		int copyAvailable, numOfBookReserve;
 
 		try
@@ -72,6 +75,7 @@ public abstract class AReservationDBController
 			{
 				answer.setNote("The reader account is not active");
 				answer.addObject(msg.getObjectList().get(0));
+				return answer;
 			}
 			else
 			{
@@ -84,6 +88,7 @@ public abstract class AReservationDBController
 				{
 					answer.setNote("No copy available");
 					answer.addObject(msg.getObjectList().get(0));
+					return answer;
 				}
 				else
 				{
@@ -91,12 +96,11 @@ public abstract class AReservationDBController
 					numOfCopyAvailable.setInt(1, reserve.getBookID());
 					rs3 =numOfCopyAvailable.executeQuery();
 					rs3.next();
-					numOfBookReserve=rs2.getInt(1);
+					numOfBookReserve=rs3.getInt(1);
 					if(copyAvailable>=numOfBookReserve)
 					{
-						/// implement the borrow 
-						answer.setNote("ReservationImplemented");
-						answer.addObject(msg.getObjectList().get(0));
+						answer=implementTheBorrow(msg,connToSQL);
+
 					}
 					else
 					{						
@@ -106,9 +110,7 @@ public abstract class AReservationDBController
 						rs4.next();
 						if(reader.getId().equals(rs4.getString(1)))//the first in the queue
 						{
-							//borrow book call the function; 
-							answer.setNote("ReservationImplemented");
-							answer.addObject(msg.getObjectList().get(0));
+							answer=implementTheBorrow(msg,connToSQL);
 						}
 						else
 						{
@@ -123,12 +125,63 @@ public abstract class AReservationDBController
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-		}
-		
-		
+		}	
 		return answer;
 	}
-
+	private static ObjectMessage implementTheBorrow(ObjectMessage msg, Connection connToSQL) 
+	{
+		ObjectMessage answer = null;  
+		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
+		Reservation reserve=(Reservation) msg.getObjectList().get(1);
+		PreparedStatement getBook,numOfCopy;
+		ResultSet rs1=null;
+		
+		try
+		{
+		getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+		getBook.setInt(1, reserve.getBookID());
+		rs1 = getBook.executeQuery();
+		rs1.next();
+		numOfCopy = connToSQL.prepareStatement("UPDATE `copy` SET `borrowerId`=?, `borrowDate`=?,`returnDate`=? WHERE bookId=? AND borrowerId='NULL'"); 
+		numOfCopy.setString(1, reader.getId());
+	
+		if(rs1.getBoolean(6))
+		{
+			LocalDate now = LocalDate.now();
+			Date today=java.sql.Date.valueOf(now);
+			LocalDate nowPlus3 = LocalDate.now().plusDays(3);
+			Date nowPlus3Date = java.sql.Date.valueOf(nowPlus3);
+		
+			numOfCopy.setDate(2, (java.sql.Date) today);
+			numOfCopy.setDate(3, (java.sql.Date) nowPlus3Date);
+		}
+		else 
+		{
+			LocalDate now = LocalDate.now();
+			Date today=java.sql.Date.valueOf(now);
+			LocalDate nowPlus14 = LocalDate.now().plusDays(14);
+			Date nowPlus14Date = java.sql.Date.valueOf(nowPlus14);
+		
+			numOfCopy.setDate(2, (java.sql.Date) today);
+			numOfCopy.setDate(3, (java.sql.Date) nowPlus14Date);
+		}
+	
+		numOfCopy.setInt(4, reserve.getBookID());
+		numOfCopy.executeUpdate();
+		answer.setNote("ReservationImplemented");
+		answer.addObject(msg.getObjectList().get(0));
+		PreparedStatement deleteReserve = connToSQL.prepareStatement("delete FROM reservations WHERE bookId=? AND  readerAccountID=?;");
+		deleteReserve.setInt(1, reserve.getBookID());
+		deleteReserve.setString(2, reader.getId());
+		deleteReserve.executeQuery();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return answer;
+	}
+	
 	/**
 	 * This function returns the list of reservation of the reader account
 	 * @param msg - the object from the client
