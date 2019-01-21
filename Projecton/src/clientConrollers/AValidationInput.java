@@ -467,12 +467,32 @@ public abstract class AValidationInput
 		{
 			return "The Author Name is too long";
 		}*/
-		if(!onlyCharacters(context))
+		/*if(!onlyCharacters(context))      //not only .. also ',' and ' '
 		{
 			return "You must fill only character";
+		}*/
+		
+		
+		for(int i=0; i<context.length(); i++)
+		{
+
+			if (i==0)
+			{
+				if(!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z'))))
+				{
+					return "Uncorrect input author name";
+				}
+			}
+			else if (!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z')) || (context.charAt(i)) == ','  || (context.charAt(i)) == ' '))
+			{
+				return "Uncorrect input author name";
+			}
+
 		}
 		return "correct";
 	}
+	
+	
 	
 	private static String checkValidationTopic(String context)
 	{
