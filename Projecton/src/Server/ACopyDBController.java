@@ -65,6 +65,12 @@ public abstract class ACopyDBController
 		}
 	}
 	 
+	/**
+	 * This function check if the book is exist in DB and if desired or not 
+	 * @param msg -the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client if book `Desire book` ,`Not Desire book` or `Not exist book`
+	 */
 	private static ObjectMessage checkReturnDate(ObjectMessage msg, Connection connToSQL) 
 	{
 		Copy copy=(Copy)msg.getObjectList().get(0);
@@ -106,6 +112,8 @@ public abstract class ACopyDBController
 		return new ObjectMessage("Not exist book");
 	}
 
+	
+	
 	private static ObjectMessage askForDelay(ObjectMessage msg, Connection connToSQL) 
 	{
 		ObjectMessage answer = new ObjectMessage("Delayed"); 
@@ -464,7 +472,13 @@ public abstract class ACopyDBController
 		return answer;
 	}
 
-	public static String checkIfBookIsAvailable(ObjectMessage msg, Connection connToSQL, String readerId) 
+	/**
+	 * This function check if specifically copy is exist and available for borrow and enter all data of borrow in `obl` DB table 
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return String with result to function that called it
+	 */
+	public static String checkIfBookIsAvailable(ObjectMessage msg, Connection connToSQL) 
 	{
 		ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
 		Copy copy=(Copy)msg.getObjectList().get(1);
@@ -496,7 +510,7 @@ public abstract class ACopyDBController
 					
 					//set borrower id to the table copies
 					PreparedStatement setBorroweID =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowerId`=?  WHERE `copyId` = ?");	
-					setBorroweID.setString(1, readerId);
+					setBorroweID.setString(1, reader.getId());
 					setBorroweID.setInt(2,copy.getCopyID()); 
 					
 					setBorroweID.executeUpdate();
@@ -504,7 +518,6 @@ public abstract class ACopyDBController
 					
 					if(!rs2.getBoolean(6)) //check if desire or not
 					{
-						//"UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?"
 						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE copy "+"SET borrowDate = ? , returnDate = ? WHERE copyId = ?");
 						
 						setReturnDay.setDate(1, (java.sql.Date) today);
@@ -529,7 +542,7 @@ public abstract class ACopyDBController
 					return "CopyAlreadyBorrowed";
 				}
 			}
-			else //this copy was already borrowed
+			else //this copy not exist in obl DB
 			{
 				return "CopyNotExist";
 			}

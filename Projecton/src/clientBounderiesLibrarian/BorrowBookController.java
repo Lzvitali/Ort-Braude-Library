@@ -82,7 +82,11 @@ public class BorrowBookController implements IGUIController
 
 	}
 
-	//func to check validation input
+	
+	/**
+	 * This function checks input validation for `borrow book` window 
+	 * @return finalResult with string "correct" or with error message 
+	 */
 	private String checkInputValidation() 
 	{
 
@@ -160,6 +164,10 @@ public class BorrowBookController implements IGUIController
 			client.handleMessageFromClient(msg);
 		});
 	}
+	
+	/**
+	 * This function set visible date of today in `borrow book` window
+	 */
 	public void setVisibleDateOfToday()
 	{
 		String borrowDate;
