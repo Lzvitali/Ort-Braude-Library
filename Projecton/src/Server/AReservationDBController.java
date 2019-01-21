@@ -63,9 +63,9 @@ public abstract class AReservationDBController
 		ResultSet rs4 = null;
 		ResultSet temp1 = null;
 		int copyAvailable, numOfBookReserve;
-
 		try
 		{
+			///continue from this 
 			isActive = connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ? ");
 			isActive.setString(1, reader.getId()); 
 			rs1 =isActive.executeQuery();
