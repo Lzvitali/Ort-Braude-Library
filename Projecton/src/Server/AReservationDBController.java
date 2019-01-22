@@ -63,6 +63,7 @@ public abstract class AReservationDBController
 		ResultSet rs4 = null;
 		ResultSet temp1 = null;
 		int copyAvailable, numOfBookReserve;
+		String temp;
 		try
 		{ 
 			///continue from this 
@@ -73,20 +74,20 @@ public abstract class AReservationDBController
 			String status=rs1.getString(8);
 			if(!(status.equals("Active")))
 			{
-				answer.setNote("The reader account is not active");
+				answer.setMessage("The reader account is not active");
 				answer.addObject(msg.getObjectList().get(0));
 				return answer;
 			}
 			else
 			{
-				numOfCopyAvailable = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookId=? AND borrowerId='NULL'"); 
+				numOfCopyAvailable = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookId=? AND borrowerId is null"); 
 				numOfCopyAvailable.setInt(1, reserve.getBookID());
 				rs2 =numOfCopyAvailable.executeQuery();
 				rs2.next();
 				copyAvailable=rs2.getInt(1);
 				if(copyAvailable==0)
 				{
-					answer.setNote("No copy available");
+					answer.setMessage("No copy available");
 					answer.addObject(msg.getObjectList().get(0));
 					return answer;
 				}
@@ -103,20 +104,24 @@ public abstract class AReservationDBController
 
 					}
 					else
-					{						
+					{		
 						whoIstheFirst = connToSQL.prepareStatement("SELECT * FROM reservations WHERE bookId=? order by Date"); 
 						numOfCopyAvailable.setInt(1, reserve.getBookID());
 						rs4 =numOfCopyAvailable.executeQuery();
-						rs4.next();
-						if(reader.getId().equals(rs4.getString(1)))//the first in the queue
+						answer =new ObjectMessage();
+						for(int i=0;i<numOfBookReserve;i++)
 						{
-							answer=implementTheBorrow(msg,connToSQL);
+							rs4.next();
+							temp=rs4.getString(1);
+							if(reader.getId().equals(temp))//the first in the queue
+							{
+								answer=implementTheBorrow(msg,connToSQL);
+								return answer;
+							}
+
 						}
-						else
-						{
-							answer.setNote("ReservationNotImplemented");
+							answer.setMessage("ReservationNotImplemented");
 							answer.addObject(msg.getObjectList().get(0));
-						}
 					}
 				}
 			}
@@ -129,8 +134,8 @@ public abstract class AReservationDBController
 		return answer;
 	}
 	private static ObjectMessage implementTheBorrow(ObjectMessage msg, Connection connToSQL) 
-	{
-		ObjectMessage answer = null;  
+{
+		ObjectMessage answer =null;
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		Reservation reserve=(Reservation) msg.getObjectList().get(1);
 		PreparedStatement getBook,numOfCopy;
@@ -142,7 +147,7 @@ public abstract class AReservationDBController
 		getBook.setInt(1, reserve.getBookID());
 		rs1 = getBook.executeQuery();
 		rs1.next();
-		numOfCopy = connToSQL.prepareStatement("UPDATE `copy` SET `borrowerId`=?, `borrowDate`=?,`returnDate`=? WHERE bookId=? AND borrowerId='NULL'"); 
+		numOfCopy = connToSQL.prepareStatement("UPDATE `copy` SET `borrowerId`=?, `borrowDate`=?,`returnDate`=? WHERE bookId=? AND borrowerId is null"); 
 		numOfCopy.setString(1, reader.getId());
 	
 		if(rs1.getBoolean(6))
@@ -168,12 +173,14 @@ public abstract class AReservationDBController
 	
 		numOfCopy.setInt(4, reserve.getBookID());
 		numOfCopy.executeUpdate();
-		answer.setNote("ReservationImplemented");
+
+		answer =new ObjectMessage();
+		answer.setMessage("ReservationImplemented");
 		answer.addObject(msg.getObjectList().get(0));
-		PreparedStatement deleteReserve = connToSQL.prepareStatement("delete FROM reservations WHERE bookId=? AND  readerAccountID=?;");
+		PreparedStatement deleteReserve = connToSQL.prepareStatement("delete FROM reservations WHERE bookId=? AND readerAccountID=?");
 		deleteReserve.setInt(1, reserve.getBookID());
 		deleteReserve.setString(2, reader.getId());
-		deleteReserve.executeQuery();
+		deleteReserve.executeUpdate();
 		}
 		catch (SQLException e) 
 		{
