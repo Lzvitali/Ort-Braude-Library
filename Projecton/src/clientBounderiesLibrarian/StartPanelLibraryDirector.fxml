@@ -16,9 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
+<AnchorPane prefHeight="820.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
    <children>
-      <BorderPane layoutY="18.0" prefHeight="689.0" prefWidth="968.0">
+      <BorderPane layoutY="18.0" prefHeight="777.0" prefWidth="1285.0">
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
@@ -81,6 +81,18 @@
                      </font>
                   </Button>
                   <Button fx:id="addBookBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#openAddBook" prefHeight="90.0" prefWidth="174.0" text="Add book">
+                     <graphic>
+                        <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/startPanelLibrarian/addBook.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="changeBookInfoBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#changeBookInfoBtn" prefHeight="90.0" prefWidth="174.0" text="Update book info">
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -162,7 +174,7 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <TabPane fx:id="TabPaneSelect" layoutY="24.0" prefHeight="534.0" prefWidth="1109.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane fx:id="TabPaneSelect" layoutY="24.0" prefHeight="624.0" prefWidth="1109.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab fx:id="searchBookTab" text="Search book">
                         <content>
@@ -217,7 +229,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchResultTable" layoutX="13.0" layoutY="136.0" prefHeight="345.0" prefWidth="1088.0">
+                                    <TableView fx:id="searchResultTable" layoutX="13.0" layoutY="136.0" prefHeight="416.0" prefWidth="1088.0">
                                       <columns>
                                         <TableColumn fx:id="bookNameColumn" prefWidth="199.00003051757812" text="Book name" />
                                         <TableColumn fx:id="authorNameColumn" prefWidth="180.0" text="Author name" />
@@ -288,7 +300,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchReaderAccountTable" layoutX="160.0" layoutY="137.0" prefHeight="358.0" prefWidth="809.0">
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="160.0" layoutY="137.0" prefHeight="442.0" prefWidth="809.0">
                                       <columns>
                                         <TableColumn fx:id="accountIDColumn" prefWidth="98.0" text="ID" />
                                         <TableColumn fx:id="accountFirstNameColumn" prefWidth="127.0" text="First name" />

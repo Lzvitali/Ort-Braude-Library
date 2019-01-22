@@ -16,9 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
+<AnchorPane prefHeight="820.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
    <children>
-      <BorderPane layoutY="18.0" prefHeight="689.0" prefWidth="968.0">
+      <BorderPane layoutY="18.0" prefHeight="778.0" prefWidth="1285.0">
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
@@ -162,7 +162,7 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <TabPane fx:id="TabPaneSelect" layoutY="24.0" prefHeight="534.0" prefWidth="1109.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane fx:id="TabPaneSelect" layoutY="24.0" prefHeight="628.0" prefWidth="1109.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab fx:id="searchBookTab" text="Search book">
                         <content>
@@ -217,7 +217,7 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchResultTable" layoutX="12.0" layoutY="136.0" prefHeight="345.0" prefWidth="1086.0">
+                                    <TableView fx:id="searchResultTable" layoutX="12.0" layoutY="136.0" prefHeight="441.0" prefWidth="1086.0">
                                       <columns>
                                         <TableColumn fx:id="bookNameColumn" prefWidth="210.0" text="Book name" />
                                         <TableColumn fx:id="authorNameColumn" prefWidth="188.0" text="Author name" />
