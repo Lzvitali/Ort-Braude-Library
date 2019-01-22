@@ -260,15 +260,22 @@ public class AReaderAccountDBController
 			}
 			else if(askedReader.getFirstName()!=null)
 			{
-				ps = connToSQL.prepareStatement("SELECT * FROM obl.ReaderAccount WHERE firstName=?");
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.ReaderAccount WHERE firstName LIKE ?");
 				input=askedReader.getFirstName();
 			}
 			else
 			{
-				ps = connToSQL.prepareStatement("SELECT * FROM obl.ReaderAccount WHERE lastName=?");
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.ReaderAccount WHERE lastName LIKE ?");
 				input=askedReader.getLastName();
 			}
-			ps.setString(1,input);
+			if(askedReader.getId()!=null)
+			{
+				ps.setString(1,"%"+input+"%");
+			}
+			else
+			{
+				ps.setString(1,input);
+			}
 			ResultSet rs = ps.executeQuery();
 	 		while(rs.next())
 	 		{

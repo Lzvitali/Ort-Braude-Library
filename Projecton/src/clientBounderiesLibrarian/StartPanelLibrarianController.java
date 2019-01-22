@@ -321,15 +321,42 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		ReaderAccount askedReader=new ReaderAccount();
 		if(selectedString.equals("ID"))
 		{
-			askedReader.setId(searchReaderAccountSearchField.getText());
+			if(AValidationInput.checkValidationUser("UserID", searchReaderAccountSearchField.getText()).equals("correct"))
+			{
+				askedReader.setId(searchReaderAccountSearchField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("UserID", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
+				searchReaderAccountSearchField.setText("");
+			}
+			
 		}
 		else if(selectedString.equals("First name"))
 		{
-			askedReader.setFirstName(searchReaderAccountSearchField.getText());
+			if(AValidationInput.checkValidationUser("First Name", searchReaderAccountSearchField.getText()).equals("correct"))
+			{
+				askedReader.setFirstName(searchReaderAccountSearchField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("First Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
+				searchReaderAccountSearchField.setText("");
+			}
+			
 		}
 		else if(selectedString.equals("Last name"))
 		{
-			askedReader.setLastName(searchReaderAccountSearchField.getText());;
+			if(AValidationInput.checkValidationUser("Last Name", searchReaderAccountSearchField.getText()).equals("correct"))
+			{
+				askedReader.setLastName(searchReaderAccountSearchField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("Last Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
+				searchReaderAccountSearchField.setText("");
+			}
+			
 		}
 		else
 		{
