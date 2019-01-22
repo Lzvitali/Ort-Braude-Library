@@ -277,9 +277,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			askedBook.setTopic(searchBookTextField.getText());;
 		}
-		else 
+		else
 		{
-			askedBook.setBookName("needtocheckthis");
+			askedBook.setFreeSearch(searchBookTextField.getText());;
 		}
 		ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
 		client.handleMessageFromClient(sendToServer); 

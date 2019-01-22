@@ -198,9 +198,9 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     		askedBook.setTopic(searchTextField.getText());;
     	}
     	else
-    	{
-    		askedBook.setBookName("needtocheckthis");
-    	}
+		{
+			askedBook.setFreeSearch(searchTextField.getText());;
+		}
     	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
     	client.handleMessageFromClient(sendToServer);   
     }
