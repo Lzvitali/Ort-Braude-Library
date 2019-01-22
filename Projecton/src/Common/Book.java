@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 
 public class Book implements IEntity, Serializable
 {
-	private int bookID;
+	private Integer bookID;
 	private String bookName;
 	private String authorName;
 	private Integer year;

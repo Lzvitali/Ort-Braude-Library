@@ -110,6 +110,8 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	@FXML 
 	private TableView<IEntity> searchResultTable; 
 
+    @FXML
+    private TableColumn<IEntity, Integer> bookIDColumn;
 	@FXML 
 	private TableColumn<IEntity, String> bookNameColumn; 
 
@@ -461,6 +463,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			Platform.runLater(()->
 			{
+				bookIDColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getBookID()).asObject());
 				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
 				bookYearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
