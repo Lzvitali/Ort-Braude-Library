@@ -246,10 +246,11 @@ public class AReaderAccountDBController
 	
 	private static ObjectMessage searchReaderAccount(ObjectMessage msg, Connection connToSQL)
 	{
-		PreparedStatement ps;
+		int isFreeSearch=0;
+		PreparedStatement ps = null;
 		ObjectMessage answer;
 		ReaderAccount askedReader=(ReaderAccount)msg.getObjectList().get(0);
-		String input;
+		String input = null;
 		ArrayList <IEntity> result=new ArrayList<IEntity>();
 		try 
 		{
@@ -263,24 +264,56 @@ public class AReaderAccountDBController
 				ps = connToSQL.prepareStatement("SELECT * FROM obl.ReaderAccount WHERE firstName LIKE ?");
 				input=askedReader.getFirstName();
 			}
-			else
+			else if(askedReader.getLastName()!=null)
 			{
 				ps = connToSQL.prepareStatement("SELECT * FROM obl.ReaderAccount WHERE lastName LIKE ?");
 				input=askedReader.getLastName();
 			}
-			if(askedReader.getId()!=null)
-			{
-				ps.setString(1,"%"+input+"%");
-			}
 			else
 			{
-				ps.setString(1,input);
+				isFreeSearch=1;
+				String freeSearch=askedReader.getFreeSearch();
+				String[] arrFreeSearch = freeSearch.split("\\s+");
+				//pass on every word in free search and check if exist in db
+				for ( String ss : arrFreeSearch)
+				{
+					ps = connToSQL.prepareStatement("SELECT * FROM obl.readeraccount WHERE ID=? OR firstName LIKE ? OR lastname LIKE ? OR phone LIKE ? OR email LIKE ? OR address LIKE ? ");
+					ps.setString(1,ss);
+					ps.setString(2,"%"+ss+"%");
+					ps.setString(3,"%"+ss+"%");
+					ps.setString(4,"%"+ss+"%");
+					ps.setString(5,"%"+ss+"%");
+					ps.setString(6,"%"+ss+"%");
+					ResultSet rs= ps.executeQuery();
+					while(rs.next())
+					{
+						result.add(new ReaderAccount(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(8),rs.getString(7)));
+					}
+				}
 			}
+			
+			//if it is not freeSearch
+			if(isFreeSearch==0)
+			{
+				if(askedReader.getId()!=null)
+				{
+					ps.setString(1,input);
+				}
+				else
+				{
+					ps.setString(1,"%"+input+"%");
+				}
 			ResultSet rs = ps.executeQuery();
-	 		while(rs.next())
-	 		{
-	 			result.add(new ReaderAccount(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(8),rs.getString(7)));
-			} 
+			
+			
+				while(rs.next())
+				{
+					result.add(new ReaderAccount(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(8),rs.getString(7)));
+				} 
+	 		
+			}
+			
+			
 	 		if(!result.isEmpty())
 	 		{
 	 			answer=new ObjectMessage(result,"ReaderAccountSearch","ReaderFound");

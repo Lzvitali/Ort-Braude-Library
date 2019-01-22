@@ -16,7 +16,7 @@ public class ReaderAccount extends User
 	private int numOfDelays;
 	private String adress;//add to table column 
 	private String educationYear;//add to table column 
-
+	private String freeSearch;
 	//buttons for the Librarian and for the Library director
 	private transient Button borrowsAndReserves;
 	private transient Button freeze;
@@ -262,6 +262,16 @@ public class ReaderAccount extends User
 	public void setFreeze(Button freeze) {
 		this.freeze = freeze;
 	}
+	
+	public String getFreeSearch() {
+		return freeSearch;
+	}
+
+
+	public void setFreeSearch(String freeSearch) {
+		this.freeSearch = freeSearch;
+	}
+
 
 
 	@Override

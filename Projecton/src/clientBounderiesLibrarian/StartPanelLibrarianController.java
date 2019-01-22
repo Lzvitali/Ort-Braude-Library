@@ -299,6 +299,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			{
 				askedBook.setTopic(searchBookTextField.getText());
 			}
+			
 			else
 			{
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchBookTextField.getText()), "Invaild Input","continue" );
@@ -358,6 +359,12 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			}
 			
 		}
+		else if(selectedString.equals("Free search"))
+		{
+			askedReader.setFreeSearch(searchReaderAccountSearchField.getText());
+			
+		}
+		
 		else
 		{
 			askedReader.setLastName("needtocheckthis");
