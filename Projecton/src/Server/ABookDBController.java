@@ -224,10 +224,11 @@ public abstract class  ABookDBController
 	
 	private static ObjectMessage searchBook(ObjectMessage msg, Connection connToSQL)
 	{
-		PreparedStatement ps;
+		int isFreeSearch=0;
+		PreparedStatement ps = null;
 		ObjectMessage answer;
 		Book askedBook=(Book)msg.getObjectList().get(0);
-		String input;
+		String input = null;
 		ArrayList <IEntity> result=new ArrayList<IEntity>();
 		try 
 		{
@@ -241,39 +242,90 @@ public abstract class  ABookDBController
 				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName=?");
 				input=askedBook.getBookName();
 			}
-			else
+			else if(askedBook.getTopic()!=null)
 			{
 				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE topic=?");
 				input=askedBook.getTopic();
 			}
-			ps.setString(1,input);
-			ResultSet rs = ps.executeQuery();
-	 		while(rs.next())
-	 		{
-	 			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
-	 			Copy copy=new Copy(-1,rs.getInt(1),null);
-	 			ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
-	 			ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
-	 			if(resultOfCopy.getNote().equals("FoundBook"))
-	 			{
-	 				book.setNumberOfCopies(1);
-	 			}
-	 			else
-	 			{
-	 				book.setNumberOfCopies(0);
-	 				message=new ObjectMessage(copy,"closetReturnDate","Copy");
-	 				resultOfCopy=ACopyDBController.selection(message,connToSQL);
-	 				try 
-	 				{
-	 					book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
-	 				}
-	 				catch(Exception e)
-	 				{
-	 					e.printStackTrace();
-	 				}
-	 			}
-	 			result.add(book);
-			} 
+			else
+			{
+				isFreeSearch=1;
+				String freeSearch=askedBook.getFreeSearch();
+				String[] arrFreeSearch = freeSearch.split("\\s+");
+				//pass on every word in free search and check if exist in db
+				for ( String ss : arrFreeSearch)
+				{
+					ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName=? OR authorName=? OR year=? OR topic=?");
+					input=ss;
+					ps.setString(1,input);
+					ps.setString(2,input);
+					ps.setString(3,input);
+					ps.setString(4,input);
+					ResultSet rs= ps.executeQuery();
+					while(rs.next())
+			 		{
+			 			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
+			 			Copy copy=new Copy(-1,rs.getInt(1),null);
+			 			ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
+			 			ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
+			 			if(resultOfCopy.getNote().equals("FoundBook"))
+			 			{
+			 				book.setNumberOfCopies(1);
+			 			}
+			 			else
+			 			{
+			 				book.setNumberOfCopies(0);
+			 				message=new ObjectMessage(copy,"closetReturnDate","Copy");
+			 				resultOfCopy=ACopyDBController.selection(message,connToSQL);
+			 				try 
+			 				{
+			 					book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
+			 				}
+			 				catch(Exception e)
+			 				{
+			 					e.printStackTrace();
+			 				}
+			 			}
+			 			result.add(book);
+					} 
+				
+				}
+			}
+			 //if it is not free search
+			if(isFreeSearch==0)
+			{
+				ps.setString(1,input);
+				ResultSet rs = ps.executeQuery();
+				while(rs.next())
+				{
+					Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
+					Copy copy=new Copy(-1,rs.getInt(1),null);
+					ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
+					ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
+					if(resultOfCopy.getNote().equals("FoundBook"))
+					{
+						book.setNumberOfCopies(1);
+					}
+					else
+					{
+						book.setNumberOfCopies(0);
+						message=new ObjectMessage(copy,"closetReturnDate","Copy");
+	 					resultOfCopy=ACopyDBController.selection(message,connToSQL);
+	 					try 
+	 					{
+	 						book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
+	 					}
+	 					catch(Exception e)
+	 					{
+	 						e.printStackTrace();
+	 					}
+					}
+					result.add(book);
+				} 
+	 		
+	 		
+			}
+			
 	 		if(!result.isEmpty())
 	 		{
 	 			answer=new ObjectMessage(result,"BookSearch","BooksFound");
@@ -283,6 +335,7 @@ public abstract class  ABookDBController
 	 			answer=new ObjectMessage("BookSearch","NoBookFound");
 	 		}
 		}
+		
 		catch (SQLException e) 
 		{
 			e.printStackTrace();

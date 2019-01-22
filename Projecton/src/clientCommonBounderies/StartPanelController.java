@@ -190,7 +190,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			}
 			else
 			{
-				askedBook.setBookName("needtocheckthis");
+				askedBook.setFreeSearch(searchTextField.getText());;
 			}
 			ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
 			connToClientController.handleMessageFromClient(sendToServer);   	
