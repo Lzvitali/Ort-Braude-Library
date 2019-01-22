@@ -16,9 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="774.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
+<AnchorPane prefHeight="774.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.StartPanelLibrarianController">
    <children>
-      <BorderPane layoutY="18.0" prefHeight="762.0" prefWidth="1285.0">
+      <BorderPane layoutY="18.0" prefHeight="762.0" prefWidth="1391.0">
          <top>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
@@ -27,8 +27,8 @@
                         <Image url="@../../icons/OBL_logo2.gif" />
                      </image>
                   </ImageView>
-                  <AnchorPane prefHeight="109.0" prefWidth="111.0" />
-                  <AnchorPane prefHeight="109.0" prefWidth="937.0">
+                  <AnchorPane prefHeight="109.0" prefWidth="194.0" />
+                  <AnchorPane prefHeight="109.0" prefWidth="965.0">
                      <children>
                         <ImageView fitHeight="82.0" fitWidth="647.0" layoutX="44.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -96,7 +96,7 @@
                      <graphic>
                         <ImageView fitHeight="51.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../icons/startPanelLibrarian/addBook.png" />
+                              <Image url="@../../icons/startPanelLibrarian/updateBook.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -143,7 +143,7 @@
                </children></VBox>
          </right>
          <left>
-            <AnchorPane prefHeight="580.0" prefWidth="1110.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="653.0" prefWidth="1214.0" BorderPane.alignment="CENTER">
                <children>
                   <VBox layoutX="51.0" layoutY="154.0" prefHeight="200.0" prefWidth="201.0" visible="false">
                      <children>
@@ -174,13 +174,13 @@
                         </JFXRadioButton>
                      </children>
                   </VBox>
-                  <TabPane fx:id="TabPaneSelect" layoutY="24.0" prefHeight="624.0" prefWidth="1109.0" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane fx:id="TabPaneSelect" layoutY="24.0" prefHeight="624.0" prefWidth="1213.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab fx:id="searchBookTab" text="Search book">
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <AnchorPane layoutX="220.0" layoutY="14.0" prefHeight="134.0" prefWidth="689.0">
+                                    <AnchorPane layoutX="262.0" layoutY="14.0" prefHeight="134.0" prefWidth="689.0">
                                        <children>
                                           <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                                              <children>
@@ -229,18 +229,19 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchResultTable" layoutX="13.0" layoutY="136.0" prefHeight="416.0" prefWidth="1088.0">
+                                    <TableView fx:id="searchResultTable" layoutX="13.0" layoutY="136.0" prefHeight="427.0" prefWidth="1196.0">
                                       <columns>
-                                        <TableColumn fx:id="bookNameColumn" prefWidth="199.00003051757812" text="Book name" />
-                                        <TableColumn fx:id="authorNameColumn" prefWidth="180.0" text="Author name" />
-                                          <TableColumn fx:id="bookYearColumn" prefWidth="57.0" text="Year" />
-                                          <TableColumn fx:id="BookTopicColumn" prefWidth="156.0" text="Topic" />
-                                          <TableColumn fx:id="isDesiredBookColumn" prefWidth="72.0" text="Desired?" />
-                                          <TableColumn fx:id="editionColumn" prefWidth="56.0" text="Edition" />
-                                          <TableColumn fx:id="locationColumn" prefWidth="69.0" text="Location" />
+                                          <TableColumn fx:id="bookIDColumn" prefWidth="75.0" text="Book ID" />
+                                        <TableColumn fx:id="bookNameColumn" prefWidth="208.0" text="Book name" />
+                                        <TableColumn fx:id="authorNameColumn" prefWidth="193.0" text="Author name" />
+                                          <TableColumn fx:id="bookYearColumn" prefWidth="60.0" text="Year" />
+                                          <TableColumn fx:id="BookTopicColumn" prefWidth="172.0" text="Topic" />
+                                          <TableColumn fx:id="isDesiredBookColumn" prefWidth="67.0" text="Desired?" />
+                                          <TableColumn fx:id="editionColumn" prefWidth="58.0" text="Edition" />
+                                          <TableColumn fx:id="locationColumn" prefWidth="70.0" text="Location" />
                                           <TableColumn fx:id="inTheLibraryColumn" prefWidth="105.0" text="In the library?" />
-                                          <TableColumn fx:id="ClosestReturnColumn" prefWidth="109.0" text="Closest return" />
-                                          <TableColumn fx:id="viewIntroColumn" prefWidth="83.0" text="View intro" />
+                                          <TableColumn fx:id="ClosestReturnColumn" prefWidth="107.0" text="Closest return" />
+                                          <TableColumn fx:id="viewIntroColumn" text="View intro" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -251,7 +252,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <AnchorPane layoutX="220.0" layoutY="14.0" prefHeight="134.0" prefWidth="689.0">
+                                    <AnchorPane layoutX="262.0" layoutY="10.0" prefHeight="134.0" prefWidth="689.0">
                                        <children>
                                           <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                                              <children>
@@ -300,15 +301,15 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchReaderAccountTable" layoutX="160.0" layoutY="137.0" prefHeight="442.0" prefWidth="809.0">
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="99.0" layoutY="129.0" prefHeight="442.0" prefWidth="1029.0">
                                       <columns>
                                         <TableColumn fx:id="accountIDColumn" prefWidth="98.0" text="ID" />
-                                        <TableColumn fx:id="accountFirstNameColumn" prefWidth="127.0" text="First name" />
-                                          <TableColumn fx:id="accountLastNameColumn" prefWidth="113.0" text="Last name" />
-                                          <TableColumn fx:id="accountStatusColumn" prefWidth="124.0" text="status" />
-                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="106.0" text="phone" />
-                                          <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="148.0" text="Borrows &amp; Reserves" />
-                                          <TableColumn fx:id="freezeColumn" prefWidth="92.0" text="Freeze" />
+                                        <TableColumn fx:id="accountFirstNameColumn" prefWidth="182.00003051757812" text="First name" />
+                                          <TableColumn fx:id="accountLastNameColumn" prefWidth="188.0" text="Last name" />
+                                          <TableColumn fx:id="accountStatusColumn" prefWidth="176.0" text="status" />
+                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="126.0" text="phone" />
+                                          <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="152.0" text="Borrows &amp; Reserves" />
+                                          <TableColumn fx:id="freezeColumn" prefWidth="106.0" text="Change status" />
                                       </columns>
                                     </TableView>
                                  </children>
