@@ -137,7 +137,7 @@ public class LogInController  implements IGUIController
 			if((msg.getNote()).equals("1"))
 			{
 				permission=1;
-				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibraryDirector.fxml","Librarian Start Panel");
+				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesLibrarian/StartPanelLibraryDirector.fxml","Librarian Managear Start Panel");
 			}
 			else if((msg.getNote()).equals("2"))
 			{

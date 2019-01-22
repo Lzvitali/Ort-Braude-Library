@@ -72,6 +72,11 @@ public abstract class AValidationInput
 				break;
 
 			}
+			case  "copyID":
+			{
+				result=checkValidationCopyID(context);
+				break;
+			}
 			case "bookName":
 			{
 				result=checkValidationBookName(context);
@@ -220,10 +225,10 @@ public abstract class AValidationInput
 		{
 			return "You must be fill only numbers";
 		}
-		if(!chackDigit(context))
+	/*	if(!chackDigit(context))
 		{
 			return "Insert correct user id";
-		}
+		}*/
 		return "correct";
 	}
 	/**
@@ -406,12 +411,29 @@ public abstract class AValidationInput
 	{
 		if(context.equals("") || null == context)
 		{
-			return"Insert 9 digit book id";	
+			return "Insert book id";	
 		}
-		if(context.length()>9)
+	/*	if(context.length()>9)
 		{
 			return "Insert no more then 9 digit book id ";
+		}*/
+		if(!onlyNumbers(context))
+		{
+			return "You must fill only numbers";
 		}
+		
+		return "correct";
+	}
+	private static String checkValidationCopyID(String context)
+	{
+		if(context.equals("") || null == context)
+		{
+			return "Insert copy id";	
+		}
+	/*	if(context.length()>9)
+		{
+			return "Insert no more then 9 digit book id ";
+		}*/
 		if(!onlyNumbers(context))
 		{
 			return "You must fill only numbers";
@@ -445,12 +467,32 @@ public abstract class AValidationInput
 		{
 			return "The Author Name is too long";
 		}*/
-		if(!onlyCharacters(context))
+		/*if(!onlyCharacters(context))      //not only .. also ',' and ' '
 		{
 			return "You must fill only character";
+		}*/
+		
+		
+		for(int i=0; i<context.length(); i++)
+		{
+
+			if (i==0)
+			{
+				if(!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z'))))
+				{
+					return "Uncorrect input author name";
+				}
+			}
+			else if (!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z')) || (context.charAt(i)) == ','  || (context.charAt(i)) == ' '))
+			{
+				return "Uncorrect input author name";
+			}
+
 		}
 		return "correct";
 	}
+	
+	
 	
 	private static String checkValidationTopic(String context)
 	{

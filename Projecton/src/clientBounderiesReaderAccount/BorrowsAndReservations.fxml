@@ -23,15 +23,16 @@
             <TableColumn fx:id="btnForBorrows" prefWidth="106.0" text="Delay borrow" />
         </columns>
       </TableView>
-      <TableView fx:id="ordersTable" layoutX="20.0" layoutY="336.0" prefHeight="200.0" prefWidth="963.0">
+      <TableView fx:id="ordersTable" layoutX="20.0" layoutY="336.0" prefHeight="200.0" prefWidth="1116.0">
         <columns>
           <TableColumn fx:id="BookNameReservColumn" prefWidth="225.00003051757812" text="Book name" />
           <TableColumn fx:id="AuthorNameReservColumn" prefWidth="191.99996948242188" text="Author name" />
             <TableColumn fx:id="YeareReservColumn" minWidth="0.0" prefWidth="52.0" text="Year" />
-            <TableColumn fx:id="TopicReservColumn" prefWidth="218.0" text="Topic" />
-            <TableColumn fx:id="isDesiredReserveColumn" text="is desired?" />
+            <TableColumn fx:id="TopicReservColumn" prefWidth="206.0" text="Topic" />
+            <TableColumn fx:id="isDesiredReserveColumn" prefWidth="85.0" text="is desired?" />
             <TableColumn fx:id="editionReserveColumn" prefWidth="57.0" text="Edition" />
-            <TableColumn fx:id="BtnForOrders" prefWidth="138.0" text="Cancel reservation" />
+            <TableColumn fx:id="reservationDateColumn" prefWidth="125.0" text="Reservation date" />
+            <TableColumn fx:id="BtnForOrders" prefWidth="172.0" text="Cancel reservation" />
         </columns>
       </TableView>
       <Label layoutX="20.0" layoutY="66.0" prefHeight="21.0" prefWidth="128.0" text="Borrows" textFill="#0e3178">

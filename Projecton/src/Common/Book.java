@@ -17,10 +17,12 @@ public class Book implements IEntity, Serializable
 	private String topic;
 	private Boolean isDesired; 
 	private String bookLocation;
-	
+
 	private Integer numberOfCopies;//only for add book(if we want in same time to add number of copies)
 	private boolean fileIsLoaded;
 	private boolean isReserved;
+	private Boolean inLibrary; 
+	private String closetReturn;
 	
 	//buttons
 	private transient Button reserve;
@@ -73,6 +75,10 @@ public class Book implements IEntity, Serializable
 		this.year=Integer.parseInt(year);
 		this.edition=Integer.parseInt(edition);
 		this.numberOfCopies=Integer.parseInt(numberOfCopies);
+		if(this.numberOfCopies>0)
+			inLibrary=true;
+		else
+			inLibrary=false;
 		Button reserve = new Button();
 		//reserve.setText("Reservation");
 		Button details= new Button();
@@ -89,6 +95,10 @@ public class Book implements IEntity, Serializable
 		this.year=Integer.parseInt(year);
 		this.edition=Integer.parseInt(edition);
 		this.numberOfCopies=Integer.parseInt(numberOfCopies);
+		if(this.numberOfCopies>0)
+			inLibrary=true;
+		else
+			inLibrary=false;
 		Button reserve = new Button();
 		//reserve.setText("Reservation");
 		Button details= new Button();
@@ -96,7 +106,7 @@ public class Book implements IEntity, Serializable
 	}
 	
 	
-	public Book( String bookID,String bookName, String authorName, int year, String topic, Boolean isDesired,int edition) 
+	public Book( String bookID,String bookName, String authorName, int year, String topic, Boolean isDesired,int edition,String bookLocation) 
 	{
 		super();
 		this.bookID =Integer.parseInt(bookID);
@@ -106,6 +116,7 @@ public class Book implements IEntity, Serializable
 		this.isDesired = isDesired;
 		this.year=year;
 		this.edition=edition;
+		this.bookLocation=bookLocation;
 		Button reserve = null;
 		Button details= null;
 	}
@@ -120,6 +131,16 @@ public class Book implements IEntity, Serializable
 		this.year = Integer.parseInt(year);
 		this.topic = topic;
 		this.isDesired =  Boolean.parseBoolean(isDesired);
+		this.edition = edition;
+	}
+
+	
+	
+	public Book(String bookName, String authorName, Integer year, Integer edition)
+	{
+		this.bookName = bookName;
+		this.authorName = authorName;
+		this.year = year;
 		this.edition = edition;
 	}
 
@@ -208,6 +229,14 @@ public class Book implements IEntity, Serializable
 	}
 
 
+	public String getClosetReturn() {
+		return closetReturn;
+	}
+
+	public void setClosetReturn(String closetReturn) {
+		this.closetReturn = closetReturn;
+	}
+
 	public void setReserve(Button reserve) 
 	{
 		this.reserve = reserve;
@@ -226,6 +255,14 @@ public class Book implements IEntity, Serializable
 		this.details = details;
 	}
 
+
+	public Boolean getInLibrary() {
+		return inLibrary;
+	}
+
+	public void setInLibrary(Boolean inLibrary) {
+		this.inLibrary = inLibrary;
+	}
 
 	public void setBookName(String bookName) 
 	{
@@ -257,6 +294,10 @@ public class Book implements IEntity, Serializable
 	public void setNumberOfCopies(Integer numberOfCopies) 
 	{
 		this.numberOfCopies = numberOfCopies;
+		if(this.numberOfCopies>0)
+			inLibrary=true;
+		else
+			inLibrary=false;
 	}
 	
 	public void setEdition(Integer edition)
@@ -284,6 +325,16 @@ public class Book implements IEntity, Serializable
 		this.isReserved = isReserved;
 	}
 
+	
+	public String getBookLocation()
+	{
+		return bookLocation;
+	}
+
+	public void setBookLocation(String bookLocation)
+	{
+		this.bookLocation = bookLocation;
+	}
 	@Override
 	public String toString() {
 		return "Book [bookID=" + bookID + ", bookName=" + bookName + ", authorName=" + authorName + ", year=" + year

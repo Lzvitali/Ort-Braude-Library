@@ -106,6 +106,7 @@ public class ReaderAccount extends User
 		this.borrowsAndReserves= null;
 		this.freeze= null;
 	}
+	
 	public ReaderAccount(String id,String firstName,String lastName, String phone,String status) 
 	{
 		super(id);
@@ -120,6 +121,7 @@ public class ReaderAccount extends User
 		this.borrowsAndReserves= null;
 		this.freeze= null;
 	}
+	
 	
 	public ReaderAccount() 
 	{
@@ -137,6 +139,18 @@ public class ReaderAccount extends User
 		this.freeze= null;
 	}
 
+	public ReaderAccount(String id) 
+	{
+		super(id);
+		this.firstName = null;
+		this.lastName = null;
+		this.phone = null;
+		this.email = null;
+		this.status = null;
+		this.numOfDelays = -1;
+		this.adress = null;
+		this.educationYear = null;
+	}
 	
 	//getters and setters
 	public String getFirstName() 

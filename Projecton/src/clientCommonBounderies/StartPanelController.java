@@ -5,16 +5,24 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 
+
 import Common.Book;
 import Common.IEntity;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
 import Common.User;
 import clientConrollers.OBLClient;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 import javafx.application.Platform;
@@ -32,6 +40,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
 
 /**
  * This class is a Controller for StartPanel.fxml AND for LogInFxml
@@ -48,145 +58,145 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	 * this is the details of the current user that we need in all the next controllers 
 	 */
 	public static User user; 
-	
+
 	public  static OBLClient connToClientController;
-	
-	
-	
+
+
+
 	// attributes for StartPanel Only
-    @FXML 
-    private Button loginBtn; 
+	@FXML 
+	private Button loginBtn; 
 
-    @FXML 
-    private JFXTextField searchTextField; 
+	@FXML 
+	private JFXTextField searchTextField; 
 
-    @FXML 
-    private Button searchBtn; 
+	@FXML 
+	private Button searchBtn; 
 
-    @FXML 
-    private JFXRadioButton bookNameRB; 
+	@FXML 
+	private JFXRadioButton bookNameRB; 
 
-    @FXML 
-    private JFXRadioButton authorNameRB; 
+	@FXML 
+	private JFXRadioButton authorNameRB; 
 
-    @FXML 
-    private JFXRadioButton topicRB; 
+	@FXML 
+	private JFXRadioButton topicRB; 
 
-    @FXML
-    private JFXRadioButton freeSearchRB; 
+	@FXML
+	private JFXRadioButton freeSearchRB; 
 
-    @FXML 
-    private TableColumn<IEntity, String> bookNameColumn; 
+	@FXML 
+	private TableColumn<IEntity, String> bookNameColumn; 
 
-    @FXML 
-    private TableColumn<IEntity, String> authorNameColumn; 
+	@FXML 
+	private TableColumn<IEntity, String> authorNameColumn; 
 
-    @FXML 
-    private TableColumn<IEntity, Integer> yearColumn; 
+	@FXML 
+	private TableColumn<IEntity, Integer> yearColumn; 
 
-    @FXML 
-    private TableColumn<IEntity, String> topicColumn; 
+	@FXML 
+	private TableColumn<IEntity, String> topicColumn; 
 
-    @FXML 
-    private TableColumn<IEntity, Boolean> isDesiredColumn; 
+	@FXML 
+	private TableColumn<IEntity, Boolean> isDesiredColumn; 
 
-    @FXML 
-    private TableColumn<IEntity, Button> viewIntroColumn; 
+	@FXML 
+	private TableColumn<IEntity, Button> viewIntroColumn; 
 
-    @FXML 
-    private TableView<IEntity> searchResultTable; 
-    
-    @FXML
-    private TableColumn<?, ?> locationColumn;
+	@FXML 
+	private TableView<IEntity> searchResultTable; 
 
-    @FXML
-    private TableColumn<?, ?> inTheLibraryColumn;
+	@FXML
+	private TableColumn<IEntity, String> locationColumn;
 
-    @FXML
-    private TableColumn<?, ?> ClosestReturnColumn;
-    
-    @FXML
-    private TableColumn<?, ?> editionColumn;
-    
-    
-    private ToggleGroup toggleGroupForBooks; 
-    
-    
+	@FXML
+	private TableColumn<IEntity, Boolean> inTheLibraryColumn;
 
-    @FXML 
-    public void initialize(String[] arr) 
-    {
-    	if(alreadyInitilized==0)
-    	{
-    		connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
-    		alreadyInitilized++;
-    	}
-    	else
-    	{
-    		connToClientController.setClientUI(this);
-    	}
-    	setRedioButtonsForBooksSearch();
-    }
+	@FXML
+	private TableColumn<IEntity, Date> ClosestReturnColumn;
 
-   
-    public  void connect(String ip,int port) //make the connection to ClientController.
-    {
-        try 
-        {
-        	connToClientController= new OBLClient(ip, port,this);
+	@FXML
+	private TableColumn<IEntity, Integer> editionColumn;
+
+
+	private ToggleGroup toggleGroupForBooks; 
+
+
+
+	@FXML 
+	public void initialize(String[] arr) 
+	{
+		if(alreadyInitilized==0)
+		{
+			connect(arr[0],Integer.parseInt(arr[1])); // start the connection to our ClientController
+			alreadyInitilized++;
+		}
+		else
+		{
+			connToClientController.setClientUI(this);
+		}
+		setRedioButtonsForBooksSearch();
+	}
+
+
+	public  void connect(String ip,int port) //make the connection to ClientController.
+	{
+		try 
+		{
+			connToClientController= new OBLClient(ip, port,this);
 		} catch (IOException e) 
-        {
+		{
 			AClientCommonUtilities.alertErrorWithExit("Please check server connection","No Server Connection ");
 		}
-    }
-    
-    @FXML
-    void openLogin(ActionEvent event) 
-    {
-    	AClientCommonUtilities.loadWindow(getClass(),"/clientCommonBounderies/LogIn.fxml","Log in");
-    	LogInController.startPanelController = getClass(); 
-    }
-    
-    @FXML
-    void makeSearch(ActionEvent event) 
-    {
-    	//lets example that will be here valdaion for book(still not exist so didnt write)
-    	
-    	//if success do this and if selected book :
+	}
+
+	@FXML
+	void openLogin(ActionEvent event) 
+	{
+		AClientCommonUtilities.loadWindow(getClass(),"/clientCommonBounderies/LogIn.fxml","Log in");
+		LogInController.startPanelController = getClass(); 
+	}
+
+	@FXML
+	void makeSearch(ActionEvent event) 
+	{
+		//lets example that will be here valdaion for book(still not exist so didnt write)
+
+		//if success do this and if selected book :
 		Platform.runLater(()->
 		{
 			JFXRadioButton  selectedRadioButton;
-	    	try 
-	    	{
-	    		selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
-	    	}
-	    	catch(NullPointerException e)
-	    	{
-	    		selectedRadioButton=bookNameRB;
-	    	}	
-	    	String selectedString = selectedRadioButton.getText();
-	    	Book askedBook=new Book();
-	    	if(selectedString.equals("Book name"))
-	    	{
-	    		askedBook.setBookName(searchTextField.getText());
-	    	}
-	    	else if(selectedString.equals("Author name"))
-	    	{
-	    		askedBook.setAuthorName(searchTextField.getText());
-	    	}
-	    	else if(selectedString.equals("Topic"))
-	    	{
-	    		askedBook.setTopic(searchTextField.getText());;
-	    	}
-	    	else
-	    	{
-	    		askedBook.setBookName("needtocheckthis");
-	    	}
-	    	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
-	    	connToClientController.handleMessageFromClient(sendToServer);   	
+			try 
+			{
+				selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
+			}
+			catch(NullPointerException e)
+			{
+				selectedRadioButton=bookNameRB;
+			}	
+			String selectedString = selectedRadioButton.getText();
+			Book askedBook=new Book();
+			if(selectedString.equals("Book name"))
+			{
+				askedBook.setBookName(searchTextField.getText());
+			}
+			else if(selectedString.equals("Author name"))
+			{
+				askedBook.setAuthorName(searchTextField.getText());
+			}
+			else if(selectedString.equals("Topic"))
+			{
+				askedBook.setTopic(searchTextField.getText());;
+			}
+			else
+			{
+				askedBook.setBookName("needtocheckthis");
+			}
+			ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+			connToClientController.handleMessageFromClient(sendToServer);   	
 		});
-    }
-    
+	}
+
 
 
 	@Override
@@ -196,7 +206,11 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		{
 			searchBookResult(msg);
 		}
-		
+		else if(msg.getMessage().equals("pfdRecieve"))
+		{
+			getPDF(msg);
+		}
+
 	}
 
 	private void searchBookResult(ObjectMessage msg)
@@ -216,41 +230,122 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 				isDesiredColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
-			int i;
-			ArrayList <IEntity> result=msg.getObjectList();
-			for(i=0;i<result.size();i++)
-			{
-				((Book)result.get(i)).setDetails(new Button("Open PDF"));
-				searchResultTable.getItems().add(result.get(i));
-			}
+				editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+				locationColumn.setCellValueFactory(new PropertyValueFactory<>("bookLocation"));
+				inTheLibraryColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).getInLibrary()).asObject());
+				ClosestReturnColumn.setCellValueFactory(new PropertyValueFactory<>("closetReturn"));
+
+				int i;
+				ArrayList <IEntity> result=msg.getObjectList();
+				for(i=0;i<result.size();i++)
+				{
+					((Book)result.get(i)).setDetails(new Button("Open PDF"));
+					Book book = ((Book)result.get(i));
+					((Book)result.get(i)).getDetails().setOnAction(e -> openPDF(e,book));
+
+					searchResultTable.getItems().add(result.get(i));
+				}
 			});
-			
+
 		}
 	}
-	
-	
-	@Override
-	public int getActivateWindows() 
+
+	/**
+	 * this function displays to the user file chooser and sends to the server the request for the pdf
+	 * @param e -event
+	 * @param book - the book instance
+	 */
+	private void openPDF(ActionEvent e, Book book)
 	{
-		return numOfActiveWindows;
+		String bookName = book.getBookName() + " " + book.getAuthorName() + " " + book.getYear() + " " + book.getEdition();
+		/*System.out.println(book.getBookName());
+		System.out.println(bookName);*/
+
+		FileChooser fc=new FileChooser();
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File","*.pdf"));
+		fc.setTitle("Save to PDF");
+		fc.setInitialFileName(bookName+".pdf");
+		File file =fc.showSaveDialog(AStartClient.primaryStagePanel);
+
+		String str = null; 
+
+		if (null != file)
+		{
+			str = file.getAbsolutePath();
+			ObjectMessage sendToServer=new ObjectMessage(bookName, "getPDF");
+			sendToServer.setExtra(str);
+			connToClientController.handleMessageFromClient(sendToServer); 
+		}
+
 	}
 
-	@Override
-	public void setActivateWindows(int newWindows) 
+	/**
+	 * this function manages the connection with the server for file transfer
+	 * @param msg - contains the size and the name of the file
+	 */
+	private void getPDF(ObjectMessage msg)
 	{
-		numOfActiveWindows=newWindows;
+		Socket sock;
+		try
+		{
+			sock = new Socket("localhost", 5643);
+			byte[] mybytearray = new byte[Integer.parseInt(msg.getNote())];
+			InputStream is = sock.getInputStream();
+			FileOutputStream fos = new FileOutputStream(msg.getExtra());
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
+			int current = bytesRead; 
+
+			do 
+			{
+				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
+				if(bytesRead >= 0) 
+				{
+					current += bytesRead;
+				}
+			} while(bytesRead < -1);
+
+			bos.write(mybytearray, 0 , current);
+			bos.flush();
+
+			fos.close();
+			bos.close();
+			sock.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
-	
-    void setRedioButtonsForBooksSearch()
-    {
-    	toggleGroupForBooks = new ToggleGroup();
-        this.bookNameRB.setToggleGroup(toggleGroupForBooks);
-        this.authorNameRB.setToggleGroup(toggleGroupForBooks);
-        this.topicRB.setToggleGroup(toggleGroupForBooks);
-        this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
-    }
-	
-    
-    
-    
+
+
+@Override
+public int getActivateWindows() 
+{
+	return numOfActiveWindows;
+}
+
+@Override
+public void setActivateWindows(int newWindows) 
+{
+	numOfActiveWindows=newWindows;
+}
+
+void setRedioButtonsForBooksSearch()
+{
+	toggleGroupForBooks = new ToggleGroup();
+	this.bookNameRB.setToggleGroup(toggleGroupForBooks);
+	this.authorNameRB.setToggleGroup(toggleGroupForBooks);
+	this.topicRB.setToggleGroup(toggleGroupForBooks);
+	this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
+}
+
+
+@FXML
+void testEmail(MouseEvent event) 
+{
+	ObjectMessage sendToServer=new ObjectMessage("sendMail","Daily");
+	connToClientController.handleMessageFromClient(sendToServer);   
+}
+
 }

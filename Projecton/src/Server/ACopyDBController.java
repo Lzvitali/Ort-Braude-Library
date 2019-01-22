@@ -4,7 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Common.Book;
 import Common.Copy;
@@ -41,12 +47,111 @@ public abstract class ACopyDBController
 		{
 			return tryToReturnBook(msg, connToSQL);
 		} 
+		else if(((msg.getMessage()).equals("ask for delay")))
+		{
+			return askForDelay(msg, connToSQL);
+		} 
+		else if(((msg.getMessage()).equals("CheckReturnDate")))
+		{
+			return checkReturnDate(msg, connToSQL);
+		} 
+		else if(((msg.getMessage()).equals("closetReturnDate")))
+		{
+			return closetReturnDate(msg, connToSQL);
+		} 
 		else
 		{
 			return null; 
 		}
 	}
 	 
+	/**
+	 * This function check if the book is exist in DB and if desired or not 
+	 * @param msg -the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client if book `Desire book` ,`Not Desire book` or `Not exist book`
+	 */
+	private static ObjectMessage checkReturnDate(ObjectMessage msg, Connection connToSQL) 
+	{
+		Copy copy=(Copy)msg.getObjectList().get(0);
+		
+		try 
+		{
+			//get the copies that the reader account want to borrow
+			PreparedStatement getCopy = connToSQL.prepareStatement("SELECT * FROM Copy WHERE copyId = ? ");
+			System.out.println();
+			getCopy.setInt(1, copy.getCopyID()); 
+			ResultSet rs1 = getCopy.executeQuery();
+			
+			if(rs1.next())//if there is copy with this id exist in DB
+			{
+				//get book id
+				PreparedStatement getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+				getBook.setInt(1, rs1.getInt(2));
+				ResultSet rs2 = getBook.executeQuery();
+				
+				rs2.next();
+				if(rs2.getBoolean(6))
+				{
+					return new ObjectMessage("Desire book");
+				}
+				else 
+				{
+					return new ObjectMessage("Not Desire book");
+				}
+			}
+			else
+			{
+				return new ObjectMessage("Not exist book");
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return new ObjectMessage("Not exist book");
+	}
+
+	
+	/**
+	 * This function make the change of the 'delay borrowed book' in the DB
+	 * and sends back to the client the new date
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
+	private static ObjectMessage askForDelay(ObjectMessage msg, Connection connToSQL) 
+	{
+		ObjectMessage answer = new ObjectMessage("Delayed"); 
+		Copy copy=(Copy) msg.getObjectList().get(0);
+
+		PreparedStatement setDate = null; 
+
+		try 
+		{			
+			LocalDate nowPlus14 = LocalDate.now().plusDays(14);
+			Date nowPlus14Date = java.sql.Date.valueOf(nowPlus14); 
+		    
+			setDate = connToSQL.prepareStatement("UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?");
+			setDate.setDate(1, (java.sql.Date) nowPlus14Date ); 
+			setDate.setInt(2, copy.getCopyID() ); 
+			setDate.executeUpdate(); 
+		}
+
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+		LocalDateTime now = LocalDateTime.now();  
+		LocalDateTime newDate = LocalDateTime.now().plusDays(14); 
+		
+		answer.setNote(dtf.format(newDate));
+		return answer;
+			
+	}
+
 	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL) 
 	{
 
@@ -141,6 +246,7 @@ public abstract class ACopyDBController
 	
 	/**
 	 * This function will return all the borrows of specific reader account
+	 * also it will provide whether the reader account can ask for delay for each one of his borrows
 	 * @param msg - the object from the client
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return ObjectMessage with the answer to the client
@@ -150,11 +256,16 @@ public abstract class ACopyDBController
 		ObjectMessage answer = null; 
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		boolean resultExist = false;
+		boolean canDelay = false;
 		
 		PreparedStatement getCopies = null; 
 		PreparedStatement getBook = null;
+		PreparedStatement getReaderAccount = null;
+		PreparedStatement getReservs = null;
 		ResultSet rs1 = null; 
 		ResultSet rs2 = null; 
+		ResultSet rs3 = null;
+		ResultSet rs4 = null; 
 
 		try 
 		{
@@ -165,7 +276,7 @@ public abstract class ACopyDBController
 			
 			ArrayList <IEntity[]> result=new ArrayList<IEntity[]>(); 
 			
-			//go by all the copies the the reader account borrowing and get the boot of each one
+			//go by all the copies the reader account borrowing and get the book of each one
 			while(rs1.next())
 			{
 				resultExist = true;
@@ -185,6 +296,94 @@ public abstract class ACopyDBController
 				{
 					//set the book info from the second query
 					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7)) );
+				}
+
+				
+				//////////////////////////////////////////////////////////
+				//check if the reader account can ask for delay this book
+				//////////////////////////////////////////////////////////
+				
+				String reason=" ";
+				
+				//check if the return date is the most updated 20    28
+				LocalDate nowPlus7 = LocalDate.now().plusDays(7);
+				Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
+				Date dateOfReturn = rs1.getDate(5); 
+				if(dateOfReturn.after(nowPlus7Date))
+				{
+					canDelay = false;
+					reason = "The date of return is the most updated";
+				}
+				else
+				{
+					//check if the book is desired
+					if(rs2.getBoolean(6))
+					{
+						canDelay = false;
+					}
+					else
+					{
+						
+						//check if it reserved by someone
+						getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
+						getReservs.setInt(1, rs1.getInt(2) ); 
+						rs4 =getReservs.executeQuery();
+						
+						if(rs4.next())
+						{
+							canDelay = false;
+						}
+						else
+						{
+							//check if he is not already in delay
+							//Date dateOfReturn =  rs1.getDate(5);
+							
+							//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+							LocalDateTime now = LocalDateTime.now();
+							
+							Instant instant = now.toInstant(ZoneOffset.UTC);
+						    Date today = Date.from(instant);
+								
+							if( today.after(dateOfReturn) )
+							{
+								canDelay = false;
+							}
+							else
+							{
+								//check if reader account is active
+								getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
+								getReaderAccount.setString(1, reader.getId() ); 
+								rs3 =getReaderAccount.executeQuery();
+								
+								if(rs3.next())
+								{
+									//if the reader account is active
+									if(!rs3.getString(8).equals("Active"))
+									{
+										canDelay = false;	
+									}
+									else
+									{
+										canDelay = true;
+									}
+								}
+							}	
+						}
+		
+					}
+				}
+				
+				((Copy)(CopyAndBook[0])).setReasonForCantDelay(reason);
+				
+				if(canDelay)
+				{
+					((Copy)(CopyAndBook[0])).setCanDelay(true);
+					//answer.setExtra("canDelay");
+				}
+				else
+				{
+					((Copy)(CopyAndBook[0])).setCanDelay(false); 
+					//answer.setExtra("canNotDelay");
 				}
 				
 				result.add(CopyAndBook);
@@ -229,7 +428,8 @@ public abstract class ACopyDBController
 			getBook = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE copyId = ? ");
 			getBook.setInt(1, askedCopy.getCopyID()); 
 			rs2 =getBook.executeQuery();
-			if(!rs2.next()) {
+			if(!rs2.next())
+			{
 				answer= new ObjectMessage("The copy is not exist in obl,you can not delete it","Unsucessfull");
 			}
 			
@@ -278,4 +478,116 @@ public abstract class ACopyDBController
 		return answer;
 	}
 
+	/**
+	 * This function check if specifically copy is exist and available for borrow and enter all data of borrow in `obl` DB table 
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return String with result to function that called it
+	 */
+	public static String checkIfBookIsAvailable(ObjectMessage msg, Connection connToSQL) 
+	{
+		ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
+		Copy copy=(Copy)msg.getObjectList().get(1);
+
+		LocalDate now = LocalDate.now();  
+		LocalDate desireDate = LocalDate.now().plusDays(3);  
+		LocalDate notDesireDate = LocalDate.now().plusDays(14);
+		
+		Date today = java.sql.Date.valueOf(now);
+		Date todayPlus3 = java.sql.Date.valueOf(desireDate);
+		Date todayPlus7 = java.sql.Date.valueOf(notDesireDate);
+
+		
+		try 
+		{
+			//get the copies that the reader account want to borrow
+			PreparedStatement getCopy = connToSQL.prepareStatement("SELECT * FROM Copy WHERE copyId = ? ");
+			getCopy.setInt(1, copy.getCopyID()); 
+			ResultSet rs1 = getCopy.executeQuery();
+			
+			if(rs1.next())//if there is copy with this id exist in DB
+			{
+				if(rs1.getString(3)==null)
+				{  
+					//get book id
+					PreparedStatement getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+					getBook.setInt(1, rs1.getInt(2));
+					ResultSet rs2 = getBook.executeQuery();
+					
+					//set borrower id to the table copies
+					PreparedStatement setBorroweID =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowerId`=?  WHERE `copyId` = ?");	
+					setBorroweID.setString(1, reader.getId());
+					setBorroweID.setInt(2,copy.getCopyID()); 
+					
+					setBorroweID.executeUpdate();
+					rs2.next();
+					
+					if(!rs2.getBoolean(6)) //check if desire or not
+					{
+						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE copy "+"SET borrowDate = ? , returnDate = ? WHERE copyId = ?");
+						
+						setReturnDay.setDate(1, (java.sql.Date) today);
+						setReturnDay.setDate(2,(java.sql.Date) todayPlus7);
+						setReturnDay.setInt(3, copy.getCopyID());
+						setReturnDay.executeUpdate();
+						return "NotDesired";// Success borrowed not desired book
+					}
+					else
+					{
+						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE copy "+"SET borrowDate = ? , returnDate = ? WHERE copyId = ?");
+						setReturnDay.setDate(1, (java.sql.Date) today);
+						setReturnDay.setDate(2,(java.sql.Date) todayPlus3);
+						setReturnDay.setInt(3, copy.getCopyID());
+						setReturnDay.executeUpdate();
+
+						return "Desired";// Success borrowed desired book
+					}		
+				}
+				else //this copy was already borrowed
+				{
+					return "CopyAlreadyBorrowed";
+				}
+			}
+			else //this copy not exist in obl DB
+			{
+				return "CopyNotExist";
+			}
+			
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			new ObjectMessage("Unexpected Error.","Unsucessfull");
+		}
+		return "CopyNotExist";
+	
+	}
+
+	private static ObjectMessage closetReturnDate(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		Copy askedBook=(Copy)msg.getObjectList().get(0);
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE bookId=? order by returnDate");
+			ps.setInt(1,askedBook.getBookID());
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			Copy askedDate=new Copy();
+			if(rs.getDate(5).equals(null))
+			{
+				return new ObjectMessage("closetReturnDate","HaveAvaiableBook");
+			}
+			else
+			{
+				askedDate.setReturnDate(rs.getDate(5).toString());
+				return new ObjectMessage(askedDate,"closetReturnDate","ReturnTheCloset");
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 
 
 import Common.Book;
+import Common.Copy;
 import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -37,9 +38,75 @@ public class AReaderAccountDBController
 		{
 			return changePersnalDetails(msg, connToSQL);
 		}
+		else if(((msg.getMessage()).equals("CheckIfExist")))
+		{
+			return checkIfExistID(msg, connToSQL);
+		}
 		
 		return answer;
 	}
+	
+	/**
+	 * This function check if reader account can borrow specific book
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
+	private static ObjectMessage checkIfExistID(ObjectMessage msg, Connection connToSQL) 
+	{
+		try 
+		{
+			
+			ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
+			Copy copy=(Copy)msg.getObjectList().get(1);
+			//get the data of the student from the BD
+			PreparedStatement checkID = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ? ");
+			checkID.setString(1,reader.getId()); 
+			ResultSet rs = checkID.executeQuery();
+			
+			//check if the id is exist in the DB
+			if(rs.next())
+			{
+								
+				if(rs.getString(8).equals("Active"))//check if status of reader is Active
+				{
+					String massege=ACopyDBController.checkIfBookIsAvailable(msg, connToSQL);
+					
+					if(massege.equals("Desired")|| massege.equals("NotDesired"))//copy available and book desired
+					{
+						return new ObjectMessage("The book was successfuly borrowed.","ExistAndAvailable");
+					}
+					
+					else if(massege.equals("CopyNotExist"))//copy  not available 
+					{
+						return new ObjectMessage("The book with this copyId is not Exist in DB.","NotExistCopy");
+					}
+					else if(massege.equals("CopyAlreadyBorrowed"))//copy not available 
+					{
+						return new ObjectMessage("The book with this copyId is already borrowed.","CopyAlreadyBorrowed");
+					}
+					
+				}
+				else // status of reader is NOT Active
+				{
+					return new ObjectMessage("Status of the reader account is NOT active. You can't borrow book! ","ExistButNotActive");
+				}
+				
+			}
+			else//  reader is NOT exist in obl DB
+			{
+				return new ObjectMessage("Reader account with this ID does not exist in DB. ","ReaderNotExist");
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		return new ObjectMessage("Reader account with this ID does not exist in DB.","ReaderNotExist");
+	}
+
+			
+			
 	private static ObjectMessage changePersnalDetails(ObjectMessage msg, Connection connToSQL)
 	{
 		ObjectMessage answer = new ObjectMessage(); 

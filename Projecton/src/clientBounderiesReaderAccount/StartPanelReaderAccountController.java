@@ -17,10 +17,16 @@ import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -38,6 +44,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class StartPanelReaderAccountController implements IGUIController,IGUIStartPanel
@@ -108,19 +115,19 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     private TableColumn<IEntity, Button> reserveBtn;
     
     @FXML
-    private TableColumn<?, ?> locationColumn;
+    private TableColumn<IEntity, String> locationColumn;
 
     @FXML
-    private TableColumn<?, ?> inTheLibraryColumn;
+    private TableColumn<IEntity, Boolean> inTheLibraryColumn;
 
     @FXML
-    private TableColumn<?, ?> ClosestReturnColumn;
+    private TableColumn<IEntity, Date> ClosestReturnColumn;
+    
+    @FXML
+    private TableColumn<IEntity, Integer> editionColumn;
+    
     
     private ToggleGroup toggleGroupForBooks; 
-
-    @FXML
-    private TableColumn<?, ?> editionColumn;
-    
     
     @FXML
     public void initialize() 
@@ -248,6 +255,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		{
 			reserveBookResult(msg);
 		}
+		else if(msg.getMessage().equals("pfdRecieve"))
+		{
+			getPDF(msg);
+		}
 		
 	}
 	
@@ -268,6 +279,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 				isDesiredColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).isDesired()).asObject());
 				topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
 				viewIntroColumn.setCellValueFactory(new PropertyValueFactory<>("details"));
+				editionColumn.setCellValueFactory(new PropertyValueFactory<>("edition"));
+				locationColumn.setCellValueFactory(new PropertyValueFactory<>("bookLocation"));
+				inTheLibraryColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(((Book)cellData.getValue()).getInLibrary()).asObject());
+				ClosestReturnColumn.setCellValueFactory(new PropertyValueFactory<>("closetReturn"));
 				reserveBtn.setCellValueFactory(new PropertyValueFactory<>("reserve"));
 			
 				int i;
@@ -276,7 +291,13 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 				{
 					
 					((Book)result.get(i)).setDetails(new Button("Open PDF"));
-					if(((Book)result.get(i)).getNumberOfCopies()==0)((Book)result.get(i)).setReserve(new Button("Reserve"));
+					Book book = ((Book)result.get(i));
+					((Book)result.get(i)).getDetails().setOnAction(e -> openPDF(e,book));
+					
+					if(((Book)result.get(i)).getNumberOfCopies()==0)
+					{
+						((Book)result.get(i)).setReserve(new Button("Reserve"));
+					}
 					if(((Book)result.get(i)).getReserve()!=null)
 					{
 						((Book)result.get(i)).getReserve().setOnAction(e -> AskToReserve(e));
@@ -286,6 +307,73 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		}
 	
 	}
+	
+	/**
+	 * this function displays to the user file chooser and sends to the server the request for the pdf
+	 * @param e -event
+	 * @param book - the book instance
+	 */
+	private void openPDF(ActionEvent e, Book book)
+	{
+		String bookName = book.getBookName() + " " + book.getAuthorName() + " " + book.getYear() + " " + book.getEdition();
+
+		FileChooser fc=new FileChooser();
+		fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF File","*.pdf"));
+		fc.setTitle("Save to PDF");
+		fc.setInitialFileName(bookName+".pdf");
+		File file =fc.showSaveDialog(null);
+
+		String str = null; 
+
+		if (null != file)
+		{
+			str = file.getAbsolutePath();
+			ObjectMessage sendToServer=new ObjectMessage(bookName, "getPDF");
+			sendToServer.setExtra(str);
+			client.handleMessageFromClient(sendToServer); 
+		}
+
+	}
+
+	/**
+	 * this function manages the connection with the server for file transfer
+	 * @param msg - contains the size and the name of the file
+	 */
+	private void getPDF(ObjectMessage msg)
+	{
+		Socket sock;
+		try
+		{
+			sock = new Socket("localhost", 5643);
+			byte[] mybytearray = new byte[Integer.parseInt(msg.getNote())];
+			InputStream is = sock.getInputStream();
+			FileOutputStream fos = new FileOutputStream(msg.getExtra());
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
+			int current = bytesRead; 
+
+			do 
+			{
+				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
+				if(bytesRead >= 0) 
+				{
+					current += bytesRead;
+				}
+			} while(bytesRead < -1);
+
+			bos.write(mybytearray, 0 , current);
+			bos.flush();
+
+			fos.close();
+			bos.close();
+			sock.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+
 	@FXML
 	void AskToReserve(ActionEvent event)
 	{
@@ -293,7 +381,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	ObjectMessage objectMessage;
     	Book book=new Book();
     	book.setBookID(Integer.parseInt(id));
-    	objectMessage=new ObjectMessage(book,"reserveBook","Book");
+    	objectMessage=new ObjectMessage(book,"reserveBook","Reservation");
     	ReaderAccount readerAccount=new ReaderAccount();
     	readerAccount.setId(LogInController.currentID);
     	objectMessage.addObject(readerAccount);
@@ -333,7 +421,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	{
     		searchResultTable.getItems().clear();
     		searchTextField.clear();
-    		AClientCommonUtilities.infoAlert("You reserve this book", "Reserved");
+    		AClientCommonUtilities.infoAlert("You reserved this book", "Reserved");
     	}
     }
 }

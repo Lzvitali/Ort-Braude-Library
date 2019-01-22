@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javafx.scene.control.Button;
 
-public class Borrows implements IEntity , Serializable 
+public class Borrow implements IEntity , Serializable 
 {
 	private String bookName;
 	private String authorName;
@@ -16,9 +16,9 @@ public class Borrows implements IEntity , Serializable
 	private String borrowDate;
 	private String returnDate;
 	
-	private Button askForDelay;
+	private Button askForDelay; 
 
-	public Borrows(String bookName, String authorName, Integer year, String topic,
+	public Borrow(String bookName, String authorName, Integer year, String topic,
 			Boolean isDesired, Integer edition, String borrowDate, String returnDate, Button askForDelay) 
 	{
 		this.bookName = bookName;
@@ -33,7 +33,7 @@ public class Borrows implements IEntity , Serializable
 	}
 
 	
-	public Borrows(String bookName, String authorName, Integer year, String topic,
+	public Borrow(String bookName, String authorName, Integer year, String topic,
 			Boolean isDesired, Integer edition) 
 	{
 		this.bookName = bookName;

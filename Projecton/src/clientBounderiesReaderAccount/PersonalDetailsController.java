@@ -147,8 +147,8 @@ public class PersonalDetailsController implements IGUIController
     	{
 			if(msg.getNote().equals("successful change details"))
 			{
-	    		String showPassword="successful change details";
-	    		AClientCommonUtilities.infoAlert(showPassword,"successful change details");
+	    		String show="successful change details";
+	    		AClientCommonUtilities.infoAlert(show,"successful change details");
 	    		AClientCommonUtilities.backToStartPanel();
 			}
 			else
