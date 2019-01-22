@@ -216,7 +216,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		setRedioButtonsForAccountsSearch();
 	}
 
-	void setRedioButtonsForBooksSearch()
+	void setRedioButtonsForBooksSearch() 
 	{
 		toggleGroupForBooks = new ToggleGroup();
 		this.bookNameRB.setToggleGroup(toggleGroupForBooks);
@@ -270,7 +270,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			askedBook.setTopic(searchBookTextField.getText());;
 		}
-		else
+		else 
 		{
 			askedBook.setBookName("needtocheckthis");
 		}
