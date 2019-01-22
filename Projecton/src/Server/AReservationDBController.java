@@ -47,6 +47,15 @@ public abstract class AReservationDBController
 			return null; 
 		}
 	}
+	
+	/**
+	 * this method implement reservation it recieve reader account and reservation 
+	 * it check if we can to borrow the copy and consider the queue of reservation for each book
+	 * the practical borrow progress in the method implementTheBorrow
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage implementReserveBook(ObjectMessage msg, Connection connToSQL) 
 	{
 		ObjectMessage answer = null;  
@@ -106,14 +115,16 @@ public abstract class AReservationDBController
 					else
 					{		
 						whoIstheFirst = connToSQL.prepareStatement("SELECT * FROM reservations WHERE bookId=? order by Date"); 
-						numOfCopyAvailable.setInt(1, reserve.getBookID());
-						rs4 =numOfCopyAvailable.executeQuery();
+						whoIstheFirst.setInt(1, reserve.getBookID());
+						rs4 =whoIstheFirst.executeQuery();
 						answer =new ObjectMessage();
-						for(int i=0;i<numOfBookReserve;i++)
+						rs4.next();
+						Date date=rs4.getDate(3);
+						rs4.beforeFirst();
+						while(rs4.next())
 						{
-							rs4.next();
-							temp=rs4.getString(1);
-							if(reader.getId().equals(temp))//the first in the queue
+							temp=rs4.getString(2);
+							if(reader.getId().equals(temp) && (date.equals(rs4.getDate(3))))//the first in the queue
 							{
 								answer=implementTheBorrow(msg,connToSQL);
 								return answer;
