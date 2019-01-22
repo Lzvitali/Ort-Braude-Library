@@ -180,7 +180,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     
     @FXML
     private TableColumn<IEntity, Integer> editionColumn;
-
+    
+    @FXML
+    private Button changeBookInfoBtn;
 
     @FXML
     private TabPane TabPaneSelect;
@@ -553,5 +555,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
 
 
+
+    @FXML
+    void openChangeBookInfo(ActionEvent event) 
+    {
+    	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/UpdateBook.fxml","Update book info");
+    }
 }
 

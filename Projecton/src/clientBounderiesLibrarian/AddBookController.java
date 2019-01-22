@@ -237,14 +237,6 @@ public class AddBookController implements IGUIController
 		combo();
 	}
 
-	private void fillFileds() 
-	{
-		BookTitleTextField.setText("");
-		BookAuthorTextField.setText("");
-		PublishedYearTextField.setText("");
-		EditionTextField.setText("");
-
-	}
 
 
 	//check validation

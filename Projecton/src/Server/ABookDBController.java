@@ -48,12 +48,27 @@ public abstract class  ABookDBController
 		{
 			return tryToSetLocationOfBook(msg, connToSQL);
 		}
+		else if((msg.getMessage()).equals("showBookInfo"))
+		{
+			return showBookInfo(msg, connToSQL);
+		}
 		else
 			return null; 
 	}
 
-	
-	
+
+
+	private static ObjectMessage showBookInfo(ObjectMessage msg, Connection connToSQL)
+	{
+
+		Book tempBook=(Book)msg.getObjectList().get(0);
+				return null;
+	}
+
+
+	/**
+	 * 
+	 */
 	private static ObjectMessage tryToSetLocationOfBook(ObjectMessage msg, Connection connToSQL) 
 	{
 
@@ -80,15 +95,15 @@ public abstract class  ABookDBController
 			{
 				return new ObjectMessage(" ","LocationNotFound");
 			}
-			
+
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
 			return new ObjectMessage("Unexpected Error.","Unsucessfull");
-			
+
 		}
-		
+
 	}
 
 
@@ -162,7 +177,7 @@ public abstract class  ABookDBController
 			{   
 				if (tempBook.getBookLocation()==null ||tempBook.getBookLocation().equals(""))
 				{
-					
+
 					return new ObjectMessage("Error!Please enter book`s location.","Wrong");
 				}
 				else
@@ -192,10 +207,10 @@ public abstract class  ABookDBController
 						checkBook.setInt(4,tempBook.getEdition());
 						rs1 =checkBook.executeQuery();
 					}
-					
-					
+
+
 				}
-				
+
 
 				if(rs1.next())
 				{
@@ -208,20 +223,20 @@ public abstract class  ABookDBController
 
 				}
 				return new ObjectMessage("This Book was successfully added like book and like copy.","Successfull");
-				
+
 			}	
 		}	
 		catch (SQLException e)
 		{
 			e.printStackTrace();
 			return new ObjectMessage("Unexpected Error.","Unsucessfull");
-			
+
 		}
-		
+
 	}
 
 
-	
+
 	private static ObjectMessage searchBook(ObjectMessage msg, Connection connToSQL)
 	{
 		int isFreeSearch=0;
@@ -257,38 +272,38 @@ public abstract class  ABookDBController
 				{
 					ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName LIKE '%'+@input+'%' OR authorName LIKE '%'+@input+'%' OR year LIKE '%'+@input+'%' OR topic LIKE '%'+@input+'%' ");
 					input=ss;
-					
+
 					ResultSet rs= ps.executeQuery();
 					while(rs.next())
-			 		{
-			 			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
-			 			Copy copy=new Copy(-1,rs.getInt(1),null);
-			 			ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
-			 			ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
-			 			if(resultOfCopy.getNote().equals("FoundBook"))
-			 			{
-			 				book.setNumberOfCopies(1);
-			 			}
-			 			else
-			 			{
-			 				book.setNumberOfCopies(0);
-			 				message=new ObjectMessage(copy,"closetReturnDate","Copy");
-			 				resultOfCopy=ACopyDBController.selection(message,connToSQL);
-			 				try 
-			 				{
-			 					book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
-			 				}
-			 				catch(Exception e)
-			 				{
-			 					e.printStackTrace();
-			 				}
-			 			}
-			 			result.add(book);
+					{
+						Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
+						Copy copy=new Copy(-1,rs.getInt(1),null);
+						ObjectMessage message=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
+						ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
+						if(resultOfCopy.getNote().equals("FoundBook"))
+						{
+							book.setNumberOfCopies(1);
+						}
+						else
+						{
+							book.setNumberOfCopies(0);
+							message=new ObjectMessage(copy,"closetReturnDate","Copy");
+							resultOfCopy=ACopyDBController.selection(message,connToSQL);
+							try 
+							{
+								book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
+							}
+							catch(Exception e)
+							{
+								e.printStackTrace();
+							}
+						}
+						result.add(book);
 					} 
-				
+
 				}
 			}
-			 //if it is not free search
+			//if it is not free search
 			if(isFreeSearch==0)
 			{
 				ps.setString(1,input);
@@ -307,32 +322,32 @@ public abstract class  ABookDBController
 					{
 						book.setNumberOfCopies(0);
 						message=new ObjectMessage(copy,"closetReturnDate","Copy");
-	 					resultOfCopy=ACopyDBController.selection(message,connToSQL);
-	 					try 
-	 					{
-	 						book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
-	 					}
-	 					catch(Exception e)
-	 					{
-	 						e.printStackTrace();
-	 					}
+						resultOfCopy=ACopyDBController.selection(message,connToSQL);
+						try 
+						{
+							book.setClosetReturn(((Copy)(resultOfCopy.getObjectList().get(0))).getReturnDate());
+						}
+						catch(Exception e)
+						{
+							e.printStackTrace();
+						}
 					}
 					result.add(book);
 				} 
-	 		
-	 		
+
+
 			}
-			
-	 		if(!result.isEmpty())
-	 		{
-	 			answer=new ObjectMessage(result,"BookSearch","BooksFound");
-	 		}
-	 		else
-	 		{
-	 			answer=new ObjectMessage("BookSearch","NoBookFound");
-	 		}
+
+			if(!result.isEmpty())
+			{
+				answer=new ObjectMessage(result,"BookSearch","BooksFound");
+			}
+			else
+			{
+				answer=new ObjectMessage("BookSearch","NoBookFound");
+			}
 		}
-		
+
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
