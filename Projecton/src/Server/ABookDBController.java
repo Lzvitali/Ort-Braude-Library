@@ -255,12 +255,9 @@ public abstract class  ABookDBController
 				//pass on every word in free search and check if exist in db
 				for ( String ss : arrFreeSearch)
 				{
-					ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName=? OR authorName=? OR year=? OR topic=?");
+					ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName LIKE '%'+@input+'%' OR authorName LIKE '%'+@input+'%' OR year LIKE '%'+@input+'%' OR topic LIKE '%'+@input+'%' ");
 					input=ss;
-					ps.setString(1,input);
-					ps.setString(2,input);
-					ps.setString(3,input);
-					ps.setString(4,input);
+					
 					ResultSet rs= ps.executeQuery();
 					while(rs.next())
 			 		{
