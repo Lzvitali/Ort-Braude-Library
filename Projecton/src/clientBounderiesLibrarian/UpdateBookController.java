@@ -142,7 +142,7 @@ public class UpdateBookController implements IGUIController
     }
     
 
-	@FXML//Natasha do it
+	@FXML//Natasha do it 
 	void updateAddNewBook(ActionEvent event)//update information about book
 	{
 		//String checkResult = validationFields();
