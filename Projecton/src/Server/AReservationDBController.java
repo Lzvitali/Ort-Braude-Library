@@ -292,34 +292,45 @@ public abstract class AReservationDBController
  			}
  			else
  			{
- 				try 
- 				{
- 					Date date = new Date();
- 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
- 					String currentTime = sdf.format(date);
- 					try 
- 					{
-						date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currentTime);
+ 	 			message=new ObjectMessage("checkIfUserGotAlreadyCopy","Copy");
+ 	 			message.addObject(msg.getObjectList().get(0), msg.getObjectList().get(1));
+ 	 			ObjectMessage resultIfUserGotAlreadyCopy=ACopyDBController.selection(message,connToSQL);
+ 	 			if(resultIfUserGotAlreadyCopy.getNote().equals("HaveCopy"))
+ 	 			{
+ 					answer=new ObjectMessage("reserveBook","HaveCopy");
+ 					return answer;
+ 	 			}
+ 	 			else
+ 	 			{
+	 				try 
+	 				{
+	 					Date date = new Date();
+	 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	 					String currentTime = sdf.format(date);
+	 					try 
+	 					{
+							date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currentTime);
+						} 
+	 					catch (ParseException e) 
+	 					{
+	
+							e.printStackTrace();
+						}
+	 					java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
+						ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`,`Date`) VALUES (?,?,?)");
+						ps.setInt(1,askedBook.getBookID());
+						ps.setString(2,askedReaderAccount.getId());
+						ps.setDate(3, sqlDate);
+						ps.executeUpdate();
+						answer=new ObjectMessage("reserveBook","Reserved");
+						return answer;
 					} 
- 					catch (ParseException e) 
- 					{
-
+	 				catch (SQLException e) 
+	 				{
 						e.printStackTrace();
+						return null;
 					}
- 					java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
-					ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`,`Date`) VALUES (?,?,?)");
-					ps.setInt(1,askedBook.getBookID());
-					ps.setString(2,askedReaderAccount.getId());
-					ps.setDate(3, sqlDate);
-					ps.executeUpdate();
-					answer=new ObjectMessage("reserveBook","Reserved");
-					return answer;
-				} 
- 				catch (SQLException e) 
- 				{
-					e.printStackTrace();
-					return null;
-				}
+ 	 			}
  			}	
  		}
 		

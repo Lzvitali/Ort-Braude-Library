@@ -59,6 +59,10 @@ public abstract class ACopyDBController
 		{
 			return closetReturnDate(msg, connToSQL);
 		} 
+		else if(((msg.getMessage()).equals("checkIfUserGotAlreadyCopy")))
+		{
+			return checkIfUserGotAlreadyCopy(msg, connToSQL);
+		} 
 		else
 		{
 			return null; 
@@ -216,7 +220,7 @@ public abstract class ACopyDBController
 	}
 	
 	
-	public static ObjectMessage checkIfAllBorrowed(ObjectMessage msg, Connection connToSQL)
+	private static ObjectMessage checkIfAllBorrowed(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
 		ObjectMessage answer;
@@ -582,6 +586,37 @@ public abstract class ACopyDBController
 			{
 				askedDate.setReturnDate(rs.getDate(5).toString());
 				return new ObjectMessage(askedDate,"closetReturnDate","ReturnTheCloset");
+			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	
+	private static ObjectMessage checkIfUserGotAlreadyCopy(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		ObjectMessage answer;
+		Book askedBook=(Book)msg.getObjectList().get(0);
+		ReaderAccount readerAccount=(ReaderAccount)msg.getObjectList().get(1);
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM obl.copy WHERE bookId= ? AND borrowerId= ?");
+			ps.setInt(1,askedBook.getBookID());
+			ps.setString(2,readerAccount.getId());
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			int x =rs.getInt(1);
+			if(rs.getInt(1)== 0)
+			{
+				return new ObjectMessage("checkIfUserGotAlreadyCopy","DontHaveCopy");
+			}
+			else
+			{
+				return new ObjectMessage("checkIfUserGotAlreadyCopy","HaveCopy");
 			}
 		} 
 		catch (SQLException e) 

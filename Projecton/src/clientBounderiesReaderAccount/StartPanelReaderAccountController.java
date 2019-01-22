@@ -442,6 +442,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	{
     		AClientCommonUtilities.infoAlert("You already reserved this book", "Already Reserved");
     	}
+    	else if(msg.getNote().equals("HaveCopy"))
+    	{
+    		AClientCommonUtilities.infoAlert("You already got copy of this book", "Already Got Copy");
+    	}
     	else
     	{
     		searchResultTable.getItems().clear();
