@@ -13,6 +13,7 @@ import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
+import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import java.io.BufferedOutputStream;
@@ -160,11 +161,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	@FXML
 	void makeSearch(ActionEvent event) 
 	{
-		//lets example that will be here valdaion for book(still not exist so didnt write)
 
 		//if success do this and if selected book :
 		Platform.runLater(()->
-		{
+		{	
 			JFXRadioButton  selectedRadioButton;
 			try 
 			{
@@ -173,27 +173,58 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			catch(NullPointerException e)
 			{
 				selectedRadioButton=bookNameRB;
-			}	
+			}
+			
+			
 			String selectedString = selectedRadioButton.getText();
 			Book askedBook=new Book();
 			if(selectedString.equals("Book name"))
 			{
-				askedBook.setBookName(searchTextField.getText());
+				if(AValidationInput.checkValidationBook("bookName", searchTextField.getText()).equals("correct"))
+				{
+					askedBook.setBookName(searchTextField.getText());
+				}
+				else
+				{
+					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("bookName", searchTextField.getText()),"Invaild Input" ,"continue" );
+					searchTextField.setText("");
+				}
+					
 			}
 			else if(selectedString.equals("Author name"))
 			{
-				askedBook.setAuthorName(searchTextField.getText());
+				if(AValidationInput.checkValidationBook("authorName", searchTextField.getText()).equals("correct"))
+				{
+					askedBook.setAuthorName(searchTextField.getText());
+				}
+				else
+				{
+					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("authorName", searchTextField.getText()),"Invaild Input","continue" );
+					searchTextField.setText("");
+				}
 			}
 			else if(selectedString.equals("Topic"))
 			{
-				askedBook.setTopic(searchTextField.getText());;
+				if(AValidationInput.checkValidationBook("topic", searchTextField.getText()).equals("correct"))
+				{
+					askedBook.setTopic(searchTextField.getText());
+				}
+				else
+				{
+					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchTextField.getText()), "Invaild Input","continue" );
+					searchTextField.setText("");
+				}
+				
 			}
 			else
 			{
-				askedBook.setFreeSearch(searchTextField.getText());;
+				askedBook.setFreeSearch(searchTextField.getText());
 			}
-			ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
-			connToClientController.handleMessageFromClient(sendToServer);   	
+			if(askedBook.getBookName()!=null ||askedBook.getAuthorName()!=null || askedBook.getTopic() !=null || askedBook.getFreeSearch() !=null)
+			{
+				ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+				connToClientController.handleMessageFromClient(sendToServer);   
+			}
 		});
 	}
 

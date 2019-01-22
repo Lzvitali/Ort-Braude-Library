@@ -14,6 +14,7 @@ import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import java.io.BufferedOutputStream;
@@ -269,15 +270,40 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		Book askedBook=new Book();
 		if(selectedString.equals("Book name"))
 		{
-			askedBook.setBookName(searchBookTextField.getText());
+			if(AValidationInput.checkValidationBook("bookName", searchBookTextField.getText()).equals("correct"))
+			{
+				askedBook.setBookName(searchBookTextField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("bookName", searchBookTextField.getText()),"Invaild Input" ,"continue" );
+				searchBookTextField.setText("");
+			}
+				
 		}
 		else if(selectedString.equals("Author name"))
 		{
-			askedBook.setAuthorName(searchBookTextField.getText());
+			if(AValidationInput.checkValidationBook("authorName", searchBookTextField.getText()).equals("correct"))
+			{
+				askedBook.setAuthorName(searchBookTextField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("authorName", searchBookTextField.getText()),"Invaild Input","continue" );
+				searchBookTextField.setText("");
+			}
 		}
 		else if(selectedString.equals("Topic"))
 		{
-			askedBook.setTopic(searchBookTextField.getText());;
+			if(AValidationInput.checkValidationBook("topic", searchBookTextField.getText()).equals("correct"))
+			{
+				askedBook.setTopic(searchBookTextField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchBookTextField.getText()), "Invaild Input","continue" );
+				searchBookTextField.setText("");
+			}
 		}
 		else
 		{

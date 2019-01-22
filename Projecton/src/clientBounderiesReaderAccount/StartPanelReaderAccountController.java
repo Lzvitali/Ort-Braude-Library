@@ -15,6 +15,7 @@ import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import java.io.BufferedOutputStream;
@@ -187,19 +188,43 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	Book askedBook=new Book();
     	if(selectedString.equals("Book name"))
     	{
-    		askedBook.setBookName(searchTextField.getText());
+    		if(AValidationInput.checkValidationBook("bookName", searchTextField.getText()).equals("correct"))
+			{
+				askedBook.setBookName(searchTextField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("bookName", searchTextField.getText()),"Invaild Input" ,"continue" );
+				searchTextField.setText("");
+			}
     	}
     	else if(selectedString.equals("Author name"))
     	{
-    		askedBook.setAuthorName(searchTextField.getText());
+    		if(AValidationInput.checkValidationBook("authorName", searchTextField.getText()).equals("correct"))
+			{
+				askedBook.setAuthorName(searchTextField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("authorName", searchTextField.getText()),"Invaild Input","continue" );
+				searchTextField.setText("");
+			}
     	}
     	else if(selectedString.equals("Topic"))
     	{
-    		askedBook.setTopic(searchTextField.getText());;
+    		if(AValidationInput.checkValidationBook("topic", searchTextField.getText()).equals("correct"))
+			{
+				askedBook.setTopic(searchTextField.getText());
+			}
+			else
+			{
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchTextField.getText()), "Invaild Input","continue" );
+				searchTextField.setText("");
+			}
     	}
     	else
 		{
-			askedBook.setFreeSearch(searchTextField.getText());;
+			askedBook.setFreeSearch(searchTextField.getText());
 		}
     	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
     	client.handleMessageFromClient(sendToServer);   
