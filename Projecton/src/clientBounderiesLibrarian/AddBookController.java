@@ -373,7 +373,7 @@ public class AddBookController implements IGUIController
 			{
 				edition=Integer.parseInt(EditionTextField.getText());
 			}
-			//
+			
 			bookForSend = new Book(bookName, authorName, year,edition );
 			ObjectMessage msg= new ObjectMessage(bookForSend,"setLocation","Book");
 			client.handleMessageFromClient(msg);

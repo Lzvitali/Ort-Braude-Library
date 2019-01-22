@@ -52,18 +52,70 @@ public abstract class  ABookDBController
 		{
 			return showBookInfo(msg, connToSQL);
 		}
+		
+		else if((msg.getMessage()).equals("changeBookInfo"))
+		{
+			return changeBookInfo(msg, connToSQL);
+		}
 		else
 			return null; 
 	}
 
 
+	private static ObjectMessage changeBookInfo(ObjectMessage msg, Connection connToSQL)
+	{
+		
+		return null;
+	}
 
+
+	/**
+	 * The function check if book exist in DB and return all data about specific book
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage showBookInfo(ObjectMessage msg, Connection connToSQL)
 	{
 
 		Book tempBook=(Book)msg.getObjectList().get(0);
-				return null;
+		PreparedStatement checkBook = null; 
+		ResultSet rs1 = null;
+		try 
+		{
+			String query= "SELECT * FROM book WHERE bookId = ?  ";
+			checkBook = connToSQL.prepareStatement(query);
+			checkBook.setInt(1,tempBook.getBookID()); 
+			rs1 =checkBook.executeQuery();
+
+			//send to client answer if there is book already exist in DB with all information about book 
+			if(rs1.next())
+			{
+				tempBook.setBookName(rs1.getString(2));
+				tempBook.setAuthorName(rs1.getString(3));
+				tempBook.setDateOfBook(rs1.getInt(4));
+				tempBook.setTopic(rs1.getString(5));
+				tempBook.setDesired(rs1.getBoolean(6));
+				tempBook.setEdition(rs1.getInt(7));
+				tempBook.setBookLocation(rs1.getString(8));
+				return new ObjectMessage(tempBook, "FoundBook");
+				
+			}
+			else //if there is no book with the same bookId
+			{
+				return new ObjectMessage("Book not exist in DB","Wrong");
+			}
+
+
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+
+		}
+		return new ObjectMessage("Book not exist in DB","Wrong");
 	}
+	
 
 
 	/**

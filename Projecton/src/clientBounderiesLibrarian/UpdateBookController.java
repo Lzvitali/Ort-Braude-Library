@@ -142,9 +142,37 @@ public class UpdateBookController implements IGUIController
     }
     
 
-	@FXML
-	void updateAddNewBook(ActionEvent event)
+	@FXML//Natasha do it
+	void updateAddNewBook(ActionEvent event)//update information about book
 	{
+		//String checkResult = validationFields();
+		Book book;
+		/*if(checkResult.equals("correct"))//if all fields correctly
+		{*/
+			String bookLocation;
+
+			if( ( bookLocationLetter.getValue() == null  || (bookLocationLetter.getValue().toString()).equals(null) ) 
+					|| ( BookLocationNumber.getValue() == null  || (BookLocationNumber.getValue().toString()).equals(null) ) )
+			{
+				bookLocation = "";
+			}
+			else
+			{
+				bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
+			}
+
+			String numOfCopies="";
+			boolean isDesired= DesiredCheckBox.isSelected();
+			book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numOfCopies, bookLocation);
+			ObjectMessage msg= new ObjectMessage(book,"changeBookInfo","Book");
+			//book.setFileIsLoaded(isUploaded);
+			client.handleMessageFromClient(msg);
+		//}
+	/*	else
+		{
+			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");		
+		}*/
+
 
 		
 	}
@@ -157,6 +185,41 @@ public class UpdateBookController implements IGUIController
 	{
 
 
+		if (msg.getMessage().equals("FoundBook"))
+		{
+			Platform.runLater(()->
+			{
+			bookInfoVBox.setVisible(true); 
+			Book tempBook=(Book)msg.getObjectList().get(0);
+			
+			BookTitleTextField.setText(tempBook.getBookName());
+			BookAuthorTextField.setText(tempBook.getAuthorName());
+			PublishedYearTextField.setText(Integer.toString(tempBook.getDateOfBook()));
+			EditionTextField.setText(Integer.toString(tempBook.getEdition()));
+			TopicTextField.setText(tempBook.getTopic());
+			DesiredCheckBox.setSelected(tempBook.getIsDesired());
+			bookLocationLetter.setValue(String.valueOf(tempBook.getBookLocation().charAt(0)));
+			BookLocationNumber.setValue(String.valueOf(tempBook.getBookLocation().charAt(2)));
+			});
+		}
+		else if(msg.getMessage().equals("Wrong")) 
+		{
+			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
+		}
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
