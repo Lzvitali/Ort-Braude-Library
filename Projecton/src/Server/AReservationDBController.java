@@ -13,6 +13,7 @@ import java.util.Date;
 import Common.Book;
 import Common.Copy;
 import Common.IEntity;
+import Common.Mail;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.Reservation;
@@ -41,7 +42,14 @@ public abstract class AReservationDBController
 		{
 			return implementReserveBook(msg, connToSQL);
 		}
-		
+		else if (((msg.getMessage()).equals("cancel reservation")))
+		{
+			return cancelReservation(msg, connToSQL);
+		}
+		else if (((msg.getMessage()).equals("letImplementReservation")))
+		{
+			return letImplementReservation(msg, connToSQL);
+		}
 		else
 		{ 
 			return null; 
@@ -305,11 +313,15 @@ public abstract class AReservationDBController
 	 				try 
 	 				{
 	 					Date date = new Date();
-	 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	 					String currentTime = sdf.format(date);
+	 					Date time= new Date();
+	 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+	 					SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
+	 					String currentDate = sdf.format(date);
+	 					String currentTime = sdf2.format(date);
 	 					try 
 	 					{
-							date=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(currentTime);
+							date=new SimpleDateFormat("yyyy-MM-dd").parse(currentDate);
+							time=new SimpleDateFormat("hh:mm:ss").parse(currentTime);
 						} 
 	 					catch (ParseException e) 
 	 					{
@@ -317,10 +329,12 @@ public abstract class AReservationDBController
 							e.printStackTrace();
 						}
 	 					java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
-						ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`,`Date`) VALUES (?,?,?)");
+	 					java.sql.Time sqlTime = new java.sql.Time(time.getTime()); 
+						ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`, `Date`,`Time`) VALUES (?,?,?,?)");
 						ps.setInt(1,askedBook.getBookID());
 						ps.setString(2,askedReaderAccount.getId());
 						ps.setDate(3, sqlDate);
+						ps.setTime(4, sqlTime);
 						ps.executeUpdate();
 						answer=new ObjectMessage("reserveBook","Reserved");
 						return answer;
@@ -366,4 +380,109 @@ public abstract class AReservationDBController
 		}
 	}
 
+	private static ObjectMessage cancelReservation(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(0);
+		Reservation reservation=(Reservation)msg.getObjectList().get(1);
+		try 
+		{
+			ps = connToSQL.prepareStatement("DELETE FROM `Reservations` WHERE bookId= ? AND readerAccountID= ?");
+			ps.setInt(1,reservation.getBookID());
+			ps.setString(2,askedReaderAccount.getId());
+			ps.executeUpdate();
+			Book askedbook=new Book();
+			askedbook.setBookID(reservation.getBookID());
+			ObjectMessage askTheFirstReader=new ObjectMessage();
+			askTheFirstReader.addObject(askedbook);
+			ObjectMessage result=getReaderThatCanImplement(askTheFirstReader,connToSQL);
+			askTheFirstReader=new ObjectMessage(result.getObjectList().get(0),"SearchReader","ReaderAccount");
+			ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
+			ObjectMessage bookDetails=new ObjectMessage(askedbook,"searchBookID","Book");
+			Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
+			ObjectMessage implementReservation=new ObjectMessage();
+			implementReservation.addObject(readerAccount, book);
+			letImplementReservation(implementReservation,connToSQL);
+			return new ObjectMessage("ReservationCanceled","cancelReservation");
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+	private static ObjectMessage letImplementReservation(ObjectMessage msg, Connection connToSQL)
+	{
+		
+		PreparedStatement ps;
+		ObjectMessage answer;
+		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(0);
+		Book book=(Book)msg.getObjectList().get(1);
+		try 
+		{
+			ps = connToSQL.prepareStatement("UPDATE `reservations` SET `startTimerImplement`=NOW() WHERE bookId= ? AND readerAccountID= ? ");
+			ps.setInt(1,book.getBookID());
+			ps.setString(2,askedReaderAccount.getId());
+			ps.executeUpdate();
+			ObjectMessage notify=new ObjectMessage("sendMail","Daily");
+			Mail mail=new Mail();
+			mail.setTo(askedReaderAccount.getEmail());
+			String body="Hello "+askedReaderAccount.getFirstName()+"\nWe glad to notfiy you that you can come to library"
+					+ " and implement your reservation for "+book.getBookName()
+					+ ".\nTake care , you got only 48 to implement reservation since the time of this mail"
+					+"\n 		Thank you , Ort Braude Library";
+			mail.setBody(body);
+			String subject="Implement your reservation for "+book.getBookName();
+			mail.setSubject(subject);
+			notify.addObject(mail);
+			ADailyDBController.selection(notify, connToSQL);
+			
+		} 
+		catch (SQLException e) 
+		{
+			
+			e.printStackTrace();
+			return null;
+		} 
+		
+		return new ObjectMessage("letImplementReservation","SentMail");
+	}
+
+	private static ObjectMessage getReaderThatCanImplement(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		Book book=(Book)msg.getObjectList().get(0); 
+		ResultSet rs = null; 
+
+			//get the copies that the reader account borrowed 
+			try 
+			{
+				ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM reservations WHERE bookId=?");
+				ps.setInt(1, book.getBookID()); 
+				rs =ps.executeQuery();
+				rs.next();
+				if(rs.getInt(1)==0)
+				{
+					return new ObjectMessage("ReaderThatCanImplement","NoFound");
+				}
+				else
+				{
+					ps = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ORDER BY `Date`,`Time` ");
+					ps.setInt(1, book.getBookID()); 
+					rs =ps.executeQuery();
+					rs.next();
+					ReaderAccount readerAccount=new ReaderAccount();
+					readerAccount.setId(rs.getString(2));
+					return new ObjectMessage(readerAccount,"ReaderThatCanImplement","Found");
+				}
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+				return new ObjectMessage("ReaderThatCanImplement","NoFound");
+			}
+	}
+	
 }

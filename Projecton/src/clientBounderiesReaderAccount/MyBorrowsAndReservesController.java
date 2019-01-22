@@ -274,10 +274,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
-		// TODO in: reader, reservation you have all the info you need for the server
-		// TODO after you got the answer from the server, clear and update the table view
-		//ObjectMessage newMsg = new ObjectMessage(reader, reservation, "cancel reservation", "Reservation");
-    	//client.handleMessageFromClient(newMsg);
+		ObjectMessage newMsg = new ObjectMessage(reader, reservation, "cancel reservation", "Reservation");
+    	client.handleMessageFromClient(newMsg);
 	}
 
 

@@ -364,11 +364,6 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			askedReader.setFreeSearch(searchReaderAccountSearchField.getText());
 			
 		}
-		
-		else
-		{
-			askedReader.setLastName("needtocheckthis");
-		}
 		ObjectMessage sendToServer=new ObjectMessage(askedReader,"SearchReader","ReaderAccount");
 		client.handleMessageFromClient(sendToServer);  
 	}

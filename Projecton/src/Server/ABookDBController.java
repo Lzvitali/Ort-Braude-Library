@@ -39,7 +39,10 @@ public abstract class  ABookDBController
 		{
 			return tryToAddBook(msg, connToSQL);
 		}
-
+		else if (((msg.getMessage()).equals("searchBookID")))
+		{
+			return searchBookID(msg, connToSQL);
+		}
 		else if (((msg.getMessage()).equals("SearchBook")))
 		{
 			return searchBook(msg, connToSQL);
@@ -409,4 +412,27 @@ public abstract class  ABookDBController
 		}
 		return answer;
 	}
+	
+	private static ObjectMessage searchBookID(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps = null;
+		ObjectMessage answer;
+		Book askedBook=(Book)msg.getObjectList().get(0);
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookId= ?");
+			ps.setInt(1, askedBook.getBookID());
+			ResultSet rs= ps.executeQuery();
+			rs.next();
+			Book book=new Book(rs.getString(1),rs.getString(2),rs.getString(3),rs.getInt(4),rs.getString(5),rs.getBoolean(6),rs.getInt(7),rs.getString(8));
+			answer=new ObjectMessage(book,"BookSearch","BookFound");
+		} 
+		catch (SQLException e) 
+		{
+			answer=new ObjectMessage("BookSearch","NoBookFound");
+			e.printStackTrace();
+		}
+		return answer;
+	}
+	
 }
