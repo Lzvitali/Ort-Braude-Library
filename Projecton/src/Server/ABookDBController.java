@@ -249,17 +249,17 @@ public abstract class  ABookDBController
 		{
 			if(askedBook.getAuthorName()!=null)
 			{
-				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE authorName=?");
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE authorName LIKE ?");
 				input=askedBook.getAuthorName();
 			}
 			else if(askedBook.getBookName()!=null)
 			{
-				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName=?");
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName LIKE ?");
 				input=askedBook.getBookName();
 			}
 			else if(askedBook.getTopic()!=null)
 			{
-				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE topic=?");
+				ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE topic LIKE ?");
 				input=askedBook.getTopic();
 			}
 			else
@@ -270,9 +270,11 @@ public abstract class  ABookDBController
 				//pass on every word in free search and check if exist in db
 				for ( String ss : arrFreeSearch)
 				{
-					ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName LIKE '%'+@input+'%' OR authorName LIKE '%'+@input+'%' OR year LIKE '%'+@input+'%' OR topic LIKE '%'+@input+'%' ");
-					input=ss;
-
+					ps = connToSQL.prepareStatement("SELECT * FROM obl.book WHERE bookName LIKE ? OR authorName LIKE ? OR year LIKE ? OR topic LIKE ? ");
+					ps.setString(1,"%"+ss+"%");
+					ps.setString(2,"%"+ss+"%");
+					ps.setString(3,"%"+ss+"%");
+					ps.setString(4,"%"+ss+"%");
 					ResultSet rs= ps.executeQuery();
 					while(rs.next())
 					{
@@ -306,7 +308,7 @@ public abstract class  ABookDBController
 			//if it is not free search
 			if(isFreeSearch==0)
 			{
-				ps.setString(1,input);
+				ps.setString(1,"%"+input+"%");
 				ResultSet rs = ps.executeQuery();
 				while(rs.next())
 				{
