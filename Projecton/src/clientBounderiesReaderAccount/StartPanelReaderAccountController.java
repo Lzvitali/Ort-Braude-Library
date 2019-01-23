@@ -369,7 +369,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		Socket sock;
 		try
 		{
-			sock = new Socket("localhost", 5643);
+			sock = new Socket(AStartClient.serverIP, 5643);
 			byte[] mybytearray = new byte[Integer.parseInt(msg.getNote())];
 			InputStream is = sock.getInputStream();
 			FileOutputStream fos = new FileOutputStream(msg.getExtra());
