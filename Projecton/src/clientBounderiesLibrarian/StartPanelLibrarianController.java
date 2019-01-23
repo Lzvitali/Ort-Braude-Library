@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -34,7 +35,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -63,6 +67,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	private static int numOfActiveWindows=0;
 
 	public static String readerAccountID; //when the librarian wants to access into the borrows and reserves of a reader account after a search 
+	public static ReaderAccount readerAccount;
 	private static String tempReaderAccountID;
 
 
@@ -588,15 +593,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 					
 					if(LogInController.permission==1)
 					{
-						if(((ReaderAccount)result.get(i)).getStatus().equals("Active"))
-						{
-							((ReaderAccount)result.get(i)).setFreeze(new Button("Freeze"));
-						}
-						else
-						{
-							((ReaderAccount)result.get(i)).setFreeze(new Button("Activate"));
-						}
-
+						readerAccount=(ReaderAccount)result.get(i);
+						(readerAccount).setFreeze(new Button("Change Status"));
+						(readerAccount).getFreeze().setOnAction(e -> changeStatus(e,readerAccount));
 					}
 					searchReaderAccountTable.getItems().add(result.get(i));
 				}
@@ -609,6 +608,28 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	{
 		readerAccountID = readerID;
 		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/BorrowsAndReservations.fxml","Orders and borrows");
+	}
+	
+	
+	//still need to work on it
+	void changeStatus(ActionEvent e, ReaderAccount reader) 
+	{
+		
+		Platform.runLater(()->
+		{  
+			readerAccount = reader;
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			ButtonType bttexit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().clear();
+			alert.setHeaderText("The status of "+readerAccount.getFirstName()+" is "+readerAccount.getStatus());
+			alert.setTitle("Change Status");
+			alert.getButtonTypes().addAll(bttexit);
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) 
+			{
+				System.exit(0);
+			}
+		});
 	}
 
 
