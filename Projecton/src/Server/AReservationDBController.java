@@ -434,7 +434,7 @@ public abstract class AReservationDBController
 			mail.setTo(askedReaderAccount.getEmail());
 			String body="Hello "+askedReaderAccount.getFirstName()+"\nWe glad to notfiy you that you can come to library"
 					+ " and implement your reservation for "+book.getBookName()
-					+ ".\nTake care , you got only 48 to implement reservation since the time of this mail"
+					+ ".\nTake care , you got only 48 hours to implement reservation since the time of this mail."
 					+"\n 		Thank you , Ort Braude Library";
 			mail.setBody(body);
 			String subject="Implement your reservation for "+book.getBookName();
