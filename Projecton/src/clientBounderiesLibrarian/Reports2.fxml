@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="750.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.ReportsController">
+   <children>
+      <TabPane layoutY="87.0" prefHeight="660.0" prefWidth="1300.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Activity (periodical)">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <VBox layoutX="27.0" layoutY="21.0" prefHeight="106.0" prefWidth="337.0">
+                           <children>
+                              <HBox alignment="BOTTOM_RIGHT" prefHeight="38.0" prefWidth="321.0">
+                                 <children>
+                                    <Label text="Month" />
+                                    <AnchorPane prefHeight="38.0" prefWidth="88.0" />
+                                    <Label text="Year" />
+                                    <AnchorPane prefHeight="38.0" prefWidth="37.0" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="44.0" prefWidth="335.0" spacing="15.0">
+                                 <children>
+                                    <Label text="Periode">
+                                       <font>
+                                          <Font name="System Bold Italic" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox prefWidth="150.0" />
+                                    <ComboBox prefWidth="70.0">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Borrows">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <HBox layoutX="26.0" layoutY="-1.0" prefHeight="605.0" prefWidth="1249.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="597.0" prefWidth="562.0">
+                                 <children>
+                                    <AnchorPane prefHeight="18.0" prefWidth="562.0" />
+                                    <Label prefHeight="45.0" prefWidth="213.0" text="Regular Books">
+                                       <font>
+                                          <Font name="System Bold Italic" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <AnchorPane prefHeight="27.0" prefWidth="562.0" />
+                                    <HBox alignment="CENTER_LEFT" prefHeight="79.0" prefWidth="562.0" spacing="25.0">
+                                       <children>
+                                          <AnchorPane prefHeight="79.0" prefWidth="16.0" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                             <children>
+                                                <Label text="Average">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Median">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="205.0" spacing="15.0">
+                                             <children>
+                                                <TextField />
+                                                <TextField />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <AnchorPane prefHeight="43.0" prefWidth="562.0" />
+                                    <BarChart>
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
+                                 </children>
+                              </VBox>
+                              <AnchorPane prefHeight="586.0" prefWidth="119.0">
+                                 <children>
+                                    <AnchorPane layoutX="59.0" layoutY="1.0" prefHeight="603.0" prefWidth="6.0" style="-fx-background-color: #c2c0c0;" />
+                                 </children>
+                              </AnchorPane>
+                              <VBox alignment="TOP_CENTER" prefHeight="597.0" prefWidth="562.0">
+                                 <children>
+                                    <AnchorPane prefHeight="18.0" prefWidth="200.0" />
+                                    <Label prefHeight="45.0" prefWidth="213.0" text="Desired Books">
+                                       <font>
+                                          <Font name="System Bold Italic" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <AnchorPane prefHeight="27.0" prefWidth="562.0" />
+                                    <HBox alignment="CENTER_LEFT" prefHeight="79.0" prefWidth="562.0" spacing="25.0">
+                                       <children>
+                                          <AnchorPane prefHeight="79.0" prefWidth="16.0" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                             <children>
+                                                <Label text="Average">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Median">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="205.0" spacing="15.0">
+                                             <children>
+                                                <TextField />
+                                                <TextField />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <AnchorPane prefHeight="43.0" prefWidth="562.0" />
+                                    <BarChart>
+                                       <xAxis>
+                                          <CategoryAxis side="BOTTOM" />
+                                       </xAxis>
+                                       <yAxis>
+                                          <NumberAxis side="LEFT" />
+                                       </yAxis>
+                                    </BarChart>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Late returns">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <HBox alignment="CENTER" prefHeight="88.0" prefWidth="1304.0">
+         <children>
+            <ImageView fitHeight="65.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../icons/reportTitle.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
