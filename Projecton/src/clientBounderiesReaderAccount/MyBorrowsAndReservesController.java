@@ -1,5 +1,5 @@
 package clientBounderiesReaderAccount;
- 
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,136 +39,131 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class MyBorrowsAndReservesController implements IGUIController
 {
-	
+
 	OBLClient client;
 
 	@FXML
-    private TableColumn<IEntity, String> BookNameBorrowColumn;
+	private TableColumn<IEntity, String> BookNameBorrowColumn;
 
-    @FXML
-    private TableColumn<IEntity, String> AuthorNameBorrowColumn;
+	@FXML
+	private TableColumn<IEntity, String> AuthorNameBorrowColumn;
 
-    @FXML
-    private TableColumn<IEntity, Integer> YearBorrowColumn;
+	@FXML
+	private TableColumn<IEntity, Integer> YearBorrowColumn;
 
-    @FXML
-    private TableColumn<IEntity, String> TopicBorrowColumn;
+	@FXML
+	private TableColumn<IEntity, String> TopicBorrowColumn;
 
-    @FXML
-    private TableColumn<IEntity, Boolean> isDesiredBorrowColumn;
+	@FXML
+	private TableColumn<IEntity, Boolean> isDesiredBorrowColumn;
 
-    @FXML
-    private TableColumn<IEntity, Integer> EditionBorrowColumn;
+	@FXML
+	private TableColumn<IEntity, Integer> EditionBorrowColumn;
 
-    @FXML
-    private TableColumn<IEntity, Date> BorrowDateColumn;
+	@FXML
+	private TableColumn<IEntity, Date> BorrowDateColumn;
 
-    @FXML
-    private TableColumn<IEntity, Date> ReturnDateColumn;
+	@FXML
+	private TableColumn<IEntity, Date> ReturnDateColumn;
 
-    @FXML
-    private TableColumn<IEntity, Button> btnForBorrows;
+	@FXML
+	private TableColumn<IEntity, Button> btnForBorrows;
 
-    @FXML
-    private TableColumn<IEntity, String> BookNameReservColumn;
+	@FXML
+	private TableColumn<IEntity, String> BookNameReservColumn;
 
-    @FXML
-    private TableColumn<IEntity, String> AuthorNameReservColumn;
+	@FXML
+	private TableColumn<IEntity, String> AuthorNameReservColumn;
 
-    @FXML
-    private TableColumn<IEntity, Integer> YeareReservColumn;
+	@FXML
+	private TableColumn<IEntity, Integer> YeareReservColumn;
 
-    @FXML
-    private TableColumn<IEntity, String> TopicReservColumn;
+	@FXML
+	private TableColumn<IEntity, String> TopicReservColumn;
 
-    @FXML
-    private TableColumn<IEntity, Boolean> isDesiredReserveColumn;
+	@FXML
+	private TableColumn<IEntity, Boolean> isDesiredReserveColumn;
 
-    @FXML
-    private TableColumn<IEntity, Integer> editionReserveColumn;
+	@FXML
+	private TableColumn<IEntity, Integer> editionReserveColumn;
 
-    @FXML
-    private TableColumn<IEntity, Button> BtnForOrders;
-    
-    @FXML
-    private TableView<Borrow> borrowsTable;
-    
-    @FXML
-    private TableView<IEntity> ordersTable;
-    
-    @FXML
-    private TableColumn<?, ?> reservationDateColumn;
-    
-    ObservableList<IEntity> list1;
-    ObservableList<IEntity> list2;
-    
-    private ReaderAccount reader;
-    
-    private Copy tempCopy;
-    private static int cntForBorrowsTable = 0; 
-    private static int cntForReservationsTable = 0;
+	@FXML
+	private TableColumn<IEntity, Button> BtnForOrders;
 
-    @FXML
-    void initialize() 
-    {
-    	client=StartPanelController.connToClientController;
-    	client.setClientUI(this);
-    	
-    	cntForBorrowsTable = 0;
-    	
-    	reader = new ReaderAccount();
-    	
-    	// 1 = Library Director , 2 = Librarian , 3 = reader account
-    	
-    	//if the reader account opening the window
-    	if(LogInController.permission == 3)
-    	{
-        	reader.setId(LogInController.currentID);
-    	}
-    	
-    	//if the librarian or the library director opening the window
-    	else 
-    	{
-    		if(LogInController.permission == 1 || LogInController.permission == 2)
-        	{
-            	reader.setId(StartPanelLibrarianController.readerAccountID);
-        	}
-    	}
-    	
-    	ObjectMessage msg = new ObjectMessage(reader, "get borrows", "Copy");
-    	client.handleMessageFromClient(msg); 
-    	//TODO: get the reserves in the display
-    	
-    }
-    
-    
-    
+	@FXML
+	private TableView<Borrow> borrowsTable;
+
+	@FXML
+	private TableView<IEntity> ordersTable;
+
+	@FXML
+	private TableColumn<?, ?> reservationDateColumn;
+
+	ObservableList<IEntity> list1;
+	ObservableList<IEntity> list2;
+
+	private ReaderAccount reader;
+
+	private Copy tempCopy;
+	private static int cntForBorrowsTable = 0; 
+	private static int cntForReservationsTable = 0;
+
+	@FXML
+	void initialize() 
+	{
+		client=StartPanelController.connToClientController;
+		client.setClientUI(this);
+
+		cntForBorrowsTable = 0;
+
+		reader = new ReaderAccount();
+
+		// 1 = Library Director , 2 = Librarian , 3 = reader account
+
+		//if the reader account opening the window
+		if(LogInController.permission == 3)
+		{
+			reader.setId(LogInController.currentID);
+		}
+
+		//if the librarian or the library director opening the window
+		else 
+		{
+			if(LogInController.permission == 1 || LogInController.permission == 2)
+			{
+				reader.setId(StartPanelLibrarianController.readerAccountID);
+			}
+		}
+
+		ObjectMessage msg = new ObjectMessage(reader, "get borrows", "Copy");
+		client.handleMessageFromClient(msg); 
+		//TODO: get the reserves in the display
+
+	}
+
+
+
 
 	@Override
 	public void display(ObjectMessage msg) 
 	{
 		if((msg.getMessage()).equals("TheBorrows"))
 		{
-			setBorrowsResukts(msg);
-			
-			if(0 == cntForBorrowsTable)
-			{
-				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-		    	client.handleMessageFromClient(newMsg);	
-		    	cntForBorrowsTable++;
-			}
+			borrowsTable.getItems().clear();
+			setBorrowsResults(msg);
+			ordersTable.getItems().clear();
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+			client.handleMessageFromClient(newMsg);	
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
-			if(0 == cntForBorrowsTable)
-			{
-				ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-		    	client.handleMessageFromClient(newMsg);	
-		    	cntForBorrowsTable++;
-			}
+			ordersTable.getItems().clear();
+			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+			client.handleMessageFromClient(newMsg);	
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
 		{
+			ordersTable.getItems().clear();
 			setReservationsTable(msg); 
 		}
 		else if((msg.getMessage()).equals("NoReserves"))
@@ -178,39 +173,38 @@ public class MyBorrowsAndReservesController implements IGUIController
 		else if((msg.getMessage()).equals("Delayed"))
 		{
 			AClientCommonUtilities.infoAlert("The borrow successfully delayed", "Success");
-			//tempCopy.setReturnDate(msg.getNote());
-			
+
 			//set again the table view
 			borrowsTable.getItems().clear();	
 			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
-	    	client.handleMessageFromClient(msg2); 
+			client.handleMessageFromClient(msg2); 
 		} 
 		else if((msg.getMessage()).equals("ReservationCanceled"))
 		{
 			AClientCommonUtilities.infoAlert("The reservation was successfully canceled", "Success");
-			
+
 			//set again the table view
 			ordersTable.getItems().clear();
 			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);	
+			client.handleMessageFromClient(newMsg);	
 		}
 		else if((msg.getMessage()).equals("ReservationImplemented"))
 		{
 			AClientCommonUtilities.infoAlert("The reservation was successfully implemented", "Success");
 			
 			//set again the table view
-			ordersTable.getItems().clear();
-			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
-	    	client.handleMessageFromClient(newMsg);	
+			borrowsTable.getItems().clear();	
+			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
+			client.handleMessageFromClient(msg2); 			
 		}
 		else if((msg.getMessage()).equals("ReservationNotImplemented"))
 		{
 			AClientCommonUtilities.alertErrorWithOption(msg.getNote(), "Unuccessfull", "Ok"); 	
 		}
-		
+
 	}
-	
-	
+
+
 	/**
 	 * this function sets the reserves of the reader account to the table
 	 * @param msg- received answer from the server
@@ -238,28 +232,28 @@ public class MyBorrowsAndReservesController implements IGUIController
 			{
 				//if the reader account opening the window
 				if(LogInController.permission == 3)
-		    	{
+				{
 					((Reservation)result.get(i)).setReservationTableBtn(new Button("Cancel"));
 					Reservation resevation = (Reservation)result.get(i);
 					((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> cancelReservation(e,resevation ));
-		    	}
-		    	
-		    	//if the librarian or the library director opening the window
-		    	else 
-		    	{
-		    		if(LogInController.permission == 1 || LogInController.permission == 2)
-		        	{
-		    			BtnForOrders.setText("Implement reservation"); 
-		    			((Reservation)result.get(i)).setReservationTableBtn(new Button("Implement"));
-		    			Reservation resevation = (Reservation)result.get(i);
-		    			((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> implementReservation(e, resevation));
-		        	} 
-		    	}
+				}
+
+				//if the librarian or the library director opening the window
+				else 
+				{
+					if(LogInController.permission == 1 || LogInController.permission == 2)
+					{
+						BtnForOrders.setText("Implement reservation"); 
+						((Reservation)result.get(i)).setReservationTableBtn(new Button("Implement"));
+						Reservation resevation = (Reservation)result.get(i);
+						((Reservation)result.get(i)).getReservationTableBtn().setOnAction(e -> implementReservation(e, resevation));
+					} 
+				}
 
 				ordersTable.getItems().add(result.get(i)); 
 			}
 		});
-		
+
 	}
 
 
@@ -275,7 +269,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
 		ObjectMessage newMsg = new ObjectMessage(reader, reservation, "cancel reservation", "Reservation");
-    	client.handleMessageFromClient(newMsg);
+		client.handleMessageFromClient(newMsg);
 	}
 
 
@@ -286,8 +280,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 	 * (same for the reader account and the librarian)
 	 * @param msg- received answer from the server
 	 */
-	void setBorrowsResukts(ObjectMessage msg)
-	{
+	void setBorrowsResults(ObjectMessage msg)
+	{ 
 		Platform.runLater(()->
 		{
 			//set columns
@@ -311,12 +305,12 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 				IEntity[] tempArray;
 				tempArray = result.get(i);
-				
+
 				tempCopy = new Copy((Copy)tempArray[0]);
 
 				( (Copy)tempArray[0] ).setAskForDelay(new Button("delay"));
 				( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> askForDelay(e, (Copy)tempArray[0]));
-				
+
 				//if reader account can't delay that copy, don't show the button
 				/*if( !((Copy)tempArray[0]).isCanDelay() )
 				{
@@ -342,7 +336,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private void askForDelay(ActionEvent e, Copy copy) 
 	{ 
 		//Copy theCopy = copy;
-		
+
 		if( !copy.isCanDelay() )
 		{
 			//System.out.println(copy.getBookID() + " - nononono"); 
@@ -360,10 +354,10 @@ public class MyBorrowsAndReservesController implements IGUIController
 			Copy msgCopy = new Copy(copy);
 			ObjectMessage msg = new ObjectMessage(msgCopy, "ask for delay", "Copy");
 			tempCopy=copy;
-			
-	    	client.handleMessageFromClient(msg);
-	    	
+
+			client.handleMessageFromClient(msg);
+
 		}
-	
+
 	}
 }
