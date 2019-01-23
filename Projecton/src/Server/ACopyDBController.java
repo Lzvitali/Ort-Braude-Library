@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,7 +23,7 @@ import Common.User;
 
 public abstract class ACopyDBController 
 {
-	
+
 	/**
 	 * This function sorts the request in the 'msg' to the relevant function and returns the answer
 	 * @param msg - the object from the client
@@ -68,7 +70,7 @@ public abstract class ACopyDBController
 			return null; 
 		}
 	}
-	 
+
 	/**
 	 * This function check if the book is exist in DB and if desired or not 
 	 * @param msg -the object from the client
@@ -78,7 +80,7 @@ public abstract class ACopyDBController
 	private static ObjectMessage checkReturnDate(ObjectMessage msg, Connection connToSQL) 
 	{
 		Copy copy=(Copy)msg.getObjectList().get(0);
-		
+
 		try 
 		{
 			//get the copies that the reader account want to borrow
@@ -86,14 +88,14 @@ public abstract class ACopyDBController
 			System.out.println();
 			getCopy.setInt(1, copy.getCopyID()); 
 			ResultSet rs1 = getCopy.executeQuery();
-			
+
 			if(rs1.next())//if there is copy with this id exist in DB
 			{
 				//get book id
 				PreparedStatement getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
 				getBook.setInt(1, rs1.getInt(2));
 				ResultSet rs2 = getBook.executeQuery();
-				
+
 				rs2.next();
 				if(rs2.getBoolean(6))
 				{
@@ -116,7 +118,7 @@ public abstract class ACopyDBController
 		return new ObjectMessage("Not exist book");
 	}
 
-	
+
 	/**
 	 * This function make the change of the 'delay borrowed book' in the DB
 	 * and sends back to the client the new date
@@ -135,7 +137,7 @@ public abstract class ACopyDBController
 		{			
 			LocalDate nowPlus14 = LocalDate.now().plusDays(14);
 			Date nowPlus14Date = java.sql.Date.valueOf(nowPlus14); 
-		    
+
 			setDate = connToSQL.prepareStatement("UPDATE Copy "+"SET returnDate = ? WHERE copyId = ?");
 			setDate.setDate(1, (java.sql.Date) nowPlus14Date ); 
 			setDate.setInt(2, copy.getCopyID() ); 
@@ -150,21 +152,24 @@ public abstract class ACopyDBController
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 		LocalDateTime now = LocalDateTime.now();  
 		LocalDateTime newDate = LocalDateTime.now().plusDays(14); 
-		
+
 		answer.setNote(dtf.format(newDate));
 		return answer;
-			
+
 	}
 
 	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL) 
 	{
 
 		ObjectMessage answer=new ObjectMessage();
+		Date borrowDate;
+		long durationOfborrow;
+
 		PreparedStatement checkCopy=null;
 		PreparedStatement updateCopy=null;
 		PreparedStatement checkReaderAccountDelays=null;
 		PreparedStatement updateReaderAccount=null;
-		
+
 		ResultSet query1 = null;
 		ResultSet query2 = null;
 		ResultSet query3=null;
@@ -181,9 +186,11 @@ public abstract class ACopyDBController
 			if(temp==false)
 			{
 				answer.setNote("The copyID is wrong or the copyID does not borrowed");
+
 			}
 			else
 			{
+				borrowDate = query1.getDate(5);  
 				checkCopy=(PreparedStatement) connToSQL.prepareStatement("SELECT * FROM copy WHERE copyId = ?");
 				checkCopy.setInt(1,tempCopy.getCopyID());
 				query2=checkCopy.executeQuery();
@@ -192,7 +199,7 @@ public abstract class ACopyDBController
 				checkReaderAccountDelays=(PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ?");
 				checkReaderAccountDelays.setString(1,id);
 				query3=checkReaderAccountDelays.executeQuery();
-			
+
 				query3.next();
 				numOfDelay=query3.getInt(9);
 				String status=query3.getString(8);
@@ -208,6 +215,21 @@ public abstract class ACopyDBController
 				updateCopy.executeUpdate();
 				answer.setNote("successful ReturnCopy");
 				answer.addObject(msg.getObjectList().get(0));
+				Date today=new Date();
+				try 
+				{
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+					String todayDate = sdf.format(today);
+					Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse(todayDate);
+					String borrowdate = sdf.format(borrowDate); 
+					Date d2 = new SimpleDateFormat("yyyy-MM-dd").parse(borrowdate);
+					durationOfborrow = d2.getTime() - d1.getTime();
+				} 
+				catch (ParseException e) 
+				{
+
+					e.printStackTrace();
+				}
 			}
 
 		}
@@ -215,11 +237,13 @@ public abstract class ACopyDBController
 		{
 			e.printStackTrace();
 			return new ObjectMessage("Unexpected Error.","Unsucessfull");		
-		}	 
+		}	
+		
+		//TODO: For Nata: take the 'durationOfborrow' for the 'note' in the "return book" in the history table
 		return answer;
 	}
-	
-	
+
+
 	private static ObjectMessage checkIfAllBorrowed(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -247,7 +271,7 @@ public abstract class ACopyDBController
 			return null;
 		}
 	}
-	
+
 	/**
 	 * This function will return all the borrows of specific reader account
 	 * also it will provide whether the reader account can ask for delay for each one of his borrows
@@ -261,7 +285,7 @@ public abstract class ACopyDBController
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		boolean resultExist = false;
 		boolean canDelay = false;
-		
+
 		PreparedStatement getCopies = null; 
 		PreparedStatement getBook = null;
 		PreparedStatement getReaderAccount = null;
@@ -277,21 +301,21 @@ public abstract class ACopyDBController
 			getCopies = connToSQL.prepareStatement("SELECT * FROM Copy WHERE borrowerId = ? ");
 			getCopies.setString(1, reader.getId() ); 
 			rs1 =getCopies.executeQuery();
-			
+
 			ArrayList <IEntity[]> result=new ArrayList<IEntity[]>(); 
-			
+
 			//go by all the copies the reader account borrowing and get the book of each one
 			while(rs1.next())
 			{
 				resultExist = true;
-				
+
 				IEntity []CopyAndBook = new IEntity[2]; //CopyAndBook[0]->the Copy info , CopyAndBook[1]->the Book info
-				
+
 				//set the copy info from the first query
 				CopyAndBook[0]=(new Copy(rs1.getInt(1), rs1.getInt(2), rs1.getString(3), rs1.getString(4), rs1.getString(5)));
-				
+
 				int bookId = rs1.getInt(2); //the bookID of the current copy
-				
+
 				//get the book of that copy
 				getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
 				getBook.setInt(1, bookId ); 
@@ -302,13 +326,13 @@ public abstract class ACopyDBController
 					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7)) );
 				}
 
-				
+
 				//////////////////////////////////////////////////////////
 				//check if the reader account can ask for delay this book
 				//////////////////////////////////////////////////////////
-				
+
 				String reason=" ";
-				
+
 				//check if the return date is the most updated 20    28
 				LocalDate nowPlus7 = LocalDate.now().plusDays(7);
 				Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
@@ -327,12 +351,12 @@ public abstract class ACopyDBController
 					}
 					else
 					{
-						
+
 						//check if it reserved by someone
 						getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
 						getReservs.setInt(1, rs1.getInt(2) ); 
 						rs4 =getReservs.executeQuery();
-						
+
 						if(rs4.next())
 						{
 							canDelay = false;
@@ -341,13 +365,13 @@ public abstract class ACopyDBController
 						{
 							//check if he is not already in delay
 							//Date dateOfReturn =  rs1.getDate(5);
-							
+
 							//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 							LocalDateTime now = LocalDateTime.now();
-							
+
 							Instant instant = now.toInstant(ZoneOffset.UTC);
-						    Date today = Date.from(instant);
-								
+							Date today = Date.from(instant);
+
 							if( today.after(dateOfReturn) )
 							{
 								canDelay = false;
@@ -358,7 +382,7 @@ public abstract class ACopyDBController
 								getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
 								getReaderAccount.setString(1, reader.getId() ); 
 								rs3 =getReaderAccount.executeQuery();
-								
+
 								if(rs3.next())
 								{
 									//if the reader account is active
@@ -373,12 +397,12 @@ public abstract class ACopyDBController
 								}
 							}	
 						}
-		
+
 					}
 				}
-				
+
 				((Copy)(CopyAndBook[0])).setReasonForCantDelay(reason);
-				
+
 				if(canDelay)
 				{
 					((Copy)(CopyAndBook[0])).setCanDelay(true);
@@ -389,10 +413,10 @@ public abstract class ACopyDBController
 					((Copy)(CopyAndBook[0])).setCanDelay(false); 
 					//answer.setExtra("canNotDelay");
 				}
-				
+
 				result.add(CopyAndBook);
 			}
-			
+
 			if(resultExist)
 			{
 				answer = new ObjectMessage(result,"TheBorrows");
@@ -401,18 +425,18 @@ public abstract class ACopyDBController
 			{
 				answer = new ObjectMessage(result,"NoBorrows");
 			}
-			
+
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		
+
 
 		return answer;
 	}
-	
-	
+
+
 	private static ObjectMessage deleteBook(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -423,11 +447,11 @@ public abstract class ACopyDBController
 		ResultSet rs3 = null;
 		Copy askedCopy=(Copy)msg.getObjectList().get(0);
 		int countNumOfCopies;
-		
-		
+
+
 		try 
 		{
-			
+
 			//get id of the book of the copy
 			getBook = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE copyId = ? ");
 			getBook.setInt(1, askedCopy.getCopyID()); 
@@ -436,49 +460,49 @@ public abstract class ACopyDBController
 			{
 				answer= new ObjectMessage("The copy is not exist in obl,you can not delete it","Unsucessfull");
 			}
-			
+
 			else{
-			int bookOfCopyID=rs2.getInt(2);
-			
-			//get number of copies of this bookID
-			getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
-			getNumOfCopies.setInt(1, bookOfCopyID); 
-			rs3 =getNumOfCopies.executeQuery();
-			rs3.next();
-			countNumOfCopies=rs3.getInt(1);
-			
-			//delete the copy
-			ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
-			ps.setInt(1,askedCopy.getCopyID());
-			ps.executeUpdate();
-			countNumOfCopies--;
-		
-			
-			//there is no copies from the book
-			if(countNumOfCopies==0)
-			{
-				try 
+				int bookOfCopyID=rs2.getInt(2);
+
+				//get number of copies of this bookID
+				getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
+				getNumOfCopies.setInt(1, bookOfCopyID); 
+				rs3 =getNumOfCopies.executeQuery();
+				rs3.next();
+				countNumOfCopies=rs3.getInt(1);
+
+				//delete the copy
+				ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
+				ps.setInt(1,askedCopy.getCopyID());
+				ps.executeUpdate();
+				countNumOfCopies--;
+
+
+				//there is no copies from the book
+				if(countNumOfCopies==0)
 				{
-					ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
-					ps.setInt(1,bookOfCopyID);
-					ps.executeUpdate();
+					try 
+					{
+						ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
+						ps.setInt(1,bookOfCopyID);
+						ps.executeUpdate();
+					}
+					catch (SQLException e) 
+					{
+						e.printStackTrace();
+						answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
+					}
 				}
-				catch (SQLException e) 
-				{
-					e.printStackTrace();
-					answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
-				}
+				answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
 			}
-			answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
-			}
-			
+
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			answer=new ObjectMessage("Unexpected Error.","Unsucessfull");
 		}
-		
+
 		return answer;
 	}
 
@@ -496,19 +520,19 @@ public abstract class ACopyDBController
 		LocalDate now = LocalDate.now();  
 		LocalDate desireDate = LocalDate.now().plusDays(3);  
 		LocalDate notDesireDate = LocalDate.now().plusDays(14);
-		
+
 		Date today = java.sql.Date.valueOf(now);
 		Date todayPlus3 = java.sql.Date.valueOf(desireDate);
 		Date todayPlus7 = java.sql.Date.valueOf(notDesireDate);
 
-		
+
 		try 
 		{
 			//get the copies that the reader account want to borrow
 			PreparedStatement getCopy = connToSQL.prepareStatement("SELECT * FROM Copy WHERE copyId = ? ");
 			getCopy.setInt(1, copy.getCopyID()); 
 			ResultSet rs1 = getCopy.executeQuery();
-			
+
 			if(rs1.next())//if there is copy with this id exist in DB
 			{
 				if(rs1.getString(3)==null)
@@ -517,19 +541,19 @@ public abstract class ACopyDBController
 					PreparedStatement getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
 					getBook.setInt(1, rs1.getInt(2));
 					ResultSet rs2 = getBook.executeQuery();
-					
+
 					//set borrower id to the table copies
 					PreparedStatement setBorroweID =connToSQL.prepareStatement("UPDATE `obl`.`copy` SET `borrowerId`=?  WHERE `copyId` = ?");	
 					setBorroweID.setString(1, reader.getId());
 					setBorroweID.setInt(2,copy.getCopyID()); 
-					
+
 					setBorroweID.executeUpdate();
 					rs2.next();
-					
+
 					if(!rs2.getBoolean(6)) //check if desire or not
 					{
 						PreparedStatement setReturnDay =connToSQL.prepareStatement("UPDATE copy "+"SET borrowDate = ? , returnDate = ? WHERE copyId = ?");
-						
+
 						setReturnDay.setDate(1, (java.sql.Date) today);
 						setReturnDay.setDate(2,(java.sql.Date) todayPlus7);
 						setReturnDay.setInt(3, copy.getCopyID());
@@ -556,7 +580,7 @@ public abstract class ACopyDBController
 			{
 				return "CopyNotExist";
 			}
-			
+
 		}
 		catch (SQLException e) 
 		{
@@ -564,7 +588,7 @@ public abstract class ACopyDBController
 			new ObjectMessage("Unexpected Error.","Unsucessfull");
 		}
 		return "CopyNotExist";
-	
+
 	}
 
 	private static ObjectMessage closetReturnDate(ObjectMessage msg, Connection connToSQL)
@@ -595,7 +619,7 @@ public abstract class ACopyDBController
 		}
 	}
 
-	
+
 	private static ObjectMessage checkIfUserGotAlreadyCopy(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
