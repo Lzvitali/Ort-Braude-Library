@@ -66,7 +66,7 @@ public abstract class AReservationDBController
 	 */
 	private static ObjectMessage implementReserveBook(ObjectMessage msg, Connection connToSQL) 
 	{
-		ObjectMessage answer = null;  
+		ObjectMessage answer = new ObjectMessage();  
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		Reservation reserve=(Reservation) msg.getObjectList().get(1);
 
@@ -91,8 +91,8 @@ public abstract class AReservationDBController
 			String status=rs1.getString(8);
 			if(!(status.equals("Active")))
 			{
-				answer.setMessage("The reader account is not active");
-				answer.addObject(msg.getObjectList().get(0));
+				answer.setMessage("ReservationNotImplemented");
+				answer.setNote("The reader account is not active");
 				return answer;
 			}
 			else
@@ -104,8 +104,8 @@ public abstract class AReservationDBController
 				copyAvailable=rs2.getInt(1);
 				if(copyAvailable==0)
 				{
-					answer.setMessage("No copy available");
-					answer.addObject(msg.getObjectList().get(0));
+					answer.setMessage("ReservationNotImplemented");
+					answer.setNote("No copy available");
 					return answer;
 				}
 				else
@@ -125,7 +125,6 @@ public abstract class AReservationDBController
 						whoIstheFirst = connToSQL.prepareStatement("SELECT * FROM reservations WHERE bookId=? order by Date"); 
 						whoIstheFirst.setInt(1, reserve.getBookID());
 						rs4 =whoIstheFirst.executeQuery();
-						answer =new ObjectMessage();
 						rs4.next();
 						Date date=rs4.getDate(3);
 						rs4.beforeFirst();
@@ -140,6 +139,7 @@ public abstract class AReservationDBController
 
 						}
 							answer.setMessage("ReservationNotImplemented");
+							answer.setNote("The reader account is not the first on queue");
 							answer.addObject(msg.getObjectList().get(0));
 					}
 				}
@@ -154,7 +154,7 @@ public abstract class AReservationDBController
 	}
 	private static ObjectMessage implementTheBorrow(ObjectMessage msg, Connection connToSQL) 
 {
-		ObjectMessage answer =null;
+		ObjectMessage answer = new ObjectMessage();;
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		Reservation reserve=(Reservation) msg.getObjectList().get(1);
 		PreparedStatement getBook,numOfCopy;
@@ -193,9 +193,7 @@ public abstract class AReservationDBController
 		numOfCopy.setInt(4, reserve.getBookID());
 		numOfCopy.executeUpdate();
 
-		answer =new ObjectMessage();
 		answer.setMessage("ReservationImplemented");
-		answer.addObject(msg.getObjectList().get(0));
 		PreparedStatement deleteReserve = connToSQL.prepareStatement("delete FROM reservations WHERE bookId=? AND readerAccountID=?");
 		deleteReserve.setInt(1, reserve.getBookID());
 		deleteReserve.setString(2, reader.getId());
