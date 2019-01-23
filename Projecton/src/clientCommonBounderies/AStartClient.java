@@ -27,6 +27,7 @@ public class AStartClient extends Application
 	private String choosen="/clientBounderiesLibrarian/StartPanelLibrarian.fxml"; //Librarian
 	private String choosen1="/clientCommonBounderies/StartPanel.fxml";
 	private String choosen2="/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml";
+	public static String serverIP ;
 	
     @Override
     public void start(Stage primaryStage) throws Exception //start the client (open FXML/Controller)
@@ -50,6 +51,7 @@ public class AStartClient extends Application
         	arr[1]="5555";
         	((StartPanelController)(startPanelController)).initialize(arr);
         }
+        serverIP = arr[0];
         root.setId("pane");
         primaryStage.setTitle("OBL");
         Scene scene=new Scene(root, 1400, 774);

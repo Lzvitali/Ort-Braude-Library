@@ -54,7 +54,7 @@ public class OblServer extends AbstractServer
 
 	public void handleMessageFromClient(Object msg, ConnectionToClient client)
 	{
-
+		
 		ObjectMessage objectMessage = (ObjectMessage)msg;
 		ObjectMessage answer;
 
@@ -127,7 +127,7 @@ public class OblServer extends AbstractServer
 			Socket sock;
 			try
 			{
-				sock = new Socket("localhost", 5643);
+				sock = new Socket(client.getInetAddress().getHostAddress(), 5643);
 				byte[] mybytearray = new byte[Integer.parseInt(objectMessage.getMessage())];
 				InputStream is = sock.getInputStream();
 				FileOutputStream fos = new FileOutputStream("pdfFiles\\"+objectMessage.getExtra() + ".pdf");
