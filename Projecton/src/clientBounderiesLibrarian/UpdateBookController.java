@@ -27,10 +27,10 @@ import javafx.scene.layout.VBox;
 
 public class UpdateBookController implements IGUIController 
 {
-	
+
 	OBLClient client;
-	
-	
+
+
 	@FXML
 	private ResourceBundle resources;
 
@@ -72,22 +72,22 @@ public class UpdateBookController implements IGUIController
 
 	@FXML
 	private TextField bookIDTextField;
-	
 
-    @FXML
-    private VBox bookInfoVBox;
-    
-    @FXML
+
+	@FXML
+	private VBox bookInfoVBox;
+
+	@FXML
 	void initialize() 
 	{
-    	client=StartPanelController.connToClientController;
+		client=StartPanelController.connToClientController;
 		client.setClientUI(this);
-		
+
 		bookInfoVBox.setVisible(false); 
 		combo();
 	}
-    
-    //the function insert chars in to the Combo box in the gui window
+
+	//the function insert chars in to the Combo box in the gui window
 	public void combo() 
 	{
 		ArrayList <String> s=new ArrayList<String>();
@@ -116,24 +116,29 @@ public class UpdateBookController implements IGUIController
 	void cancelBtnClicked(ActionEvent event) 
 	{
 		AClientCommonUtilities.backToStartPanel();
-		
+
 	}
 
+	
 	//the function activated every time when user type in `bookId` box and ask server if this book exist . 
-    @FXML
-    void showBookInfo(KeyEvent event) 
-    {
-    	Platform.runLater(()->
+	@FXML
+	void showBookInfo(KeyEvent event) 
+	{
+		
+		Platform.runLater(()->
 		{ 
+			
 			int bookID;	
 
-			if(bookIDTextField.getText().equals("") || null == bookIDTextField.getText())
-			{
-				bookID=0;
+			if (AValidationInput.checkValidationBook("bookID", bookIDTextField.getText()).equals("correct"))
+			{	
+				bookID=Integer.parseInt(bookIDTextField.getText());
+
 			}
+
 			else
 			{
-				bookID=Integer.parseInt(bookIDTextField.getText());
+				bookID=0;
 			}
 
 			Book book=new Book(bookID);
@@ -141,34 +146,34 @@ public class UpdateBookController implements IGUIController
 			client.handleMessageFromClient(msg);
 		});
 
-    }
-    
-//the function activated when user press button for update book`s information
-    @FXML
-    void updateAddNewBook(ActionEvent event)//update information about book
-    {
-    	String checkResult = validationFields();
-    	Book book;
-    	
-    	if(checkResult.equals("correct"))//if all fields correctly
-    	{
-    		String bookLocation;
-    		bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
-    		boolean isDesired= DesiredCheckBox.isSelected();
-    		book=new Book(bookIDTextField.getText(),BookTitleTextField.getText(), BookAuthorTextField.getText(),Integer.parseInt(PublishedYearTextField.getText()),TopicTextField.getText(),isDesired,Integer.parseInt(EditionTextField.getText()), bookLocation);
-    		ObjectMessage msg= new ObjectMessage(book,"changeBookInfo","Book");
-    		client.handleMessageFromClient(msg);
-    	}
-    	else
-    	{
-    		AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");		
-    	}
+	}
+
+	//the function activated when user press button for update book`s information
+	@FXML
+	void updateAddNewBook(ActionEvent event)//update information about book
+	{
+		String checkResult = validationFields();
+		Book book;
+
+		if(checkResult.equals("correct"))//if all fields correctly
+		{
+			String bookLocation;
+			bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
+			boolean isDesired= DesiredCheckBox.isSelected();
+			book=new Book(bookIDTextField.getText(),BookTitleTextField.getText(), BookAuthorTextField.getText(),Integer.parseInt(PublishedYearTextField.getText()),TopicTextField.getText(),isDesired,Integer.parseInt(EditionTextField.getText()), bookLocation);
+			ObjectMessage msg= new ObjectMessage(book,"changeBookInfo","Book");
+			client.handleMessageFromClient(msg);
+		}
+		else
+		{
+			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");		
+		}
 
 
 
-    }
+	}
 
-	
+
 
 
 	@Override
@@ -180,17 +185,17 @@ public class UpdateBookController implements IGUIController
 		{
 			Platform.runLater(()->
 			{
-			bookInfoVBox.setVisible(true); 
-			Book tempBook=(Book)msg.getObjectList().get(0);
-			
-			BookTitleTextField.setText(tempBook.getBookName());
-			BookAuthorTextField.setText(tempBook.getAuthorName());
-			PublishedYearTextField.setText(Integer.toString(tempBook.getDateOfBook()));
-			EditionTextField.setText(Integer.toString(tempBook.getEdition()));
-			TopicTextField.setText(tempBook.getTopic());
-			DesiredCheckBox.setSelected(tempBook.getIsDesired());
-			bookLocationLetter.setValue(String.valueOf(tempBook.getBookLocation().charAt(0)));
-			BookLocationNumber.setValue(String.valueOf(tempBook.getBookLocation().charAt(2)));
+				bookInfoVBox.setVisible(true); 
+				Book tempBook=(Book)msg.getObjectList().get(0);
+
+				BookTitleTextField.setText(tempBook.getBookName());
+				BookAuthorTextField.setText(tempBook.getAuthorName());
+				PublishedYearTextField.setText(Integer.toString(tempBook.getDateOfBook()));
+				EditionTextField.setText(Integer.toString(tempBook.getEdition()));
+				TopicTextField.setText(tempBook.getTopic());
+				DesiredCheckBox.setSelected(tempBook.getIsDesired());
+				bookLocationLetter.setValue(String.valueOf(tempBook.getBookLocation().charAt(0)));
+				BookLocationNumber.setValue(String.valueOf(tempBook.getBookLocation().charAt(2)));
 			});
 		}
 		else if(msg.getMessage().equals("Wrong")) 
@@ -205,11 +210,11 @@ public class UpdateBookController implements IGUIController
 		}
 		else if(msg.getMessage().equals("Book not exist in DB"))
 		{
-			//do nothing
+			bookInfoVBox.setVisible(false); 
 		}
 	}
 
-	
+
 	//The function checks validation of input
 	private String validationFields()
 	{
@@ -268,17 +273,17 @@ public class UpdateBookController implements IGUIController
 		}
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
