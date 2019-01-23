@@ -396,13 +396,16 @@ public abstract class AReservationDBController
 			ObjectMessage askTheFirstReader=new ObjectMessage();
 			askTheFirstReader.addObject(askedbook);
 			ObjectMessage result=getReaderThatCanImplement(askTheFirstReader,connToSQL);
-			askTheFirstReader=new ObjectMessage(result.getObjectList().get(0),"SearchReader","ReaderAccount");
-			ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
-			ObjectMessage bookDetails=new ObjectMessage(askedbook,"searchBookID","Book");
-			Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
-			ObjectMessage implementReservation=new ObjectMessage();
-			implementReservation.addObject(readerAccount, book);
-			letImplementReservation(implementReservation,connToSQL);
+			if(result.getNote().equals("Found"))
+			{
+				askTheFirstReader=new ObjectMessage(result.getObjectList().get(0),"SearchReader","ReaderAccount");
+				ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
+				ObjectMessage bookDetails=new ObjectMessage(askedbook,"searchBookID","Book");
+				Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
+				ObjectMessage implementReservation=new ObjectMessage();
+				implementReservation.addObject(readerAccount, book);
+				letImplementReservation(implementReservation,connToSQL);
+			}
 			return new ObjectMessage("ReservationCanceled","cancelReservation");
 		} 
 		catch (SQLException e) 
