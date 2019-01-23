@@ -65,15 +65,62 @@ public abstract class  ABookDBController
 	}
 
 
+	/**
+	 * This function update information about book in the DB in MySQL. It is check if updated info of book is not like book that already in db 
+	 * @param msg- the object from the client
+	 * @param connToSQL -the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client if book was added successfully or not or it has wrong .
+	 */
 	private static ObjectMessage changeBookInfo(ObjectMessage msg, Connection connToSQL)
 	{
+		Book tempBook=(Book)msg.getObjectList().get(0);
+		PreparedStatement checkBook = null; 
+		ResultSet rs1 = null;
 		
+		//check if updated info of book is not like book that already in db
+		String queryForNewBook= "SELECT * FROM book WHERE bookName = ? AND authorName = ? AND year = ? AND edition = ? AND bookId NOT LIKE ?";
+		
+		try {
+			checkBook = connToSQL.prepareStatement(queryForNewBook);
+			checkBook.setString(1,tempBook.getBookName()); 
+			checkBook.setString(2, tempBook.getAuthorName());
+			checkBook.setInt(3, tempBook.getDateOfBook());
+			checkBook.setInt(4,tempBook.getEdition());
+			checkBook.setInt(5, tempBook.getBookID());
+			rs1 =checkBook.executeQuery();
+			
+			if(rs1.next())
+			{
+				return new ObjectMessage("Wrong");
+			}
+			else //save new info about specific book
+			{
+				PreparedStatement updatedBook = connToSQL.prepareStatement("UPDATE book "+"SET bookName= ? , authorName = ? , year = ? , topic = ? , isDesired = ? , edition = ? , bookLocation = ?  WHERE bookId = ?");
+				updatedBook.setString(1, (String)tempBook.getBookName());
+				updatedBook.setString(2, (String)tempBook.getAuthorName());
+				updatedBook.setInt(3, (int)tempBook.getDateOfBook());
+				updatedBook.setString(4, tempBook.getTopic());
+				updatedBook.setBoolean(5,(Boolean) tempBook.isDesired());
+				updatedBook.setInt(6, (int)tempBook.getEdition());
+				updatedBook.setString(7, tempBook.getBookLocation());
+				updatedBook.setInt(8, tempBook.getBookID());
+				updatedBook.executeUpdate(); 
+				return new ObjectMessage("UpdateBookInfoSccessfully");
+			}
+			
+		} catch (SQLException e) 
+		{
+		
+			e.printStackTrace();
+		}
+		
+
 		return null;
 	}
 
 
 	/**
-	 * The function check if book exist in DB and return all data about specific book
+	 * The function check if book exist in DB and return all data  to client about specific book if it exist and if not
 	 * @param msg- the object from the client
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return ObjectMessage with the answer to the client
@@ -106,7 +153,7 @@ public abstract class  ABookDBController
 			}
 			else //if there is no book with the same bookId
 			{
-				return new ObjectMessage("Book not exist in DB","Wrong");
+				return new ObjectMessage("Book not exist in DB");
 			}
 
 
@@ -122,7 +169,10 @@ public abstract class  ABookDBController
 
 
 	/**
-	 * 
+	 * This function check location of specific book and send it to client
+	 * @param msg- the object from the client
+	 * @param connToSQL -the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client if book was added successfully or not or it has wrong .
 	 */
 	private static ObjectMessage tryToSetLocationOfBook(ObjectMessage msg, Connection connToSQL) 
 	{

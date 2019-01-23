@@ -483,7 +483,7 @@ public abstract class AValidationInput
 					return "Uncorrect input author name";
 				}
 			}
-			else if (!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z')) || (context.charAt(i)) == ','  || (context.charAt(i)) == ' '))
+			else if (!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z')) || (context.charAt(i)) == ','  || (context.charAt(i)) == ' ' || (context.charAt(i)) == '.'))
 			{
 				return "Uncorrect input author name";
 			}

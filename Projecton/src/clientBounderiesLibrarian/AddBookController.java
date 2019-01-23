@@ -239,7 +239,7 @@ public class AddBookController implements IGUIController
 
 
 
-	//check validation
+	//The function checks validation of input
 	private String validationFields()
 	{
 		String result,finalResult="";

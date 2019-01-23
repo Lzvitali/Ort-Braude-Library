@@ -5,6 +5,7 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import com.jfoenix.controls.JFXButton;
@@ -86,7 +87,7 @@ public class UpdateBookController implements IGUIController
 		combo();
 	}
     
-    
+    //the function insert chars in to the Combo box in the gui window
 	public void combo() 
 	{
 		ArrayList <String> s=new ArrayList<String>();
@@ -118,6 +119,7 @@ public class UpdateBookController implements IGUIController
 		
 	}
 
+	//the function activated every time when user type in `bookId` box and ask server if this book exist . 
     @FXML
     void showBookInfo(KeyEvent event) 
     {
@@ -141,41 +143,30 @@ public class UpdateBookController implements IGUIController
 
     }
     
-
-	@FXML//Natasha do it 
-	void updateAddNewBook(ActionEvent event)//update information about book
-	{
-		//String checkResult = validationFields();
-		Book book;
-		/*if(checkResult.equals("correct"))//if all fields correctly
-		{*/
-			String bookLocation;
-
-			if( ( bookLocationLetter.getValue() == null  || (bookLocationLetter.getValue().toString()).equals(null) ) 
-					|| ( BookLocationNumber.getValue() == null  || (BookLocationNumber.getValue().toString()).equals(null) ) )
-			{
-				bookLocation = "";
-			}
-			else
-			{
-				bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
-			}
-
-			String numOfCopies="";
-			boolean isDesired= DesiredCheckBox.isSelected();
-			book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numOfCopies, bookLocation);
-			ObjectMessage msg= new ObjectMessage(book,"changeBookInfo","Book");
-			//book.setFileIsLoaded(isUploaded);
-			client.handleMessageFromClient(msg);
-		//}
-	/*	else
-		{
-			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");		
-		}*/
+//the function activated when user press button for update book`s information
+    @FXML
+    void updateAddNewBook(ActionEvent event)//update information about book
+    {
+    	String checkResult = validationFields();
+    	Book book;
+    	
+    	if(checkResult.equals("correct"))//if all fields correctly
+    	{
+    		String bookLocation;
+    		bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
+    		boolean isDesired= DesiredCheckBox.isSelected();
+    		book=new Book(bookIDTextField.getText(),BookTitleTextField.getText(), BookAuthorTextField.getText(),Integer.parseInt(PublishedYearTextField.getText()),TopicTextField.getText(),isDesired,Integer.parseInt(EditionTextField.getText()), bookLocation);
+    		ObjectMessage msg= new ObjectMessage(book,"changeBookInfo","Book");
+    		client.handleMessageFromClient(msg);
+    	}
+    	else
+    	{
+    		AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");		
+    	}
 
 
-		
-	}
+
+    }
 
 	
 
@@ -185,7 +176,7 @@ public class UpdateBookController implements IGUIController
 	{
 
 
-		if (msg.getMessage().equals("FoundBook"))
+		if (msg.getMessage().equals("FoundBook"))//for showing all information about asked book
 		{
 			Platform.runLater(()->
 			{
@@ -204,11 +195,79 @@ public class UpdateBookController implements IGUIController
 		}
 		else if(msg.getMessage().equals("Wrong")) 
 		{
-			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
+			AClientCommonUtilities.alertErrorWithOption("You try to update data of book with data of another book that already in the DB.","Wrong","Back");
+			//AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), msg.getNote(),"Back");
+		}
+		else if(msg.getMessage().equals("UpdateBookInfoSccessfully"))
+		{
+			AClientCommonUtilities.infoAlert("You successfuly updated data of this book .","Successful" );
+			AClientCommonUtilities.backToStartPanel();
+		}
+		else if(msg.getMessage().equals("Book not exist in DB"))
+		{
+			//do nothing
 		}
 	}
 
 	
+	//The function checks validation of input
+	private String validationFields()
+	{
+		String result,finalResult="";
+
+		result=AValidationInput.checkValidationBook("bookName",BookTitleTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
+		result=AValidationInput.checkValidationBook("authorName",BookAuthorTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
+
+		result=AValidationInput.checkValidationBook("dateOfBook",PublishedYearTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
+
+		result=AValidationInput.checkValidationBook("topic",TopicTextField.getText());
+		if(!result.equals("correct"))
+		{
+			finalResult+=result+'\n';
+		}
+
+		if(EditionTextField.getText().equals("") || null == EditionTextField.getText())
+		{
+			finalResult+="Insert number of edition";
+
+		}
+		else
+		{
+			for(int i=0;i<EditionTextField.getText().length();i++)//check validation for edition text field
+			{
+
+				if(EditionTextField.getText().charAt(i)<'0' ||EditionTextField.getText().charAt(i)>'9')        
+				{
+					finalResult+="Edition must contain only numbers";
+					break;
+				}
+
+			}
+		}
+
+		if(finalResult.equals(""))
+		{
+			return "correct";
+		}
+
+		else
+		{
+			return finalResult;
+		}
+
+	}
 	
 	
 	

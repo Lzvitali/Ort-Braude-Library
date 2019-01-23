@@ -26,21 +26,7 @@ public class Book implements IEntity, Serializable
 	
 	//buttons
 	private transient Button reserve;
-	private transient Button details;
-	
-//	public Book(int bookID, String bookName, String authorName, Date dateOfBook, String topic, boolean isDesired) 
-//	{
-//		super();
-//		this.bookID =(int) bookID;
-//		this.bookName = bookName;
-//		this.authorName = authorName;
-//		this.dateOfBook =(Date) dateOfBook;
-//		this.topic = topic;
-//		this.isDesired = (Boolean)isDesired;
-//		Button reserve = new Button();
-//		Button details= new Button();
-//	}
-	  
+	private transient Button details; 
 	
 
 	public Book(String bookName)
