@@ -98,7 +98,7 @@ public abstract class ADailyDBController
 	        return null;
 	}
 	
-	//check the methode ester
+	//check the methode 
 	private static void writeUserStatusHistory(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps=null;
