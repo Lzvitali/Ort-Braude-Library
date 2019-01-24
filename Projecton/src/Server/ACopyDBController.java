@@ -223,7 +223,7 @@ public abstract class ACopyDBController
 				//Date today=new Date();
 				LocalDate now = LocalDate.now(); 
 				Date today1 = java.sql.Date.valueOf(now);
-				durationOfborrow=today1.getDate()-borrowDate.getDate();
+				durationOfborrow=today1.getDate()-borrowDate.getDate(); 
 				
 				// send to  HISTORY
 				try 
