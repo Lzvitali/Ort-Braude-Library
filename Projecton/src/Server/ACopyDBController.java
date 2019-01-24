@@ -16,6 +16,7 @@ import java.util.Date;
 
 import Common.Book;
 import Common.Copy;
+import Common.History;
 import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -166,7 +167,7 @@ public abstract class ACopyDBController
 
 		ObjectMessage answer=new ObjectMessage();
 		Date borrowDate;
-		long durationOfborrow;
+		long durationOfborrow = 0;
 
 		PreparedStatement checkCopy=null;
 		PreparedStatement updateCopy=null;
@@ -218,21 +219,34 @@ public abstract class ACopyDBController
 				updateCopy.executeUpdate();
 				answer.setNote("successful ReturnCopy");
 				answer.addObject(msg.getObjectList().get(0));
-				Date today=new Date();
+				
+				//Date today=new Date();
+				LocalDate now = LocalDate.now(); 
+				Date today1 = java.sql.Date.valueOf(now);
+				durationOfborrow=today1.getDate()-borrowDate.getDate();
+				
+				// send to  HISTORY
 				try 
 				{
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-					String todayDate = sdf.format(today);
-					Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse(todayDate);
-					String borrowdate = sdf.format(borrowDate); 
-					Date d2 = new SimpleDateFormat("yyyy-MM-dd").parse(borrowdate);
-					durationOfborrow = d2.getTime() - d1.getTime();
+					LocalDate now1 = LocalDate.now(); 
+					Date today11 = java.sql.Date.valueOf(now);
+					//Date d3 = new SimpleDateFormat("yyyy-MM-dd").parse(todayDate1);
+					History sendObject = new History(query2.getString(3),"Return book",Integer.parseInt(query2.getString(2)),tempCopy.getCopyID(),today1,Long.toString(durationOfborrow));
+					AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+				} 
+				catch (NumberFormatException e) 
+				{
+					e.printStackTrace();
+				} 
+				catch (SQLException e)
+				{
+					e.printStackTrace();
 				} 
 				catch (ParseException e) 
 				{
-
 					e.printStackTrace();
 				}
+
 			}
 
 		}
@@ -241,9 +255,7 @@ public abstract class ACopyDBController
 			e.printStackTrace();
 			return new ObjectMessage("Unexpected Error.","Unsucessfull");		
 		}	
-		
-		//TODO: For Nata: take the 'durationOfborrow' for the 'note' in the "return book" in the history table
-		// get the today date-- Date today=new Date();
+
 		return answer;
 	}
 
@@ -371,10 +383,10 @@ public abstract class ACopyDBController
 							//Date dateOfReturn =  rs1.getDate(5);
 
 							//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
-							LocalDateTime now = LocalDateTime.now();
+							//LocalDateTime now = LocalDateTime.now();
 
-							Instant instant = now.toInstant(ZoneOffset.UTC);
-							Date today = Date.from(instant);
+							LocalDate now = LocalDate.now(); 
+							Date today = java.sql.Date.valueOf(now);
 
 							if( today.after(dateOfReturn) )
 							{
@@ -497,6 +509,14 @@ public abstract class ACopyDBController
 						answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
 					}
 				}
+				
+				if(!msg.getExtra().equals("") && null != msg.getExtra())
+				{
+					if(msg.getExtra().equals("after book lost"))
+					{
+						//TODO: For Nata: add to the history
+					}
+				}
 				answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
 			}
 
@@ -516,7 +536,7 @@ public abstract class ACopyDBController
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return String with result to function that called it
 	 */
-	public static String checkIfBookIsAvailable(ObjectMessage msg, Connection connToSQL) 
+	public static String checkIfBookIsAvailableForBorrow(ObjectMessage msg, Connection connToSQL) 
 	{
 		ReaderAccount reader=(ReaderAccount)msg.getObjectList().get(0);
 		Copy copy=(Copy)msg.getObjectList().get(1);
@@ -562,9 +582,11 @@ public abstract class ACopyDBController
 						setReturnDay.setDate(2,(java.sql.Date) todayPlus7);
 						setReturnDay.setInt(3, copy.getCopyID());
 						setReturnDay.executeUpdate();
-						// TODO history
-						ObjectMessage forHistoryObject=new ObjectMessage();
-						AHistoryDBController.enterActionToHistory(msg, connToSQL);
+						
+						// send to history
+						History sendObject =new History(reader.getId(),"Borrow book",rs1.getInt(2),copy.getCopyID(),(java.sql.Date) today);
+						AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+						
 						return "NotDesired";// Success borrowed not desired book
 					}
 					else
@@ -574,7 +596,10 @@ public abstract class ACopyDBController
 						setReturnDay.setDate(2,(java.sql.Date) todayPlus3);
 						setReturnDay.setInt(3, copy.getCopyID());
 						setReturnDay.executeUpdate();
-						// TODO history
+						
+						// send to  history
+						History sendObject =new History(reader.getId(),"Borrow book",rs1.getInt(2),copy.getCopyID(),(java.sql.Date) today);
+						AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
 						return "Desired";// Success borrowed desired book
 					}		
 				}
