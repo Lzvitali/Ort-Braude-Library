@@ -74,7 +74,7 @@ public class LogInController  implements IGUIController
     	
     	String checkResult = AValidationInput.checkValidationUser("UserID", id);
     	
-    	/*if(id.equals("") || password.equals(""))
+    	if(id.equals("") || password.equals(""))
     	{
     		AClientCommonUtilities.alertErrorWithOption("Please fill both: ID and Password", "Wrong input", "Ok");
     	}    	
@@ -82,24 +82,26 @@ public class LogInController  implements IGUIController
 		{
     		currentID=id;
         	
-        	System.out.println(id + "  " + password);
+        	//System.out.println(id + "  " + password);
 
         	User user = new User(id,password);
         	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
-
+        	client.setClientUI(this);
         	client.handleMessageFromClient(msg); 
 		}
     	else
     	{
     		AClientCommonUtilities.alertErrorWithOption(checkResult, "Wrong input", "Ok");
-    	}*/
+    	}
     	
-    	currentID=id;
+    	
+    	//login with no validation
+    	/*currentID=id;
     	
     	User user = new User(id,password);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
     	client.setClientUI(this);
-    	client.handleMessageFromClient(msg); 
+    	client.handleMessageFromClient(msg); */
     	
     }
     

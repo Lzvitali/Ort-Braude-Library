@@ -223,7 +223,7 @@ public abstract class AValidationInput
 		}
 		if(!onlyNumbers(context))
 		{
-			return "You must be fill only numbers";
+			return "You must fill only numbers";
 		}
 	/*	if(!chackDigit(context))
 		{
