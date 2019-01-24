@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="567.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesReaderAccount.MyBorrowsAndReservesController">
+   <children>
+      <TableView fx:id="borrowsTable" layoutX="20.0" layoutY="93.0" prefHeight="176.0" prefWidth="1201.0">
+        <columns>
+          <TableColumn fx:id="BookNameBorrowColumn" prefWidth="230.0" text="Book name" />
+          <TableColumn fx:id="AuthorNameBorrowColumn" prefWidth="185.0" text="Author name" />
+            <TableColumn fx:id="YearBorrowColumn" prefWidth="50.0" text="Year" />
+            <TableColumn fx:id="TopicBorrowColumn" prefWidth="216.0" text="Topic" />
+            <TableColumn fx:id="isDesiredBorrowColumn" prefWidth="81.0" text="is desired?" />
+            <TableColumn fx:id="EditionBorrowColumn" prefWidth="59.0" text="Edition" />
+            <TableColumn fx:id="BorrowDateColumn" prefWidth="95.0" text="Borrow date" />
+            <TableColumn fx:id="ReturnDateColumn" prefWidth="93.0" text="Return date" />
+            <TableColumn fx:id="btnForBorrows" prefWidth="106.0" text="Delay borrow" />
+            <TableColumn fx:id="bookLostColumn" prefWidth="84.0" text="Book Lost" />
+        </columns>
+      </TableView>
+      <TableView fx:id="ordersTable" layoutX="20.0" layoutY="336.0" prefHeight="200.0" prefWidth="1116.0">
+        <columns>
+          <TableColumn fx:id="BookNameReservColumn" prefWidth="225.00003051757812" text="Book name" />
+          <TableColumn fx:id="AuthorNameReservColumn" prefWidth="191.99996948242188" text="Author name" />
+            <TableColumn fx:id="YeareReservColumn" minWidth="0.0" prefWidth="52.0" text="Year" />
+            <TableColumn fx:id="TopicReservColumn" prefWidth="206.0" text="Topic" />
+            <TableColumn fx:id="isDesiredReserveColumn" prefWidth="85.0" text="is desired?" />
+            <TableColumn fx:id="editionReserveColumn" prefWidth="57.0" text="Edition" />
+            <TableColumn fx:id="reservationDateColumn" prefWidth="125.0" text="Reservation date" />
+            <TableColumn fx:id="BtnForOrders" prefWidth="172.0" text="Cancel reservation" />
+        </columns>
+      </TableView>
+      <Label layoutX="20.0" layoutY="66.0" prefHeight="21.0" prefWidth="128.0" text="Borrows" textFill="#0e3178">
+         <font>
+            <Font name="System Bold Italic" size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="20.0" layoutY="309.0" text="Reservations" textFill="#0e3178">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="75.0" fitWidth="635.0" layoutX="286.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../icons/borrowsReservesTitle.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

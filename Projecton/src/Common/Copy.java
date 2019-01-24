@@ -15,7 +15,7 @@ public class Copy implements IEntity, Serializable
 	private String returnDate;
 	
 	private transient Button askForDelay;
-	
+	private transient Button LostCopy;
 	private boolean canDelay;
 	private String reasonForCantDelay;
 	
@@ -128,6 +128,14 @@ public class Copy implements IEntity, Serializable
 
 
 
+
+	public Button getLostCopy() {
+		return LostCopy;
+	}
+
+	public void setLostCopy(Button lostCopy) {
+		LostCopy = lostCopy;
+	}
 
 	public void setBorrowDate(String borrowDate) {
 		this.borrowDate = borrowDate;

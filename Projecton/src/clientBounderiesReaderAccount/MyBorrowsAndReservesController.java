@@ -89,6 +89,9 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	@FXML
 	private TableColumn<IEntity, Button> BtnForOrders;
+	
+    @FXML
+    private TableColumn<IEntity, Button> bookLostColumn;
 
 	@FXML
 	private TableView<Borrow> borrowsTable;
@@ -105,8 +108,6 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private ReaderAccount reader;
 
 	private Copy tempCopy;
-	private static int cntForBorrowsTable = 0; 
-	private static int cntForReservationsTable = 0;
 
 	@FXML
 	void initialize() 
@@ -114,7 +115,6 @@ public class MyBorrowsAndReservesController implements IGUIController
 		client=StartPanelController.connToClientController;
 		client.setClientUI(this);
 
-		cntForBorrowsTable = 0;
 
 		reader = new ReaderAccount();
 
@@ -304,7 +304,6 @@ public class MyBorrowsAndReservesController implements IGUIController
 			BorrowDateColumn.setCellValueFactory(new PropertyValueFactory<>("borrowDate"));
 			ReturnDateColumn.setCellValueFactory(new PropertyValueFactory<>("returnDate"));
 
-
 			ArrayList <IEntity[]> result=msg.getObjectArray(); //get the array list received from the server
 
 			//set to the results to the table
@@ -319,20 +318,33 @@ public class MyBorrowsAndReservesController implements IGUIController
 				( (Copy)tempArray[0] ).setAskForDelay(new Button("delay"));
 				( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> askForDelay(e, (Copy)tempArray[0]));
 
-				//if reader account can't delay that copy, don't show the button
-				/*if( !((Copy)tempArray[0]).isCanDelay() )
+				if(LogInController.permission == 1 || LogInController.permission == 2)
 				{
-					( (Copy)tempArray[0] ).getAskForDelay().setVisible(false);
-				}*/
+					( (Copy)tempArray[0] ).setLostCopy(new Button("handle"));
+					( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> handleLostBook(e, (Copy)tempArray[0]));
+				}
 
 				Borrow borrowsTableList = new Borrow( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
 						((Book)tempArray[1]).getYear(), ((Book)tempArray[1]).getTopic(), ((Book)tempArray[1]).isDesired(), ((Book)tempArray[1]).getEdition(),
 						((Copy)tempArray[0]).getBorrowDate(), ((Copy)tempArray[0]).getReturnDate(), ((Copy)tempArray[0]).getAskForDelay());
+				if(LogInController.permission == 1 || LogInController.permission == 2)
+				{
+					bookLostColumn.setCellValueFactory(new PropertyValueFactory<>("LostCopy"));
+					borrowsTableList.setLostCopy(((Copy)tempArray[0]).getLostCopy()); 
+				}
 
 				borrowsTable.getItems().add(borrowsTableList); 
 			}
 		});
 	}
+
+
+
+	private void handleLostBook(ActionEvent e, Copy copy) 
+	{
+		
+	}
+
 
 
 

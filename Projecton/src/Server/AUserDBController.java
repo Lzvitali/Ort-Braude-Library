@@ -107,7 +107,6 @@ public class AUserDBController
 
 					if(rs2.next())
 					{
-						System.out.println(rs2.getString(8));
 						//check if locked
 						if(rs2.getString(8).equals("Locked"))
 						{

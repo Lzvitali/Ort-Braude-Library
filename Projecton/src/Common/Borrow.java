@@ -16,7 +16,26 @@ public class Borrow implements IEntity , Serializable
 	private String borrowDate;
 	private String returnDate;
 	
-	private Button askForDelay; 
+	private transient Button askForDelay;
+	private transient Button LostCopy;
+	
+
+	public Borrow(String bookName, String authorName, Integer year, Integer edition, String topic, Boolean isDesired,
+			String borrowDate, String returnDate, Button askForDelay, Button lostCopy) 
+	{
+		super();
+		this.bookName = bookName;
+		this.authorName = authorName;
+		this.year = year;
+		this.edition = edition;
+		this.topic = topic;
+		this.isDesired = isDesired;
+		this.borrowDate = borrowDate;
+		this.returnDate = returnDate;
+		this.askForDelay = askForDelay;
+		LostCopy = lostCopy;
+	}
+
 
 	public Borrow(String bookName, String authorName, Integer year, String topic,
 			Boolean isDesired, Integer edition, String borrowDate, String returnDate, Button askForDelay) 
@@ -91,6 +110,16 @@ public class Borrow implements IEntity , Serializable
 
 	public String getTopic() {
 		return topic;
+	}
+
+
+	public Button getLostCopy() {
+		return LostCopy;
+	}
+
+
+	public void setLostCopy(Button lostCopy) {
+		LostCopy = lostCopy;
 	}
 
 

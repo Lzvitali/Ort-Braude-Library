@@ -619,7 +619,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	void openBorrowsAndReserves(ActionEvent e, String readerID) 
 	{
 		readerAccountID = readerID;
-		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/BorrowsAndReservations.fxml","Orders and borrows");
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/BorrowsAndReservationsLForLibrarian.fxml","Orders and borrows");
 	}
 	
 	
