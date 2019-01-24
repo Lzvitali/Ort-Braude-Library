@@ -67,6 +67,9 @@ public class AReaderAccountDBController
 			ps.setString(1,readerAccount.getId());
 			ps.setString(2,readerAccount.getStatus());
 			ps.executeUpdate();
+			
+			//TODO: For Nata: call your history function
+			
 			return answer;
 		}
 		catch(Exception e)

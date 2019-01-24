@@ -154,6 +154,9 @@ public abstract class ACopyDBController
 		LocalDateTime newDate = LocalDateTime.now().plusDays(14); 
 
 		answer.setNote(dtf.format(newDate));
+		
+		//TODO: For Nata: add to history
+		
 		return answer;
 
 	}
@@ -240,6 +243,7 @@ public abstract class ACopyDBController
 		}	
 		
 		//TODO: For Nata: take the 'durationOfborrow' for the 'note' in the "return book" in the history table
+		// get the today date-- Date today=new Date();
 		return answer;
 	}
 
@@ -558,6 +562,7 @@ public abstract class ACopyDBController
 						setReturnDay.setDate(2,(java.sql.Date) todayPlus7);
 						setReturnDay.setInt(3, copy.getCopyID());
 						setReturnDay.executeUpdate();
+						// TODO history
 						return "NotDesired";// Success borrowed not desired book
 					}
 					else
@@ -567,7 +572,7 @@ public abstract class ACopyDBController
 						setReturnDay.setDate(2,(java.sql.Date) todayPlus3);
 						setReturnDay.setInt(3, copy.getCopyID());
 						setReturnDay.executeUpdate();
-
+						// TODO history
 						return "Desired";// Success borrowed desired book
 					}		
 				}

@@ -154,7 +154,7 @@ public abstract class AReservationDBController
 	}
 	private static ObjectMessage implementTheBorrow(ObjectMessage msg, Connection connToSQL) 
 {
-		ObjectMessage answer = new ObjectMessage();;
+		ObjectMessage answer = new ObjectMessage();
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		Reservation reserve=(Reservation) msg.getObjectList().get(1);
 		PreparedStatement getBook,numOfCopy;
@@ -203,6 +203,9 @@ public abstract class AReservationDBController
 		{
 			e.printStackTrace();
 		}
+		
+		//TODO: For Nata: add to history
+		
 		return answer;
 	}
 	
@@ -335,6 +338,9 @@ public abstract class AReservationDBController
 						ps.setTime(4, sqlTime);
 						ps.executeUpdate();
 						answer=new ObjectMessage("reserveBook","Reserved");
+						
+						//TODO: For Nata: add to history
+						
 						return answer;
 					} 
 	 				catch (SQLException e) 
@@ -404,6 +410,9 @@ public abstract class AReservationDBController
 				implementReservation.addObject(readerAccount, book);
 				letImplementReservation(implementReservation,connToSQL);
 			}
+			
+			//TODO: For Nata: add to history
+			
 			return new ObjectMessage("ReservationCanceled","cancelReservation");
 		} 
 		catch (SQLException e) 
