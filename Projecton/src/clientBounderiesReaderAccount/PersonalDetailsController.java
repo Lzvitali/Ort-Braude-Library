@@ -5,9 +5,9 @@ import com.jfoenix.controls.JFXButton;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
-import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AClientCommonUtilities;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 

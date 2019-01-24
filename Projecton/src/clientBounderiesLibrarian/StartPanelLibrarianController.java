@@ -10,10 +10,10 @@ import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
-import clientCommonBounderies.AClientCommonUtilities;
-import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AClientCommonUtilities;
+import clientConrollers.AStartClient;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 

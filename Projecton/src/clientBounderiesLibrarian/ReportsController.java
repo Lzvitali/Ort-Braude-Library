@@ -118,8 +118,8 @@ public class ReportsController implements IGUIController
 	{
 		if(msg.getMessage().equals("succssful reporting"))
 		{
-			Report report=(Report)msg.getObjectArray().get(arg0)
-			avgForAll.setText(String.valueOf(report.getAverage()));
+			//Report report=(Report)msg.getObjectArray().get(arg0)
+			//avgForAll.setText(String.valueOf(report.getAverage()));
 			//medianForAll.setText();
 		}
 		else if(msg.getMessage().equals("average of desired book"))

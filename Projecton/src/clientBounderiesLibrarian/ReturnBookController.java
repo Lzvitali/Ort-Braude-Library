@@ -7,8 +7,8 @@ import Common.Copy;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
-import clientCommonBounderies.AClientCommonUtilities;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AClientCommonUtilities;
 import clientConrollers.OBLClient;
 
 import java.net.URL;

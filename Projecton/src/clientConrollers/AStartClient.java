@@ -1,4 +1,4 @@
-package clientCommonBounderies;
+package clientConrollers;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +13,7 @@ import java.util.Scanner;
 import Common.IGUIController;
 import Common.IGUIStartPanel;
 import clientBounderiesLibrarian.StartPanelLibrarianController;
+import clientCommonBounderies.StartPanelController;
 
 
 /**

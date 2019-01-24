@@ -11,10 +11,10 @@ import Common.IGUIStartPanel;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
-import clientCommonBounderies.AClientCommonUtilities;
-import clientCommonBounderies.AStartClient;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AClientCommonUtilities;
+import clientConrollers.AStartClient;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
@@ -152,30 +152,6 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
     	client.handleMessageFromClient(msg);
     	   	
-    	
-    	//Old log out:
-    	
-    	/*//change the status of that user in the DB
-    	User user = new User(LogInController.currentID);
-    	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
-    	client.handleMessageFromClient(msg);
-    	
-    	//got to StartPannel
-		try 
-		{
-			((Node)event.getSource()).getScene().getWindow().hide(); //hiding primary window
-			Stage primaryStage = new Stage();
-			primaryStage.setTitle("Ort Braude Library");
-			Pane root;
-			root = FXMLLoader.load(getClass().getResource("/clientCommonBounderies/StartPanel.fxml"));
-			Scene scene = new Scene(root);
-			primaryStage.setScene(scene);		
-			primaryStage.show();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}*/
     }
 
     

@@ -83,7 +83,7 @@ public abstract class AHistoryDBController
 
 			}
 			average=(float)sumOfDesired/(float)countOfDesired;
-			report2[1]=new Report(average, average);
+			//report2[1]=new Report(average, average);
 
 			result.add(report2);
 			answer = new ObjectMessage((IEntity)result,"succssful reporting", " ");
