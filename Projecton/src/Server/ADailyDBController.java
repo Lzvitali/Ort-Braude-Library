@@ -2,6 +2,7 @@ package Server;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -95,6 +96,31 @@ public abstract class ADailyDBController
 	            me.printStackTrace();
 	        }
 	        return null;
+	}
+	
+	private static void writeUserStatusHistory(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps=null;
+		ResultSet query1 = null;
+		PreparedStatement ps2=null;
+		ResultSet query2 = null;
+		try 
+		{
+			ps=connToSQL.prepareStatement("SELECT ID, status FROM readeraccount");
+			query1=ps.executeQuery();
+			while(query1.next())
+			{
+				ps2=connToSQL.prepareStatement("INSERT INTO `UserStatusHistory` (`readerAccountID`,`status`) VALUES (?,?)");
+				ps2.setString(1, query1.getString(1));
+				ps2.setString(2, query1.getString(2));
+				ps2.executeUpdate();
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}	
+		
 	}
 
 	private static ObjectMessage resetUserStatusHistory(ObjectMessage msg, Connection connToSQL)
