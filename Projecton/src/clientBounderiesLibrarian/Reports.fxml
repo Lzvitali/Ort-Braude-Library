@@ -25,90 +25,120 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <VBox layoutX="482.0" layoutY="32.0" prefHeight="106.0" prefWidth="337.0">
+                        <VBox layoutX="442.0" layoutY="149.0" prefHeight="354.0" prefWidth="436.0">
                            <children>
-                              <HBox alignment="BOTTOM_RIGHT" prefHeight="38.0" prefWidth="321.0">
+                              <HBox prefHeight="164.0" prefWidth="469.0">
                                  <children>
-                                    <Label text="Month" />
-                                    <AnchorPane prefHeight="38.0" prefWidth="88.0" />
-                                    <Label text="Year" />
-                                    <AnchorPane prefHeight="38.0" prefWidth="37.0" />
+                                    <VBox alignment="CENTER_LEFT" prefHeight="113.0" prefWidth="271.0">
+                                       <children>
+                                          <Label text="Active reader accounts">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <AnchorPane prefHeight="20.0" prefWidth="477.0" />
+                                          <Label text="Freezed reader accounts">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <AnchorPane prefHeight="20.0" prefWidth="477.0" />
+                                          <Label text="Locked reader accounts">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="296.0" prefWidth="177.0">
+                                       <children>
+                                          <AnchorPane prefHeight="27.0" prefWidth="171.0" />
+                                          <TextField fx:id="activeReaderAccounts" />
+                                          <AnchorPane prefHeight="14.0" prefWidth="177.0" />
+                                          <TextField fx:id="freezedReaderAccounts" />
+                                          <AnchorPane prefHeight="14.0" prefWidth="477.0" />
+                                          <TextField fx:id="lockedReaderAccounts" />
+                                       </children>
+                                    </VBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="44.0" prefWidth="335.0" spacing="15.0">
+                              <AnchorPane prefHeight="40.0" prefWidth="436.0" />
+                              <HBox prefHeight="118.0" prefWidth="475.0">
                                  <children>
-                                    <Label text="Periode">
-                                       <font>
-                                          <Font name="System Bold Italic" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <ComboBox prefWidth="150.0" />
-                                    <ComboBox prefWidth="70.0">
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </ComboBox>
+                                    <VBox prefHeight="114.0" prefWidth="280.0">
+                                       <children>
+                                          <VBox prefHeight="124.0" prefWidth="293.0">
+                                             <children>
+                                                <Label text="Number of total book copies">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <AnchorPane prefHeight="20.0" prefWidth="477.0" />
+                                                <Label prefHeight="16.0" prefWidth="477.0" text="Number of reader accounts that ">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="20.0" prefWidth="477.0" text="didn't returned the book on time">
+                                                   <font>
+                                                      <Font name="System Bold" size="16.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="118.0" prefWidth="170.0">
+                                       <children>
+                                          <AnchorPane prefHeight="5.0" prefWidth="163.0" />
+                                          <TextField fx:id="totalNumOfCopies" />
+                                          <AnchorPane prefHeight="20.0" prefWidth="477.0" />
+                                          <TextField fx:id="numOfdelayedReaderAccounts" />
+                                       </children>
+                                    </VBox>
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox layoutX="416.0" layoutY="147.0" prefHeight="345.0" prefWidth="469.0">
+                        <HBox alignment="CENTER" layoutX="291.0" layoutY="41.0" prefHeight="100.0" prefWidth="738.0">
                            <children>
-                              <VBox alignment="CENTER_LEFT" prefHeight="353.0" prefWidth="266.0">
+                              <VBox prefHeight="106.0" prefWidth="337.0">
                                  <children>
-                                    <Label text="Active reader accounts">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <AnchorPane prefHeight="20.0" prefWidth="477.0" />
-                                    <Label text="Freezed reader accounts">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <AnchorPane prefHeight="20.0" prefWidth="477.0" />
-                                    <Label text="Locked reader accounts">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <AnchorPane prefHeight="91.0" prefWidth="266.0" />
-                                    <Label text="Number of total book copies">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <AnchorPane prefHeight="20.0" prefWidth="477.0" />
-                                    <Label prefHeight="16.0" prefWidth="477.0" text="Number of reader accounts that ">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <Label prefHeight="20.0" prefWidth="477.0" text="didn't returned the book on time">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                    </Label>
+                                    <HBox alignment="BOTTOM_RIGHT" prefHeight="38.0" prefWidth="321.0">
+                                       <children>
+                                          <Label text="Month" />
+                                          <AnchorPane prefHeight="38.0" prefWidth="88.0" />
+                                          <Label text="Year" />
+                                          <AnchorPane prefHeight="38.0" prefWidth="37.0" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" prefHeight="44.0" prefWidth="335.0" spacing="15.0">
+                                       <children>
+                                          <Label text="Periode">
+                                             <font>
+                                                <Font name="System Bold Italic" size="16.0" />
+                                             </font>
+                                          </Label>
+                                          <ComboBox fx:id="monthComboBox" prefWidth="150.0" />
+                                          <ComboBox fx:id="yearComboBox" prefWidth="70.0">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </ComboBox>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="296.0" prefWidth="177.0">
+                              <AnchorPane prefHeight="100.0" prefWidth="149.0" />
+                              <VBox prefHeight="100.0" prefWidth="218.0">
                                  <children>
-                                    <AnchorPane prefHeight="19.0" prefWidth="177.0" />
-                                    <TextField />
-                                    <AnchorPane prefHeight="14.0" prefWidth="177.0" />
-                                    <TextField />
-                                    <AnchorPane prefHeight="14.0" prefWidth="477.0" />
-                                    <TextField />
-                                    <AnchorPane prefHeight="86.0" prefWidth="177.0" />
-                                    <TextField />
-                                    <AnchorPane prefHeight="20.0" prefWidth="477.0" />
-                                    <TextField />
+                                    <AnchorPane prefHeight="45.0" prefWidth="218.0" />
+                                    <ComboBox fx:id="chooseFromPreviousComboBox" prefHeight="31.0" prefWidth="213.0" promptText="Choose from previous" />
                                  </children>
                               </VBox>
                            </children>
                         </HBox>
-                        <VBox layoutX="30.0" layoutY="17.0" prefHeight="584.0" prefWidth="307.0" />
                      </children></AnchorPane>
             </content>
           </Tab>
