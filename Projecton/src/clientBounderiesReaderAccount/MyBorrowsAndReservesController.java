@@ -207,6 +207,16 @@ public class MyBorrowsAndReservesController implements IGUIController
 		{
 			AClientCommonUtilities.alertErrorWithOption(msg.getNote(), "Unuccessfull", "Ok"); 	
 		}
+		else if(msg.getMessage().equals("This Book was successfully deleted "))
+		{		
+			AClientCommonUtilities.infoAlert(msg.getMessage(),"A successful deleleting book");
+			
+			//set again the table view
+			borrowsTable.getItems().clear();	
+			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
+			client.setClientUI(this);
+			client.handleMessageFromClient(msg2); 
+		}
 
 	}
 
@@ -262,7 +272,11 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 	}
 
-
+	/**
+	 * this function handles the event for pressing the button of 'implement' for librarian and library director to immplement book reservation
+	 * @param e-the event
+	 * @param reservation-the reservation instance 
+	 */
 	private void implementReservation(ActionEvent e, Reservation reservation) 
 	{
 		ObjectMessage newMsg = new ObjectMessage(reader, reservation, "implement reservation", "Reservation");
@@ -272,7 +286,11 @@ public class MyBorrowsAndReservesController implements IGUIController
 
 
 
-
+	/**
+	 * this function handles the event for pressing the button of 'cancel' for the reader account to cancel book reservation
+	 * @param e-the event
+	 * @param reservation-the reservation instance 
+	 */
 	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
 		ObjectMessage newMsg = new ObjectMessage(reader, reservation, "cancel reservation", "Reservation");
@@ -321,7 +339,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 				if(LogInController.permission == 1 || LogInController.permission == 2)
 				{ 
 					( (Copy)tempArray[0] ).setLostCopy(new Button("handle"));
-					( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> handleLostBook(e, (Copy)tempArray[0]));
+					( (Copy)tempArray[0] ).getLostCopy().setOnAction(e -> handleLostBook(e, (Copy)tempArray[0]));
 				}
 
 				Borrow borrowsTableList = new Borrow( ((Book)tempArray[1]).getBookName(), ((Book)tempArray[1]).getAuthorName(), 
@@ -339,13 +357,29 @@ public class MyBorrowsAndReservesController implements IGUIController
 	}
 
 
-
+	/**
+	 * this function handles the event for pressing the button of 'handle' for librarian and library director to handle book lost
+	 * @param e-the event
+	 * @param copy-the copy instance 
+	 */
 	private void handleLostBook(ActionEvent e, Copy copy) 
 	{
+		//ask the server to delete this copy
+		ObjectMessage msg = new ObjectMessage(copy,"DeleteBook","Copy");
+		msg.setExtra("after book lost");
+		client.setClientUI(this);
+		client.handleMessageFromClient(msg);
+		
+		//TODO: add to the function of delete book 
+		/*if(!askedCopy.getExtra().equals("") && null != askedCopy.getExtra())
+		{
+			if(askedCopy.getExtra().equals("after book lost"))
+			{
+				//TODO: For Nata: add to the history
+			}
+		}*/
 		
 	}
-
-
 
 
 	/**
