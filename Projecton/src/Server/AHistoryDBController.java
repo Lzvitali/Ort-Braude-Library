@@ -1,12 +1,14 @@
 package Server;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Common.Copy;
+import Common.History;
 import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -27,10 +29,46 @@ public abstract class AHistoryDBController
 
 	}
 
-	public static void enterActionToHistory( ObjectMessage msg, Connection connToSQL) 
+	public static void enterActionToHistory( History sendObject, Connection connToSQL) 
 	{
-		
-		
+		if(sendObject.getAction().equals("Borrow book"))
+		{
+
+			try {
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`userID`,`bookId`,`copyId`,`action`,`date`) VALUES (?,?,?,?,?); "); 
+				updateHistory.setString(1,sendObject.getUserID()); 
+				updateHistory.setInt(2,sendObject.getBookId()); 
+				updateHistory.setInt(3,sendObject.getCopyId());
+				updateHistory.setString(4,sendObject.getAction()); 
+				updateHistory.setDate(5,(Date) sendObject.getActionDate()); 
+				updateHistory.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+
+				e.printStackTrace();
+			} 
+
+		}
+		else if(sendObject.getAction().equals("Return book"))
+		{
+			try {
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`userID`,`bookId`,`copyId`,`action`,`date`,`Note`) VALUES (?,?,?,?,?,?); "); 
+				updateHistory.setString(1,sendObject.getUserID()); 
+				updateHistory.setInt(2,sendObject.getBookId()); 
+				updateHistory.setInt(3,sendObject.getCopyId());
+				updateHistory.setString(4,sendObject.getAction()); 
+				updateHistory.setDate(5,(Date) sendObject.getActionDate()); 
+				updateHistory.setString(6,sendObject.getNote());
+				updateHistory.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+
+				e.printStackTrace();
+			} 
+		}
+
 	}
 	
 	

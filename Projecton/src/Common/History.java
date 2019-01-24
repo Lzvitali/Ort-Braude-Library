@@ -6,16 +6,55 @@ public class History  implements IEntity
 {
 	private String userID;
 	private String action;
+	private int bookId;
+	private int copyId;
 	private Date actionDate;
 	private String note;
 	
 	
-	public History(String userID, String action, Date actionDate, String note) 
+	public History(String userID, String action, int bookId, int copyId, Date actionDate, String note) 
+	{
+
+		this.userID = userID;
+		this.action = action;
+		this.bookId = bookId;
+		this.copyId = copyId;
+		this.actionDate = actionDate;
+		this.note = note;
+	}
+
+
+	public History(String userID, String action,int bookId, int copyId, Date actionDate) 
 	{
 		this.userID = userID;
 		this.action = action;
+		this.bookId=bookId;
+		this.copyId=copyId;
 		this.actionDate = actionDate;
-		this.note = note;
+	}
+
+
+	public int getBookId() 
+	{
+		return bookId;
+	}
+
+
+	public void setBookId(int bookId)
+	{
+		this.bookId = bookId;
+	}
+
+
+	public int getCopyId()
+	{
+		return copyId;
+	}
+
+
+	public void setCopyId(int copyId) 
+	{
+		this.copyId = copyId;
 	}
 
 
