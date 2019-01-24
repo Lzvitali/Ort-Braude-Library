@@ -53,6 +53,7 @@ public abstract class AHistoryDBController
 		else if(sendObject.getAction().equals("Return book"))
 		{
 			try {
+
 				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`userID`,`bookId`,`copyId`,`action`,`date`,`Note`) VALUES (?,?,?,?,?,?); "); 
 				updateHistory.setString(1,sendObject.getUserID()); 
 				updateHistory.setInt(2,sendObject.getBookId()); 
@@ -70,8 +71,8 @@ public abstract class AHistoryDBController
 		}
 
 	}
-	
-	
+
+
 	private static ObjectMessage getReportTwo( ObjectMessage msg, Connection connToSQL) 
 	{
 		ArrayList<Report> result=new ArrayList<Report>();
@@ -97,7 +98,7 @@ public abstract class AHistoryDBController
 			Report reportAllBooks=new Report(average,average);
 			result.add(2,reportAllBooks);
 
-			
+
 
 
 
@@ -125,7 +126,7 @@ public abstract class AHistoryDBController
 			Report reportDesiredBook=new Report(average,average);
 			result.add(1,reportDesiredBook);
 
-			
+
 			answer = new ObjectMessage((IEntity)result,"succssful reporting", "Report number 2 ");
 
 		}

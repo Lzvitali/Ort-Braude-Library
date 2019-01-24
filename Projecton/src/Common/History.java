@@ -10,8 +10,8 @@ public class History  implements IEntity
 	private int copyId;
 	private Date actionDate;
 	private String note;
-	
-	
+
+
 	public History(String userID, String action, int bookId, int copyId, Date actionDate, String note) 
 	{
 
@@ -104,6 +104,6 @@ public class History  implements IEntity
 	{
 		this.note = note;
 	}
-	
-	
+
+
 }
