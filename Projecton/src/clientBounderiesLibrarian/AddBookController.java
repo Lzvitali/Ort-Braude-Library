@@ -170,6 +170,7 @@ public class AddBookController implements IGUIController
 			book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText(), bookLocation);
 			ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
 			book.setFileIsLoaded(isUploaded);
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);
 		}
 		else
@@ -376,6 +377,7 @@ public class AddBookController implements IGUIController
 			
 			bookForSend = new Book(bookName, authorName, year,edition );
 			ObjectMessage msg= new ObjectMessage(bookForSend,"setLocation","Book");
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);
 		});
 
@@ -454,6 +456,7 @@ public class AddBookController implements IGUIController
 			m.setMessage(Integer.toString((int) myFile.length()));
 			m.setExtra(fileName);
 			servsock = new ServerSocket(5643);
+			client.setClientUI(this);
 			client.handleMessageFromClient(m);
 			sock = servsock.accept();
 			byte[] mybytearray = new byte[(int) myFile.length()];

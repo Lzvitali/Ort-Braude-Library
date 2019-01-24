@@ -57,6 +57,7 @@ public class PersonalDetailsController implements IGUIController
     	ReaderAccount readerAccount=new ReaderAccount();
     	readerAccount.setId(LogInController.currentID);
     	ObjectMessage objectMessage=new ObjectMessage(readerAccount,"SearchReader","ReaderAccount");
+    	client.setClientUI(this);
     	client.handleMessageFromClient(objectMessage);
     }
 
@@ -101,6 +102,7 @@ public class PersonalDetailsController implements IGUIController
     		}
     		ReaderAccount reader=new ReaderAccount(userID, 3, true, firstName,lastName,phoneNum,email,adress,educationYear);
     		ObjectMessage msg = new ObjectMessage(reader,"changePersonalDetails","ReaderAccount");
+    		client.setClientUI(this);
         	client.handleMessageFromClient(msg);
     	}
     	else

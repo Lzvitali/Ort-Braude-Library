@@ -150,6 +150,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	//change the status of that user in the DB
     	User user = new User(LogInController.currentID);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+    	client.setClientUI(this);
     	client.handleMessageFromClient(msg);
     	   	
     }
@@ -203,6 +204,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 			askedBook.setFreeSearch(searchTextField.getText());
 		}
     	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+    	client.setClientUI(this);
     	client.handleMessageFromClient(sendToServer);   
     }
 
@@ -331,6 +333,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 			str = file.getAbsolutePath();
 			ObjectMessage sendToServer=new ObjectMessage(bookName, "getPDF");
 			sendToServer.setExtra(str);
+			client.setClientUI(this);
 			client.handleMessageFromClient(sendToServer); 
 		}
 
@@ -386,6 +389,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	ReaderAccount readerAccount=new ReaderAccount();
     	readerAccount.setId(LogInController.currentID);
     	objectMessage.addObject(readerAccount);
+    	client.setClientUI(this);
     	client.handleMessageFromClient(objectMessage);
 	}
 	
@@ -404,6 +408,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	ObjectMessage objectMessage;
     	Copy copy=new Copy(-1,ID,null);
     	objectMessage=new ObjectMessage(copy,"checkIfAllBorrowed","Copy");
+    	client.setClientUI(this);
     	client.handleMessageFromClient(objectMessage);
     }
     

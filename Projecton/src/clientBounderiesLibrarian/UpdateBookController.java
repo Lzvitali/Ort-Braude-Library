@@ -143,6 +143,7 @@ public class UpdateBookController implements IGUIController
 
 			Book book=new Book(bookID);
 			ObjectMessage msg= new ObjectMessage(book,"showBookInfo","Book");
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);
 		});
 
@@ -162,6 +163,7 @@ public class UpdateBookController implements IGUIController
 			boolean isDesired= DesiredCheckBox.isSelected();
 			book=new Book(bookIDTextField.getText(),BookTitleTextField.getText(), BookAuthorTextField.getText(),Integer.parseInt(PublishedYearTextField.getText()),TopicTextField.getText(),isDesired,Integer.parseInt(EditionTextField.getText()), bookLocation);
 			ObjectMessage msg= new ObjectMessage(book,"changeBookInfo","Book");
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);
 		}
 		else

@@ -67,6 +67,7 @@ public class BorrowBookController implements IGUIController
 			ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
 			Copy copy=new Copy(CopyIdTextField.getText());
 			ObjectMessage msg = new ObjectMessage(reader,copy,"CheckIfExist","ReaderAccount",reader.getId());
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);	
 		}
 		else 
@@ -161,6 +162,7 @@ public class BorrowBookController implements IGUIController
 			Copy copy=new Copy(returnDate);
 			ObjectMessage msg = new ObjectMessage(copy,"CheckReturnDate","Copy");
 			System.out.println(copy.getCopyID()); 
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);
 		});
 	}

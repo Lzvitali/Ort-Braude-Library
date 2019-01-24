@@ -164,6 +164,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	void makeSearch(ActionEvent event) 
 	{
 
+		connToClientController.setClientUI(this);
 		//if success do this and if selected book :
 		Platform.runLater(()->
 		{	

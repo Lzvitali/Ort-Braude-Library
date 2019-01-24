@@ -136,6 +136,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 		}
 
 		ObjectMessage msg = new ObjectMessage(reader, "get borrows", "Copy");
+		client.setClientUI(this);
 		client.handleMessageFromClient(msg); 
 		//TODO: get the reserves in the display
 
@@ -153,12 +154,14 @@ public class MyBorrowsAndReservesController implements IGUIController
 			setBorrowsResults(msg);
 			ordersTable.getItems().clear();
 			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+			client.setClientUI(this);
 			client.handleMessageFromClient(newMsg);	
 		}
 		else if((msg.getMessage()).equals("NoBorrows"))
 		{
 			ordersTable.getItems().clear();
 			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+			client.setClientUI(this);
 			client.handleMessageFromClient(newMsg);	
 		}
 		else if((msg.getMessage()).equals("TheReserves"))
@@ -177,6 +180,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 			//set again the table view
 			borrowsTable.getItems().clear();	
 			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg2); 
 		} 
 		else if((msg.getMessage()).equals("ReservationCanceled"))
@@ -186,6 +190,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 			//set again the table view
 			ordersTable.getItems().clear();
 			ObjectMessage newMsg = new ObjectMessage(reader, "get reserves", "Reservation");
+			client.setClientUI(this);
 			client.handleMessageFromClient(newMsg);	
 		}
 		else if((msg.getMessage()).equals("ReservationImplemented"))
@@ -195,6 +200,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 			//set again the table view
 			borrowsTable.getItems().clear();	
 			ObjectMessage msg2 = new ObjectMessage(reader, "get borrows", "Copy");
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg2); 			
 		}
 		else if((msg.getMessage()).equals("ReservationNotImplemented"))
@@ -260,6 +266,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private void implementReservation(ActionEvent e, Reservation reservation) 
 	{
 		ObjectMessage newMsg = new ObjectMessage(reader, reservation, "implement reservation", "Reservation");
+		client.setClientUI(this);
 		client.handleMessageFromClient(newMsg);
 	}
 
@@ -269,6 +276,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	private void cancelReservation(ActionEvent e, Reservation reservation)  
 	{
 		ObjectMessage newMsg = new ObjectMessage(reader, reservation, "cancel reservation", "Reservation");
+		client.setClientUI(this);
 		client.handleMessageFromClient(newMsg);
 	}
 
@@ -335,11 +343,8 @@ public class MyBorrowsAndReservesController implements IGUIController
 	 */
 	private void askForDelay(ActionEvent e, Copy copy) 
 	{ 
-		//Copy theCopy = copy;
-
 		if( !copy.isCanDelay() )
-		{
-			//System.out.println(copy.getBookID() + " - nononono"); 
+		{ 
 			if(copy.getReasonForCantDelay().equals("The date of return is the most updated"))
 			{
 				AClientCommonUtilities.alertErrorWithOption("The date of return is the most updated", "Rejection", "Ok");
@@ -354,7 +359,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 			Copy msgCopy = new Copy(copy);
 			ObjectMessage msg = new ObjectMessage(msgCopy, "ask for delay", "Copy");
 			tempCopy=copy;
-
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);
 
 		}

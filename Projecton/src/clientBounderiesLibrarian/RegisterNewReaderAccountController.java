@@ -105,6 +105,7 @@ public class RegisterNewReaderAccountController implements IGUIController
 			}
 			ReaderAccount reader=new ReaderAccount(userID, 3, false, firstName,lastName,phoneNum,email, "Active",0,adress,EditionYears);
 			ObjectMessage msg = new ObjectMessage(reader,"RegistrationNewReaderAccount","ReaderAccount");
+			client.setClientUI(this);
 			client.handleMessageFromClient(msg);
 		}
 		else

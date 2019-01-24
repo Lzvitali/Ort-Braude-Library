@@ -68,6 +68,7 @@ public class LogInController  implements IGUIController
     @FXML
     void makeLogIn(ActionEvent event) 
     {
+    	
     	String id = logInIDTextField.getText();
     	String password = logInPasswordTextField.getText();
     	
@@ -95,11 +96,9 @@ public class LogInController  implements IGUIController
     	
     	currentID=id;
     	
-    	System.out.println(id + "  " + password);
-    	
     	User user = new User(id,password);
     	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
-    	
+    	client.setClientUI(this);
     	client.handleMessageFromClient(msg); 
     	
     }
@@ -109,6 +108,7 @@ public class LogInController  implements IGUIController
 	@FXML
     void makeLoginWithEnterBtn(KeyEvent event)
     {
+		client.setClientUI(this);
     	if(event.getCode().equals(KeyCode.ENTER))
     	{
     		makeLogIn(new ActionEvent());

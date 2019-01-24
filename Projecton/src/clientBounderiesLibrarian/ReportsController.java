@@ -107,6 +107,7 @@ public class ReportsController implements IGUIController
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
     	ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
+    	client.setClientUI(this);
 		client.handleMessageFromClient(sendToServer); 
     	
     	

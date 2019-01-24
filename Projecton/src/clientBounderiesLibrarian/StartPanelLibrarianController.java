@@ -320,6 +320,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			askedBook.setFreeSearch(searchBookTextField.getText());;
 		}
 		ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+		client.setClientUI(this);
 		client.handleMessageFromClient(sendToServer); 
 	}
 
@@ -374,6 +375,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			
 		}
 		ObjectMessage sendToServer=new ObjectMessage(askedReader,"SearchReader","ReaderAccount");
+		client.setClientUI(this);
 		client.handleMessageFromClient(sendToServer);  
 	}
 
@@ -388,6 +390,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		//change the status of that user in the DB
 		User user = new User(LogInController.currentID);
 		ObjectMessage msg = new ObjectMessage(user,"user try to log out","User");
+		client.setClientUI(this);
 		client.handleMessageFromClient(msg);
 	}
 
@@ -523,6 +526,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			str = file.getAbsolutePath();
 			ObjectMessage sendToServer=new ObjectMessage(bookName, "getPDF");
 			sendToServer.setExtra(str);
+			client.setClientUI(this);
 			client.handleMessageFromClient(sendToServer); 
 		}
 
@@ -657,6 +661,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				sendReader.setId(readerAccount.getId());
 				sendReader.setStatus(result.get().getText());
 				ObjectMessage objectMessage=new ObjectMessage(sendReader,"ChangeStatus","ReaderAccount");
+				client.setClientUI(this);
 				client.handleMessageFromClient(objectMessage);
 			}
 		});

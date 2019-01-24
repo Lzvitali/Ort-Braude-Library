@@ -47,6 +47,7 @@ public class ReturnBookController implements IGUIController {
     	int copyID=Integer.parseInt(CopyIdTextFielf.getText());
     	Copy copy=new Copy(copyID);
     	ObjectMessage msg = new ObjectMessage(copy,"ReturnCopy","Copy");
+    	client.setClientUI(this);
     	client.handleMessageFromClient(msg);
     	
     }
