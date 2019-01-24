@@ -2,6 +2,7 @@ package clientBounderiesLibrarian;
 
 import com.jfoenix.controls.JFXTextField;
 
+import Common.IEntity;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.Report;
@@ -9,6 +10,7 @@ import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -117,22 +119,18 @@ public class ReportsController implements IGUIController
 	@Override
 	public void display(ObjectMessage msg) 
 	{
-		if(msg.getMessage().equals("succssful reporting"))
-		{
-			//Report report=(Report)msg.getObjectArray().get(arg0)
-			//avgForAll.setText(String.valueOf(report.getAverage()));
-			//medianForAll.setText();
-		}
-		else if(msg.getMessage().equals("average of desired book"))
-		{
+		
+			ArrayList <IEntity> result=msg.getObjectList(); //get the array list received from the server
+			float averageAll=((Report)result.get(2)).getAverage();
 			
+			avgForAll.setText(String.valueOf(averageAll));
+			//medianForAll.setText(String.valueOf());
 			
-		}
-		else
-		{
-			
-			
-		}
+			float averageDesired=((Report)result.get(1)).getAverage();
+		
+			avgForDesired.setText(String.valueOf(averageDesired));
+			//medianForAll.setText(String.valueOf());
+		
 		
 
 		

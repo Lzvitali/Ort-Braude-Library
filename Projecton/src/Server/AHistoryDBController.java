@@ -42,6 +42,7 @@ public abstract class AHistoryDBController
 		PreparedStatement getAverageDesired;
 		int sumOfDesired=0;
 		ResultSet rs1 = null; 
+		ResultSet rs2 = null;
 		int isDesired;
 		int idOfBook;
 		Float average;
@@ -55,14 +56,14 @@ public abstract class AHistoryDBController
 			rs1 =getAverageAllBooks.executeQuery();
 			rs1.next();
 			average=rs1.getFloat(1);
-			Report report2=new Report(average,average);
-			result.add(report2);
+			Report reportAllBooks=new Report(average,average);
+			result.add(2,reportAllBooks);
 
-			//report2[2]=new Report(average, average);
+			
 
 
 
-			////average of desired books
+			//average of desired books
 			getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.history WHERE action=?" );
 			getAverageDesired.setString(1,"return Book"); 
 			rs1 =getAverageDesired.executeQuery();
@@ -73,8 +74,8 @@ public abstract class AHistoryDBController
 				idOfBook=rs1.getInt(3);
 				getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.book WHERE bookId=?" );
 				getAverageDesired.setInt(1,idOfBook); 
-				rs1 =getAverageDesired.executeQuery();
-				isDesired=rs1.getInt(6);
+				rs2 =getAverageDesired.executeQuery();
+				isDesired=rs2.getInt(6);
 				if(isDesired==1)
 				{
 					countOfDesired++;
@@ -83,10 +84,11 @@ public abstract class AHistoryDBController
 
 			}
 			average=(float)sumOfDesired/(float)countOfDesired;
-			//report2[1]=new Report(average, average);
+			Report reportDesiredBook=new Report(average,average);
+			result.add(1,reportDesiredBook);
 
-			result.add(report2);
-			answer = new ObjectMessage((IEntity)result,"succssful reporting", " ");
+			
+			answer = new ObjectMessage((IEntity)result,"succssful reporting", "Report number 2 ");
 
 		}
 
