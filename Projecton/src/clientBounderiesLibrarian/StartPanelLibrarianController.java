@@ -205,7 +205,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
 	@FXML // fx:id="reportBtn"
 	private Button reportBtn; 
-
+		
 	@FXML
 	private TableColumn<IEntity, Button> freezeColumn;
 
@@ -213,7 +213,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	void openReportWindow(ActionEvent event) 
 	{
 		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesLibrarian/Reports.fxml","Reporst");
+		
 	}
+	
 	///////////////////////////////////////////////////////////////////////////////////
 
 

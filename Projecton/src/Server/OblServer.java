@@ -121,6 +121,20 @@ public class OblServer extends AbstractServer
 				e.printStackTrace();
 			}
 		}
+		
+		else if( (objectMessage.getNote()).equals("History") ) 
+		{
+			answer = AHistoryDBController.selection(objectMessage,connToSQL);
+			try 
+			{
+				client.sendToClient(answer);
+			} 
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
 		else if( (objectMessage.getNote()).equals("AddPDF") ) 
 		{
 

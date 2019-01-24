@@ -25,12 +25,15 @@ public class ObjectMessage implements Serializable
 		objectListOfArrays=new ArrayList<IEntity[]>();;
 		this.message="";
 	}
+	
+	
 	public ObjectMessage(String message)
 	{
 		objectList=new ArrayList<IEntity>();
 		objectListOfArrays=new ArrayList<IEntity[]>();;
 		this.message=message;
 	}
+	
 	
 	
 	public ObjectMessage(IEntity entityOne,String message, String note)

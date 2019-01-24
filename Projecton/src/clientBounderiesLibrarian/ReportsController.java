@@ -4,14 +4,18 @@ import com.jfoenix.controls.JFXTextField;
 
 import Common.IGUIController;
 import Common.ObjectMessage;
+import Common.Report;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 
 public class ReportsController implements IGUIController
@@ -19,6 +23,9 @@ public class ReportsController implements IGUIController
 
 	OBLClient client;
 	
+    @FXML
+    private TabPane TabPaneSelect;
+    
     @FXML
     private ResourceBundle resources;
 
@@ -99,13 +106,37 @@ public class ReportsController implements IGUIController
     {
     	client=StartPanelController.connToClientController;
     	client.setClientUI(this);
+    	ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
+		client.handleMessageFromClient(sendToServer); 
+    	
+    	
 
     }
 
 	@Override
 	public void display(ObjectMessage msg) 
 	{
+		if(msg.getMessage().equals("succssful reporting"))
+		{
+			Report report=(Report)msg.getObjectArray().get(arg0)
+			avgForAll.setText(String.valueOf(report.getAverage()));
+			//medianForAll.setText();
+		}
+		else if(msg.getMessage().equals("average of desired book"))
+		{
+			
+			
+		}
+		else
+		{
+			
+			
+		}
+		
+
 		
 		
+		
+
 	}
 }
