@@ -563,6 +563,8 @@ public abstract class ACopyDBController
 						setReturnDay.setInt(3, copy.getCopyID());
 						setReturnDay.executeUpdate();
 						// TODO history
+						ObjectMessage forHistoryObject=new ObjectMessage();
+						AHistoryDBController.enterActionToHistory(msg, connToSQL);
 						return "NotDesired";// Success borrowed not desired book
 					}
 					else
