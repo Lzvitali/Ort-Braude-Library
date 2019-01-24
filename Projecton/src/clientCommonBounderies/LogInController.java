@@ -155,10 +155,17 @@ public class LogInController  implements IGUIController
 		{
 			if((msg.getMessage()).equals("unsuccessful"))
 			{
+				if((msg.getNote()).equals("User already connected"))
+				{
+					AClientCommonUtilities.alertError("User already connected", "Error");
+				}
+				else if((msg.getNote()).equals("User is Locked"))
+				{
+					AClientCommonUtilities.alertError("User is Locked", "Error");
+				}
 				
-				AClientCommonUtilities.alertError("User already connected", "Error");
 			}
-			else
+			else if((msg.getNote()).equals("not exist"))
 			{
 				AClientCommonUtilities.alertError("ID or Password not match", "Error");
 			}
