@@ -42,8 +42,37 @@ public class AReaderAccountDBController
 		{
 			return checkIfExistID(msg, connToSQL);
 		}
-		
-		return answer;
+		else if(((msg.getMessage()).equals("ChangeStatus")))
+		{
+			return changeStatus(msg, connToSQL);
+		}
+		else
+		{
+			return answer;
+		}
+	}
+	
+	private static ObjectMessage changeStatus(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		ReaderAccount readerAccount=(ReaderAccount)msg.getObjectList().get(0);
+		ObjectMessage answer=new ObjectMessage("StatusChanged","The Status of "+readerAccount.getId()+" have changed to "+readerAccount.getStatus());
+		try 
+		{
+			ps = connToSQL.prepareStatement("UPDATE `readeraccount` SET `status`=? WHERE ID=?");
+			ps.setString(1,readerAccount.getStatus());
+			ps.setString(2,readerAccount.getId());
+			ps.executeUpdate();
+			ps = connToSQL.prepareStatement("INSERT INTO `UserStatusHistory` (`readerAccountID`,`status`) VALUES (?,?); ");
+			ps.setString(1,readerAccount.getId());
+			ps.setString(2,readerAccount.getStatus());
+			ps.executeUpdate();
+			return answer;
+		}
+		catch(Exception e)
+		{
+			return answer;
+		}
 	}
 	
 	/**

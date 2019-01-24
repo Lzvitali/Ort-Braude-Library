@@ -456,6 +456,12 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			getPDF(msg);
 		}
+		else if(msg.getMessage().equals("StatusChanged"))
+		{
+			makeSearch(new ActionEvent());
+			AClientCommonUtilities.infoAlert(msg.getNote(), "Status changed");
+			
+		}
 	}
 	private void searchBookResult(ObjectMessage msg)
 	{
@@ -593,9 +599,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 					
 					if(LogInController.permission==1)
 					{
-						readerAccount=(ReaderAccount)result.get(i);
-						(readerAccount).setFreeze(new Button("Change Status"));
-						(readerAccount).getFreeze().setOnAction(e -> changeStatus(e,readerAccount));
+						ReaderAccount saveReaderAccount=(ReaderAccount)result.get(i);
+						(saveReaderAccount).setFreeze(new Button("Change Status"));
+						(saveReaderAccount).getFreeze().setOnAction(e -> changeStatus(e,saveReaderAccount));
 					}
 					searchReaderAccountTable.getItems().add(result.get(i));
 				}
@@ -611,23 +617,45 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	}
 	
 	
-	//still need to work on it
+	
 	void changeStatus(ActionEvent e, ReaderAccount reader) 
 	{
 		
 		Platform.runLater(()->
 		{  
+			ButtonType option1;
+			ButtonType option2;
+			ButtonType cancel;
 			readerAccount = reader;
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			ButtonType bttexit = new ButtonType("exit", ButtonBar.ButtonData.CANCEL_CLOSE);
-			alert.getButtonTypes().clear();
-			alert.setHeaderText("The status of "+readerAccount.getFirstName()+" is "+readerAccount.getStatus());
-			alert.setTitle("Change Status");
-			alert.getButtonTypes().addAll(bttexit);
-			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get().getButtonData() == ButtonBar.ButtonData.CANCEL_CLOSE) 
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			if(reader.getStatus().equals("Active"))
 			{
-				System.exit(0);
+				option1 = new ButtonType("Frozen", ButtonBar.ButtonData.LEFT);
+				option2 = new ButtonType("Locked", ButtonBar.ButtonData.LEFT);
+			}
+			else if(reader.getStatus().equals("Frozen"))
+			{
+				option1 = new ButtonType("Active", ButtonBar.ButtonData.LEFT);
+				option2 = new ButtonType("Locked", ButtonBar.ButtonData.LEFT);
+			}
+			else
+			{
+				option1 = new ButtonType("Active", ButtonBar.ButtonData.LEFT);
+				option2 = new ButtonType("Locked", ButtonBar.ButtonData.LEFT);
+			}
+			cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+			alert.getButtonTypes().clear();
+			alert.setHeaderText("The status of "+readerAccount.getFirstName()+" is "+readerAccount.getStatus()+"\nChoose the request status");
+			alert.setTitle("Change Status");
+			alert.getButtonTypes().addAll(option1,option2,cancel);
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get().getButtonData() != ButtonBar.ButtonData.CANCEL_CLOSE) 
+			{
+				ReaderAccount sendReader=new ReaderAccount();
+				sendReader.setId(readerAccount.getId());
+				sendReader.setStatus(result.get().getText());
+				ObjectMessage objectMessage=new ObjectMessage(sendReader,"ChangeStatus","ReaderAccount");
+				client.handleMessageFromClient(objectMessage);
 			}
 		});
 	}
