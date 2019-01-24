@@ -319,7 +319,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 				( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> askForDelay(e, (Copy)tempArray[0]));
 
 				if(LogInController.permission == 1 || LogInController.permission == 2)
-				{
+				{ 
 					( (Copy)tempArray[0] ).setLostCopy(new Button("handle"));
 					( (Copy)tempArray[0] ).getAskForDelay().setOnAction(e -> handleLostBook(e, (Copy)tempArray[0]));
 				}
