@@ -1,6 +1,8 @@
 package Server;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -26,6 +28,10 @@ public abstract class ADailyDBController
 		if (((msg.getMessage()).equals("sendMail")))
 		{
 			return sendMail(msg, connToSQL);
+		}
+		else if (((msg.getMessage()).equals("resetUserStatusHistory")))
+		{
+			return resetUserStatusHistory(msg, connToSQL);
 		}
 		else
 		{
@@ -89,6 +95,31 @@ public abstract class ADailyDBController
 	            me.printStackTrace();
 	        }
 	        return null;
+	}
+
+	private static ObjectMessage resetUserStatusHistory(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps,ps2;
+		try 
+		{
+			ps= connToSQL.prepareStatement("DROP TABLE IF EXISTS `UserStatusHistory`");
+			ps2= connToSQL.prepareStatement("CREATE TABLE `UserStatusHistory` (\r\n" + 
+					"  `readerAccountID` varchar(9) NOT NULL ,\r\n" + 
+					"  `status` enum('Active','Frozen','Locked')  NOT NULL,\r\n" + 
+					"  PRIMARY KEY  (`readerAccountID`,`status`),\r\n" + 
+					"  FOREIGN KEY (`readerAccountID`) REFERENCES `ReaderAccount` (`ID`)\r\n" + 
+					") ENGINE=InnoDB;");
+			ps.executeUpdate();
+			ps2.executeUpdate();
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
+		
+		return null;
 	}
 }
 

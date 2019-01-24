@@ -335,7 +335,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			}
 			else
 			{
-				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("UserID", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationUser("UserID", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
 				searchReaderAccountSearchField.setText("");
 			}
 			
@@ -348,7 +348,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			}
 			else
 			{
-				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("First Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationUser("First Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
 				searchReaderAccountSearchField.setText("");
 			}
 			
@@ -361,7 +361,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			}
 			else
 			{
-				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("Last Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
+				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationUser("Last Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
 				searchReaderAccountSearchField.setText("");
 			}
 			
