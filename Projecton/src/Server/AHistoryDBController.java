@@ -25,9 +25,31 @@ public abstract class AHistoryDBController
 		{
 			return getReportTwo(msg, connToSQL);
 		}
+		else if(((msg.getMessage()).equals("get report 3")))
+		{
+			return getReportThree(msg, connToSQL);
+		}
+		else if(((msg.getMessage()).equals("get reader account History")))
+		{
+			return getReaderAccountHistory(msg, connToSQL);
+		}
 		else
 			return null;	
 
+	}
+
+	private static ObjectMessage getReaderAccountHistory(ObjectMessage msg, Connection connToSQL) 
+	{
+		
+		
+		return new ObjectMessage("");
+	}
+
+	//TODO: For Vitali
+	private static ObjectMessage getReportThree(ObjectMessage msg, Connection connToSQL) 
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
