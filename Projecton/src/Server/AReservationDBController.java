@@ -122,10 +122,9 @@ public abstract class AReservationDBController
 					if(copyAvailable>=numOfBookReserve)
 					{
 						answer=implementTheBorrow(msg,connToSQL);
-
 					}
 					else
-					{		
+					{	
 						whoIstheFirst = connToSQL.prepareStatement("SELECT * FROM reservations WHERE bookId=? order by Date"); 
 						whoIstheFirst.setInt(1, reserve.getBookID());
 						rs4 =whoIstheFirst.executeQuery();
