@@ -8,18 +8,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="474.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesReaderAccount.MyHistoryController">
+<AnchorPane prefHeight="478.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesReaderAccount.MyHistoryController">
    <children>
       <ImageView fitHeight="65.0" fitWidth="301.0" layoutX="268.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../icons/viewHistoryTitle.png" />
          </image>
       </ImageView>
-      <TableView layoutX="18.0" layoutY="79.0" prefHeight="337.0" prefWidth="721.0">
+      <TableView fx:id="tableHistory" layoutX="18.0" layoutY="66.0" prefHeight="347.0" prefWidth="735.0">
         <columns>
-          <TableColumn fx:id="ActionDateColumn" prefWidth="116.0" text="Action date" />
-          <TableColumn fx:id="ActionColumn" prefWidth="284.0" text="Action" />
-            <TableColumn fx:id="Details" prefWidth="320.0" text="Details" />
+            <TableColumn fx:id="nomberOfRow" prefWidth="44.0" text="no" />
+          <TableColumn fx:id="ActionDateColumn" prefWidth="188.0" text="Action date" />
+          <TableColumn fx:id="ActionColumn" prefWidth="273.0" text="Action" />
+            <TableColumn fx:id="Details" prefWidth="231.0" text="Details" />
         </columns>
       </TableView>
       <JFXButton fx:id="ExitBtn" layoutX="48.0" layoutY="429.0" onAction="#exitBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Exit">
