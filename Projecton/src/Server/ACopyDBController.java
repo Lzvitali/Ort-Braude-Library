@@ -227,7 +227,7 @@ public abstract class ACopyDBController
 				long diff = Math.abs(today1.getTime() -((Date)query1.getDate(4)).getTime());
 				long dif2 = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
-				// send to  HISTORY
+/*				// send to  HISTORY
 				try 
 				{
 					History sendObject = new History(query2.getString(3),"Return book",Integer.parseInt(query2.getString(2)),tempCopy.getCopyID(),today1,Long.toString(dif2));
@@ -240,7 +240,7 @@ public abstract class ACopyDBController
 				catch (SQLException e)
 				{
 					e.printStackTrace();
-				}
+				}*/
 				
 				//send Mail if book have reservation
 				ObjectMessage askTheFirstReader=new ObjectMessage();

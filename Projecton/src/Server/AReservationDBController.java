@@ -472,7 +472,7 @@ public abstract class AReservationDBController
 			//get the copies that the reader account borrowed 
 			try 
 			{
-				ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM reservations WHERE bookId=?");
+				ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM reservations WHERE bookId=? AND startTimerImplement IS NULL");
 				ps.setInt(1, book.getBookID()); 
 				rs =ps.executeQuery();
 				rs.next();
@@ -482,7 +482,7 @@ public abstract class AReservationDBController
 				}
 				else
 				{
-					ps = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ORDER BY `Date`,`Time` ");
+					ps = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? AND startTimerImplement IS NULL ORDER BY `Date`,`Time` ");
 					ps.setInt(1, book.getBookID()); 
 					rs =ps.executeQuery();
 					rs.next();
