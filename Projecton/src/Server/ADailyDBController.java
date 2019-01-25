@@ -10,6 +10,8 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -33,8 +35,7 @@ public abstract class ADailyDBController
 	final static String password = "Aa112233";
 	
     static ScheduledThreadPoolExecutor executor;
-    private static int runAlready ;
-    static ScheduledFuture<?> t;
+    static ExecutorService pool = Executors.newFixedThreadPool(5); 
     
     public static void startThreads(Connection connToSQL)
     {
@@ -48,8 +49,7 @@ public abstract class ADailyDBController
 
 		if (((msg.getMessage()).equals("sendMail")))
 		{
-			runAlready=1;
-			t=executor.scheduleAtFixedRate(()->sendMail(msg, connToSQL), 0, 1, TimeUnit.SECONDS);
+			pool.execute(()->sendMail(msg, connToSQL));
 		}
 	}
 
@@ -110,9 +110,6 @@ public abstract class ADailyDBController
 	        catch (MessagingException me) {
 	            me.printStackTrace();
 	        }
-            if (++runAlready == 2) {
-                t.cancel(false);
-            }
 	}
 	
 	//check the methode 
