@@ -102,7 +102,7 @@ public class MyHistoryController implements IGUIController
 			ArrayList <IEntity> result = msg.getObjectList(); //get the array list received from the server
 
 			//set to the results to the table
-			for(int i=0;i<result.size();i++)
+			for(int i=0; i<result.size(); i++)
 			{
 				tableHistory.getItems().add(result.get(i));
 			}
