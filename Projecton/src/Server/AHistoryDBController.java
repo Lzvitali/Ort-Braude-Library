@@ -75,11 +75,14 @@ public abstract class AHistoryDBController
 
 	private static ObjectMessage getReportTwo( ObjectMessage msg, Connection connToSQL) 
 	{
-		ArrayList<Report> result=new ArrayList<Report>();
+		ArrayList<IEntity> result=new ArrayList<IEntity>();
 		int countOfDesired=0;
+		int countOfUnDesired=0;
 		PreparedStatement getAverageAllBooks;
 		PreparedStatement getAverageDesired;
+		PreparedStatement getAverageUnDesired;
 		int sumOfDesired=0;
+		int sumOfUnDesired=0;
 		ResultSet rs1 = null; 
 		ResultSet rs2 = null;
 		int isDesired;
@@ -96,7 +99,7 @@ public abstract class AHistoryDBController
 			rs1.next();
 			average=rs1.getFloat(1);
 			Report reportAllBooks=new Report(average,average);
-			result.add(2,reportAllBooks);
+			result.add(reportAllBooks);
 
 
 
@@ -114,6 +117,7 @@ public abstract class AHistoryDBController
 				getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.book WHERE bookId=?" );
 				getAverageDesired.setInt(1,idOfBook); 
 				rs2 =getAverageDesired.executeQuery();
+				rs2.next();
 				isDesired=rs2.getInt(6);
 				if(isDesired==1)
 				{
@@ -124,12 +128,45 @@ public abstract class AHistoryDBController
 			}
 			average=(float)sumOfDesired/(float)countOfDesired;
 			Report reportDesiredBook=new Report(average,average);
-			result.add(1,reportDesiredBook);
+			result.add(reportDesiredBook);
 
 
-			answer = new ObjectMessage((IEntity)result,"succssful reporting", "Report number 2 ");
+			answer = new ObjectMessage(result,"succssful reporting", "Report number 2 ");
+
+		
+		
+		
+		
+		
+		//average of UN-desired books
+		getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.history WHERE action=?" );
+		getAverageDesired.setString(1,"return Book"); 
+		rs1 =getAverageDesired.executeQuery();
+
+		while(rs1.next())
+		{
+			daysOfBorrows=Integer.parseInt(rs1.getString(7));
+			idOfBook=rs1.getInt(3);
+			getAverageUnDesired = connToSQL.prepareStatement("SELECT* FROM obl.book WHERE bookId=?" );
+			getAverageUnDesired.setInt(1,idOfBook); 
+			rs2 =getAverageUnDesired.executeQuery();
+			rs2.next();
+			isDesired=rs2.getInt(6);
+			if(isDesired==0)
+			{
+				countOfUnDesired++;
+				sumOfUnDesired+=daysOfBorrows;
+			}
 
 		}
+		average=(float)sumOfUnDesired/(float)countOfUnDesired;
+		Report reportUnDesiredBook=new Report(average,average);
+		result.add(reportUnDesiredBook);
+
+
+		answer = new ObjectMessage(result,"succssful reporting", "Report number 2 ");
+
+	}
 
 
 		catch(SQLException e) 

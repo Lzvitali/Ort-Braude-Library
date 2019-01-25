@@ -121,7 +121,7 @@ public class ReportsController implements IGUIController
 	{
 		
 			ArrayList <IEntity> result=msg.getObjectList(); //get the array list received from the server
-			float averageAll=((Report)result.get(2)).getAverage();
+			float averageAll=((Report)result.get(0)).getAverage();
 			
 			avgForAll.setText(String.valueOf(averageAll));
 			//medianForAll.setText(String.valueOf());
@@ -131,7 +131,7 @@ public class ReportsController implements IGUIController
 			avgForDesired.setText(String.valueOf(averageDesired));
 			//medianForAll.setText(String.valueOf());
 		
-		
+			float averageUnDesired=((Report)result.get(1)).getAverage();
 
 		
 		
