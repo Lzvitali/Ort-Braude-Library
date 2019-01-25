@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -30,9 +31,10 @@ public abstract class ADailyDBController
 {
 	final static String userName = "OBLManager2019@gmail.com";
 	final static String password = "Aa112233";
-    static ScheduledThreadPoolExecutor executor;
-
 	
+    static ScheduledThreadPoolExecutor executor;
+    private static int runAlready ;
+    static ScheduledFuture<?> t;
     
     public static void startThreads(Connection connToSQL)
     {
@@ -41,22 +43,19 @@ public abstract class ADailyDBController
     }
     
     
-	public static ObjectMessage selection(ObjectMessage msg, Connection connToSQL)
+	public static void selection(ObjectMessage msg, Connection connToSQL)
 	{
 
 		if (((msg.getMessage()).equals("sendMail")))
 		{
-			return sendMail(msg, connToSQL);
-		}
-		else
-		{
-			return null; 
+			runAlready=1;
+			t=executor.scheduleAtFixedRate(()->sendMail(msg, connToSQL), 0, 1, TimeUnit.SECONDS);
 		}
 	}
 
 	
 	
-	private static ObjectMessage sendMail(ObjectMessage msg, Connection connToSQL) 
+	private static void sendMail(ObjectMessage msg, Connection connToSQL) 
 	{
 			Mail mail=((Mail)((ObjectMessage)msg).getObjectList().get(0));
 			String[] to = { mail.getTo() }; // list of recipient email addresses
@@ -111,7 +110,9 @@ public abstract class ADailyDBController
 	        catch (MessagingException me) {
 	            me.printStackTrace();
 	        }
-	        return null;
+            if (++runAlready == 2) {
+                t.cancel(false);
+            }
 	}
 	
 	//check the methode 

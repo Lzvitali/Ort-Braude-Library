@@ -111,17 +111,8 @@ public class OblServer extends AbstractServer
 		}
 		else if( (objectMessage.getNote()).equals("Daily") ) 
 		{
-			answer = ADailyDBController.selection(objectMessage,connToSQL);
-			try 
-			{
-				client.sendToClient(answer);
-			} 
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
+			ADailyDBController.selection(objectMessage,connToSQL);
+		}	
 		else if( (objectMessage.getNote()).equals("History") ) 
 		{
 			answer = AHistoryDBController.selection(objectMessage,connToSQL);
