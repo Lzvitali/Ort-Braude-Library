@@ -25,9 +25,11 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import Common.Book;
 import Common.Copy;
 import Common.Mail;
 import Common.ObjectMessage;
+import Common.ReaderAccount;
 import Common.Report;
 
 public abstract class ADailyDBController 
@@ -316,12 +318,33 @@ public abstract class ADailyDBController
 					ps.setString(1, copy.getBorrowerID());
 					rs=ps.executeQuery();
 					rs.next();
+					ObjectMessage askTheFirstReader=new ObjectMessage(copy.getBorrowerID(),"SearchReader","ReaderAccount");
+					ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
+					Book askedBook=new Book();
+					askedBook.setBookID(copy.getBookID());
+					ObjectMessage bookDetails=new ObjectMessage(askedBook,"searchBookID","Book");
+					Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
+					ObjectMessage notify=new ObjectMessage("sendMail","Daily");
+					Mail mail=new Mail();
+					mail.setTo(readerAccount.getEmail());
+					String subject="Return your book "+book.getBookName();
+					mail.setSubject(subject);
 					if(rs.getInt(1)<3)
 					{
 						ps=connToSQL.prepareStatement("UPDATE `ReaderAccount` SET `numOfDelays`=? , Status='Frozen' WHERE ID=?");
 						ps.setInt(1, (rs.getInt(1)+1));
 						ps.setString(2, copy.getBorrowerID());
 						ps.executeUpdate();
+						
+						String body="Hello "+readerAccount.getFirstName()+"\nWe want to notfiy you that you need to come to library"
+								+ " and return "+book.getBookName()
+								+ ".\nUntill that your account is Frozen."
+								+"\n 		Thank you , Ort Braude Library";
+						mail.setBody(body);
+						notify.addObject(mail);
+						ADailyDBController.selection(notify, connToSQL);
+						
+						
 					}
 					else
 					{
@@ -329,6 +352,15 @@ public abstract class ADailyDBController
 						ps.setInt(1, (rs.getInt(1)+1));
 						ps.setString(2, copy.getBorrowerID());
 						ps.executeUpdate();
+						
+						String body="Hello "+readerAccount.getFirstName()+"\nWe want to notfiy you that you need to come to library"
+								+ " and return "+book.getBookName()
+								+ ".\nUntill that your account is Locked because you have more then 3 delays in your history."
+								+"\n 		Thank you , Ort Braude Library";
+						mail.setBody(body);
+						notify.addObject(mail);
+						ADailyDBController.selection(notify, connToSQL);
+						
 					}
 				}
 			}					
