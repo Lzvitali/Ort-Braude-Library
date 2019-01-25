@@ -217,7 +217,7 @@ public abstract class AValidationInput
 		{
 			return"Insert 9 digit user id";	
 		}
-		if(context.length()<9)
+		if(context.length() != 9)
 		{
 			return "Insert 9 digit user id or fill zero before";
 		}
