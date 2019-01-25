@@ -163,17 +163,18 @@ public abstract class ADailyDBController
 			e.printStackTrace();
 		}
 	}
-	private static void  countQuantityOfCopyInCaseAddCopyOrBookToDB(Connection connToSQL)
+	public static void  countQuantityOfCopyInCaseAddCopyOrBookToDB(Connection connToSQL)
 	{
 		PreparedStatement ps=null;
 		PreparedStatement ps2=null;
 		ResultSet query=null;
 		ResultSet query2=null;
 		LocalDate now = LocalDate.now();
-		Date today=java.sql.Date.valueOf(now);
-		int mounth=today.getMonth();
-		int year=today.getYear();
-		Date date= new Date(1,mounth, year);
+		int mounth=now.getMonthValue();
+		int year=now.getYear();
+		int day=1;
+		LocalDate today=now.of(year, mounth, day);
+		Date result=java.sql.Date.valueOf(today);
 		
 		try
 		{
@@ -181,9 +182,8 @@ public abstract class ADailyDBController
 			query=ps.executeQuery();
 			ps2=connToSQL.prepareStatement("UPDATE `history` SET `note`=? WHERE Date=? AND action=?");
 			ps2.setString(1,query.getString(0));
-			ps2.setString(3, "quantity of copies");
-			today.set
-			ps
+			ps2.setDate(2, (java.sql.Date) result);
+			ps2.setString(3, "quantity of copies");			
 		}
 		catch (SQLException e) 
 		{

@@ -64,7 +64,6 @@ public abstract class  ABookDBController
 			return null; 
 	}
 
-
 	/**
 	 * This function update information about book in the DB in MySQL. It is check if updated info of book is not like book that already in db 
 	 * @param msg- the object from the client
@@ -259,7 +258,7 @@ public abstract class  ABookDBController
 								addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
 								addCopy.executeUpdate();
 							}
-
+						//check with Natali	///ADailyDBController.countQuantityOfCopyInCaseAddCopyOrBookToDB(connToSQL);
 							return new ObjectMessage("This Book is already exist in the system,so successfully added it like copy.","Successfull");
 						}
 						else //if there is different topics
@@ -311,6 +310,7 @@ public abstract class  ABookDBController
 						checkBook.setInt(3, tempBook.getDateOfBook());
 						checkBook.setInt(4,tempBook.getEdition());
 						rs1 =checkBook.executeQuery();
+
 					}
 
 
@@ -327,6 +327,7 @@ public abstract class  ABookDBController
 					}
 
 				}
+				//check with Natali	///ADailyDBController.countQuantityOfCopyInCaseAddCopyOrBookToDB(connToSQL);
 				return new ObjectMessage("This Book was successfully added like book and like copy.","Successfull");
 
 			}	
