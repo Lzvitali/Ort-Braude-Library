@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -137,6 +138,33 @@ public abstract class ADailyDBController
 		
 	}
 
+	private static void  countQuantityOfCopy(Connection connToSQL)
+	{
+		PreparedStatement ps=null;
+		PreparedStatement ps2=null;
+		ResultSet query=null;
+		ResultSet query2=null;
+		LocalDate now = LocalDate.now();
+		Date today=java.sql.Date.valueOf(now);
+		
+		
+		try
+		{
+			ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM copy");		
+			query=ps.executeQuery();
+			ps2=connToSQL.prepareStatement("INSERT INTO `history`(`action`, `date`,`Note`) VALUES (?,?,?)");
+			ps2.setString(1, "quantity of copies");
+			ps2.setDate(2, (java.sql.Date) today);
+			ps2.setString(3, query.getString(0));
+			
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 	private static void  resetUserStatusHistory(Connection connToSQL)
 	{
