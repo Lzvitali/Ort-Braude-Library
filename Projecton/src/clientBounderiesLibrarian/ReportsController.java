@@ -109,9 +109,8 @@ public class ReportsController implements IGUIController
 
 		resultsForReport3.setVisible(false);
 		
-		ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
-		//client.setClientUI(this);
-		client.handleMessageFromClient(sendToServer); 
+		//ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
+		//client.handleMessageFromClient(sendToServer); 
 
 	}
 

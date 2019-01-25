@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -115,27 +116,39 @@ public abstract class AHistoryDBController
 		int bookID = Integer.parseInt(msg.getExtra());
 		
 		boolean bookIsExist = false; // if book with given id is exist
+		boolean thereIsResults = false;
 		int cnt = 0; //counter for total number of late returns
 		long totalDurationofLates = 0;
-		float average;
-		float median;
+		float average = 0;
+		float median = 0;
 		ArrayList<Long> durationOfTheLate=new ArrayList<Long>();
 		
 		PreparedStatement booksWithLates = null; 
+		PreparedStatement existenceOfTheBook = null;
 		PreparedStatement getReturnDate = null;
+		ResultSet rs0 = null;
 		ResultSet rs1 = null;
 		ResultSet rs2 = null;
 		
 		try 
 		{
+			//check if the book exist
+			existenceOfTheBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+			existenceOfTheBook.setInt(1, bookID);   
+			rs0 =existenceOfTheBook.executeQuery();
+			
+			if(rs0.next())
+			{
+				bookIsExist = true; //book exist
+			}
+			
 			booksWithLates = connToSQL.prepareStatement("SELECT * FROM history WHERE bookId = ? AND action = ? ");
 			booksWithLates.setInt(1, bookID); 
 			booksWithLates.setString(2, "Late in Return");  
 			rs1 =booksWithLates.executeQuery();
 			
 			while(rs1.next())
-			{
-				bookIsExist = true; //book exist 
+			{ 
 				cnt++;
 				
 				int readerAccountID = rs1.getInt(2);
@@ -157,12 +170,20 @@ public abstract class AHistoryDBController
 					returnDate = rs2.getDate(6);
 				}
 				
+				if(null == returnDate)
+				{
+					LocalDate now = LocalDate.now(); 
+					Date today = java.sql.Date.valueOf(now);
+					returnDate = today;
+				}
+				
 				//calculate the duration of the borrow
 				long diff = Math.abs(startOfLate.getTime() -returnDate.getTime()); 
 				Long dif2 = new Long( TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));	
 				
 				totalDurationofLates += dif2;
 				durationOfTheLate.add(dif2);
+				thereIsResults = true;
 
 			}
 
@@ -175,20 +196,30 @@ public abstract class AHistoryDBController
 
 		if(bookIsExist)
 		{
-			//get the median
-			Collections.sort(durationOfTheLate);
-			if (durationOfTheLate.size()%2 == 1)
+			
+			if(thereIsResults)
 			{
-				median = (float)(durationOfTheLate.get(durationOfTheLate.size() / 2));
+				average = (float)totalDurationofLates/(float)cnt;
+				
+				//get the median
+				Collections.sort(durationOfTheLate);
+				if (durationOfTheLate.size()%2 == 1)
+				{
+					median = (float)(durationOfTheLate.get(durationOfTheLate.size() / 2));
 
+				}
+				else 
+				{
+					median =(float)((durationOfTheLate.get(durationOfTheLate.size()/2) +durationOfTheLate.get(durationOfTheLate.size()/2 - 1))/2.0);
+				}
 			}
-			else 
+			else
 			{
-				median =(float)((durationOfTheLate.get(durationOfTheLate.size()/2) +durationOfTheLate.get(durationOfTheLate.size()/2 - 1))/2);
+				median = 0;
 			}
 			  
 			
-			average = (float)totalDurationofLates/(float)cnt;
+			
 			
 			Report report = new Report();
 			report.setAverage(average);
