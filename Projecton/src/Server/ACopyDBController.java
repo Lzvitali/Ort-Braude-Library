@@ -178,7 +178,7 @@ public abstract class ACopyDBController
 		ResultSet query2 = null;
 		ResultSet query3=null;
 		int numOfDelay;
-
+		Book askedbook=new Book();
 		Copy tempCopy=(Copy)msg.getObjectList().get(0);
 		try
 		{
@@ -199,6 +199,7 @@ public abstract class ACopyDBController
 				checkCopy.setInt(1,tempCopy.getCopyID());
 				query2=checkCopy.executeQuery();
 				query2.next();
+				askedbook.setBookID(query2.getInt(2));
 				String id=query2.getString(3);
 				checkReaderAccountDelays=(PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ?");
 				checkReaderAccountDelays.setString(1,id);
@@ -239,7 +240,24 @@ public abstract class ACopyDBController
 				catch (SQLException e)
 				{
 					e.printStackTrace();
-				} 
+				}
+				
+				//send Mail if book have reservation
+				ObjectMessage askTheFirstReader=new ObjectMessage();
+				askTheFirstReader.setMessage("getReaderThatCanImplement");
+				askTheFirstReader.addObject(askedbook);
+				ObjectMessage result=AReservationDBController.selection(askTheFirstReader,connToSQL);
+				if(result.getNote().equals("Found"))
+				{
+					askTheFirstReader=new ObjectMessage(result.getObjectList().get(0),"SearchReader","ReaderAccount");
+					ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
+					ObjectMessage bookDetails=new ObjectMessage(askedbook,"searchBookID","Book");
+					Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
+					ObjectMessage implementReservation=new ObjectMessage();
+					implementReservation.setMessage("letImplementReservation");
+					implementReservation.addObject(readerAccount, book);
+					AReservationDBController.selection(implementReservation,connToSQL);
+				}
 
 
 			}

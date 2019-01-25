@@ -66,10 +66,11 @@ public class ReturnBookController implements IGUIController {
     	{
 			String successful="successful ReturnCopy";
     		AClientCommonUtilities.infoAlert(successful,"successful ReturnCopy");
+    		AClientCommonUtilities.backToStartPanel();
     	}
     	else
     	{
-    		AClientCommonUtilities.infoAlert(msg.getMessage(),"Return book is unsuccessful");
+    		AClientCommonUtilities.infoAlert(msg.getNote(),"Return book is unsuccessful");
     	}	
 	}
 }

@@ -50,6 +50,10 @@ public abstract class AReservationDBController
 		{
 			return letImplementReservation(msg, connToSQL);
 		}
+		else if (((msg.getMessage()).equals("getReaderThatCanImplement")))
+		{
+			return getReaderThatCanImplement(msg, connToSQL);
+		}
 		else
 		{ 
 			return null; 
@@ -427,7 +431,6 @@ public abstract class AReservationDBController
 	{
 		
 		PreparedStatement ps;
-		ObjectMessage answer;
 		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(0);
 		Book book=(Book)msg.getObjectList().get(1);
 		try 
