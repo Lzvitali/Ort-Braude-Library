@@ -120,18 +120,25 @@ public class ReportsController implements IGUIController
 	public void display(ObjectMessage msg) 
 	{
 		
-			ArrayList <IEntity> result=msg.getObjectList(); //get the array list received from the server
-			float averageAll=((Report)result.get(0)).getAverage();
+			if(msg.getNote().equals("Report number 2"))
+			{
+				ArrayList <IEntity> result=msg.getObjectList(); //get the array list received from the server
+				
+				float avgRegular=((Report)result.get(0)).getAverage();
+				float medianRegular=((Report)result.get(0)).getMedian();
+				avgForRegular.setText(String.valueOf(avgRegular));
+				medianForRegular.setText(String.valueOf(medianRegular));
+				
+				float averageDesired=((Report)result.get(1)).getAverage();
+				float medianDesired=((Report)result.get(1)).getMedian();
+				avgForDesired.setText(String.valueOf(averageDesired));
+				medianForDesired.setText(String.valueOf(medianDesired));
 			
-			avgForAll.setText(String.valueOf(averageAll));
-			//medianForAll.setText(String.valueOf());
-			
-			float averageDesired=((Report)result.get(1)).getAverage();
-		
-			avgForDesired.setText(String.valueOf(averageDesired));
-			//medianForAll.setText(String.valueOf());
-		
-			float averageUnDesired=((Report)result.get(1)).getAverage();
+				float averageAll=((Report)result.get(2)).getAverage();
+				float medianAll=((Report)result.get(1)).getMedian();
+				avgForAll.setText(String.valueOf(averageAll));
+				medianForAll.setText(String.valueOf(medianAll));
+			}
 
 		
 		

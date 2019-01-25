@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import Common.Copy;
 import Common.History;
@@ -111,34 +112,72 @@ public abstract class AHistoryDBController
 	private static ObjectMessage getReportTwo( ObjectMessage msg, Connection connToSQL) 
 	{
 		ArrayList<IEntity> result=new ArrayList<IEntity>();
+		ArrayList<Integer> numberOfDaysOdBorrowingArrReg=new ArrayList<Integer>();
+		ArrayList<Integer> numberOfDaysOdBorrowingArrDes=new ArrayList<Integer>();
+		ArrayList<Integer> numberOfDaysOdBorrowingArrAll=new ArrayList<Integer>();
 		int countOfDesired=0;
-		int countOfUnDesired=0;
+		int countOfRegular=0;
 		PreparedStatement getAverageAllBooks;
 		PreparedStatement getAverageDesired;
-		PreparedStatement getAverageUnDesired;
+		PreparedStatement getReturnedBooks;
+		PreparedStatement getAverageRegular;
 		int sumOfDesired=0;
-		int sumOfUnDesired=0;
+		int sumOfRegular=0;
 		ResultSet rs1 = null; 
 		ResultSet rs2 = null;
 		int isDesired;
 		int idOfBook;
 		Float average;
+		Float median;
+		double middleOfArr;
 		int daysOfBorrows;
 		ObjectMessage answer = null; 
 		try 
 		{
-			//average of all books
-			getAverageAllBooks = connToSQL.prepareStatement("SELECT AVG(Note) FROM obl.history WHERE action=?");
-			getAverageAllBooks.setString(1,"return Book"); 
-			rs1 =getAverageAllBooks.executeQuery();
-			rs1.next();
-			average=rs1.getFloat(1);
-			Report reportAllBooks=new Report(average,average);
-			result.add(reportAllBooks);
+			//average of Regular books
+			getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.history WHERE action=?" );
+			getAverageDesired.setString(1,"return Book"); 
+			rs1 =getAverageDesired.executeQuery();
 
+			while(rs1.next())
+			{
+				daysOfBorrows=Integer.parseInt(rs1.getString(7));
+				idOfBook=rs1.getInt(3);
+				getAverageRegular = connToSQL.prepareStatement("SELECT* FROM obl.book WHERE bookId=?" );
+				getAverageRegular.setInt(1,idOfBook); 
+				rs2 =getAverageRegular.executeQuery();
+				rs2.next();
+				isDesired=rs2.getInt(6);
+				if(isDesired==0)
+				{
+					numberOfDaysOdBorrowingArrReg.add(daysOfBorrows); 
+					countOfRegular++;
+					sumOfRegular+=daysOfBorrows;
+				}
+				
+				
+			}
+			average=(float)sumOfRegular/(float)countOfRegular;
+			
+			//get the median
+			Collections.sort(numberOfDaysOdBorrowingArrReg);
+			 if (numberOfDaysOdBorrowingArrReg.size()%2 == 1)
+			 {
+				 middleOfArr = numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size() / 2);
+						
+			 }
+			 else 
+			 {
+				 middleOfArr =(numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size()/2) +numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size()/2 - 1))/2;
+			 }
+			 
+			 median=(float) middleOfArr;
+		
+			Report reportRegularBook=new Report(average, median);
+			result.add(reportRegularBook);
 
-
-
+			
+			
 
 			//average of desired books
 			getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.history WHERE action=?" );
@@ -156,50 +195,71 @@ public abstract class AHistoryDBController
 				isDesired=rs2.getInt(6);
 				if(isDesired==1)
 				{
+					numberOfDaysOdBorrowingArrDes.add(daysOfBorrows); 
 					countOfDesired++;
 					sumOfDesired+=daysOfBorrows;
 				}
 
 			}
 			average=(float)sumOfDesired/(float)countOfDesired;
-			Report reportDesiredBook=new Report(average,average);
+			
+			//get the median
+			Collections.sort(numberOfDaysOdBorrowingArrDes);
+			 if (numberOfDaysOdBorrowingArrDes.size()%2 == 1)
+			 {
+				 middleOfArr = numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size() / 2);
+						
+			 }
+			 else 
+			 {
+				 middleOfArr =(numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size()/2) +numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size()/2 - 1))/2;
+			 }
+			 
+			 median=(float) middleOfArr;
+			
+			
+			
+			Report reportDesiredBook=new Report(average,median);
 			result.add(reportDesiredBook);
+
+			
+			
+				
+			//average of all books
+			getAverageAllBooks = connToSQL.prepareStatement("SELECT AVG(Note) FROM obl.history WHERE action=?");
+			getAverageAllBooks.setString(1,"return Book"); 
+			rs1 =getAverageAllBooks.executeQuery();
+			rs1.next();
+			average=rs1.getFloat(1);
+			
+			//get the median
+			getReturnedBooks = connToSQL.prepareStatement("SELECT* FROM obl.history WHERE action=?" );
+			getReturnedBooks.setString(1,"return Book"); 
+			rs1 =getReturnedBooks.executeQuery();
+
+			while(rs1.next())
+			{
+				daysOfBorrows=Integer.parseInt(rs1.getString(7));
+				numberOfDaysOdBorrowingArrAll.add(daysOfBorrows);
+			}
+			Collections.sort(numberOfDaysOdBorrowingArrAll);
+			 if (numberOfDaysOdBorrowingArrAll.size()%2 == 1)
+			 {
+				 middleOfArr = numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size() / 2);
+						
+			 }
+			 else 
+			 {
+				 middleOfArr =(numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size()/2) +numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size()/2 - 1))/2;
+			 }
+			 
+			 median=(float) middleOfArr;
+			
+			Report reportAllBooks=new Report(average,median);
+			result.add(reportAllBooks);
 
 
 			answer = new ObjectMessage(result,"succssful reporting", "Report number 2 ");
-
-		
-		
-		
-		
-		
-		//average of UN-desired books
-		getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.history WHERE action=?" );
-		getAverageDesired.setString(1,"return Book"); 
-		rs1 =getAverageDesired.executeQuery();
-
-		while(rs1.next())
-		{
-			daysOfBorrows=Integer.parseInt(rs1.getString(7));
-			idOfBook=rs1.getInt(3);
-			getAverageUnDesired = connToSQL.prepareStatement("SELECT* FROM obl.book WHERE bookId=?" );
-			getAverageUnDesired.setInt(1,idOfBook); 
-			rs2 =getAverageUnDesired.executeQuery();
-			rs2.next();
-			isDesired=rs2.getInt(6);
-			if(isDesired==0)
-			{
-				countOfUnDesired++;
-				sumOfUnDesired+=daysOfBorrows;
-			}
-
-		}
-		average=(float)sumOfUnDesired/(float)countOfUnDesired;
-		Report reportUnDesiredBook=new Report(average,average);
-		result.add(reportUnDesiredBook);
-
-
-		answer = new ObjectMessage(result,"succssful reporting", "Report number 2 ");
 
 	}
 
