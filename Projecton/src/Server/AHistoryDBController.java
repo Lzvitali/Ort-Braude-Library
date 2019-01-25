@@ -35,7 +35,7 @@ public abstract class AHistoryDBController
 		{
 
 			try {
-				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`userID`,`bookId`,`copyId`,`action`,`date`) VALUES (?,?,?,?,?); "); 
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`copyId`,`action`,`date`) VALUES (?,?,?,?,?); "); 
 				updateHistory.setString(1,sendObject.getUserID()); 
 				updateHistory.setInt(2,sendObject.getBookId()); 
 				updateHistory.setInt(3,sendObject.getCopyId());
@@ -54,7 +54,7 @@ public abstract class AHistoryDBController
 		{
 			try {
 
-				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`userID`,`bookId`,`copyId`,`action`,`date`,`Note`) VALUES (?,?,?,?,?,?); "); 
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`copyId`,`action`,`date`,`Note`) VALUES (?,?,?,?,?,?); "); 
 				updateHistory.setString(1,sendObject.getUserID()); 
 				updateHistory.setInt(2,sendObject.getBookId()); 
 				updateHistory.setInt(3,sendObject.getCopyId());
