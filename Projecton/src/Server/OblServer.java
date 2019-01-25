@@ -248,6 +248,8 @@ public class OblServer extends AbstractServer
 	protected void serverStarted()
 	{
 		System.out.println("The server is online ");
+		ADailyDBController.startThreads(connToSQL);
+		
 	}
 
 	public static void ConnectToDB(String user,String password,String schema) // make the connection for DB according the user and password that entered
@@ -326,7 +328,7 @@ public class OblServer extends AbstractServer
 
 	}
 
-
+	
 
 
 }
