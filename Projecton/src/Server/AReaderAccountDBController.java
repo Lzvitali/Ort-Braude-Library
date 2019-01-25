@@ -76,7 +76,7 @@ public class AReaderAccountDBController
 			LocalDate now = LocalDate.now(); 
 			Date today = java.sql.Date.valueOf(now);
 			String noteStatus="From "+msg.getExtra()+" to "+ readerAccount.getStatus();
-			History sendObject =new History(readerAccount.getId(),"Change status",(java.sql.Date) today,noteStatus);
+			History sendObject =new History(readerAccount.getId(),"Changed status",(java.sql.Date) today,noteStatus);
 			AHistoryDBController.enterActionToHistory(sendObject, connToSQL);	
 
 			return answer;

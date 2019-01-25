@@ -1,8 +1,9 @@
 package Common;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class History  implements IEntity
+public class History  implements IEntity, Serializable  
 {
 	private String userID;
 	private String action;
@@ -12,6 +13,7 @@ public class History  implements IEntity
 	private String note;
 	private String nameOfBook;
 	private Integer no;
+	private String actionDateForTable;
 	
 
 
@@ -60,6 +62,24 @@ public class History  implements IEntity
 		this.action = action;
 		this.actionDate = today;
 		this.note = noteStatus;
+	}
+
+
+	public History(Integer no, String action, String actionDate, String nameOfBook)
+	{
+		this.no=no;
+		this.action = action;
+		this.actionDateForTable = actionDate;
+		this.nameOfBook=nameOfBook;
+	}
+
+
+
+	public History(Integer no, String action, String actionDate)
+	{
+		this.no=no;
+		this.action = action;
+		this.actionDateForTable = actionDate;
 	}
 
 
@@ -134,5 +154,16 @@ public class History  implements IEntity
 		this.note = note;
 	}
 
+
+	public String getNameOfBook() 
+	{
+		return nameOfBook;
+	}
+
+
+	public void setNameOfBook(String nameOfBook)
+	{
+		this.nameOfBook = nameOfBook;
+	}
 
 }
