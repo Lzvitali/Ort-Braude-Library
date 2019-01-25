@@ -661,6 +661,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				sendReader.setId(readerAccount.getId());
 				sendReader.setStatus(result.get().getText());
 				ObjectMessage objectMessage=new ObjectMessage(sendReader,"ChangeStatus","ReaderAccount");
+				objectMessage.setExtra(reader.getStatus());
 				client.setClientUI(this);
 				client.handleMessageFromClient(objectMessage);
 			}

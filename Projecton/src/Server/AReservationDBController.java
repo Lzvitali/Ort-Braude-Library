@@ -163,7 +163,7 @@ public abstract class AReservationDBController
 		Reservation reserve=(Reservation) msg.getObjectList().get(1);
 		PreparedStatement getBook,numOfCopy;
 		ResultSet rs1=null;
-		
+		ResultSet rs2=null;
 		try
 		{
 		getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
@@ -208,11 +208,26 @@ public abstract class AReservationDBController
 			e.printStackTrace();
 		}
 		
-		//add `implement reservation book` to HISTORY
-		LocalDate now = LocalDate.now(); 
-		Date today = java.sql.Date.valueOf(now);
-		History sendObject =new History( reader.getId(),"Cancel reservation book",reserve.getBookID(),(java.sql.Date) today);
-		AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+		//get number of copy for History table
+		PreparedStatement getBookId;
+		try {
+			getBookId = connToSQL.prepareStatement("SELECT * FROM Copy WHERE bookId = ? AND borrowerId =?");
+			getBookId.setInt(1, reserve.getBookID());
+			getBookId.setString(2,reader.getId());
+			rs2 = getBookId.executeQuery();
+			rs2.next();
+			
+			//add `implement reservation book` to HISTORY
+			LocalDate now = LocalDate.now(); 
+			Date today = java.sql.Date.valueOf(now);
+			History sendObject =new History( reader.getId(),"Borrow book",reserve.getBookID(),rs2.getInt(1),(java.sql.Date) today);
+			AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return answer;
 	}

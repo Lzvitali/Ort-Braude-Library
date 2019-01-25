@@ -10,6 +10,9 @@ public class History  implements IEntity
 	private int copyId;
 	private Date actionDate;
 	private String note;
+	private String nameOfBook;
+	private Integer no;
+	
 
 
 	public History(String userID, String action, int bookId, int copyId, Date actionDate, String note) 
@@ -40,6 +43,23 @@ public class History  implements IEntity
 		this.action = action;
 		this.bookId=bookId;
 		this.actionDate = today;
+	}
+
+
+	public History(String id, String action, java.sql.Date today) 
+	{
+		this.userID = id;
+		this.action = action;
+		this.actionDate = today;
+	}
+
+
+	public History(String id, String action, java.sql.Date today, String noteStatus) 
+	{
+		this.userID = id;
+		this.action = action;
+		this.actionDate = today;
+		this.note = noteStatus;
 	}
 
 

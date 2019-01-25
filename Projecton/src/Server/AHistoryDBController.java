@@ -29,12 +29,18 @@ public abstract class AHistoryDBController
 
 	}
 
+	/**
+	 * The function enter users actions to history table in the obl DB
+	 * @param sendObject- the object from controller where happened action
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	public static void enterActionToHistory( History sendObject, Connection connToSQL) 
 	{
-		if(sendObject.getAction().equals("Borrow book"))
+		if(sendObject.getAction().equals("Borrow book")||sendObject.getAction().equals("Delayed borrow book")||sendObject.getAction().equals("Lose book"))
 		{
 
-			try {
+			try 
+			{
 				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`copyId`,`action`,`date`) VALUES (?,?,?,?,?); "); 
 				updateHistory.setString(1,sendObject.getUserID()); 
 				updateHistory.setInt(2,sendObject.getBookId()); 
@@ -52,7 +58,8 @@ public abstract class AHistoryDBController
 		}
 		else if(sendObject.getAction().equals("Return book"))
 		{
-			try {
+			try 
+			{
 
 				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`copyId`,`action`,`date`,`Note`) VALUES (?,?,?,?,?,?); "); 
 				updateHistory.setString(1,sendObject.getUserID()); 
@@ -69,10 +76,12 @@ public abstract class AHistoryDBController
 				e.printStackTrace();
 			} 
 		}
-		
-		else if(sendObject.getAction().equals("Reserve book"))
+
+
+		else if(sendObject.getAction().equals("Cancel reservation book")||sendObject.getAction().equals("Reserve book"))
 		{
-			try {
+			try 
+			{
 
 				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`action`,`date`) VALUES (?,?,?,?); "); 
 				updateHistory.setString(1,sendObject.getUserID()); 
@@ -85,18 +94,35 @@ public abstract class AHistoryDBController
 			{
 				e.printStackTrace();
 			} 
-			
 		}
 		
-		else if(sendObject.getAction().equals("Cancel reservation book"))
+		else if(sendObject.getAction().equals("Registration to OBL"))
 		{
-			try {
+			try 
+			{
 
-				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`action`,`date`) VALUES (?,?,?,?); "); 
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`action`,`date`) VALUES (?,?,?); "); 
 				updateHistory.setString(1,sendObject.getUserID()); 
-				updateHistory.setInt(2,sendObject.getBookId()); 
-				updateHistory.setString(3,sendObject.getAction()); 
-				updateHistory.setDate(4,(Date) sendObject.getActionDate()); 
+				updateHistory.setString(2,sendObject.getAction()); 
+				updateHistory.setDate(3,(Date) sendObject.getActionDate()); 
+				updateHistory.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			} 
+		}
+
+		else if(sendObject.getAction().equals("Change status"))
+		{
+			try 
+			{
+
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`action`,`date`,`Note`) VALUES (?,?,?,?); "); 
+				updateHistory.setString(1,sendObject.getUserID()); 
+				updateHistory.setString(2,sendObject.getAction()); 
+				updateHistory.setDate(3,(Date) sendObject.getActionDate()); 
+				updateHistory.setString(4,sendObject.getNote()); 
 				updateHistory.executeUpdate();
 			} 
 			catch (SQLException e) 

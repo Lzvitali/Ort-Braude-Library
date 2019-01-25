@@ -157,7 +157,11 @@ public abstract class ACopyDBController
 
 		answer.setNote(dtf.format(newDate));
 
-		//TODO: For Nata: add to history
+		//add `delayed book` to HISTORY
+				LocalDate now1 = LocalDate.now(); 
+				Date today = java.sql.Date.valueOf(now1);
+				History sendObject =new History( copy.getBorrowerID(),"Delayed borrow book",copy.getBookID(),copy.getCopyID(),(java.sql.Date) today);
+				AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
 
 		return answer;
 
@@ -527,7 +531,12 @@ public abstract class ACopyDBController
 				{
 					if(msg.getExtra().equals("after book lost"))
 					{
-						//TODO: For Nata: add to the history
+						// `lose book` send to history
+						LocalDate now1 = LocalDate.now(); 
+						Date today = java.sql.Date.valueOf(now1);
+						History sendObject =new History(askedCopy.getBorrowerID(),"Lose book",bookOfCopyID,askedCopy.getCopyID(),(java.sql.Date) today);
+						AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+						
 					}
 				}
 				answer=new ObjectMessage("This Book was successfully deleted ","Successfull");

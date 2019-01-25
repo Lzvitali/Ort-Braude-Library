@@ -3,13 +3,16 @@ package Server;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.sql.PreparedStatement;
 
 
 import Common.Book;
 import Common.Copy;
+import Common.History;
 import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
@@ -52,6 +55,7 @@ public class AReaderAccountDBController
 		}
 	}
 
+	
 	private static ObjectMessage changeStatus(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -68,7 +72,12 @@ public class AReaderAccountDBController
 			ps.setString(2,readerAccount.getStatus());
 			ps.executeUpdate();
 
-			//TODO: For Nata: call your history function
+			//`change reader account status` added to History
+			LocalDate now = LocalDate.now(); 
+			Date today = java.sql.Date.valueOf(now);
+			String noteStatus="From "+msg.getExtra()+" to "+ readerAccount.getStatus();
+			History sendObject =new History(readerAccount.getId(),"Change status",(java.sql.Date) today,noteStatus);
+			AHistoryDBController.enterActionToHistory(sendObject, connToSQL);	
 
 			return answer;
 		}
@@ -268,6 +277,12 @@ public class AReaderAccountDBController
 			updateReaderAccount.executeUpdate();
 			answer.setMessage("successful registration");
 			answer.addObject(msg.getObjectList().get(0));
+			
+			//`register new reader account ` added to History
+			LocalDate now = LocalDate.now(); 
+			Date today = java.sql.Date.valueOf(now);
+			History sendObject =new History((String)reader.getId(),"Registration to OBL",(java.sql.Date) today);
+			AHistoryDBController.enterActionToHistory(sendObject, connToSQL);	
 		}
 		catch (SQLException e) 
 		{
