@@ -4,16 +4,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +25,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import Common.Copy;
 import Common.Mail;
 import Common.ObjectMessage;
 import Common.Report;
@@ -42,6 +42,7 @@ public abstract class ADailyDBController
     {
     	executor=new ScheduledThreadPoolExecutor(10);
     	executor.scheduleAtFixedRate(() -> resetUserStatusHistory(connToSQL), 0, 1, TimeUnit.DAYS);
+    	executor.scheduleAtFixedRate(() -> checkDelayDaily(connToSQL), 0, 12, TimeUnit.HOURS);
     }
     
     
@@ -268,6 +269,74 @@ public abstract class ADailyDBController
 		{
 			e.printStackTrace();
 		}
+	}
+
+
+	@SuppressWarnings("resource")
+	private static void  checkDelayDaily(Connection connToSQL)
+	{
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date now =  Calendar.getInstance().getTime();
+   	 	String today=format.format(now);
+   	 	ArrayList <Copy> copies=new ArrayList<Copy>();
+   	 	Copy copyInput;
+   	 	ResultSet rs;
+   	 	PreparedStatement ps;
+   	 	try 
+   	 	{
+			ps=connToSQL.prepareStatement("SELECT * FROM copy WHERE borrowerId IS NOT NULL AND returnDate < ?");
+			ps.setString(1, today);
+			rs =ps.executeQuery();
+			while(rs.next())
+			{
+				copyInput=new Copy();
+				copyInput.setCopyID(rs.getInt(1));
+				copyInput.setBookID(rs.getInt(2));
+				copyInput.setBorrowerID(rs.getString(3));
+				copyInput.setReturnDate(rs.getString(5));
+				copies.add(copyInput);
+			}
+			for(Copy copy: copies)
+			{
+				ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM History WHERE readerAccountID= ? AND copyId =? AND action= 'Late in return' AND Date= ?" );	
+				ps.setString(1, copy.getBorrowerID());
+				ps.setInt(2, copy.getCopyID());
+				ps.setString(3, copy.getReturnDate());
+				rs=ps.executeQuery();
+				rs.next();
+				if(rs.getInt(1)==0)
+				{
+					ps=connToSQL.prepareStatement("INSERT INTO `history`(`readerAccountID`, `bookId`,`copyId`,`action`,`date`) VALUES (?,?,?,'Late in return',?)");
+					ps.setString(1, copy.getBorrowerID());
+					ps.setInt(2, copy.getBookID());
+					ps.setInt(3, copy.getCopyID());
+					ps.setString(4, copy.getReturnDate());
+					ps.executeUpdate();
+					ps=connToSQL.prepareStatement("SELECT `numOfDelays` FROM `ReaderAccount` WHERE ID=?");
+					ps.setString(1, copy.getBorrowerID());
+					rs=ps.executeQuery();
+					rs.next();
+					if(rs.getInt(1)<3)
+					{
+						ps=connToSQL.prepareStatement("UPDATE `ReaderAccount` SET `numOfDelays`=? , Status='Frozen' WHERE ID=?");
+						ps.setInt(1, (rs.getInt(1)+1));
+						ps.setString(2, copy.getBorrowerID());
+						ps.executeUpdate();
+					}
+					else
+					{
+						ps=connToSQL.prepareStatement("UPDATE `ReaderAccount` SET `numOfDelays`=? , Status='Locked' WHERE ID=?");
+						ps.setInt(1, (rs.getInt(1)+1));
+						ps.setString(2, copy.getBorrowerID());
+						ps.executeUpdate();
+					}
+				}
+			}					
+		}
+   	 	catch (SQLException e) 
+   	 	{
+			e.printStackTrace();
+		}		
 	}
 }
 
