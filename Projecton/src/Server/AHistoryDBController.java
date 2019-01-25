@@ -69,6 +69,41 @@ public abstract class AHistoryDBController
 				e.printStackTrace();
 			} 
 		}
+		
+		else if(sendObject.getAction().equals("Reserve book"))
+		{
+			try {
+
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`action`,`date`) VALUES (?,?,?,?); "); 
+				updateHistory.setString(1,sendObject.getUserID()); 
+				updateHistory.setInt(2,sendObject.getBookId()); 
+				updateHistory.setString(3,sendObject.getAction()); 
+				updateHistory.setDate(4,(Date) sendObject.getActionDate()); 
+				updateHistory.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			} 
+			
+		}
+		
+		else if(sendObject.getAction().equals("Cancel reservation book"))
+		{
+			try {
+
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `history` (`readerAccountID`,`bookId`,`action`,`date`) VALUES (?,?,?,?); "); 
+				updateHistory.setString(1,sendObject.getUserID()); 
+				updateHistory.setInt(2,sendObject.getBookId()); 
+				updateHistory.setString(3,sendObject.getAction()); 
+				updateHistory.setDate(4,(Date) sendObject.getActionDate()); 
+				updateHistory.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			} 
+		}
 
 	}
 

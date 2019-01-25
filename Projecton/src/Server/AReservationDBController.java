@@ -12,6 +12,7 @@ import java.util.Date;
 
 import Common.Book;
 import Common.Copy;
+import Common.History;
 import Common.IEntity;
 import Common.Mail;
 import Common.ObjectMessage;
@@ -207,7 +208,11 @@ public abstract class AReservationDBController
 			e.printStackTrace();
 		}
 		
-		//TODO: For Nata: add to history
+		//add `implement reservation book` to HISTORY
+		LocalDate now = LocalDate.now(); 
+		Date today = java.sql.Date.valueOf(now);
+		History sendObject =new History( reader.getId(),"Cancel reservation book",reserve.getBookID(),(java.sql.Date) today);
+		AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
 		
 		return answer;
 	}
@@ -340,9 +345,15 @@ public abstract class AReservationDBController
 						ps.setDate(3, sqlDate);
 						ps.setTime(4, sqlTime);
 						ps.executeUpdate();
-						answer=new ObjectMessage("reserveBook","Reserved");
 						
-						//TODO: For Nata: add to history
+
+						//add `reservation book` to HISTORY
+						LocalDate now = LocalDate.now(); 
+						Date today = java.sql.Date.valueOf(now);
+						History sendObject =new History(askedReaderAccount.getId(),"Reserve book",askedBook.getBookID(),(java.sql.Date) today);
+						AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+						
+						answer=new ObjectMessage("reserveBook","Reserved");
 						
 						return answer;
 					} 
@@ -414,8 +425,12 @@ public abstract class AReservationDBController
 				letImplementReservation(implementReservation,connToSQL);
 			}
 			
-			//TODO: For Nata: add to history
-			
+			//add `cancel reservation book` to HISTORY
+			LocalDate now = LocalDate.now(); 
+			Date today = java.sql.Date.valueOf(now);
+			History sendObject =new History(askedReaderAccount.getId(),"Cancel reservation book",reservation.getBookID(),(java.sql.Date) today);
+			AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+
 			return new ObjectMessage("ReservationCanceled","cancelReservation");
 		} 
 		catch (SQLException e) 
@@ -438,6 +453,9 @@ public abstract class AReservationDBController
 			ps.setInt(1,book.getBookID());
 			ps.setString(2,askedReaderAccount.getId());
 			ps.executeUpdate();
+			
+			
+			//send mail
 			ObjectMessage notify=new ObjectMessage("sendMail","Daily");
 			Mail mail=new Mail();
 			mail.setTo(askedReaderAccount.getEmail());
