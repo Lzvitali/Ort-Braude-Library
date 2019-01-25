@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
+import Common.Book;
 import Common.Copy;
 import Common.History;
 import Common.IEntity;
@@ -25,7 +27,7 @@ public abstract class AHistoryDBController
 		{
 			return getReportTwo(msg, connToSQL);
 		}
-		else if(((msg.getMessage()).equals("get report 3")))
+		else if(((msg.getMessage()).equals("Ask for report3")))
 		{
 			return getReportThree(msg, connToSQL);
 		}
@@ -45,11 +47,109 @@ public abstract class AHistoryDBController
 		return new ObjectMessage("");
 	}
 
-	//TODO: For Vitali
+	/**
+	 * This function receives book number and returns it's info that need for Report3
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage getReportThree(ObjectMessage msg, Connection connToSQL) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		ObjectMessage answer = new ObjectMessage(); 
+		int bookID = Integer.parseInt(msg.getExtra());
+		
+		boolean bookIsExist = false; // if book with given id is exist
+		int cnt = 0; //counter for total number of late returns
+		long totalDurationofLates = 0;
+		float average;
+		float median;
+		ArrayList<Long> durationOfTheLate=new ArrayList<Long>();
+		
+		PreparedStatement booksWithLates = null; 
+		PreparedStatement getReturnDate = null;
+		ResultSet rs1 = null;
+		ResultSet rs2 = null;
+		
+		try 
+		{
+			booksWithLates = connToSQL.prepareStatement("SELECT * FROM history WHERE bookId = ? AND action = ? ");
+			booksWithLates.setInt(1, bookID); 
+			booksWithLates.setString(2, "Late in Return");  
+			rs1 =booksWithLates.executeQuery();
+			
+			while(rs1.next())
+			{
+				bookIsExist = true; //book exist 
+				cnt++;
+				
+				int readerAccountID = rs1.getInt(2);
+				int copyID = rs1.getInt(4);
+				Date startOfLate = rs1.getDate(6);
+				Date returnDate = null;
+				
+				//find the return date for this book
+				getReturnDate = connToSQL.prepareStatement("select * from history where `date` > ? and `copyid` = ? and `readerAccountID` = ? and `action` = ? order by `date` ");
+				getReturnDate.setDate(1, startOfLate);
+				getReturnDate.setInt(2, copyID); 
+				getReturnDate.setInt(3, readerAccountID); 
+				getReturnDate.setString(4,"Return book");  
+				rs2 =getReturnDate.executeQuery();
+				
+				//get the first result
+				if(rs2.next())
+				{
+					returnDate = rs2.getDate(6);
+				}
+				
+				//calculate the duration of the borrow
+				long diff = Math.abs(startOfLate.getTime() -returnDate.getTime()); 
+				Long dif2 = new Long( TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));	
+				
+				totalDurationofLates += dif2;
+				durationOfTheLate.add(dif2);
+
+			}
+
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+
+		}
+
+		if(bookIsExist)
+		{
+			//get the median
+			Collections.sort(durationOfTheLate);
+			if (durationOfTheLate.size()%2 == 1)
+			{
+				median = (float)(durationOfTheLate.get(durationOfTheLate.size() / 2));
+
+			}
+			else 
+			{
+				median =(float)((durationOfTheLate.get(durationOfTheLate.size()/2) +durationOfTheLate.get(durationOfTheLate.size()/2 - 1))/2);
+			}
+			  
+			
+			average = (float)totalDurationofLates/(float)cnt;
+			
+			Report report = new Report();
+			report.setAverage(average);
+			report.setMedian(median);
+			report.setTotal(cnt); 
+			
+			answer.addObject(report);
+			answer.setNote("Report number 3"); 
+		}
+		else
+		{
+			answer.setNote("Report number 3 - no results"); 
+		}
+		
+		 
+		
+		return answer;
 	}
 
 	/**

@@ -4,12 +4,13 @@ import java.io.Serializable;
 
 public class Report implements IEntity , Serializable
 {
-	private float average;
-	private float median;
-	
-	private String activeReaderAccounts;
-	private String frozenReaderAccounts;
-	private String lockedReaderAccounts;
+	private float average; //for Report2 & Report3
+	private float median; //for Report2 & Report3
+	private int total; //for Report3
+
+	private String activeReaderAccounts; //for Report2
+	private String frozenReaderAccounts; //for Report2
+	private String lockedReaderAccounts; //for Report2
 
 	public Report(float average,float median)
 	{
@@ -18,7 +19,7 @@ public class Report implements IEntity , Serializable
 	}
 	public Report()
 	{
-		
+
 	}
 
 	public String getActiveReaderAccounts() 
@@ -71,6 +72,12 @@ public class Report implements IEntity , Serializable
 	{
 		this.median = median;
 	}
-	
-	
+
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
 }

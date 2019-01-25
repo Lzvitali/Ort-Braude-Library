@@ -310,86 +310,37 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <HBox layoutX="204.0" layoutY="69.0" prefHeight="538.0" prefWidth="935.0" spacing="20.0">
+                        <HBox alignment="CENTER" layoutX="171.0" layoutY="69.0" prefHeight="538.0" prefWidth="935.0" spacing="20.0">
                            <children>
-                              <VBox alignment="TOP_CENTER" prefHeight="597.0" prefWidth="400.0">
-                                 <children>
-                                    <AnchorPane prefHeight="18.0" prefWidth="562.0" />
-                                    <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0">
-                                       <children>
-                                          <Label prefHeight="45.0" prefWidth="274.0" text="Number of late returns">
-                                             <font>
-                                                <Font name="System Bold Italic" size="24.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
-                                    <AnchorPane prefHeight="27.0" prefWidth="562.0" />
-                                    <HBox alignment="CENTER_LEFT" prefHeight="79.0" prefWidth="562.0" spacing="25.0">
-                                       <children>
-                                          <AnchorPane prefHeight="79.0" prefWidth="16.0" />
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
-                                             <children>
-                                                <Label text="Average">
-                                                   <font>
-                                                      <Font name="System Bold Italic" size="15.0" />
-                                                   </font>
-                                                </Label>
-                                                <Label text="Median">
-                                                   <font>
-                                                      <Font name="System Bold Italic" size="15.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </VBox>
-                                          <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="150.0" spacing="15.0">
-                                             <children>
-                                                <TextField fx:id="avgForNumLateReturns" />
-                                                <TextField fx:id="medianForNumLateReturns" />
-                                             </children>
-                                          </VBox>
-                                       </children>
-                                    </HBox>
-                                    <AnchorPane prefHeight="43.0" prefWidth="562.0" />
-                                    <BarChart fx:id="diagramForNumLateReturns" prefHeight="315.0" prefWidth="381.0">
-                                       <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
-                                       </xAxis>
-                                       <yAxis>
-                                          <NumberAxis side="LEFT" />
-                                       </yAxis>
-                                    </BarChart>
-                                 </children>
-                              </VBox>
-                              <AnchorPane prefHeight="555.0" prefWidth="20.0">
-                                 <children>
-                                    <AnchorPane layoutX="7.0" layoutY="8.0" prefHeight="503.0" prefWidth="6.0" style="-fx-background-color: #c2c0c0;" />
-                                 </children>
-                              </AnchorPane>
-                              <VBox alignment="TOP_CENTER" prefHeight="552.0" prefWidth="400.0">
+                              <VBox fx:id="resultsForReport3" alignment="TOP_CENTER" prefHeight="538.0" prefWidth="532.0">
                                  <children>
                                     <AnchorPane prefHeight="18.0" prefWidth="200.0" />
                                     <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0">
                                        <children>
-                                          <Label prefHeight="45.0" prefWidth="314.0" text="duration of the late returns">
+                                          <Label prefHeight="45.0" prefWidth="314.0" text="Duration of the late returns">
                                              <font>
                                                 <Font name="System Bold Italic" size="24.0" />
                                              </font>
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <AnchorPane prefHeight="27.0" prefWidth="562.0" />
-                                    <HBox alignment="CENTER_LEFT" prefHeight="79.0" prefWidth="562.0" spacing="25.0">
+                                    <AnchorPane prefHeight="13.0" prefWidth="400.0" />
+                                    <HBox alignment="CENTER_LEFT" prefHeight="145.0" prefWidth="400.0" spacing="25.0">
                                        <children>
-                                          <AnchorPane prefHeight="79.0" prefWidth="16.0" />
-                                          <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+                                          <AnchorPane prefHeight="142.0" prefWidth="38.0" />
+                                          <VBox alignment="CENTER_LEFT" prefHeight="142.0" prefWidth="234.0" spacing="25.0">
                                              <children>
-                                                <Label text="Average">
+                                                <Label text="Total number of late returns">
                                                    <font>
                                                       <Font name="System Bold Italic" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="Median">
+                                                <Label text="Average duration of late return">
+                                                   <font>
+                                                      <Font name="System Bold Italic" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Median duration of late return">
                                                    <font>
                                                       <Font name="System Bold Italic" size="15.0" />
                                                    </font>
@@ -398,16 +349,17 @@
                                           </VBox>
                                           <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="150.0" spacing="15.0">
                                              <children>
+                                                <TextField fx:id="totalForLateReturns" />
                                                 <TextField fx:id="avgForDurationLateReturns" />
                                                 <TextField fx:id="medianForDurationLateReturns" />
                                              </children>
                                           </VBox>
                                        </children>
                                     </HBox>
-                                    <AnchorPane prefHeight="43.0" prefWidth="562.0" />
+                                    <AnchorPane prefHeight="18.0" prefWidth="400.0" />
                                     <BarChart fx:id="diagramForNumLateReturns" prefHeight="315.0" prefWidth="381.0">
                                        <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
+                                          <CategoryAxis prefWidth="339.0" side="BOTTOM" />
                                        </xAxis>
                                        <yAxis>
                                           <NumberAxis side="LEFT" />
@@ -424,7 +376,7 @@
                                     <Font name="System Bold Italic" size="16.0" />
                                  </font>
                               </Label>
-                              <JFXTextField fx:id="BookIDReport3" prefHeight="29.0" prefWidth="206.0" promptText="Enter Book ID" />
+                              <JFXTextField fx:id="BookIDReport3" onKeyTyped="#getBookInfo" prefHeight="29.0" prefWidth="206.0" promptText="Enter Book ID" />
                            </children>
                         </HBox>
                      </children></AnchorPane>
