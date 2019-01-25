@@ -127,9 +127,9 @@ public abstract class AHistoryDBController
 		ResultSet rs2 = null;
 		int isDesired;
 		int idOfBook;
-		Float average;
-		Float median;
-		double middleOfArr;
+		float average;
+		float median;
+		
 		int daysOfBorrows;
 		ObjectMessage answer = null; 
 		try 
@@ -150,7 +150,7 @@ public abstract class AHistoryDBController
 				isDesired=rs2.getInt(6);
 				if(isDesired==0)
 				{
-					numberOfDaysOdBorrowingArrReg.add(daysOfBorrows); 
+					numberOfDaysOdBorrowingArrReg.add(daysOfBorrows); //for the median
 					countOfRegular++;
 					sumOfRegular+=daysOfBorrows;
 				}
@@ -163,16 +163,15 @@ public abstract class AHistoryDBController
 			Collections.sort(numberOfDaysOdBorrowingArrReg);
 			 if (numberOfDaysOdBorrowingArrReg.size()%2 == 1)
 			 {
-				 middleOfArr = numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size() / 2);
+				 median = (float)(numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size() / 2));
 						
 			 }
 			 else 
 			 {
-				 middleOfArr =(numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size()/2) +numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size()/2 - 1))/2;
+				 median =(float)((numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size()/2) +numberOfDaysOdBorrowingArrReg.get(numberOfDaysOdBorrowingArrReg.size()/2 - 1))/2);
 			 }
 			 
-			 median=(float) middleOfArr;
-		
+			
 			Report reportRegularBook=new Report(average, median);
 			result.add(reportRegularBook);
 
@@ -195,7 +194,7 @@ public abstract class AHistoryDBController
 				isDesired=rs2.getInt(6);
 				if(isDesired==1)
 				{
-					numberOfDaysOdBorrowingArrDes.add(daysOfBorrows); 
+					numberOfDaysOdBorrowingArrDes.add(daysOfBorrows); //for the median
 					countOfDesired++;
 					sumOfDesired+=daysOfBorrows;
 				}
@@ -207,16 +206,15 @@ public abstract class AHistoryDBController
 			Collections.sort(numberOfDaysOdBorrowingArrDes);
 			 if (numberOfDaysOdBorrowingArrDes.size()%2 == 1)
 			 {
-				 middleOfArr = numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size() / 2);
+				 median= (float)(numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size() / 2));
 						
 			 }
 			 else 
 			 {
-				 middleOfArr =(numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size()/2) +numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size()/2 - 1))/2;
+				 median =(float)((numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size()/2) +numberOfDaysOdBorrowingArrDes.get(numberOfDaysOdBorrowingArrDes.size()/2 - 1))/2);
 			 }
 			 
-			 median=(float) middleOfArr;
-			
+			 
 			
 			
 			Report reportDesiredBook=new Report(average,median);
@@ -240,26 +238,25 @@ public abstract class AHistoryDBController
 			while(rs1.next())
 			{
 				daysOfBorrows=Integer.parseInt(rs1.getString(7));
-				numberOfDaysOdBorrowingArrAll.add(daysOfBorrows);
+				numberOfDaysOdBorrowingArrAll.add(daysOfBorrows); //for the median
 			}
 			Collections.sort(numberOfDaysOdBorrowingArrAll);
 			 if (numberOfDaysOdBorrowingArrAll.size()%2 == 1)
 			 {
-				 middleOfArr = numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size() / 2);
+				 median= (float)(numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size() / 2));
 						
 			 }
 			 else 
 			 {
-				 middleOfArr =(numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size()/2) +numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size()/2 - 1))/2;
+				 median =(float) ((numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size()/2) +numberOfDaysOdBorrowingArrAll.get(numberOfDaysOdBorrowingArrAll.size()/2 - 1))/2);
 			 }
 			 
-			 median=(float) middleOfArr;
 			
 			Report reportAllBooks=new Report(average,median);
 			result.add(reportAllBooks);
 
 
-			answer = new ObjectMessage(result,"succssful reporting", "Report number 2 ");
+			answer = new ObjectMessage(result,"succssful reporting", "Report number 2");
 
 	}
 
