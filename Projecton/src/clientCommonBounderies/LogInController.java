@@ -121,6 +121,7 @@ public class LogInController  implements IGUIController
     @Override
 	public void display(ObjectMessage msg) 
     {
+    	String ms = msg.getMessage();
     	//if successful go to the relevant start panel
 		if((msg.getMessage()).equals("successful"))
 		{
@@ -168,7 +169,7 @@ public class LogInController  implements IGUIController
 				}
 				
 			}
-			else if((msg.getNote()).equals("not exist"))
+			else if((msg.getMessage()).equals("not exist"))
 			{
 				AClientCommonUtilities.alertError("ID or Password not match", "Error");
 			}
