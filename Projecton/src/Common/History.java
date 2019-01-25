@@ -34,6 +34,15 @@ public class History  implements IEntity
 	}
 
 
+	public History(String id, String action, int bookId, java.sql.Date today) 
+	{
+		this.userID = id;
+		this.action = action;
+		this.bookId=bookId;
+		this.actionDate = today;
+	}
+
+
 	public int getBookId() 
 	{
 		return bookId;
