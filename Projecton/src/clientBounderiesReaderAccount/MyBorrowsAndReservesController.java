@@ -370,15 +370,6 @@ public class MyBorrowsAndReservesController implements IGUIController
 		client.setClientUI(this);
 		client.handleMessageFromClient(msg);
 		
-		//TODO: add to the function of delete book 
-		/*if(!askedCopy.getExtra().equals("") && null != askedCopy.getExtra())
-		{
-			if(askedCopy.getExtra().equals("after book lost"))
-			{
-				//TODO: For Nata: add to the history
-			}
-		}*/
-		
 	}
 
 
