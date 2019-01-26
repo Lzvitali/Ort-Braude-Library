@@ -10,9 +10,11 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -40,13 +42,15 @@ public abstract class ADailyDBController
 	
     static ScheduledThreadPoolExecutor executor;
     static ExecutorService pool = Executors.newFixedThreadPool(15); 
+    private static Object lock1 = new Object();
     
     public static void startThreads(Connection connToSQL)
     {
     	executor=new ScheduledThreadPoolExecutor(10);
-    	executor.scheduleAtFixedRate(() -> resetUserStatusHistory(connToSQL), 0, 1, TimeUnit.DAYS);
-    	executor.scheduleAtFixedRate(() -> checkDelayDaily(connToSQL), 0, 12, TimeUnit.HOURS);
+        executor.scheduleAtFixedRate(() -> checkDelayDaily(connToSQL), 0, 12, TimeUnit.HOURS);
     	executor.scheduleAtFixedRate(() -> checkIfDidntImplementReservation(connToSQL), 0, 4, TimeUnit.HOURS);
+        executor.scheduleAtFixedRate(() -> resetUserStatusHistory(connToSQL),30, 86399, TimeUnit.SECONDS);
+    	
     }
     
     
@@ -117,8 +121,7 @@ public abstract class ADailyDBController
 	            me.printStackTrace();
 	        }
 	}
-	
-	//check the methode 
+	 
 	private static void monthlyUpdateUserStatusHistory(Connection connToSQL)
 	{
 		PreparedStatement ps=null;
@@ -207,33 +210,35 @@ public abstract class ADailyDBController
 	
 	private static void  resetUserStatusHistory(Connection connToSQL)
 	{
-		SimpleDateFormat format = new SimpleDateFormat("dd");
-		SimpleDateFormat format2 = new SimpleDateFormat("MM");
-		Date now =  Calendar.getInstance().getTime();
-   	 	String today=format.format(now);
-   	 	if(today.equals("01"))
-   	 	{
-   	 		PreparedStatement ps,ps2;
-   	 		try 
-   	 		{
-   	 			updateHistoryStatusReader(connToSQL,Integer.parseInt(format2.format(now)));
-   	 			ps= connToSQL.prepareStatement("DROP TABLE IF EXISTS `UserStatusHistory`");
-				ps2= connToSQL.prepareStatement("CREATE TABLE `UserStatusHistory` (\r\n" + 
-						"  `readerAccountID` varchar(9) NOT NULL ,\r\n" + 
-						"  `status` enum('Active','Frozen','Locked')  NOT NULL,\r\n" + 
-						"  PRIMARY KEY  (`readerAccountID`,`status`),\r\n" + 
-						"  FOREIGN KEY (`readerAccountID`) REFERENCES `ReaderAccount` (`ID`)\r\n" + 
-						") ENGINE=InnoDB;");
-				ps.executeUpdate();
-				ps2.executeUpdate();
-				monthlyUpdateUserStatusHistory(connToSQL);
-				
-   	 		} 
-   	 		catch (SQLException e) 
-   	 		{
-   	 			e.printStackTrace();
-   	 		}
-   	 	}	
+		synchronized(lock1) 
+		{
+			SimpleDateFormat format = new SimpleDateFormat("dd");
+			SimpleDateFormat format2 = new SimpleDateFormat("MM");
+			Date now =  Calendar.getInstance().getTime();
+	   	 	String today=format.format(now);
+	   	 	if(today.equals("26"))
+	   	 	{
+	   	 		PreparedStatement ps,ps2;
+	   	 		try 
+	   	 		{
+					updateHistoryStatusReader(connToSQL,Integer.parseInt(format2.format(now)));
+	   	 			ps= connToSQL.prepareStatement("DROP TABLE IF EXISTS `UserStatusHistory`");
+					ps2= connToSQL.prepareStatement("CREATE TABLE `UserStatusHistory` (\r\n" + 
+							"  `readerAccountID` varchar(9) NOT NULL ,\r\n" + 
+							"  `status` enum('Active','Frozen','Locked')  NOT NULL,\r\n" + 
+							"  PRIMARY KEY  (`readerAccountID`,`status`),\r\n" + 
+							"  FOREIGN KEY (`readerAccountID`) REFERENCES `ReaderAccount` (`ID`)\r\n" + 
+							") ENGINE=InnoDB;");
+					ps.executeUpdate();
+					ps2.executeUpdate();
+					monthlyUpdateUserStatusHistory(connToSQL);					
+	   	 		} 
+	   	 		catch (SQLException e) 
+	   	 		{
+	   	 			e.printStackTrace();
+	   	 		}
+	   	 	}
+		}
 	}
 
 	
@@ -305,74 +310,81 @@ public abstract class ADailyDBController
 				copyInput.setReturnDate(rs.getString(5));
 				copies.add(copyInput);
 			}
-			for(Copy copy: copies)
+			synchronized(lock1) 
 			{
-				ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM History WHERE readerAccountID= ? AND copyId =? AND action= 'Late in return' AND Date= ?" );	
-				ps.setString(1, copy.getBorrowerID());
-				ps.setInt(2, copy.getCopyID());
-				ps.setString(3, copy.getReturnDate());
-				rs=ps.executeQuery();
-				rs.next();
-				if(rs.getInt(1)==0)
+				for(Copy copy: copies)
 				{
-					ps=connToSQL.prepareStatement("INSERT INTO `history`(`readerAccountID`, `bookId`,`copyId`,`action`,`date`) VALUES (?,?,?,'Late in return',?)");
+					ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM History WHERE readerAccountID= ? AND copyId =? AND action= 'Late in return' AND Date= ?" );	
 					ps.setString(1, copy.getBorrowerID());
-					ps.setInt(2, copy.getBookID());
-					ps.setInt(3, copy.getCopyID());
-					ps.setString(4, copy.getReturnDate());
-					ps.executeUpdate();
-					ps=connToSQL.prepareStatement("SELECT `numOfDelays` FROM `ReaderAccount` WHERE ID=?");
-					ps.setString(1, copy.getBorrowerID());
+					ps.setInt(2, copy.getCopyID());
+					ps.setString(3, copy.getReturnDate());
 					rs=ps.executeQuery();
 					rs.next();
-					ReaderAccount readerAccount=new ReaderAccount();
-					readerAccount.setId(copy.getBorrowerID());
-					ObjectMessage askTheFirstReader=new ObjectMessage(readerAccount,"SearchReader","ReaderAccount");
-					readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
-					Book askedBook=new Book();
-					askedBook.setBookID(copy.getBookID());
-					ObjectMessage bookDetails=new ObjectMessage(askedBook,"searchBookID","Book");
-					Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
-					ObjectMessage notify=new ObjectMessage("sendMail","Daily");
-					Mail mail=new Mail();
-					mail.setTo(readerAccount.getEmail());
-					String subject="Return your book "+book.getBookName();
-					mail.setSubject(subject);
-					if(rs.getInt(1)<3)
+					if(rs.getInt(1)==0)
 					{
-						ps=connToSQL.prepareStatement("UPDATE `ReaderAccount` SET `numOfDelays`=? , Status='Frozen' WHERE ID=?");
-						ps.setInt(1, (rs.getInt(1)+1));
-						ps.setString(2, copy.getBorrowerID());
+						ps=connToSQL.prepareStatement("INSERT INTO `history`(`readerAccountID`, `bookId`,`copyId`,`action`,`date`) VALUES (?,?,?,'Late in return',?)");
+						ps.setString(1, copy.getBorrowerID());
+						ps.setInt(2, copy.getBookID());
+						ps.setInt(3, copy.getCopyID());
+						ps.setString(4, copy.getReturnDate());
 						ps.executeUpdate();
-						
-						String body="Hello "+readerAccount.getFirstName()+"\nWe want to notfiy you that you need to come to library"
-								+ " and return "+book.getBookName()
-								+ ".\nUntill that your account is Frozen."
-								+"\n 		Thank you , Ort Braude Library";
-						mail.setBody(body);
-						notify.addObject(mail);
-						ADailyDBController.selection(notify, connToSQL);
-						
-						
-					}
-					else
-					{
-						ps=connToSQL.prepareStatement("UPDATE `ReaderAccount` SET `numOfDelays`=? , Status='Locked' WHERE ID=?");
-						ps.setInt(1, (rs.getInt(1)+1));
-						ps.setString(2, copy.getBorrowerID());
-						ps.executeUpdate();
-						
-						String body="Hello "+readerAccount.getFirstName()+"\nWe want to notfiy you that you need to come to library"
-								+ " and return "+book.getBookName()
-								+ ".\nUntill that your account is Locked because you have more then 3 delays in your history."
-								+"\n 		Thank you , Ort Braude Library";
-						mail.setBody(body);
-						notify.addObject(mail);
-						ADailyDBController.selection(notify, connToSQL);
-						
-					}
+						ps=connToSQL.prepareStatement("SELECT `numOfDelays` FROM `ReaderAccount` WHERE ID=?");
+						ps.setString(1, copy.getBorrowerID());
+						rs=ps.executeQuery();
+						rs.next();
+						ReaderAccount readerAccount=new ReaderAccount();
+						readerAccount.setId(copy.getBorrowerID());
+						ObjectMessage askTheFirstReader=new ObjectMessage(readerAccount,"SearchReader","ReaderAccount");
+						readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
+						Book askedBook=new Book();
+						askedBook.setBookID(copy.getBookID());
+						ObjectMessage bookDetails=new ObjectMessage(askedBook,"searchBookID","Book");
+						Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
+						ObjectMessage notify=new ObjectMessage("sendMail","Daily");
+						Mail mail=new Mail();
+						mail.setTo(readerAccount.getEmail());
+						String subject="Return your book "+book.getBookName();
+						mail.setSubject(subject);
+						if(rs.getInt(1)<3)
+						{
+							readerAccount.setStatus("Frozen");
+							ps=connToSQL.prepareStatement("UPDATE `ReaderAccount` SET `numOfDelays`=? , status='Frozen' WHERE ID=?");
+							ps.setInt(1, (rs.getInt(1)+1));
+							ps.setString(2, copy.getBorrowerID());
+							ps.executeUpdate();
+							
+							String body="Hello "+readerAccount.getFirstName()+"\nWe want to notfiy you that you need to come to library"
+									+ " and return "+book.getBookName()
+									+ ".\nUntill that your account is Frozen."
+									+"\n 		Thank you , Ort Braude Library";
+							mail.setBody(body);
+							notify.addObject(mail);
+							ADailyDBController.selection(notify, connToSQL);
+							
+							
+						}
+						else
+						{
+							readerAccount.setStatus("Locked");
+							ps=connToSQL.prepareStatement("UPDATE `ReaderAccount` SET `numOfDelays`=? , status='Locked' WHERE ID=?");
+							ps.setInt(1, (rs.getInt(1)+1));
+							ps.setString(2, copy.getBorrowerID());
+							ps.executeUpdate();
+							
+							String body="Hello "+readerAccount.getFirstName()+"\nWe want to notfiy you that you need to come to library"
+									+ " and return "+book.getBookName()
+									+ ".\nUntill that your account is Locked because you have more then 3 delays in your history."
+									+"\n 		Thank you , Ort Braude Library";
+							mail.setBody(body);
+							notify.addObject(mail);
+							ADailyDBController.selection(notify, connToSQL);
+							
+						}
+						ObjectMessage objectMessage=new ObjectMessage(readerAccount,"ChangeStatus","ReaderAccount");
+						AReaderAccountDBController.selection(objectMessage, connToSQL);
+					}		
 				}
-			}					
+			}
 		}
    	 	catch (SQLException e) 
    	 	{
@@ -380,6 +392,7 @@ public abstract class ADailyDBController
 		}		
 	}
 
+	
 	private static void  checkIfDidntImplementReservation(Connection connToSQL)
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
