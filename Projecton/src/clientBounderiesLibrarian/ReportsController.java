@@ -65,7 +65,7 @@ public class ReportsController implements IGUIController
 	private TextField medianForRegular;
 
 	@FXML
-	private BarChart<?, ?> diagramForRegular;
+	private BarChart<String,Number> diagramForRegular;
 
 	@FXML
 	private TextField avgForDesired;
@@ -74,7 +74,7 @@ public class ReportsController implements IGUIController
 	private TextField medianForDesired;
 
 	@FXML
-	private BarChart<?, ?> diagramForDesired;
+	private BarChart<String,Number> diagramForDesired;
 
 	@FXML
 	private TextField avgForAll;
@@ -83,7 +83,7 @@ public class ReportsController implements IGUIController
 	private TextField medianForAll;
 
 	@FXML
-	private BarChart<?, ?> diagramForAll;
+	private BarChart<String,Number> diagramForAll;
 
 	@FXML
 	private TextField totalForLateReturns;
@@ -123,6 +123,10 @@ public class ReportsController implements IGUIController
 		if(msg.getNote().equals("Report number 2"))
 		{
 			setReport2Result(msg);
+			setDiagram(msg,diagramForRegular);
+			setDiagram(msg,diagramForDesired);
+			setDiagram(msg,diagramForAll);
+			
 		}
 		else if(msg.getNote().equals("Report number 3")) //for Report3
 		{
@@ -153,7 +157,7 @@ public class ReportsController implements IGUIController
 		
 	}
 
-	//TODO: Inbar, complete the comment for the JavaDocs
+	
 	/**
 	 * This function sets the results of Report2 to the GUI
 	 * @param msg- the received object from the server
