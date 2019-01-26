@@ -494,7 +494,8 @@ public abstract class ACopyDBController
 				answer= new ObjectMessage("The copy is not exist in obl,you can not delete it","Unsucessfull");
 			}
 
-			else{
+			else
+			{
 				int bookOfCopyID=rs2.getInt(2);
 
 				//get number of copies of this bookID

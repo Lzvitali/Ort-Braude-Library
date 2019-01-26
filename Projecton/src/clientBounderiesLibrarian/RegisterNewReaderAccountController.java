@@ -181,6 +181,7 @@ public class RegisterNewReaderAccountController implements IGUIController
 		if(msg.getMessage().equals("successful registration"))
 		{
 			String showPassword="successful Registration the new password for the reader is "+ ((ReaderAccount)msg.getObjectList().get(0)).getPassword();
+			AClientCommonUtilities.backToStartPanel();
 			AClientCommonUtilities.infoAlert(showPassword,"Registration successful");
 		}
 		else
