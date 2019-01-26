@@ -149,24 +149,28 @@ public abstract class ADailyDBController
 		PreparedStatement ps2=null;
 		ResultSet query=null;
 		ResultSet query2=null;
-		LocalDate now = LocalDate.now();
-		Date today=java.sql.Date.valueOf(now);
-		
-		
-		try
-		{
-			ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM copy");		
-			query=ps.executeQuery();
-			ps2=connToSQL.prepareStatement("INSERT INTO `history`(`action`, `date`,`Note`) VALUES (?,?,?)");
-			ps2.setString(1, "quantity of copies");
-			ps2.setDate(2, (java.sql.Date) today);
-			ps2.setString(3, query.getString(0));
-			
-		}
-		catch (SQLException e) 
-		{
-			e.printStackTrace();
-		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat day = new SimpleDateFormat("dd");
+		Date date = Date.from(ZonedDateTime.now().minusMonths(1).toInstant());
+		String today=sdf.format(date);
+		String todayDay=day.format(date);
+   	 	if(today.equals("01"))
+   	 	{
+			try
+			{
+				ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM copy");		
+				query=ps.executeQuery();
+				ps2=connToSQL.prepareStatement("INSERT INTO `history`(`action`, `date`,`Note`) VALUES (?,?,?)");
+				ps2.setString(1, "quantity of copies");
+				ps2.setString(2,today);
+				ps2.setString(3, query.getString(0));
+				
+			}
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+   	 	}
 	}
 	
 	public static void  countQuantityOfCopyInCaseAddCopyOrBookToDB(Connection connToSQL)
