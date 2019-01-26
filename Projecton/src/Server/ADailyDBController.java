@@ -31,6 +31,7 @@ import Common.Mail;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.Report;
+import Common.Reservation;
 
 public abstract class ADailyDBController 
 {
@@ -45,6 +46,7 @@ public abstract class ADailyDBController
     	executor=new ScheduledThreadPoolExecutor(10);
     	executor.scheduleAtFixedRate(() -> resetUserStatusHistory(connToSQL), 0, 1, TimeUnit.DAYS);
     	executor.scheduleAtFixedRate(() -> checkDelayDaily(connToSQL), 0, 12, TimeUnit.HOURS);
+    	executor.scheduleAtFixedRate(() -> checkIfDidntImplementReservation(connToSQL), 0, 4, TimeUnit.HOURS);
     }
     
     
@@ -166,6 +168,7 @@ public abstract class ADailyDBController
 			e.printStackTrace();
 		}
 	}
+	
 	public static void  countQuantityOfCopyInCaseAddCopyOrBookToDB(Connection connToSQL)
 	{
 		PreparedStatement ps=null;
@@ -371,6 +374,41 @@ public abstract class ADailyDBController
    	 	{
 			e.printStackTrace();
 		}		
+	}
+
+	private static void  checkIfDidntImplementReservation(Connection connToSQL)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DATE, -2);
+		String lessTwoDays = (String)(sdf.format(calendar.getTime()));
+ 	 	ResultSet rs;
+   	 	ArrayList <Reservation> reservations=new ArrayList<Reservation>();
+   	 	Reservation reservationInput;
+   	 	ReaderAccount readerAccount;
+   	 	PreparedStatement ps;
+   	 	try 
+   	 	{
+			ps=connToSQL.prepareStatement("SELECT * FROM reservations WHERE startTimerImplement IS NOT NULL AND startTimerImplement < ?");
+			ps.setString(1, lessTwoDays);
+			rs =ps.executeQuery();
+			while(rs.next())
+			{
+				reservationInput=new Reservation();
+				reservationInput.setBookID(rs.getInt(1));
+				reservationInput.setReaderAccountID(rs.getString(2));
+				reservations.add(reservationInput);
+				readerAccount=new ReaderAccount();
+				readerAccount.setId(rs.getString(2));
+				ObjectMessage newMsg = new ObjectMessage(readerAccount, reservationInput, "cancel reservation", "Reservation");
+				AReservationDBController.selection(newMsg, connToSQL);
+			}
+		
+   	 	}
+   	 	catch(Exception e)
+   	 	{
+   	 		e.printStackTrace();
+   	 	}
 	}
 }
 

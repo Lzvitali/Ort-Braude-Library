@@ -8,7 +8,7 @@ import javafx.scene.control.Button;
 public class Reservation implements IEntity , Serializable 
 {
 	private int bookID;
-	//private String readerAccountID;
+	private String readerAccountID;
 	private String date;
 	
 	private String bookName;
@@ -50,6 +50,11 @@ public class Reservation implements IEntity , Serializable
 		//this.reservationTableBtn = new Button();
 	}
 
+
+	public Reservation() 
+	{
+		
+	}
 
 	public int getBookID() {
 		return bookID;
@@ -136,6 +141,10 @@ public class Reservation implements IEntity , Serializable
 	}
 
 
+	public void setBookID(int bookID) {
+		this.bookID = bookID;
+	}
+
 	public void setEdition(Integer edition) {
 		this.edition = edition;
 	}
@@ -148,6 +157,14 @@ public class Reservation implements IEntity , Serializable
 
 	public void setReservationTableBtn(Button reservationTableBtn) {
 		this.reservationTableBtn = reservationTableBtn;
+	}
+
+	public String getReaderAccountID() {
+		return readerAccountID;
+	}
+
+	public void setReaderAccountID(String readerAccountID) {
+		this.readerAccountID = readerAccountID;
 	}
 
 

@@ -156,6 +156,8 @@ public abstract class AReservationDBController
 		}	
 		return answer;
 	}
+	
+	
 	private static ObjectMessage implementTheBorrow(ObjectMessage msg, Connection connToSQL) 
 {
 		ObjectMessage answer = new ObjectMessage();
@@ -529,5 +531,7 @@ public abstract class AReservationDBController
 				return new ObjectMessage("ReaderThatCanImplement","NoFound");
 			}
 	}
+	
+	
 	
 }
