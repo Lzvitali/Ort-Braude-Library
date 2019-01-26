@@ -304,6 +304,7 @@ public abstract class AReservationDBController
 	{
 		PreparedStatement ps;
 		ObjectMessage answer;
+		ResultSet rs;
 		Book askedBook=(Book)msg.getObjectList().get(0);
 		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(1);
 		Copy copy=new Copy(-1,askedBook.getBookID(),null);
@@ -338,41 +339,54 @@ public abstract class AReservationDBController
  	 			{
 	 				try 
 	 				{
-	 					Date date = new Date();
-	 					Date time= new Date();
-	 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-	 					SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
-	 					String currentDate = sdf.format(date);
-	 					String currentTime = sdf2.format(date);
-	 					try 
+	 					ps = connToSQL.prepareStatement("SELECT status FROM obl.readeraccount WHERE ID=?");
+	 					ps.setString(1,askedReaderAccount.getId());
+	 					rs=ps.executeQuery();
+	 					rs.next();
+	 					if(rs.getString(1).equals("Active"))
 	 					{
-							date=new SimpleDateFormat("yyyy-MM-dd").parse(currentDate);
-							time=new SimpleDateFormat("hh:mm:ss").parse(currentTime);
-						} 
-	 					catch (ParseException e) 
-	 					{
-	
-							e.printStackTrace();
-						}
-	 					java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
-	 					java.sql.Time sqlTime = new java.sql.Time(time.getTime()); 
-						ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`, `Date`,`Time`) VALUES (?,?,?,?)");
-						ps.setInt(1,askedBook.getBookID());
-						ps.setString(2,askedReaderAccount.getId());
-						ps.setDate(3, sqlDate);
-						ps.setTime(4, sqlTime);
-						ps.executeUpdate();
-						
+		 					Date date = new Date();
+		 					Date time= new Date();
+		 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+		 					SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
+		 					String currentDate = sdf.format(date);
+		 					String currentTime = sdf2.format(date);
+		 					try 
+		 					{
+								date=new SimpleDateFormat("yyyy-MM-dd").parse(currentDate);
+								time=new SimpleDateFormat("hh:mm:ss").parse(currentTime);
+							} 
+		 					catch (ParseException e) 
+		 					{
+		
+								e.printStackTrace();
+							}
+		 					java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
+		 					java.sql.Time sqlTime = new java.sql.Time(time.getTime()); 
+							ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`, `Date`,`Time`) VALUES (?,?,?,?)");
+							ps.setInt(1,askedBook.getBookID());
+							ps.setString(2,askedReaderAccount.getId());
+							ps.setDate(3, sqlDate);
+							ps.setTime(4, sqlTime);
+							ps.executeUpdate();
+							
 
-						//add `reservation book` to HISTORY
-						LocalDate now = LocalDate.now(); 
-						Date today = java.sql.Date.valueOf(now);
-						History sendObject =new History(askedReaderAccount.getId(),"Reserve book",askedBook.getBookID(),(java.sql.Date) today);
-						AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
-						
-						answer=new ObjectMessage("reserveBook","Reserved");
-						
-						return answer;
+							//add `reservation book` to HISTORY
+							LocalDate now = LocalDate.now(); 
+							Date today = java.sql.Date.valueOf(now);
+							History sendObject =new History(askedReaderAccount.getId(),"Reserve book",askedBook.getBookID(),(java.sql.Date) today);
+							AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+							
+							answer=new ObjectMessage("reserveBook","Reserved");
+							
+							return answer;
+	 						
+	 					}
+	 					else
+	 					{
+							answer=new ObjectMessage("reserveBook","The Status of reader account is "+rs.getString(1)+"\nHe can't reserve book.");
+							return answer;
+	 					}
 					} 
 	 				catch (SQLException e) 
 	 				{
