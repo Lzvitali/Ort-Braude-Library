@@ -5,6 +5,7 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -25,11 +26,11 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <VBox layoutX="442.0" layoutY="149.0" prefHeight="354.0" prefWidth="436.0">
+                        <VBox layoutX="416.0" layoutY="167.0" prefHeight="354.0" prefWidth="436.0">
                            <children>
                               <HBox prefHeight="164.0" prefWidth="469.0">
                                  <children>
-                                    <VBox alignment="CENTER_LEFT" prefHeight="113.0" prefWidth="271.0">
+                                    <VBox alignment="CENTER_LEFT" prefHeight="164.0" prefWidth="282.0">
                                        <children>
                                           <Label text="Active reader accounts">
                                              <font>
@@ -101,21 +102,21 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox alignment="CENTER" layoutX="291.0" layoutY="41.0" prefHeight="100.0" prefWidth="738.0">
+                        <HBox alignment="CENTER" layoutX="102.0" layoutY="50.0" prefHeight="100.0" prefWidth="1122.0">
                            <children>
-                              <VBox prefHeight="106.0" prefWidth="337.0">
+                              <VBox prefHeight="100.0" prefWidth="520.0">
                                  <children>
                                     <HBox alignment="BOTTOM_RIGHT" prefHeight="38.0" prefWidth="321.0">
                                        <children>
                                           <Label text="Month" />
                                           <AnchorPane prefHeight="38.0" prefWidth="88.0" />
                                           <Label text="Year" />
-                                          <AnchorPane prefHeight="38.0" prefWidth="37.0" />
+                                          <AnchorPane prefHeight="38.0" prefWidth="156.0" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="44.0" prefWidth="335.0" spacing="15.0">
                                        <children>
-                                          <Label text="Periode">
+                                          <Label prefHeight="25.0" prefWidth="121.0" text="Choose periode:">
                                              <font>
                                                 <Font name="System Bold Italic" size="16.0" />
                                              </font>
@@ -126,15 +127,29 @@
                                                 <Insets />
                                              </HBox.margin>
                                           </ComboBox>
+                                          <Button fx:id="showNewReportBtn" mnemonicParsing="false" onAction="#showNewReport" text="show report" />
                                        </children>
                                     </HBox>
                                  </children>
                               </VBox>
-                              <AnchorPane prefHeight="100.0" prefWidth="149.0" />
+                              <AnchorPane prefHeight="100.0" prefWidth="187.0">
+                                 <children>
+                                    <Label layoutX="12.0" layoutY="45.0" prefHeight="28.0" prefWidth="163.0" text="Or choose from here:">
+                                       <font>
+                                          <Font name="System Bold Italic" size="16.0" />
+                                       </font>
+                                    </Label>
+                                 </children></AnchorPane>
                               <VBox prefHeight="100.0" prefWidth="218.0">
                                  <children>
                                     <AnchorPane prefHeight="45.0" prefWidth="218.0" />
-                                    <ComboBox fx:id="chooseFromPreviousComboBox" prefHeight="31.0" prefWidth="213.0" promptText="Choose from previous" />
+                                    <ComboBox fx:id="chooseFromPreviousComboBox" prefHeight="31.0" prefWidth="213.0" promptText="Previous reports" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" prefHeight="100.0" prefWidth="114.0">
+                                 <children>
+                                    <AnchorPane prefHeight="20.0" prefWidth="80.0" />
+                                    <Button fx:id="showPreviousReportBtn" mnemonicParsing="false" onAction="#showPreviousReport" text="show report" />
                                  </children>
                               </VBox>
                            </children>

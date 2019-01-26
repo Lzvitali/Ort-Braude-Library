@@ -21,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -103,6 +104,12 @@ public class ReportsController implements IGUIController
 
     @FXML
     private VBox resultsForReport3;
+    
+    @FXML
+    private Button showNewReportBtn;
+    
+    @FXML
+    private Button showPreviousReportBtn;
 
 
 	@FXML
@@ -214,15 +221,32 @@ public class ReportsController implements IGUIController
 		sendToServer.setExtra(bookID); 
 		client.handleMessageFromClient(sendToServer);
     }
+    
+    
+    @FXML //choose by Year & Month
+    void showNewReport(ActionEvent event) 
+    {
+
+    }
+    
+    
+    @FXML //choose from comboBox
+    void showPreviousReport(ActionEvent event) 
+    {
+
+    }
 
 
+    /**
+     * This function sets the BarChart diagram with the details that came from the server
+     * @param detailsArray - arrayList with the data for the diagram
+     * @param diagram - the reference for the diagram to set for the data
+     */
     private void setDiagram(ArrayList<Long> detailsArray, BarChart<String,Number> diagram)
     { 	
     	Platform.runLater(()->
     	{
     		diagram.getData().clear();
-
-    		
 
     		//if there is no data for the diagram- finish
     		if(0 == detailsArray.size())

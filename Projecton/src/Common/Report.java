@@ -8,12 +8,20 @@ public class Report implements IEntity , Serializable
 	private float average; //for Report2 & Report3
 	private float median; //for Report2 & Report3
 	private int total; //for Report3
-
-	private String activeReaderAccounts; //for Report2
-	private String frozenReaderAccounts; //for Report2
-	private String lockedReaderAccounts; //for Report2
 	
-	ArrayList<Long> detailsArray;
+	ArrayList<Long> detailsArray; //for Report2 & Report3
+	
+	
+	
+	private String activeReaderAccounts; //for Report1 & Daily
+	private String frozenReaderAccounts; //for Report1 & Daily
+	private String lockedReaderAccounts; //for Report1 & Daily
+	private String totalCopies; //for Report1
+	private String numOfDidntReturnOnTime; //for Report1
+	
+	
+	
+	
 
 	public Report(float average,float median)
 	{
@@ -87,6 +95,18 @@ public class Report implements IEntity , Serializable
 	}
 	public void setDetailsArray(ArrayList<Long> detailsArray) {
 		this.detailsArray = detailsArray;
+	}
+	public String getTotalCopies() {
+		return totalCopies;
+	}
+	public void setTotalCopies(String totalCopies) {
+		this.totalCopies = totalCopies;
+	}
+	public String getNumOfDidntReturnOnTime() {
+		return numOfDidntReturnOnTime;
+	}
+	public void setNumOfDidntReturnOnTime(String numOfDidntReturnOnTime) {
+		this.numOfDidntReturnOnTime = numOfDidntReturnOnTime;
 	}
 	
 	
