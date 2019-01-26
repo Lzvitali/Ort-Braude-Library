@@ -172,7 +172,7 @@
                                        <children>
                                           <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                                              <children>
-                                                <JFXTextField fx:id="searchBookTextField" prefHeight="34.0" prefWidth="490.0" promptText="Search book">
+                                                <JFXTextField fx:id="searchBookTextField" onKeyPressed="#makeSearchBookWithEnterBtn" prefHeight="34.0" prefWidth="490.0" promptText="Search book">
                                                    <font>
                                                       <Font size="16.0" />
                                                    </font>
@@ -244,7 +244,7 @@
                                        <children>
                                           <HBox layoutX="34.0" layoutY="69.0" prefHeight="60.0" prefWidth="603.0" spacing="10.0">
                                              <children>
-                                                <JFXTextField fx:id="searchReaderAccountSearchField" prefHeight="34.0" prefWidth="490.0" promptText="Search reader account">
+                                                <JFXTextField fx:id="searchReaderAccountSearchField" onKeyPressed="#makeSearchReaderWithEnterBtn" prefHeight="34.0" prefWidth="490.0" promptText="Search reader account">
                                                    <font>
                                                       <Font size="16.0" />
                                                    </font>

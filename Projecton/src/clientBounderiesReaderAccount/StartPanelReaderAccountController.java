@@ -44,6 +44,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -141,6 +143,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     		System.exit(0);
     	});
     	setRedioButtonsForBooksSearch();
+    	searchResultTable.setVisible(false);
     }
 
     @FXML
@@ -163,14 +166,18 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
     	String selectedString = selectedRadioButton.getText();
     	Book askedBook=new Book();
+    	boolean valid=false;
     	if(selectedString.equals("Book name"))
     	{
     		if(AValidationInput.checkValidationBook("bookName", searchTextField.getText()).equals("correct"))
 			{
+    			valid=true;
 				askedBook.setBookName(searchTextField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchResultTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("bookName", searchTextField.getText()),"Invaild Input" ,"continue" );
 				searchTextField.setText("");
 			}
@@ -179,10 +186,13 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	{
     		if(AValidationInput.checkValidationBook("authorName", searchTextField.getText()).equals("correct"))
 			{
+    			valid=true;
 				askedBook.setAuthorName(searchTextField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchResultTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("authorName", searchTextField.getText()),"Invaild Input","continue" );
 				searchTextField.setText("");
 			}
@@ -191,21 +201,28 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	{
     		if(AValidationInput.checkValidationBook("topic", searchTextField.getText()).equals("correct"))
 			{
+    			valid=true;
 				askedBook.setTopic(searchTextField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchResultTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchTextField.getText()), "Invaild Input","continue" );
 				searchTextField.setText("");
 			}
     	}
     	else
 		{
+    		valid=true;
 			askedBook.setFreeSearch(searchTextField.getText());
 		}
-    	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
-    	client.setClientUI(this);
-    	client.handleMessageFromClient(sendToServer);   
+    	if(valid)
+    	{
+	    	ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+	    	client.setClientUI(this);
+	    	client.handleMessageFromClient(sendToServer);   
+    	}
     }
 
     @FXML
@@ -271,11 +288,12 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		searchResultTable.getItems().clear();
 		if(msg.getNote().equals("NoBookFound"))
 		{
+			searchResultTable.setVisible(false);
 			AClientCommonUtilities.infoAlert("No books found , try insert other value", "No books found");
 		}
 		else
 		{
-		
+				searchResultTable.setVisible(true);
 				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
 				yearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
@@ -413,6 +431,16 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     }
     
     
+	@FXML
+    void makeSearchBookWithEnterBtn(KeyEvent event)
+    {
+		client.setClientUI(this);
+    	if(event.getCode().equals(KeyCode.ENTER))
+    	{
+    		makeSearch(new ActionEvent());
+       }
+    }
+	
     private void reserveBookResult(ObjectMessage msg)
     {
     	if(msg.getNote().equals("HaveAvailableCopy"))

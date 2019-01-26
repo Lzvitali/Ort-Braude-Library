@@ -43,6 +43,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
@@ -139,6 +141,8 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			connToClientController.setClientUI(this);
 		}
 		setRedioButtonsForBooksSearch();
+		searchResultTable.setVisible(false);
+
 	}
 
 
@@ -168,6 +172,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		//if success do this and if selected book :
 		Platform.runLater(()->
 		{	
+			boolean valid=false;
 			JFXRadioButton  selectedRadioButton;
 			try 
 			{
@@ -185,10 +190,13 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			{
 				if(AValidationInput.checkValidationBook("bookName", searchTextField.getText()).equals("correct"))
 				{
+					valid=true;
 					askedBook.setBookName(searchTextField.getText());
 				}
 				else
 				{
+					valid=false;
+					searchResultTable.setVisible(false);
 					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("bookName", searchTextField.getText()),"Invaild Input" ,"continue" );
 					searchTextField.setText("");
 				}
@@ -198,10 +206,13 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			{
 				if(AValidationInput.checkValidationBook("authorName", searchTextField.getText()).equals("correct"))
 				{
+					valid=true;
 					askedBook.setAuthorName(searchTextField.getText());
 				}
 				else
 				{
+					valid=false;
+					searchResultTable.setVisible(false);
 					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("authorName", searchTextField.getText()),"Invaild Input","continue" );
 					searchTextField.setText("");
 				}
@@ -210,10 +221,13 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			{
 				if(AValidationInput.checkValidationBook("topic", searchTextField.getText()).equals("correct"))
 				{
+					valid=true;
 					askedBook.setTopic(searchTextField.getText());
 				}
 				else
 				{
+					valid=false;
+					searchResultTable.setVisible(false);
 					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchTextField.getText()), "Invaild Input","continue" );
 					searchTextField.setText("");
 				}
@@ -221,12 +235,16 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			}
 			else
 			{
+				valid=true;
 				askedBook.setFreeSearch(searchTextField.getText());
 			}
 			if(askedBook.getBookName()!=null ||askedBook.getAuthorName()!=null || askedBook.getTopic() !=null || askedBook.getFreeSearch() !=null)
 			{
-				ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
-				connToClientController.handleMessageFromClient(sendToServer);   
+				if(valid)
+				{
+					ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+					connToClientController.handleMessageFromClient(sendToServer);   
+				}
 			}
 		});
 	}
@@ -252,12 +270,14 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		searchResultTable.getItems().clear();
 		if(msg.getNote().equals("NoBookFound"))
 		{
+			searchResultTable.setVisible(false);
 			AClientCommonUtilities.infoAlert("No books found , try insert other value", "No books found");
 		}
 		else
 		{
 			Platform.runLater(()->
 			{
+				searchResultTable.setVisible(true);
 				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
 				yearColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getYear()).asObject());
@@ -353,33 +373,36 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	}
 
 
-@Override
-public int getActivateWindows() 
-{
-	return numOfActiveWindows;
-}
+	@Override
+	public int getActivateWindows() 
+	{
+		return numOfActiveWindows;
+	}
+	
+	@Override
+	public void setActivateWindows(int newWindows) 
+	{
+		numOfActiveWindows=newWindows;
+	}
+	
+	void setRedioButtonsForBooksSearch()
+	{
+		toggleGroupForBooks = new ToggleGroup();
+		this.bookNameRB.setToggleGroup(toggleGroupForBooks);
+		this.authorNameRB.setToggleGroup(toggleGroupForBooks);
+		this.topicRB.setToggleGroup(toggleGroupForBooks);
+		this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
+	}
+	
+	@FXML
+	void makeSearchBookWithEnterBtn(KeyEvent event)
+	{
+		connToClientController.setClientUI(this);
+		if(event.getCode().equals(KeyCode.ENTER))
+		{
+			makeSearch(new ActionEvent());
+	   }
+	}
 
-@Override
-public void setActivateWindows(int newWindows) 
-{
-	numOfActiveWindows=newWindows;
-}
-
-void setRedioButtonsForBooksSearch()
-{
-	toggleGroupForBooks = new ToggleGroup();
-	this.bookNameRB.setToggleGroup(toggleGroupForBooks);
-	this.authorNameRB.setToggleGroup(toggleGroupForBooks);
-	this.topicRB.setToggleGroup(toggleGroupForBooks);
-	this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
-}
-
-
-@FXML
-void testEmail(MouseEvent event) 
-{
-	ObjectMessage sendToServer=new ObjectMessage("sendMail","Daily");
-	connToClientController.handleMessageFromClient(sendToServer);   
-}
 
 }

@@ -45,6 +45,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -233,6 +235,8 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		});
 		setRedioButtonsForBooksSearch();
 		setRedioButtonsForAccountsSearch();
+		searchResultTable.setVisible(false);
+		searchReaderAccountTable.setVisible(false);
 	}
 
 	void setRedioButtonsForBooksSearch() 
@@ -277,14 +281,18 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
 		String selectedString = selectedRadioButton.getText();
 		Book askedBook=new Book();
+		boolean valid=false;
 		if(selectedString.equals("Book name"))
 		{
 			if(AValidationInput.checkValidationBook("bookName", searchBookTextField.getText()).equals("correct"))
 			{
+				valid=true;
 				askedBook.setBookName(searchBookTextField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchResultTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("bookName", searchBookTextField.getText()),"Invaild Input" ,"continue" );
 				searchBookTextField.setText("");
 			}
@@ -294,10 +302,13 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			if(AValidationInput.checkValidationBook("authorName", searchBookTextField.getText()).equals("correct"))
 			{
+				valid=true;
 				askedBook.setAuthorName(searchBookTextField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchResultTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("authorName", searchBookTextField.getText()),"Invaild Input","continue" );
 				searchBookTextField.setText("");
 			}
@@ -306,22 +317,29 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			if(AValidationInput.checkValidationBook("topic", searchBookTextField.getText()).equals("correct"))
 			{
+				valid=true;
 				askedBook.setTopic(searchBookTextField.getText());
 			}
 			
 			else
 			{
+				valid=false;
+				searchResultTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchBookTextField.getText()), "Invaild Input","continue" );
 				searchBookTextField.setText("");
 			}
 		}
 		else
 		{
+			valid=true;
 			askedBook.setFreeSearch(searchBookTextField.getText());;
 		}
-		ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
-		client.setClientUI(this);
-		client.handleMessageFromClient(sendToServer); 
+		if(valid)
+		{
+			ObjectMessage sendToServer=new ObjectMessage(askedBook,"SearchBook","Book");
+			client.setClientUI(this);
+			client.handleMessageFromClient(sendToServer); 
+		}
 	}
 
 
@@ -330,14 +348,18 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForAccounts.getSelectedToggle();
 		String selectedString = selectedRadioButton.getText();
 		ReaderAccount askedReader=new ReaderAccount();
+		boolean valid=false;
 		if(selectedString.equals("ID"))
 		{
 			if(AValidationInput.checkValidationUser("UserID", searchReaderAccountSearchField.getText()).equals("correct"))
 			{
+				valid=true;
 				askedReader.setId(searchReaderAccountSearchField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchReaderAccountTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationUser("UserID", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
 				searchReaderAccountSearchField.setText("");
 			}
@@ -347,10 +369,13 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			if(AValidationInput.checkValidationUser("First Name", searchReaderAccountSearchField.getText()).equals("correct"))
 			{
+				valid=true;
 				askedReader.setFirstName(searchReaderAccountSearchField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchReaderAccountTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationUser("First Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
 				searchReaderAccountSearchField.setText("");
 			}
@@ -360,10 +385,13 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		{
 			if(AValidationInput.checkValidationUser("Last Name", searchReaderAccountSearchField.getText()).equals("correct"))
 			{
+				valid=true;
 				askedReader.setLastName(searchReaderAccountSearchField.getText());
 			}
 			else
 			{
+				valid=false;
+				searchReaderAccountTable.setVisible(false);
 				AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationUser("Last Name", searchReaderAccountSearchField.getText()), "Invaild Input","continue" );
 				searchReaderAccountSearchField.setText("");
 			}
@@ -371,12 +399,17 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		}
 		else if(selectedString.equals("Free search"))
 		{
+			valid=true;
 			askedReader.setFreeSearch(searchReaderAccountSearchField.getText());
 			
 		}
-		ObjectMessage sendToServer=new ObjectMessage(askedReader,"SearchReader","ReaderAccount");
-		client.setClientUI(this);
-		client.handleMessageFromClient(sendToServer);  
+		if(valid)
+		{
+			ObjectMessage sendToServer=new ObjectMessage(askedReader,"SearchReader","ReaderAccount");
+			client.setClientUI(this);
+			client.handleMessageFromClient(sendToServer);  
+		}
+		
 	}
 
 
@@ -473,12 +506,14 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		searchResultTable.getItems().clear();
 		if(msg.getNote().equals("NoBookFound"))
 		{
+			searchResultTable.setVisible(false);
 			AClientCommonUtilities.infoAlert("No books found , try insert other value", "No books found");
 		}
 		else
 		{
 			Platform.runLater(()->
 			{
+				searchResultTable.setVisible(true);
 				bookIDColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(((Book)cellData.getValue()).getBookID()).asObject());
 				bookNameColumn.setCellValueFactory(new PropertyValueFactory<>("bookName"));
 				authorNameColumn.setCellValueFactory(new PropertyValueFactory<>("authorName"));
@@ -576,12 +611,14 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		searchReaderAccountTable.getItems().clear();
 		if(msg.getNote().equals("NoReaderFound"))
 		{
+			searchReaderAccountTable.setVisible(false);
 			AClientCommonUtilities.infoAlert("No readers found , try insert other value", "No readers found");
 		}
 		else
 		{
 			Platform.runLater(()->
 			{
+				searchReaderAccountTable.setVisible(true);
 				accountIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
 				accountFirstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
 				accountLastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -669,8 +706,27 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	}
 
 
+	@FXML
+    void makeSearchBookWithEnterBtn(KeyEvent event)
+    {
+		client.setClientUI(this);
+    	if(event.getCode().equals(KeyCode.ENTER))
+    	{
+    		searchBookPressed();
+       }
+    }
+	@FXML
+    void makeSearchReaderWithEnterBtn(KeyEvent event)
+    {
+		client.setClientUI(this);
+    	if(event.getCode().equals(KeyCode.ENTER))
+    	{
+    		searchReaderAccountPressed(); 
+       }
+    }
 
-
+	
+	
     @FXML
     void openChangeBookInfo(ActionEvent event) 
     {
