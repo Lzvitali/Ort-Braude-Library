@@ -227,6 +227,9 @@ public class ReportsController implements IGUIController
     		//if there is no data for the diagram- finish
     		if(0 == detailsArray.size())
     		{
+    			XYChart.Series<String,Number> series = new XYChart.Series<String,Number>();
+    			diagram.getData().add(series);
+    			series.setName("");
     			return;
     		}
     		
@@ -263,6 +266,10 @@ public class ReportsController implements IGUIController
     				}
     			}
 
+    			//set the format of numbers that will be displayed in the diagrams
+    			DecimalFormat df = new DecimalFormat();
+				df.setMaximumFractionDigits(2);
+				
     			//set the column
     			if(0 == range)
     			{
@@ -270,15 +277,13 @@ public class ReportsController implements IGUIController
     			}
     			else
     			{
-    				DecimalFormat df = new DecimalFormat();
-    				df.setMaximumFractionDigits(2);
-    				//System.out.println(df.format(decimalNumber));
+    				
     				series.getData().add(new XYChart.Data<String,Number>((df.format(i) + "-" + df.format(i+range)), cnt));
     			}
 
     		}
 
-
+    		
     		diagram.getData().add(series);
     	});
     }

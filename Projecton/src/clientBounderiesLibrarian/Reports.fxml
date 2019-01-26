@@ -180,8 +180,8 @@
                                           </VBox>
                                           <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="150.0" spacing="15.0">
                                              <children>
-                                                <TextField fx:id="avgForRegular" />
-                                                <TextField fx:id="medianForRegular" />
+                                                <TextField fx:id="avgForRegular" editable="false" />
+                                                <TextField fx:id="medianForRegular" editable="false" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -189,10 +189,10 @@
                                     <AnchorPane prefHeight="43.0" prefWidth="562.0" />
                                     <BarChart fx:id="diagramForRegular" prefHeight="315.0" prefWidth="381.0">
                                       <xAxis>
-                                        <CategoryAxis side="BOTTOM" />
+                                        <CategoryAxis label="duration on the 'borrow'" side="BOTTOM" />
                                       </xAxis>
                                       <yAxis>
-                                        <NumberAxis side="LEFT" />
+                                        <NumberAxis label="amount of reader accounts" side="LEFT" />
                                       </yAxis>
                                     </BarChart>
                                  </children>
@@ -234,8 +234,8 @@
                                           </VBox>
                                           <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="150.0" spacing="15.0">
                                              <children>
-                                                <TextField fx:id="avgForDesired" />
-                                                <TextField fx:id="medianForDesired" />
+                                                <TextField fx:id="avgForDesired" editable="false" />
+                                                <TextField fx:id="medianForDesired" editable="false" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -243,10 +243,10 @@
                                     <AnchorPane prefHeight="43.0" prefWidth="562.0" />
                                     <BarChart fx:id="diagramForDesired" prefHeight="315.0" prefWidth="381.0">
                                        <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
+                                          <CategoryAxis label="duration on the 'borrow'" side="BOTTOM" />
                                        </xAxis>
                                        <yAxis>
-                                          <NumberAxis side="LEFT" />
+                                          <NumberAxis label="amount of reader accounts" side="LEFT" />
                                        </yAxis>
                                     </BarChart>
                                  </children>
@@ -284,8 +284,8 @@
                                           </VBox>
                                           <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="150.0" spacing="15.0">
                                              <children>
-                                                <TextField fx:id="avgForAll" />
-                                                <TextField fx:id="medianForAll" />
+                                                <TextField fx:id="avgForAll" editable="false" />
+                                                <TextField fx:id="medianForAll" editable="false" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -293,10 +293,10 @@
                                     <AnchorPane prefHeight="43.0" prefWidth="562.0" />
                                     <BarChart fx:id="diagramForAll" prefHeight="315.0" prefWidth="381.0">
                                        <xAxis>
-                                          <CategoryAxis side="BOTTOM" />
+                                          <CategoryAxis label="duration on the 'borrow'" side="BOTTOM" />
                                        </xAxis>
                                        <yAxis>
-                                          <NumberAxis side="LEFT" />
+                                          <NumberAxis label="amount of reader accounts" side="LEFT" />
                                        </yAxis>
                                     </BarChart>
                                  </children>
@@ -317,7 +317,7 @@
                                     <AnchorPane prefHeight="18.0" prefWidth="200.0" />
                                     <HBox alignment="CENTER" prefHeight="46.0" prefWidth="400.0">
                                        <children>
-                                          <Label prefHeight="45.0" prefWidth="314.0" text="Duration of the late returns">
+                                          <Label prefHeight="43.0" prefWidth="147.0" text="Late returns">
                                              <font>
                                                 <Font name="System Bold Italic" size="24.0" />
                                              </font>
@@ -349,20 +349,20 @@
                                           </VBox>
                                           <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="150.0" spacing="15.0">
                                              <children>
-                                                <TextField fx:id="totalForLateReturns" />
-                                                <TextField fx:id="avgForDurationLateReturns" />
-                                                <TextField fx:id="medianForDurationLateReturns" />
+                                                <TextField fx:id="totalForLateReturns" editable="false" />
+                                                <TextField fx:id="avgForDurationLateReturns" editable="false" />
+                                                <TextField fx:id="medianForDurationLateReturns" editable="false" />
                                              </children>
                                           </VBox>
                                        </children>
                                     </HBox>
                                     <AnchorPane prefHeight="18.0" prefWidth="400.0" />
-                                    <BarChart fx:id="diagramForNumLateReturns" prefHeight="315.0" prefWidth="381.0">
+                                    <BarChart fx:id="diagramForNumLateReturns" animated="false" prefHeight="315.0" prefWidth="381.0">
                                        <xAxis>
-                                          <CategoryAxis prefWidth="339.0" side="BOTTOM" />
+                                          <CategoryAxis label="duration on the 'late return'" prefWidth="339.0" side="BOTTOM" />
                                        </xAxis>
                                        <yAxis>
-                                          <NumberAxis side="LEFT" />
+                                          <NumberAxis label="amount of reader accounts" side="LEFT" />
                                        </yAxis>
                                     </BarChart>
                                  </children>
