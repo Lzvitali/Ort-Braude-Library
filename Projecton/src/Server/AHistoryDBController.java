@@ -348,9 +348,9 @@ public abstract class AHistoryDBController
 	private static ObjectMessage getReportTwo( ObjectMessage msg, Connection connToSQL) 
 	{
 		ArrayList<IEntity> result=new ArrayList<IEntity>();
-		ArrayList<Integer> numberOfDaysOdBorrowingArrReg=new ArrayList<Integer>();
-		ArrayList<Integer> numberOfDaysOdBorrowingArrDes=new ArrayList<Integer>();
-		ArrayList<Integer> numberOfDaysOdBorrowingArrAll=new ArrayList<Integer>();
+		ArrayList<Long> numberOfDaysOdBorrowingArrReg=new ArrayList<Long>();
+		ArrayList<Long> numberOfDaysOdBorrowingArrDes=new ArrayList<Long>();
+		ArrayList<Long> numberOfDaysOdBorrowingArrAll=new ArrayList<Long>();
 		int countOfDesired=0;
 		int countOfRegular=0;
 		int countOfAll=0;
@@ -359,7 +359,7 @@ public abstract class AHistoryDBController
 		PreparedStatement getReturnedBooks;
 		PreparedStatement getAverageRegular;
 		int sumOfDesired=0;
-		int sumOfRegular=0;
+		long sumOfRegular=0;
 		ResultSet rs1 = null; 
 		ResultSet rs2 = null;
 		int isDesired;
@@ -367,7 +367,7 @@ public abstract class AHistoryDBController
 		float average;
 		float median;
 		
-		int daysOfBorrows;
+		Long daysOfBorrows;
 		ObjectMessage answer = null; 
 		try 
 		{
@@ -378,7 +378,7 @@ public abstract class AHistoryDBController
 
 			while(rs1.next())
 			{
-				daysOfBorrows=Integer.parseInt(rs1.getString(7));
+				daysOfBorrows=Long.parseLong(rs1.getString(7));
 				idOfBook=rs1.getInt(3);
 				getAverageRegular = connToSQL.prepareStatement("SELECT* FROM obl.book WHERE bookId=?" );
 				getAverageRegular.setInt(1,idOfBook); 
@@ -425,7 +425,8 @@ public abstract class AHistoryDBController
 			
 			Report reportRegularBook=new Report(average, median);
 			result.add(reportRegularBook);
-
+			reportRegularBook.setDetailsArray(numberOfDaysOdBorrowingArrReg); 
+			
 			
 			
 
@@ -436,7 +437,7 @@ public abstract class AHistoryDBController
 
 			while(rs1.next())
 			{
-				daysOfBorrows=Integer.parseInt(rs1.getString(7));
+				daysOfBorrows=Long.parseLong(rs1.getString(7));
 				idOfBook=rs1.getInt(3);
 				getAverageDesired = connToSQL.prepareStatement("SELECT* FROM obl.book WHERE bookId=?" );
 				getAverageDesired.setInt(1,idOfBook); 
@@ -484,6 +485,7 @@ public abstract class AHistoryDBController
 			 
 			 
 			Report reportDesiredBook=new Report(average,median);
+			//reportDesiredBook.set
 			result.add(reportDesiredBook);
 
 			
@@ -503,7 +505,7 @@ public abstract class AHistoryDBController
 
 			while(rs1.next())
 			{
-				daysOfBorrows=Integer.parseInt(rs1.getString(7));
+				daysOfBorrows=Long.parseLong(rs1.getString(7));
 				countOfAll++;
 				numberOfDaysOdBorrowingArrAll.add(daysOfBorrows); //for the median
 			}
