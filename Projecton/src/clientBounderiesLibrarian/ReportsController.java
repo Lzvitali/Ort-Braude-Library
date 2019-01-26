@@ -11,6 +11,7 @@ import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -123,15 +124,28 @@ public class ReportsController implements IGUIController
 		if(msg.getNote().equals("Report number 2"))
 		{
 			setReport2Result(msg);
-			setDiagram(msg,diagramForRegular);
-			setDiagram(msg,diagramForDesired);
-			setDiagram(msg,diagramForAll);
+			
+			ArrayList <IEntity> result = msg.getObjectList();
+			//set first diagram
+    		ArrayList<Long> detailsArray0 = ((Report)result.get(0)).getDetailsArray();
+			setDiagram(detailsArray0,diagramForRegular);
+			
+			//set second diagram
+    		ArrayList<Long> detailsArray1 = ((Report)result.get(1)).getDetailsArray();
+			setDiagram(detailsArray1,diagramForDesired);
+			
+			//set thread diagram
+    		ArrayList<Long> detailsArray2 = ((Report)result.get(2)).getDetailsArray();
+			setDiagram(detailsArray2,diagramForAll);
 			
 		}
 		else if(msg.getNote().equals("Report number 3")) //for Report3
 		{
 			setReport3Result(msg);
-			setDiagram(msg,diagramForNumLateReturns);
+			
+			ArrayList <IEntity> result = msg.getObjectList();
+    		ArrayList<Long> detailsArray = ((Report)result.get(0)).getDetailsArray();
+			setDiagram(detailsArray, diagramForNumLateReturns);
 		}
 		else if(msg.getNote().equals("Report number 3 - no results")) //for Report3
 		{
@@ -202,14 +216,13 @@ public class ReportsController implements IGUIController
     }
 
 
-    private void setDiagram(ObjectMessage msg, BarChart<String,Number> diagram)
+    private void setDiagram(ArrayList<Long> detailsArray, BarChart<String,Number> diagram)
     { 	
     	Platform.runLater(()->
     	{
     		diagram.getData().clear();
 
-    		ArrayList <IEntity> result = msg.getObjectList();
-    		ArrayList<Long> detailsArray = ((Report)result.get(0)).getDetailsArray();
+    		
 
     		//if there is no data for the diagram- finish
     		if(0 == detailsArray.size())
@@ -257,7 +270,10 @@ public class ReportsController implements IGUIController
     			}
     			else
     			{
-    				series.getData().add(new XYChart.Data<String,Number>((String.valueOf(i) + "-" + String.valueOf(i+range)), cnt));
+    				DecimalFormat df = new DecimalFormat();
+    				df.setMaximumFractionDigits(2);
+    				//System.out.println(df.format(decimalNumber));
+    				series.getData().add(new XYChart.Data<String,Number>((df.format(i) + "-" + df.format(i+range)), cnt));
     			}
 
     		}

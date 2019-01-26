@@ -485,7 +485,7 @@ public abstract class AHistoryDBController
 			 
 			 
 			Report reportDesiredBook=new Report(average,median);
-			//reportDesiredBook.set
+			reportDesiredBook.setDetailsArray(numberOfDaysOdBorrowingArrDes);
 			result.add(reportDesiredBook);
 
 			
@@ -529,7 +529,8 @@ public abstract class AHistoryDBController
 			}
 			 
 			
-			Report reportAllBooks=new Report(average,median);
+			Report reportAllBooks=new Report(average,median); 
+			reportAllBooks.setDetailsArray(numberOfDaysOdBorrowingArrAll);
 			result.add(reportAllBooks);
 
 
