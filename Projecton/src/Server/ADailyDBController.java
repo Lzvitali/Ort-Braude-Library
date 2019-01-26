@@ -38,7 +38,7 @@ public abstract class ADailyDBController
 	final static String password = "Aa112233";
 	
     static ScheduledThreadPoolExecutor executor;
-    static ExecutorService pool = Executors.newFixedThreadPool(5); 
+    static ExecutorService pool = Executors.newFixedThreadPool(15); 
     
     public static void startThreads(Connection connToSQL)
     {
@@ -318,8 +318,10 @@ public abstract class ADailyDBController
 					ps.setString(1, copy.getBorrowerID());
 					rs=ps.executeQuery();
 					rs.next();
-					ObjectMessage askTheFirstReader=new ObjectMessage(copy.getBorrowerID(),"SearchReader","ReaderAccount");
-					ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
+					ReaderAccount readerAccount=new ReaderAccount();
+					readerAccount.setId(copy.getBorrowerID());
+					ObjectMessage askTheFirstReader=new ObjectMessage(readerAccount,"SearchReader","ReaderAccount");
+					readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
 					Book askedBook=new Book();
 					askedBook.setBookID(copy.getBookID());
 					ObjectMessage bookDetails=new ObjectMessage(askedBook,"searchBookID","Book");
