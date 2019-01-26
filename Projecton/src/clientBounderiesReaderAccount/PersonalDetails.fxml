@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -12,7 +13,7 @@
 
 <AnchorPane prefHeight="501.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesReaderAccount.PersonalDetailsController">
    <children>
-      <VBox layoutX="197.0" layoutY="82.0" prefHeight="216.0" prefWidth="220.0" spacing="10.0">
+      <VBox layoutX="197.0" layoutY="82.0" prefHeight="277.0" prefWidth="220.0" spacing="10.0">
          <children>
             <TextField fx:id="IDTextField" editable="false">
                <font>
@@ -29,21 +30,10 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <TextField fx:id="PhoneTextField" style="-fx-background-color: ccecff;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="EmailTextField" style="-fx-background-color: ccecff;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="AdressTextField" style="-fx-background-color: ccecff;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
+            <JFXTextField fx:id="PhoneTextField" />
+            <JFXTextField fx:id="EmailTextField" />
+            <JFXTextField fx:id="AdressTextField" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
             <TextField fx:id="EducationYearTextField" editable="false">
                <font>
                   <Font size="14.0" />
@@ -51,7 +41,7 @@
             </TextField>
          </children>
       </VBox>
-      <VBox layoutX="83.0" layoutY="82.0" prefHeight="293.0" prefWidth="110.0" spacing="21.0">
+      <VBox layoutX="83.0" layoutY="82.0" prefHeight="250.0" prefWidth="110.0" spacing="21.0">
          <children>
             <Label prefHeight="26.0" prefWidth="131.0" text="ID">
                <font>
@@ -111,6 +101,30 @@
             <Image url="@../../icons/personalDetailsTitle.png" />
          </image>
       </ImageView>
-      <Label layoutX="206.0" layoutY="369.0" text="change the marks fields" />
+      <Label layoutX="100.0" layoutY="380.0" text="Editable fields" />
+      <VBox alignment="TOP_RIGHT" layoutX="35.0" layoutY="206.0" prefHeight="110.0" prefWidth="42.0" spacing="21.0">
+         <children>
+            <Label prefHeight="20.0" prefWidth="16.0" text="*" textFill="#01bc61">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label prefHeight="20.0" prefWidth="16.0" text="*" textFill="#01bc61">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label prefHeight="20.0" prefWidth="16.0" text="*" textFill="#01bc61">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <Label layoutX="83.0" layoutY="382.0" prefHeight="20.0" prefWidth="16.0" text="*" textFill="#01bc61">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

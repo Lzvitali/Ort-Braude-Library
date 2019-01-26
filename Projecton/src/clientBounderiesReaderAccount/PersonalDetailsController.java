@@ -1,6 +1,7 @@
 package clientBounderiesReaderAccount;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
 
 import Common.IGUIController;
 import Common.ObjectMessage;
@@ -31,16 +32,17 @@ public class PersonalDetailsController implements IGUIController
     private TextField LastnameTextField;
 
     @FXML
-    private TextField PhoneTextField;
+    private JFXTextField PhoneTextField;
 
     @FXML
-    private TextField AdressTextField;
+    private JFXTextField EmailTextField;
+
+    @FXML
+    private JFXTextField AdressTextField;
 
     @FXML
     private TextField EducationYearTextField;
 
-    @FXML
-    private TextField EmailTextField;
 
     @FXML
     private JFXButton cancelBtn;
