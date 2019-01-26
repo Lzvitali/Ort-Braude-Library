@@ -65,21 +65,21 @@ public class History  implements IEntity, Serializable
 	}
 
 
-	public History(Integer no, String action, String actionDate, String nameOfBook)
+	public History(Integer no, String action, java.sql.Date actionDate, String nameOfBook)
 	{
 		this.no=no;
 		this.action = action;
-		this.actionDateForTable = actionDate;
+		this.actionDate = actionDate;
 		this.nameOfBook=nameOfBook;
 	}
 
 
 
-	public History(Integer no, String action, String actionDate)
+	public History(Integer no, String action, Date actionDate)
 	{
 		this.no=no;
 		this.action = action;
-		this.actionDateForTable = actionDate;
+		this.actionDate = actionDate;
 	}
 
 
@@ -164,6 +164,16 @@ public class History  implements IEntity, Serializable
 	public void setNameOfBook(String nameOfBook)
 	{
 		this.nameOfBook = nameOfBook;
+	}
+
+
+	public Integer getNo() {
+		return no;
+	}
+
+
+	public void setNo(Integer no) {
+		this.no = no;
 	}
 
 }

@@ -42,67 +42,68 @@ public abstract class AHistoryDBController
 	}
 
 	//function get history of specific reader account and sent it to client 
-	private static ObjectMessage getReaderAccountHistory(ObjectMessage msg, Connection connToSQL) 
-	{
-		ReaderAccount askedReader=(ReaderAccount)msg.getObjectList().get(0);
-		askedReader.getId();
-		Boolean resultExist=false;
-		Integer no=0;
-		ResultSet rs,rs2;
-		ArrayList <IEntity> result=new ArrayList<IEntity>(); 
-		try 
+		private static ObjectMessage getReaderAccountHistory(ObjectMessage msg, Connection connToSQL) 
 		{
-			//statement for if user exist. take all his History
-			PreparedStatement reader = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM history WHERE readerAccountID = ? ");
-			reader.setString(1,askedReader.getId());
-			rs = reader.executeQuery();
-			History history;
-			//check if the id have History
-			while(rs.next())
+			ReaderAccount askedReader=(ReaderAccount)msg.getObjectList().get(0);
+			askedReader.getId();
+			Boolean resultExist=false;
+			Integer no=1;
+			ResultSet rs,rs2;
+			ArrayList <IEntity> result=new ArrayList<IEntity>(); 
+			try 
 			{
-				resultExist = true;
-				if(rs.getString(5).equals("Changed status"))
+				//statement for if user exist. take all his History
+				PreparedStatement reader = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM history WHERE readerAccountID = ? ");
+				reader.setString(1,askedReader.getId());
+				rs = reader.executeQuery();
+				History history;
+				//check if the id have History
+				while(rs.next())
 				{
-					history= new History(no++,rs.getString(6),rs.getString(5),rs.getString(7));
-					result.add(history);
+					resultExist = true;
+					if(rs.getString(5).equals("Changed status"))
+					{
+						history= new History(no++,rs.getString(5),(java.sql.Date)rs.getDate(6),rs.getString(7));
+						result.add(history);
+					}
+					else if(rs.getString(5).equals("Registration to OBL"))
+					{
+						history= new History(no++,rs.getString(5),(java.sql.Date)rs.getDate(6));
+						result.add(history);
+					}
+					else//for actions with book
+					{
+						//get Book name for set it in window of history
+						PreparedStatement forBookName = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+						forBookName.setInt(1, rs.getInt(3));
+						rs2=forBookName.executeQuery();
+						rs2.next();
+						history= new History(no++,rs.getString(5),(java.sql.Date)rs.getDate(6),rs2.getString(2));
+						result.add(history);
+					}
 				}
-				else if(rs.getString(5).equals("Registration to OBL"))
+				
+				if(resultExist)
 				{
-					history= new History(no++,rs.getString(6),rs.getString(5));
-					result.add(history);
+					return new ObjectMessage(result,"SetHistory"," ");
 				}
-				else//for actions with book
+				else
 				{
-					//get Book name for set it in window of history
-					PreparedStatement forBookName = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
-					forBookName.setInt(1, rs.getInt(3));
-					rs2=forBookName.executeQuery();
-					rs2.next();
-					history= new History(no++,rs.getString(6),rs.getString(5),rs2.getString(2));
-					result.add(history);
+					return new ObjectMessage(result,"NoHistory"," ");
 				}
-			}
-			
-			if(resultExist)
-			{
-				return new ObjectMessage(result,"SetHistory"," ");
-			}
-			else
-			{
-				return new ObjectMessage(result,"NoHistory"," ");
-			}
 
+				
+			} 
+			catch (SQLException e) 
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 			
-		} 
-		catch (SQLException e) 
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		
-		
-		return new ObjectMessage(result,"NoHistory"," ");
-	}
+			
+			return new ObjectMessage(result,"NoHistory"," ");
+		}
+
 
 	/**
 	 * This function receives book number and returns it's info that need for Report3

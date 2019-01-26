@@ -1,5 +1,6 @@
 package Server;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -508,6 +509,7 @@ public abstract class ACopyDBController
 
 			else
 			{
+				
 				//the requested copy is exist
 				//checks if the requested copy is not borrowed
 				String borrowerId=rs2.getString(3);
@@ -537,6 +539,16 @@ public abstract class ACopyDBController
 						}
 					}
 					
+					//For deleting the file
+					//get name ob book for delete pdf
+					PreparedStatement forBookName = (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+					ResultSet rsBookName = null;
+					forBookName.setInt(1, bookOfCopyID);
+					rsBookName=forBookName.executeQuery();
+					rsBookName.next();
+					String bookName=rsBookName.getString(2)+" "+rsBookName.getString(3)+" "+rsBookName.getString(4)+" "+rsBookName.getString(7);
+					
+					
 					//if there is no reservation to this book or if there is a reservation but there is more than one copy
 					//get number of copies of this bookID
 					getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
@@ -557,6 +569,10 @@ public abstract class ACopyDBController
 					{
 						try 
 						{
+							//delete pdf file of book
+							File myFile = new File("pdfFiles\\"+bookName+".pdf");
+							myFile.delete();
+							
 							ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
 							ps.setInt(1,bookOfCopyID);
 							ps.executeUpdate();

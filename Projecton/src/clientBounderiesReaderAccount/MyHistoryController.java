@@ -94,9 +94,9 @@ public class MyHistoryController implements IGUIController
 		{
 			//set columns 
 			ActionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
-			Details.setCellValueFactory(new PropertyValueFactory<>("note"));
-			ActionDateColumn.setCellValueFactory(new PropertyValueFactory<>("actionDateForTable"));
-			//nomberOfRow.setCellValueFactory(cellData -> new SimpleIntegerProperty(((History)cellData.getValue()).getNameOfBook()).asObject());
+			Details.setCellValueFactory(new PropertyValueFactory<>("nameOfBook"));
+			ActionDateColumn.setCellValueFactory(new PropertyValueFactory<>("actionDate"));
+			nomberOfRow.setCellValueFactory(cellData -> new SimpleIntegerProperty(((History)cellData.getValue()).getNo()).asObject());
 			
 			
 			ArrayList <IEntity> result = msg.getObjectList(); //get the array list received from the server
