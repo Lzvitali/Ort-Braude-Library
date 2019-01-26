@@ -109,8 +109,8 @@ public class ReportsController implements IGUIController
 
 		resultsForReport3.setVisible(false);
 		
-		//ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
-		//client.handleMessageFromClient(sendToServer); 
+		ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
+		client.handleMessageFromClient(sendToServer); 
 
 	}
 
@@ -150,8 +150,8 @@ public class ReportsController implements IGUIController
 
 	//TODO: Inbar, complete the comment for the JavaDocs
 	/**
-	 * 
-	 * @param msg
+	 * This function sets the results of Report2 to the GUI
+	 * @param msg- the received object from the server
 	 */
 	public void setReport2Result(ObjectMessage msg)
 	{
