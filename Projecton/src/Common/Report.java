@@ -1,6 +1,7 @@
 package Common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Report implements IEntity , Serializable
 {
@@ -11,6 +12,8 @@ public class Report implements IEntity , Serializable
 	private String activeReaderAccounts; //for Report2
 	private String frozenReaderAccounts; //for Report2
 	private String lockedReaderAccounts; //for Report2
+	
+	ArrayList<Long> detailsArray;
 
 	public Report(float average,float median)
 	{
@@ -79,5 +82,13 @@ public class Report implements IEntity , Serializable
 	public void setTotal(int total) {
 		this.total = total;
 	}
+	public ArrayList<Long> getDetailsArray() {
+		return detailsArray;
+	}
+	public void setDetailsArray(ArrayList<Long> detailsArray) {
+		this.detailsArray = detailsArray;
+	}
+	
+	
 
 }

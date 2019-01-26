@@ -14,9 +14,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -92,7 +95,7 @@ public class ReportsController implements IGUIController
 	private TextField medianForDurationLateReturns;
 
 	@FXML
-	private BarChart<?, ?> diagramForNumLateReturns;
+	private BarChart<String,Number> diagramForNumLateReturns;
 
 	@FXML
 	private JFXTextField BookIDReport3;
@@ -124,6 +127,7 @@ public class ReportsController implements IGUIController
 		else if(msg.getNote().equals("Report number 3")) //for Report3
 		{
 			setReport3Result(msg);
+			setDiagram(msg,diagramForNumLateReturns);
 		}
 		else if(msg.getNote().equals("Report number 3 - no results")) //for Report3
 		{
@@ -131,6 +135,7 @@ public class ReportsController implements IGUIController
 		}
 
 	}
+
 
 	/**
 	 * This function sets the results of Report3 to the GUI (only if the asked book was found)
@@ -191,4 +196,71 @@ public class ReportsController implements IGUIController
 		sendToServer.setExtra(bookID); 
 		client.handleMessageFromClient(sendToServer);
     }
+
+
+    private void setDiagram(ObjectMessage msg, BarChart<String,Number> diagram)
+    { 	
+    	Platform.runLater(()->
+    	{
+    		diagram.getData().clear();
+
+    		ArrayList <IEntity> result = msg.getObjectList();
+    		ArrayList<Long> detailsArray = ((Report)result.get(0)).getDetailsArray();
+
+    		//if there is no data for the diagram- finish
+    		if(0 == detailsArray.size())
+    		{
+    			return;
+    		}
+    		
+    		//get the max value
+    		Long maxValue = detailsArray.get(detailsArray.size() -1 );
+
+
+    		XYChart.Series<String,Number> series = new XYChart.Series<String,Number>();
+
+
+    		//find the range in the columns
+    		float range = (float) (maxValue/10.0) ;
+    		float addTOi = (float) 1.0;
+    		if(range <= 1.0)
+    		{
+    			range = 0;
+    		}
+    		else
+    		{
+    			addTOi = range;
+    		}
+
+    		for(float i=0; i<maxValue || i<=10 ; i+=addTOi)
+    		{
+    			//find the value for the i-column
+    			Integer cnt = 0;
+    			for(int j=0; j<detailsArray.size(); j++)
+    			{
+
+    				//check if in the range
+    				if( ((float)detailsArray.get(j) >= i) && ((float)detailsArray.get(j) <= i+range) )
+    				{
+    					cnt++; 
+    				}
+    			}
+
+    			//set the column
+    			if(0 == range)
+    			{
+    				series.getData().add(new XYChart.Data<String,Number>((String.valueOf(i)), cnt));
+    			}
+    			else
+    			{
+    				series.getData().add(new XYChart.Data<String,Number>((String.valueOf(i) + "-" + String.valueOf(i+range)), cnt));
+    			}
+
+    		}
+
+
+    		diagramForNumLateReturns.getData().add(series);
+    	});
+    }
+
 }

@@ -114,7 +114,7 @@ public abstract class AHistoryDBController
 	{
 		ObjectMessage answer = new ObjectMessage(); 
 		int bookID = Integer.parseInt(msg.getExtra());
-		
+
 		boolean bookIsExist = false; // if book with given id is exist
 		boolean thereIsResults = false;
 		int cnt = 0; //counter for total number of late returns
@@ -122,7 +122,7 @@ public abstract class AHistoryDBController
 		float average = 0;
 		float median = 0;
 		ArrayList<Long> durationOfTheLate=new ArrayList<Long>();
-		
+
 		PreparedStatement booksWithLates = null; 
 		PreparedStatement existenceOfTheBook = null;
 		PreparedStatement getReturnDate = null;
@@ -225,6 +225,7 @@ public abstract class AHistoryDBController
 			report.setAverage(average);
 			report.setMedian(median);
 			report.setTotal(cnt); 
+			report.setDetailsArray(durationOfTheLate);
 			
 			answer.addObject(report);
 			answer.setNote("Report number 3"); 
