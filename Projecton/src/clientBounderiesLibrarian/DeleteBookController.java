@@ -56,6 +56,7 @@ public class DeleteBookController implements IGUIController
     		int idOfCopy=Integer.parseInt(copyID);
     		Copy copyBook=new Copy(idOfCopy);
     		ObjectMessage msg = new ObjectMessage(copyBook,"DeleteBook","Copy");
+    		msg.setExtra("");
     		client.setClientUI(this);
     		client.handleMessageFromClient(msg);
     	}

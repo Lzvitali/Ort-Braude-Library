@@ -26,6 +26,9 @@ import Common.User;
 public abstract class ACopyDBController 
 {
 
+	private static final String NULL = null;
+
+
 	/**
 	 * This function sorts the request in the 'msg' to the relevant function and returns the answer
 	 * @param msg - the object from the client
@@ -468,24 +471,33 @@ public abstract class ACopyDBController
 
 		return answer;
 	}
+	
 
-
+	/**
+	 * This function will delete the requested copy if it possible
+	 * The function checks if the copy is not borrowed and if there is a reservation to the fitting book and the requested copy is the last in the library->can not delete the copy
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage deleteBook(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
 		PreparedStatement getBook = null;
 		PreparedStatement getNumOfCopies = null;
+		PreparedStatement checksReservations=null;
 		ObjectMessage answer;
 		ResultSet rs2 = null; 
 		ResultSet rs3 = null;
 		Copy askedCopy=(Copy)msg.getObjectList().get(0);
 		int countNumOfCopies;
+		
 
 
 		try 
 		{
-
-			//get id of the book of the copy
+			
+			//checks if the copy is exist
 			getBook = connToSQL.prepareStatement("SELECT * FROM obl.copy WHERE copyId = ? ");
 			getBook.setInt(1, askedCopy.getCopyID()); 
 			rs2 =getBook.executeQuery();
@@ -496,53 +508,81 @@ public abstract class ACopyDBController
 
 			else
 			{
-				int bookOfCopyID=rs2.getInt(2);
-
-				//get number of copies of this bookID
-				getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
-				getNumOfCopies.setInt(1, bookOfCopyID); 
-				rs3 =getNumOfCopies.executeQuery();
-				rs3.next();
-				countNumOfCopies=rs3.getInt(1);
-
-				//delete the copy
-				ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
-				ps.setInt(1,askedCopy.getCopyID());
-				ps.executeUpdate();
-				countNumOfCopies--;
-
-
-				//there is no copies from the book
-				if(countNumOfCopies==0)
+				//the requested copy is exist
+				//checks if the requested copy is not borrowed
+				String borrowerId=rs2.getString(3);
+				if(borrowerId!=NULL)
 				{
-					try 
-					{
-						ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
-						ps.setInt(1,bookOfCopyID);
-						ps.executeUpdate();
-					}
-					catch (SQLException e) 
-					{
-						e.printStackTrace();
-						answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
-					}
+					answer= new ObjectMessage("The copy is borrowed,you can not delete it","Unsucessfull");
 				}
-
-				if(!msg.getExtra().equals("") && null != msg.getExtra())
+				else
 				{
-					if(msg.getExtra().equals("after book lost"))
+					//the requested copy is not borrowed
+					//check if there is reservations to the fitting book
+					int bookOfCopyID=rs2.getInt(2);
+					checksReservations = connToSQL.prepareStatement("SELECT * FROM obl.reservations WHERE bookId = ? ");
+					checksReservations.setInt(1, bookOfCopyID);
+					rs2 =checksReservations.executeQuery();
+					if(rs2.next())
 					{
-						// `lose book` send to history
-						LocalDate now1 = LocalDate.now(); 
-						Date today = java.sql.Date.valueOf(now1);
-						History sendObject =new History(askedCopy.getBorrowerID(),"Lose book",bookOfCopyID,askedCopy.getCopyID(),(java.sql.Date) today);
-						AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
-						
+						//there is one or more reservation
+						getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
+						getNumOfCopies.setInt(1, bookOfCopyID); 
+						rs3 =getNumOfCopies.executeQuery();
+						countNumOfCopies=rs3.getInt(1);
+						if(countNumOfCopies==1)
+						{
+							answer= new ObjectMessage("There is a reservation to this book and this is the last copy,you can not delete it","Unsucessfull");
+							return answer;
+						}
 					}
+					
+					//if there is no reservation to this book or if there is a reservation but there is more than one copy
+					//get number of copies of this bookID
+					getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
+					getNumOfCopies.setInt(1, bookOfCopyID); 
+					rs3 =getNumOfCopies.executeQuery();
+					rs3.next();
+					countNumOfCopies=rs3.getInt(1);
+	
+					//delete the copy
+					ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
+					ps.setInt(1,askedCopy.getCopyID());
+					ps.executeUpdate();
+					countNumOfCopies--;
+	
+	
+					//there is no copies to the book
+					if(countNumOfCopies==0)
+					{
+						try 
+						{
+							ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
+							ps.setInt(1,bookOfCopyID);
+							ps.executeUpdate();
+						}
+						catch (SQLException e) 
+						{
+							e.printStackTrace();
+							answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
+						}
+					}
+	
+					if(!msg.getExtra().equals("") && null != msg.getExtra())
+					{
+						if(msg.getExtra().equals("after book lost"))
+						{
+							// `lose book` send to history
+							LocalDate now1 = LocalDate.now(); 
+							Date today = java.sql.Date.valueOf(now1);
+							History sendObject =new History(askedCopy.getBorrowerID(),"Lose book",bookOfCopyID,askedCopy.getCopyID(),(java.sql.Date) today);
+							AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+							
+						}
+					}
+					answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
 				}
-				answer=new ObjectMessage("This Book was successfully deleted ","Successfull");
 			}
-
 		} 
 		catch (SQLException e) 
 		{
@@ -552,6 +592,8 @@ public abstract class ACopyDBController
 
 		return answer;
 	}
+	
+	
 
 	/**
 	 * This function check if specifically copy is exist and available for borrow and enter all data of borrow in `obl` DB table 
