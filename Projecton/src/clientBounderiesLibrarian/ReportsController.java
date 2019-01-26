@@ -259,7 +259,7 @@ public class ReportsController implements IGUIController
     		}
 
 
-    		diagramForNumLateReturns.getData().add(series);
+    		diagram.getData().add(series);
     	});
     }
 
