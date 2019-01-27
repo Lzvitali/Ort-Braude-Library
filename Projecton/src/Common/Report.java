@@ -2,26 +2,27 @@ package Common;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Report implements IEntity , Serializable
 {
 	private float average; //for Report2 & Report3
 	private float median; //for Report2 & Report3
 	private int total; //for Report3
-	
+	private Date chosenDateForReport1;
 	private ArrayList<Long> detailsArray; //for Report2 & Report3
-	
-	
-	
+
+
+
 	private String activeReaderAccounts; //for Report1 & Daily
 	private String frozenReaderAccounts; //for Report1 & Daily
 	private String lockedReaderAccounts; //for Report1 & Daily
 	private String totalCopies; //for Report1
 	private String numOfDidntReturnOnTime; //for Report1
-	
+
 	private ArrayList<String> comboBoxOptions; //for Report1
-	
-	
+
+
 
 	public Report(float average,float median)
 	{
@@ -33,6 +34,19 @@ public class Report implements IEntity , Serializable
 
 	}
 
+	public Report(Date chosenDateForReport1)
+	{
+		this.chosenDateForReport1 = chosenDateForReport1;
+	}
+
+	public Report(int active, int frozen, int locked, int quantityOfCopies, int numOfDidntReturnOnTime) 
+	{
+		this.activeReaderAccounts=Integer.toString(active);
+		this.frozenReaderAccounts=Integer.toString(frozen);
+		this.lockedReaderAccounts=Integer.toString(locked);
+		this. totalCopies=Integer.toString(quantityOfCopies);
+		this.numOfDidntReturnOnTime=Integer.toString(numOfDidntReturnOnTime);
+	}
 	public String getActiveReaderAccounts() 
 	{
 		return activeReaderAccounts;
@@ -84,37 +98,55 @@ public class Report implements IEntity , Serializable
 		this.median = median;
 	}
 
-	public int getTotal() {
+	public int getTotal()
+	{
 		return total;
 	}
-	public void setTotal(int total) {
+	public void setTotal(int total)
+	{
 		this.total = total;
 	}
-	public ArrayList<Long> getDetailsArray() {
+	public ArrayList<Long> getDetailsArray()
+	{
 		return detailsArray;
 	}
-	public void setDetailsArray(ArrayList<Long> detailsArray) {
+	public void setDetailsArray(ArrayList<Long> detailsArray) 
+	{
 		this.detailsArray = detailsArray;
 	}
-	public String getTotalCopies() {
+	public String getTotalCopies()
+	{
 		return totalCopies;
 	}
-	public void setTotalCopies(String totalCopies) {
+	public void setTotalCopies(String totalCopies) 
+	{
 		this.totalCopies = totalCopies;
 	}
-	public String getNumOfDidntReturnOnTime() {
+	public String getNumOfDidntReturnOnTime()
+	{
 		return numOfDidntReturnOnTime;
 	}
-	public void setNumOfDidntReturnOnTime(String numOfDidntReturnOnTime) {
+	public void setNumOfDidntReturnOnTime(String numOfDidntReturnOnTime) 
+	{
 		this.numOfDidntReturnOnTime = numOfDidntReturnOnTime;
 	}
-	public ArrayList<String> getComboBoxOptions() {
+	public ArrayList<String> getComboBoxOptions()
+	{
 		return comboBoxOptions;
 	}
-	public void setComboBoxOptions(ArrayList<String> comboBoxOptions) {
+	public void setComboBoxOptions(ArrayList<String> comboBoxOptions) 
+	{
 		this.comboBoxOptions = comboBoxOptions;
 	}
-	
-	
+	public Date getChosenDateForReport1() 
+	{
+		return chosenDateForReport1;
+	}
+	public void setChosenDateForReport1(Date chosenDateForReport1) 
+	{
+		this.chosenDateForReport1 = chosenDateForReport1;
+	}
+
+
 
 }

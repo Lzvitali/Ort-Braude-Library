@@ -40,8 +40,130 @@ public abstract class AHistoryDBController
 		{
 			return getReaderAccountHistory(msg, connToSQL);
 		}
+		else if(((msg.getMessage()).equals("Ask for new report1")))
+		{
+			return getNewReportOne(msg, connToSQL);
+			
+		}
 		else
 			return null;	
+
+	}
+
+	/**
+	 * Function get all data from server  (history table) that client asked for report one
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
+	private static ObjectMessage getNewReportOne(ObjectMessage msg, Connection connToSQL)
+	{
+		Report newReport=(Report)msg.getObjectList().get(0);
+		Date checkingDate=(Date)newReport.getChosenDateForReport1();
+		Date tempDate=checkingDate;
+		Date firstDayForReportLaters=(Date)newReport.getChosenDateForReport1();
+		int month=firstDayForReportLaters.getMonth();
+		if(month==1)
+		{
+			month=12;
+			firstDayForReportLaters.setMonth(month);
+		}
+		else 
+		{
+			month-=1;
+			firstDayForReportLaters.setMonth(month);
+		}
+		
+		ResultSet rs;
+		int active=0, frozen=0, locked=0, quantityOfCopies=0, numOfDidntReturnOnTime=0;
+		
+		try 
+		{
+			//statement for getting active reader account in specific month                
+			PreparedStatement report1 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
+			report1.setDate(2,checkingDate);
+			report1.setString(1,"Active readerAccounts");
+			rs = report1.executeQuery();
+			if(rs.next())
+			{
+				active=rs.getInt(1);
+			}
+			else 
+			{
+				active=0;
+			}
+			
+			//statement for getting frozen reader account in specific month                
+			PreparedStatement report2 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
+			report2.setDate(2,checkingDate);
+			report2.setString(1,"Freezed readerAccounts");
+			rs = report2.executeQuery();
+			if(rs.next())
+			{
+				frozen=rs.getInt(1);
+			}
+			else 
+			{
+				frozen=0;
+			}
+			
+			//statement for getting locked reader account in specific month                
+			PreparedStatement report3 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
+			report3.setDate(2,checkingDate);
+			report3.setString(1,"Locked readerAccounts");
+			rs = report3.executeQuery();
+			if(rs.next())
+			{
+				locked=rs.getInt(1);
+			}
+			else 
+			{
+				locked=0;
+			}
+			//statement for getting quantities of total book copies  in specific month     
+			PreparedStatement report4 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
+			report4.setDate(2,checkingDate);
+			report4.setString(1,"Quantity of copies");
+			rs = report4.executeQuery();
+			if(rs.next())
+			{
+				quantityOfCopies=rs.getInt(1);
+			}
+			else 
+			{
+				quantityOfCopies=0;
+			}
+
+
+			//statement for getting quantities of total book copies  in specific month     
+			PreparedStatement report5 = (PreparedStatement) connToSQL.prepareStatement("select count(distinct readerAccountID) AS count from obl.history where `action`=? and date >= ? and date <= ?");	
+			report5.setString(1,"Late in return");
+			report5.setDate(2,firstDayForReportLaters);
+			report5.setDate(3,tempDate);
+			rs = report5.executeQuery();
+			if(rs.next())
+			{
+				numOfDidntReturnOnTime=rs.getInt(1);
+			}
+			else 
+			{
+				numOfDidntReturnOnTime=0;
+			}
+
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		} 
+		if(active!=0 || frozen!=0 || locked!=0 || quantityOfCopies!=0||numOfDidntReturnOnTime!=0)
+		{
+			Report resReport=new Report(active,frozen,locked,quantityOfCopies,numOfDidntReturnOnTime);
+			return new ObjectMessage(resReport,"","Results  active,frozen,locked for report1");
+		}
+		else 
+		{
+			return new ObjectMessage("","no result for report1");
+		}
 
 	}
 
@@ -52,7 +174,13 @@ public abstract class AHistoryDBController
 		return null;
 	}
 
-	//function get history of specific reader account and sent it to client 
+	
+	/**
+	 * function get history of specific reader account from DB and sent it to client 
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage getReaderAccountHistory(ObjectMessage msg, Connection connToSQL) 
 	{
 		ReaderAccount askedReader=(ReaderAccount)msg.getObjectList().get(0);

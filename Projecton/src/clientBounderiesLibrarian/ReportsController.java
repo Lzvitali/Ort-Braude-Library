@@ -12,10 +12,14 @@ import clientConrollers.OBLClient;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -33,6 +37,8 @@ public class ReportsController implements IGUIController
 
 	OBLClient client;
 
+    @FXML
+    private VBox report1;
 	@FXML
 	private TabPane TabPaneSelect;
 
@@ -52,10 +58,10 @@ public class ReportsController implements IGUIController
 	private TextField numOfdelayedReaderAccounts;
 
 	@FXML
-	private ComboBox<?> monthComboBox;
+	private ComboBox<Integer> monthComboBox;
 
 	@FXML
-	private ComboBox<?> yearComboBox;
+	private ComboBox<Integer> yearComboBox;
 
 	@FXML
 	private ComboBox<?> chooseFromPreviousComboBox;
@@ -111,6 +117,8 @@ public class ReportsController implements IGUIController
     @FXML
     private Button showPreviousReportBtn;
 
+	ObservableList<Integer> list1;
+	ObservableList<Integer> list2;
 
 	@FXML
 	void initialize() 
@@ -119,8 +127,8 @@ public class ReportsController implements IGUIController
 		client.setClientUI(this);
 
 		resultsForReport3.setVisible(false);
-		
-		//TODO For Nata: put heare the call for the function of the comboBox
+		report1.setVisible(false);
+		combo();
 		
 		ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
 		client.handleMessageFromClient(sendToServer); 
@@ -165,9 +173,27 @@ public class ReportsController implements IGUIController
 		{
 			resultsForReport3.setVisible(false);
 		}
+		else if(msg.getNote().equals("Results  active,frozen,locked for report1"))
+		{
+
+			Report newRes=(Report) msg.getObjectList().get(0);
+			activeReaderAccounts.setText(newRes.getActiveReaderAccounts());
+			freezedReaderAccounts.setText(newRes.getFrozenReaderAccounts());
+			lockedReaderAccounts.setText(newRes.getLockedReaderAccounts());
+			totalNumOfCopies.setText(newRes.getTotalCopies());
+			numOfdelayedReaderAccounts.setText(newRes.getNumOfDidntReturnOnTime());
+			report1.setVisible(true);
+
+		}
+
+		else if((msg.getNote().equals("no result for report1")))
+		{
+			report1.setVisible(false);
+
+		}
 
 	}
-	
+
 	private void setPreviousReportsComboBox() 
 	{
 		
@@ -239,6 +265,25 @@ public class ReportsController implements IGUIController
     @FXML //choose by Year & Month
     void showNewReport(ActionEvent event) 
     {
+    	int mounth;
+    	if (monthComboBox.getValue()==12)
+    	{
+    		mounth=1;
+    		
+    	}
+    	else
+    	{
+    		mounth=monthComboBox.getValue()+1;
+    	}
+    	
+    	int year=yearComboBox.getValue();
+    	LocalDate now = LocalDate.of(year, mounth,1 );
+    	Date dateForReport=java.sql.Date.valueOf(now);//make date from combobox
+
+    	Report newReport=new Report(dateForReport);
+    	ObjectMessage sendToServer=new ObjectMessage(newReport,"Ask for new report1","History");
+    	client.handleMessageFromClient(sendToServer);
+
 
     }
     
@@ -325,4 +370,27 @@ public class ReportsController implements IGUIController
     	});
     }
 
+    public void combo() 
+    {
+    	ArrayList <Integer> s=new ArrayList<Integer>();
+    	LocalDate now = LocalDate.now();
+		int year=now.getYear();
+ 	
+    	for(int i=2016; i<=year; i++)
+    	{
+    		s.add(i);
+    	}
+
+    	list1 = FXCollections.observableArrayList(s);
+    	yearComboBox.setItems( list1);
+
+    	ArrayList <Integer> b=new ArrayList<Integer>();
+
+    	for(int i= 1; i<= 12; i++)
+    	{
+    		b.add(i);
+    	}
+    	list2 = FXCollections.observableArrayList(b);
+    	monthComboBox.setItems( list2);
+    }
 }
