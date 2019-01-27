@@ -183,7 +183,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 				selectedRadioButton=bookNameRB;
 			}
 			
-			
+		
 			String selectedString = selectedRadioButton.getText();
 			Book askedBook=new Book();
 			if(selectedString.equals("Book name"))

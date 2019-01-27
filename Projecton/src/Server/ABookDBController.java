@@ -258,7 +258,7 @@ public abstract class  ABookDBController
 								addCopy.setInt(1, Integer.parseInt(rs1.getString(1)));
 								addCopy.executeUpdate();
 							}
-						//check with Natali	///ADailyDBController.countQuantityOfCopyInCaseAddCopyOrBookToDB(connToSQL);
+							ADailyDBController.countQuantityOfCopyInCaseAddCopyOrBookToDB(connToSQL,tempBook.getNumberOfCopies());
 							return new ObjectMessage("This Book is already exist in the system,so successfully added it like copy.","Successfull");
 						}
 						else //if there is different topics
@@ -327,7 +327,7 @@ public abstract class  ABookDBController
 					}
 
 				}
-				//check with Natali	///ADailyDBController.countQuantityOfCopyInCaseAddCopyOrBookToDB(connToSQL);
+				ADailyDBController.countQuantityOfCopyInCaseAddCopyOrBookToDB(connToSQL,tempBook.getNumberOfCopies());
 				return new ObjectMessage("This Book was successfully added like book and like copy.","Successfull");
 
 			}	

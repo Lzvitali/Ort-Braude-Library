@@ -176,7 +176,7 @@ public abstract class ADailyDBController
    	 	}
 	}
 	
-	public static void  countQuantityOfCopyInCaseAddCopyOrBookToDB(Connection connToSQL)
+	public static void  countQuantityOfCopyInCaseAddCopyOrBookToDB(Connection connToSQL, Integer numOfAddedCopies)
 	{
 		PreparedStatement ps=null;
 		PreparedStatement ps2=null;
@@ -191,12 +191,18 @@ public abstract class ADailyDBController
 		
 		try
 		{
-			ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM copy");		
+			ps=connToSQL.prepareStatement("SELECT * FROM history WHERE Date=? AND action=?");	
+			ps.setDate(1, (java.sql.Date) result);
+			ps.setString(2, "quantity of copies");
 			query=ps.executeQuery();
+			query.next();
+			String note= query.getString(7);
+			Integer currentCopies=numOfAddedCopies+Integer.parseInt(note);
 			ps2=connToSQL.prepareStatement("UPDATE `history` SET `note`=? WHERE Date=? AND action=?");
-			ps2.setString(1,query.getString(0));
+			ps2.setString(1,Integer.toString(currentCopies));
 			ps2.setDate(2, (java.sql.Date) result);
-			ps2.setString(3, "quantity of copies");			
+			ps2.setString(3, "quantity of copies");	
+			ps2.executeUpdate();
 		}
 		catch (SQLException e) 
 		{
