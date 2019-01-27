@@ -60,9 +60,21 @@ public class AReaderAccountDBController
 	{
 		PreparedStatement ps;
 		ReaderAccount readerAccount=(ReaderAccount)msg.getObjectList().get(0);
+		ResultSet rs;
 		ObjectMessage answer=new ObjectMessage("StatusChanged","The Status of "+readerAccount.getId()+" have changed to "+readerAccount.getStatus());
 		try 
 		{
+			ps = connToSQL.prepareStatement("Select status,numOfDelays FROM readeraccount WHERE ID=?");
+			ps.setString(1,readerAccount.getId());
+			rs=ps.executeQuery();
+			rs.next();
+			if(rs.getString(1).equals("Locked") && rs.getInt(2)>3 && readerAccount.getStatus().equals("Active"))
+			{
+				ps = connToSQL.prepareStatement("UPDATE `readeraccount` SET `numOfDelays`=? WHERE ID=?");
+				ps.setInt(1,0);
+				ps.setString(2,readerAccount.getId());
+				ps.executeUpdate();
+			}
 			ps = connToSQL.prepareStatement("UPDATE `readeraccount` SET `status`=? WHERE ID=?");
 			ps.setString(1,readerAccount.getStatus());
 			ps.setString(2,readerAccount.getId());
