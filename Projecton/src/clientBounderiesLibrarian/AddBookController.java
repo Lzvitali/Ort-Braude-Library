@@ -272,7 +272,7 @@ public class AddBookController implements IGUIController
 
 		if(EditionTextField.getText().equals("") || null == EditionTextField.getText())
 		{
-			finalResult+="Insert number of edition";
+			finalResult+="Insert number of edition\n";
 
 		}
 		else
@@ -282,7 +282,7 @@ public class AddBookController implements IGUIController
 
 				if(EditionTextField.getText().charAt(i)<'0' ||EditionTextField.getText().charAt(i)>'9')        
 				{
-					finalResult+="Edition must contain only numbers";
+					finalResult+="Edition must contain only numbers\n";
 					break;
 				}
 
@@ -291,12 +291,12 @@ public class AddBookController implements IGUIController
 
 		if(numberOfCopies.getText().equals("") || null == numberOfCopies.getText())
 		{
-			finalResult+="Insert number of copies";
+			finalResult+="Insert number of copies\n";
 
 		}
 		else if(numberOfCopies.getText().equals("0"))
 		{
-			finalResult+="Number of copies must be bigger then 0.";
+			finalResult+="Number of copies must be bigger then 0.\n";
 		}
 		else
 		{
@@ -305,7 +305,7 @@ public class AddBookController implements IGUIController
 
 				if(numberOfCopies.getText().charAt(i)<'0' ||numberOfCopies.getText().charAt(i)>'9')        
 				{
-					finalResult+="Edition must contain only numbers";
+					finalResult+="Edition must contain only numbers\n";
 					break;
 				}
 
@@ -363,7 +363,26 @@ public class AddBookController implements IGUIController
 			}
 			else
 			{
-				year=Integer.parseInt(PublishedYearTextField.getText());
+				boolean onlyDigits = true;
+				
+				for(int i=0; i<PublishedYearTextField.getText().length(); i++) 
+				{
+					if(PublishedYearTextField.getText().charAt(i)<'0' ||PublishedYearTextField.getText().charAt(i)>'9')
+					{
+						onlyDigits = false;
+						break;
+					}
+				}
+				
+				if(onlyDigits)
+				{
+					year=Integer.parseInt(PublishedYearTextField.getText());
+				}
+				else
+				{
+					year= 0;
+				}
+				
 			}
 
 			if(EditionTextField.getText().equals("") || null == EditionTextField.getText())
@@ -372,7 +391,26 @@ public class AddBookController implements IGUIController
 			}
 			else
 			{
-				edition=Integer.parseInt(EditionTextField.getText());
+				boolean onlyDigits2 = true;
+				
+				for(int i=0; i<EditionTextField.getText().length(); i++) 
+				{
+					if(EditionTextField.getText().charAt(i)<'0' ||EditionTextField.getText().charAt(i)>'9')
+					{
+						onlyDigits2 = false;
+						break;
+					}
+				}
+				
+				if(onlyDigits2)
+				{
+					edition=Integer.parseInt(EditionTextField.getText());
+				}
+				else
+				{
+					edition= 0;
+				}
+				
 			}
 			
 			bookForSend = new Book(bookName, authorName, year,edition );
