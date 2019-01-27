@@ -94,7 +94,7 @@ public class OblServer extends AbstractServer
 			catch (IOException e)
 			{
 				e.printStackTrace();
-			}
+			} 
 		}
 
 		else if( (objectMessage.getNote()).equals("Copy") ) 

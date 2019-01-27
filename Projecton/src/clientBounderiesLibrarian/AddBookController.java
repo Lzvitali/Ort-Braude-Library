@@ -394,7 +394,7 @@ public class AddBookController implements IGUIController
 			{
 				sendFile();
 			}
-
+ 
 			AClientCommonUtilities.infoAlert(msg.getMessage(), msg.getNote());
 			AClientCommonUtilities.backToStartPanel();
 

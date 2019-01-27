@@ -49,8 +49,8 @@ public abstract class ADailyDBController
     	executor=new ScheduledThreadPoolExecutor(10);
         executor.scheduleAtFixedRate(() -> checkDelayDaily(connToSQL), 0, 12, TimeUnit.HOURS);
     	executor.scheduleAtFixedRate(() -> checkIfDidntImplementReservation(connToSQL), 0, 4, TimeUnit.HOURS);
-        executor.scheduleAtFixedRate(() -> resetUserStatusHistory(connToSQL),30, 86399, TimeUnit.SECONDS);
-    	
+        executor.scheduleAtFixedRate(() -> resetUserStatusHistory(connToSQL),20, 86399, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(() -> countQuantityOfCopyEveryMounth(connToSQL),15, 86399, TimeUnit.SECONDS);
     }
     
     
@@ -151,23 +151,23 @@ public abstract class ADailyDBController
 		PreparedStatement ps=null;
 		PreparedStatement ps2=null;
 		ResultSet query=null;
-		ResultSet query2=null;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat day = new SimpleDateFormat("dd");
-		Date date = Date.from(ZonedDateTime.now().minusMonths(1).toInstant());
+		SimpleDateFormat sdf2 = new SimpleDateFormat("dd");
+		Date date = new Date();
 		String today=sdf.format(date);
-		String todayDay=day.format(date);
-   	 	if(today.equals("01"))
+		String todayDay=sdf2.format(date);
+   	 	if(todayDay.equals("01"))
    	 	{
 			try
 			{
 				ps=connToSQL.prepareStatement("SELECT COUNT(*) FROM copy");		
 				query=ps.executeQuery();
+				query.next();
 				ps2=connToSQL.prepareStatement("INSERT INTO `history`(`action`, `date`,`Note`) VALUES (?,?,?)");
 				ps2.setString(1, "quantity of copies");
 				ps2.setString(2,today);
-				ps2.setString(3, query.getString(0));
-				
+				ps2.setString(3, query.getString(1));
+				ps2.executeUpdate();
 			}
 			catch (SQLException e) 
 			{
@@ -181,18 +181,19 @@ public abstract class ADailyDBController
 		PreparedStatement ps=null;
 		PreparedStatement ps2=null;
 		ResultSet query=null;
-		ResultSet query2=null;
 		LocalDate now = LocalDate.now();
 		int mounth=now.getMonthValue();
 		int year=now.getYear();
 		int day=1;
 		LocalDate today=now.of(year, mounth, day);
-		Date result=java.sql.Date.valueOf(today);
-		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = java.sql.Date.valueOf(today);
+		String todayString;
+		todayString=sdf.format(date);
 		try
 		{
 			ps=connToSQL.prepareStatement("SELECT * FROM history WHERE Date=? AND action=?");	
-			ps.setDate(1, (java.sql.Date) result);
+			ps.setString(1, todayString);
 			ps.setString(2, "quantity of copies");
 			query=ps.executeQuery();
 			query.next();
@@ -200,7 +201,7 @@ public abstract class ADailyDBController
 			Integer currentCopies=numOfAddedCopies+Integer.parseInt(note);
 			ps2=connToSQL.prepareStatement("UPDATE `history` SET `note`=? WHERE Date=? AND action=?");
 			ps2.setString(1,Integer.toString(currentCopies));
-			ps2.setDate(2, (java.sql.Date) result);
+			ps2.setString(2, todayString);
 			ps2.setString(3, "quantity of copies");	
 			ps2.executeUpdate();
 		}
@@ -222,7 +223,7 @@ public abstract class ADailyDBController
 			SimpleDateFormat format2 = new SimpleDateFormat("MM");
 			Date now =  Calendar.getInstance().getTime();
 	   	 	String today=format.format(now);
-	   	 	if(today.equals("26"))
+	   	 	if(today.equals("01"))
 	   	 	{
 	   	 		PreparedStatement ps,ps2;
 	   	 		try 
@@ -254,7 +255,7 @@ public abstract class ADailyDBController
 		ResultSet rs;
 		Report members=new Report();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = Date.from(ZonedDateTime.now().minusMonths(1).toInstant());
+		Date date = new Date();
 		String today=sdf.format(date);
 		try 
 		{
@@ -275,7 +276,7 @@ public abstract class ADailyDBController
 			ps.setString(1, today);
 			ps.setString(2, members.getActiveReaderAccounts());
 			ps.executeUpdate();
-			ps=connToSQL.prepareStatement("INSERT INTO `History` (`action`,`date`,`Note`) VALUES ('Frozen readerAccounts',?,?); "); 
+			ps=connToSQL.prepareStatement("INSERT INTO `History` (`action`,`date`,`Note`) VALUES ('Freezed readerAccounts',?,?); "); 
 			ps.setString(1, today);
 			ps.setString(2, members.getFrozenReaderAccounts());
 			ps.executeUpdate();
