@@ -70,7 +70,6 @@ public abstract class ADailyDBController
 	}
 
 	
-	
 	private static void sendMail(ObjectMessage msg, Connection connToSQL) 
 	{
 			Mail mail=((Mail)((ObjectMessage)msg).getObjectList().get(0));
@@ -85,7 +84,7 @@ public abstract class ADailyDBController
 	        props.put("mail.smtp.password", password);
 	        props.put("mail.smtp.port", "587");
 	        props.put("mail.smtp.auth", "true");
-
+	        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 	        Session session = Session.getInstance(props);
 	        MimeMessage message;
 	        try 
