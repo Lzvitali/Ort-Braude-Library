@@ -9,7 +9,7 @@ public class Report implements IEntity , Serializable
 	private float median; //for Report2 & Report3
 	private int total; //for Report3
 	
-	ArrayList<Long> detailsArray; //for Report2 & Report3
+	private ArrayList<Long> detailsArray; //for Report2 & Report3
 	
 	
 	
@@ -19,7 +19,7 @@ public class Report implements IEntity , Serializable
 	private String totalCopies; //for Report1
 	private String numOfDidntReturnOnTime; //for Report1
 	
-	
+	private ArrayList<String> comboBoxOptions; //for Report1
 	
 	
 
@@ -107,6 +107,12 @@ public class Report implements IEntity , Serializable
 	}
 	public void setNumOfDidntReturnOnTime(String numOfDidntReturnOnTime) {
 		this.numOfDidntReturnOnTime = numOfDidntReturnOnTime;
+	}
+	public ArrayList<String> getComboBoxOptions() {
+		return comboBoxOptions;
+	}
+	public void setComboBoxOptions(ArrayList<String> comboBoxOptions) {
+		this.comboBoxOptions = comboBoxOptions;
 	}
 	
 	

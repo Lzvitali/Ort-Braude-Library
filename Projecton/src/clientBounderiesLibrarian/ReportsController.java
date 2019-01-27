@@ -120,10 +120,13 @@ public class ReportsController implements IGUIController
 
 		resultsForReport3.setVisible(false);
 		
+		//TODO For Nata: put heare the call for the function of the comboBox
+		
 		ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
 		client.handleMessageFromClient(sendToServer); 
 
 	}
+
 
 	@Override
 	public void display(ObjectMessage msg) 
@@ -145,6 +148,10 @@ public class ReportsController implements IGUIController
     		ArrayList<Long> detailsArray2 = ((Report)result.get(2)).getDetailsArray();
 			setDiagram(detailsArray2,diagramForAll);
 			
+			//set the comboBox for the Report1
+			//ObjectMessage sendToServer=new ObjectMessage("get previous reports options","History");
+			//client.handleMessageFromClient(sendToServer); 
+			
 		}
 		else if(msg.getNote().equals("Report number 3")) //for Report3
 		{
@@ -159,6 +166,12 @@ public class ReportsController implements IGUIController
 			resultsForReport3.setVisible(false);
 		}
 
+	}
+	
+	private void setPreviousReportsComboBox() 
+	{
+		
+		
 	}
 
 
@@ -276,7 +289,7 @@ public class ReportsController implements IGUIController
     			addTOi = range;
     		}
 
-    		for(float i=0; i<maxValue || i<=10 ; i+=addTOi)
+    		for(float i=1; i<maxValue || i<=10 ; i+=addTOi)
     		{
     			//find the value for the i-column
     			Integer cnt = 0;
