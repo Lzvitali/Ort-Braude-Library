@@ -37,12 +37,18 @@ import Common.Reservation;
 
 public abstract class ADailyDBController 
 {
+	
+    static String testDay="27";
+	
+	
+	
 	final static String userName = "OBLManager2019@gmail.com";
 	final static String password = "Aa112233";
 	
     static ScheduledThreadPoolExecutor executor;
     static ExecutorService pool = Executors.newFixedThreadPool(15); 
     private static Object lock1 = new Object();
+    
     
     public static void startThreads(Connection connToSQL)
     {
@@ -156,7 +162,7 @@ public abstract class ADailyDBController
 		Date date = new Date();
 		String today=sdf.format(date);
 		String todayDay=sdf2.format(date);
-   	 	if(todayDay.equals("01"))
+   	 	if(todayDay.equals(testDay))
    	 	{
 			try
 			{
@@ -184,7 +190,7 @@ public abstract class ADailyDBController
 		LocalDate now = LocalDate.now();
 		int mounth=now.getMonthValue();
 		int year=now.getYear();
-		int day=1;
+		int day=Integer.parseInt(testDay);
 		LocalDate today=now.of(year, mounth, day);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = java.sql.Date.valueOf(today);
@@ -223,7 +229,7 @@ public abstract class ADailyDBController
 			SimpleDateFormat format2 = new SimpleDateFormat("MM");
 			Date now =  Calendar.getInstance().getTime();
 	   	 	String today=format.format(now);
-	   	 	if(today.equals("01"))
+	   	 	if(today.equals(testDay))
 	   	 	{
 	   	 		PreparedStatement ps,ps2;
 	   	 		try 
