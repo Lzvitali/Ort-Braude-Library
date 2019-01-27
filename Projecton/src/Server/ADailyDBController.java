@@ -255,7 +255,7 @@ public abstract class ADailyDBController
 		ResultSet rs;
 		Report members=new Report();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = new Date();
+		Date date = Date.from(ZonedDateTime.now().minusMonths(1).toInstant());
 		String today=sdf.format(date);
 		try 
 		{
