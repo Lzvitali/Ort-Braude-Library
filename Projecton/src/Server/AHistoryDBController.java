@@ -60,8 +60,7 @@ public abstract class AHistoryDBController
 	{
 		Report newReport=(Report)msg.getObjectList().get(0);
 		Date checkingDate=(Date)newReport.getChosenDateForReport1();
-		Date tempDate=checkingDate;
-		Date firstDayForReportLaters=(Date)newReport.getChosenDateForReport1();
+		Date firstDayForReportLaters=new Date(checkingDate.getYear(), checkingDate.getMonth(), 1);
 		int month=firstDayForReportLaters.getMonth();
 		if(month==1)
 		{
@@ -122,7 +121,7 @@ public abstract class AHistoryDBController
 			}
 			//statement for getting quantities of total book copies  in specific month     
 			PreparedStatement report4 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
-			report4.setDate(2,checkingDate);
+			report4.setDate(2,firstDayForReportLaters);
 			report4.setString(1,"Quantity of copies");
 			rs = report4.executeQuery();
 			if(rs.next())
@@ -139,7 +138,7 @@ public abstract class AHistoryDBController
 			PreparedStatement report5 = (PreparedStatement) connToSQL.prepareStatement("select count(distinct readerAccountID) AS count from obl.history where `action`=? and date >= ? and date <= ?");	
 			report5.setString(1,"Late in return");
 			report5.setDate(2,firstDayForReportLaters);
-			report5.setDate(3,tempDate);
+			report5.setDate(3,checkingDate);
 			rs = report5.executeQuery();
 			if(rs.next())
 			{
@@ -158,7 +157,9 @@ public abstract class AHistoryDBController
 		if(active!=0 || frozen!=0 || locked!=0 || quantityOfCopies!=0||numOfDidntReturnOnTime!=0)
 		{
 			Report resReport=new Report(active,frozen,locked,quantityOfCopies,numOfDidntReturnOnTime);
+			resReport.setChosenDateForReport1(firstDayForReportLaters);
 			return new ObjectMessage(resReport,"","Results  active,frozen,locked for report1");
+			//TODO: add date and all data to `ReportsHistory`
 		}
 		else 
 		{

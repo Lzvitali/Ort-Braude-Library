@@ -64,7 +64,7 @@ public class ReportsController implements IGUIController
 	private ComboBox<Integer> yearComboBox;
 
 	@FXML
-	private ComboBox<?> chooseFromPreviousComboBox;
+	private ComboBox<String> chooseFromPreviousComboBox;
 
 	@FXML
 	private TextField avgForRegular;
@@ -119,6 +119,7 @@ public class ReportsController implements IGUIController
 
 	ObservableList<Integer> list1;
 	ObservableList<Integer> list2;
+	ObservableList<String> list3;
 
 	@FXML
 	void initialize() 
@@ -183,7 +184,7 @@ public class ReportsController implements IGUIController
 			totalNumOfCopies.setText(newRes.getTotalCopies());
 			numOfdelayedReaderAccounts.setText(newRes.getNumOfDidntReturnOnTime());
 			report1.setVisible(true);
-
+		
 		}
 
 		else if((msg.getNote().equals("no result for report1")))
@@ -197,7 +198,10 @@ public class ReportsController implements IGUIController
 	private void setPreviousReportsComboBox() 
 	{
 		
-		
+		/*ArrayList <String> s=new ArrayList<String>();
+		s.add(newRes.getChosenDateForReport1().getMonth()+" - " +newRes.getChosenDateForReport1().getYear());
+		list3 = FXCollections.observableArrayList(s);
+		chooseFromPreviousComboBox.setItems( list3);*/
 	}
 
 
