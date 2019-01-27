@@ -209,20 +209,8 @@ public abstract class ACopyDBController
 				query2.next();
 				askedbook.setBookID(query2.getInt(2));
 				String id=query2.getString(3);
-				checkReaderAccountDelays=(PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ?");
-				checkReaderAccountDelays.setString(1,id);
-				query3=checkReaderAccountDelays.executeQuery();
-
-				query3.next();
-				numOfDelay=query3.getInt(9);
-				String status=query3.getString(8);
-				if(numOfDelay<3 && status.equals("Frozen"))
-				{
-					updateReaderAccount = connToSQL.prepareStatement("UPDATE `readeraccount` SET `status`=? WHERE ID=?");
-					updateReaderAccount.setString(1,"Active");
-					updateReaderAccount.setString(2,id);
-					updateReaderAccount.executeUpdate();
-				}
+				
+				
 				updateCopy = connToSQL.prepareStatement("UPDATE `copy` SET `borrowerId`=NULL ,`borrowDate`=NULL ,`returnDate`=NULL WHERE copyId=?");
 				updateCopy.setInt(1,tempCopy.getCopyID());
 				updateCopy.executeUpdate();
@@ -249,6 +237,80 @@ public abstract class ACopyDBController
 				{
 					e.printStackTrace();
 				}
+				
+				
+				//update the status of the reader if it's relevant 
+				checkReaderAccountDelays=(PreparedStatement) connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ?");
+				checkReaderAccountDelays.setString(1,id);
+				query3=checkReaderAccountDelays.executeQuery();
+
+				query3.next();
+				numOfDelay=query3.getInt(9);
+				String status=query3.getString(8);
+				if(numOfDelay<3 && status.equals("Frozen"))
+				{
+					//check if he returned all the books that were in late
+					boolean returnedAllTheBooks = true;
+					PreparedStatement booksWithLates = null; 
+					PreparedStatement getReturnDate = null;
+					ResultSet rs1 = null;
+					ResultSet rs2 = null;
+					
+					try 
+					{
+						//get all the 'late returns' of that reader account
+						booksWithLates = connToSQL.prepareStatement("SELECT * FROM history WHERE readerAccountID = ? AND action = ? ");
+						booksWithLates.setString(1, id); 
+						booksWithLates.setString(2, "Late in Return");  
+						rs1 =booksWithLates.executeQuery();
+
+						while(rs1.next())
+						{ 
+							int copyID = rs1.getInt(4);
+							Date startOfLate = rs1.getDate(6);
+							Date returnDate = null;
+
+							//find the return date for this book
+							getReturnDate = connToSQL.prepareStatement("select * from history where `date` > ? and `copyid` = ? and `readerAccountID` = ? and `action` = ? order by `date` ");
+							getReturnDate.setDate(1, (java.sql.Date) startOfLate);
+							getReturnDate.setInt(2, copyID); 
+							getReturnDate.setInt(3, Integer.parseInt(id)); 
+							getReturnDate.setString(4,"Return book");  
+							rs2 =getReturnDate.executeQuery();
+
+							//if there is a result- the reader account return that book
+							if(rs2.next())
+							{
+								returnDate = rs2.getDate(6);
+							}
+							
+							if(null == returnDate)
+							{
+								returnedAllTheBooks = false;
+							}
+
+						}
+
+					}
+					catch (SQLException e)
+					{
+						e.printStackTrace();
+
+					}
+					
+					if(returnedAllTheBooks)
+					{
+						//update to active
+						ObjectMessage obj0 = new ObjectMessage();
+						obj0.setMessage("ChangeStatus");
+						ReaderAccount reader = new ReaderAccount();
+						reader.setId(id);
+						reader.setStatus("Active");
+						AReaderAccountDBController.selection(msg, connToSQL);
+					}
+				}
+				
+				
 				
 				//send Mail if book have reservation
 				ObjectMessage askTheFirstReader=new ObjectMessage();
@@ -491,7 +553,7 @@ public abstract class ACopyDBController
 		ResultSet rs2 = null; 
 		ResultSet rs3 = null;
 		Copy askedCopy=(Copy)msg.getObjectList().get(0);
-		int countNumOfCopies;
+		int countNumOfCopies = 0;
 		
 
 
@@ -513,7 +575,7 @@ public abstract class ACopyDBController
 				//the requested copy is exist
 				//checks if the requested copy is not borrowed
 				String borrowerId=rs2.getString(3);
-				if(borrowerId!=NULL)
+				if(borrowerId!=null && !msg.getExtra().equals("after book lost"))
 				{
 					answer= new ObjectMessage("The copy is borrowed,you can not delete it","Unsucessfull");
 				}
@@ -531,10 +593,11 @@ public abstract class ACopyDBController
 						getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
 						getNumOfCopies.setInt(1, bookOfCopyID); 
 						rs3 =getNumOfCopies.executeQuery();
+						rs3.next();
 						countNumOfCopies=rs3.getInt(1);
-						if(countNumOfCopies==1)
+						if(countNumOfCopies==1 && !msg.getExtra().equals("after book lost"))
 						{
-							answer= new ObjectMessage("There is a reservation to this book and this is the last copy,you can not delete it","Unsucessfull");
+							answer= new ObjectMessage("There is a reservation to this book and this is the last copy, you can not delete it","Unsucessfull");
 							return answer;
 						}
 					}
@@ -551,11 +614,11 @@ public abstract class ACopyDBController
 					
 					//if there is no reservation to this book or if there is a reservation but there is more than one copy
 					//get number of copies of this bookID
-					getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
+					/*getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
 					getNumOfCopies.setInt(1, bookOfCopyID); 
-					rs3 =getNumOfCopies.executeQuery();
-					rs3.next();
-					countNumOfCopies=rs3.getInt(1);
+					rs3 =getNumOfCopies.executeQuery();*/
+					
+					//countNumOfCopies=rs3.getInt(1);
 	
 					//delete the copy
 					ps = connToSQL.prepareStatement("DELETE copy FROM obl.copy WHERE copyId=?");
