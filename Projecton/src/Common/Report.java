@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javafx.collections.ObservableList;
+
 public class Report implements IEntity , Serializable
 {
 	private float average; //for Report2 & Report3
 	private float median; //for Report2 & Report3
 	private int total; //for Report3
-	private Date chosenDateForReport1;
+	private Date chosenDateForReport1; //for Report1
 	private ArrayList<Long> detailsArray; //for Report2 & Report3
 
 
@@ -21,6 +23,7 @@ public class Report implements IEntity , Serializable
 	private String numOfDidntReturnOnTime; //for Report1
 
 	private ArrayList<String> comboBoxOptions; //for Report1
+	private ObservableList<String> oldReportsOptions; //for Report1
 
 
 
@@ -146,7 +149,13 @@ public class Report implements IEntity , Serializable
 	{
 		this.chosenDateForReport1 = chosenDateForReport1;
 	}
+	public ObservableList<String> getOldReportsOptions() {
+		return oldReportsOptions;
+	}
+	public void setOldReportsOptions(ObservableList<String> oldReportsOptions) {
+		this.oldReportsOptions = oldReportsOptions;
+	}
 
-
+	
 
 }

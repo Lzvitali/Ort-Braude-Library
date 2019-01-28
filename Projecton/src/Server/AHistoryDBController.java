@@ -17,6 +17,8 @@ import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.Report;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public abstract class AHistoryDBController
 {
@@ -158,8 +160,29 @@ public abstract class AHistoryDBController
 		{
 			Report resReport=new Report(active,frozen,locked,quantityOfCopies,numOfDidntReturnOnTime);
 			resReport.setChosenDateForReport1(firstDayForReportLaters);
+			
+			
+			//add all data to `ReportsHistory` table
+			try 
+			{
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?); "); 
+				updateHistory.setString(1,Integer.toString(firstDayForReportLaters.getYear())); 
+				updateHistory.setString(2,Integer.toString(firstDayForReportLaters.getMonth())); 
+				updateHistory.setInt(3,active);
+				updateHistory.setInt(4,frozen); 
+				updateHistory.setInt(5,locked); 
+				updateHistory.setInt(5,quantityOfCopies); 
+				updateHistory.setInt(5,numOfDidntReturnOnTime); 
+				updateHistory.executeUpdate();
+			} 
+			catch (SQLException e) 
+			{
+
+				e.printStackTrace();
+			} 
+			
+			
 			return new ObjectMessage(resReport,"","Results  active,frozen,locked for report1");
-			//TODO: add date and all data to `ReportsHistory`
 		}
 		else 
 		{
@@ -168,11 +191,58 @@ public abstract class AHistoryDBController
 
 	}
 
-
+	/**
+	 * This function returns an ObservableList<String> list to the client with the comboBox options (of the old reports)
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage getPreviousReportsOptions(ObjectMessage msg, Connection connToSQL)
 	{
-
-		return null;
+		ObjectMessage answer = new ObjectMessage(); 
+		
+		ArrayList <String> s=new ArrayList<String>();
+		ObservableList<String> list;
+		
+		boolean noResults = true;
+		
+		PreparedStatement oldReports = null;  
+		ResultSet rs = null;
+		
+		try
+		{
+			//get all the rows
+			oldReports = connToSQL.prepareStatement("SELECT * FROM ReportsHistory ");   
+			rs =oldReports.executeQuery();
+			
+			while(rs.next())
+			{
+				noResults = false;
+				s.add(rs.getString(2)+" - " +rs.getString(1));
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		} 
+		
+		if(!noResults)
+		{
+			list = FXCollections.observableArrayList(s);
+			
+			Report report = new Report();
+			report.setOldReportsOptions(list);
+					
+			answer.addObject(report); 
+			answer.setNote("options for old reports comboBox");
+		}
+		else
+		{
+			answer.setNote("No options for old reports comboBox");
+		}
+		
+		
+		return answer;
 	}
 
 	
@@ -236,7 +306,6 @@ public abstract class AHistoryDBController
 		} 
 		catch (SQLException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 

@@ -7,6 +7,7 @@ import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.Report;
 import clientCommonBounderies.StartPanelController;
+import clientConrollers.AClientCommonUtilities;
 import clientConrollers.AValidationInput;
 import clientConrollers.OBLClient;
 
@@ -184,25 +185,32 @@ public class ReportsController implements IGUIController
 			totalNumOfCopies.setText(newRes.getTotalCopies());
 			numOfdelayedReaderAccounts.setText(newRes.getNumOfDidntReturnOnTime());
 			report1.setVisible(true);
+			
+			//add the that report to the combo box, so she can view it now
+			ArrayList <String> s=new ArrayList<String>();
+			s.add(newRes.getChosenDateForReport1().getMonth()+" - " +newRes.getChosenDateForReport1().getYear());
+			list3 = FXCollections.observableArrayList(s);
+			chooseFromPreviousComboBox.setItems( list3);
 		
 		}
 
 		else if((msg.getNote().equals("no result for report1")))
 		{
 			report1.setVisible(false);
-
+			AClientCommonUtilities.infoAlert("No data for the choosen period", "No results"); 
+		}
+		else if(msg.getNote().equals("options for old reports comboBox")) 
+		{
+			ArrayList <IEntity> result = msg.getObjectList();
+			chooseFromPreviousComboBox.setItems( ((Report)result.get(0)).getOldReportsOptions() );
+		}
+		else if(msg.getNote().equals("No options for old reports comboBox")) 
+		{
+			//Do nothing..
 		}
 
 	}
 
-	private void setPreviousReportsComboBox() 
-	{
-		
-		/*ArrayList <String> s=new ArrayList<String>();
-		s.add(newRes.getChosenDateForReport1().getMonth()+" - " +newRes.getChosenDateForReport1().getYear());
-		list3 = FXCollections.observableArrayList(s);
-		chooseFromPreviousComboBox.setItems( list3);*/
-	}
 
 
 	/**
