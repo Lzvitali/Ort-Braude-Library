@@ -26,7 +26,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <VBox fx:id="report1" layoutX="416.0" layoutY="167.0" prefHeight="354.0" prefWidth="436.0">
+                        <VBox fx:id="report1" layoutX="432.0" layoutY="169.0" prefHeight="354.0" prefWidth="436.0">
                            <children>
                               <HBox prefHeight="164.0" prefWidth="469.0">
                                  <children>
@@ -102,26 +102,26 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox alignment="CENTER" layoutX="102.0" layoutY="50.0" prefHeight="100.0" prefWidth="1122.0">
+                        <HBox alignment="CENTER" layoutX="117.0" layoutY="58.0" prefHeight="100.0" prefWidth="1035.0">
                            <children>
-                              <VBox prefHeight="100.0" prefWidth="520.0">
+                              <VBox prefHeight="100.0" prefWidth="455.0">
                                  <children>
                                     <HBox alignment="BOTTOM_RIGHT" prefHeight="38.0" prefWidth="321.0">
                                        <children>
                                           <Label text="Month" />
-                                          <AnchorPane prefHeight="38.0" prefWidth="88.0" />
+                                          <AnchorPane prefHeight="38.0" prefWidth="46.0" />
                                           <Label text="Year" />
-                                          <AnchorPane prefHeight="38.0" prefWidth="156.0" />
+                                          <AnchorPane prefHeight="38.0" prefWidth="161.0" />
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER" prefHeight="44.0" prefWidth="335.0" spacing="15.0">
+                                    <HBox alignment="CENTER" prefHeight="44.0" prefWidth="480.0" spacing="15.0">
                                        <children>
                                           <Label prefHeight="25.0" prefWidth="121.0" text="Choose periode:">
                                              <font>
                                                 <Font name="System Bold Italic" size="16.0" />
                                              </font>
                                           </Label>
-                                          <ComboBox fx:id="monthComboBox" prefWidth="150.0" />
+                                          <ComboBox fx:id="monthComboBox" prefHeight="20.0" prefWidth="70.0" />
                                           <ComboBox fx:id="yearComboBox" prefWidth="70.0">
                                              <HBox.margin>
                                                 <Insets />
@@ -140,10 +140,10 @@
                                        </font>
                                     </Label>
                                  </children></AnchorPane>
-                              <VBox prefHeight="100.0" prefWidth="218.0">
+                              <VBox prefHeight="100.0" prefWidth="173.0">
                                  <children>
                                     <AnchorPane prefHeight="45.0" prefWidth="218.0" />
-                                    <ComboBox fx:id="chooseFromPreviousComboBox" prefHeight="31.0" prefWidth="213.0" promptText="Previous reports" />
+                                    <ComboBox fx:id="chooseFromPreviousComboBox" prefHeight="31.0" prefWidth="169.0" promptText="Previous reports" />
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" prefHeight="100.0" prefWidth="114.0">

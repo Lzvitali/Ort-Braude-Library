@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,11 +46,50 @@ public abstract class AHistoryDBController
 		else if(((msg.getMessage()).equals("Ask for new report1")))
 		{
 			return getNewReportOne(msg, connToSQL);
-			
+		}
+		else if(((msg.getMessage()).equals("Ask for old report1")))
+		{
+			return getOldwReportOne(msg, connToSQL);
 		}
 		else
-			return null;	
+		{
+			return null;
+		}
 
+	}
+
+	/**
+	 * This function returns an old report for client from `ReportsHistory` table
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
+	private static ObjectMessage getOldwReportOne(ObjectMessage msg, Connection connToSQL) 
+	{
+		Report answerReport = new Report();
+		
+		PreparedStatement oldRepot = null;  
+		ResultSet rs1 = null;
+		
+		
+		try
+		{
+			oldRepot = connToSQL.prepareStatement("SELECT * FROM ReportsHistory WHERE Year = ? AND Month = ? ");
+			oldRepot.setString(1, ((Report)msg.getObjectList().get(0)).getYear()); 
+			oldRepot.setString(2, ((Report)msg.getObjectList().get(0)).getMonth());  
+			rs1 =oldRepot.executeQuery();
+			
+			rs1.next();
+			
+			answerReport = new Report(rs1.getInt(3), rs1.getInt(4), rs1.getInt(5), rs1.getInt(6), rs1.getInt(7));
+		}
+		catch (SQLException e) 
+		{
+
+			e.printStackTrace();
+		} 
+		
+		return new ObjectMessage(answerReport,"","Results  active,frozen,locked for report1");
 	}
 
 	/**
@@ -62,7 +102,7 @@ public abstract class AHistoryDBController
 	{
 		Report newReport=(Report)msg.getObjectList().get(0);
 		Date checkingDate=(Date)newReport.getChosenDateForReport1();
-		Date firstDayForReportLaters=new Date(checkingDate.getYear(), checkingDate.getMonth(), 1);
+		Date firstDayForReportLaters=new Date(checkingDate.getYear() - 1, checkingDate.getMonth(), 1);
 		int month=firstDayForReportLaters.getMonth();
 		if(month==1)
 		{
@@ -162,27 +202,53 @@ public abstract class AHistoryDBController
 			resReport.setChosenDateForReport1(firstDayForReportLaters);
 			
 			
-			//add all data to `ReportsHistory` table
-			try 
+			//check if still not in the `ReportsHistory` table
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+			SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
+			String yearr=sdf.format(firstDayForReportLaters);
+			String monthh=sdf2.format(firstDayForReportLaters);
+			
+			PreparedStatement oldRepot = null;  
+			ResultSet rs1 = null;
+			
+			
+			try
 			{
-				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?) "); 
-				int yaerr=checkingDate.getYear();
-				updateHistory.setString(1,Integer.toString(firstDayForReportLaters.getYear())); 
-				updateHistory.setString(2,Integer.toString(firstDayForReportLaters.getMonth())); 
-				updateHistory.setInt(3,active);
-				updateHistory.setInt(4,frozen); 
-				updateHistory.setInt(5,locked); 
-				updateHistory.setInt(6,quantityOfCopies); 
-				updateHistory.setInt(7,numOfDidntReturnOnTime); 
-				updateHistory.executeUpdate();
-			} 
+				oldRepot = connToSQL.prepareStatement("SELECT * FROM ReportsHistory WHERE Year = ? AND Month = ? ");
+				oldRepot.setString(1, yearr); 
+				oldRepot.setString(2, monthh);  
+				rs1 =oldRepot.executeQuery();
+				
+				if(!rs1.next()) //if it is not in that table, put it in there
+				{
+					//add all data to `ReportsHistory` table
+					try 
+					{
+						PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?) "); 
+						updateHistory.setString(1,yearr); 
+						updateHistory.setString(2,monthh); 
+						updateHistory.setInt(3,active); 
+						updateHistory.setInt(4,frozen); 
+						updateHistory.setInt(5,locked); 
+						updateHistory.setInt(6,quantityOfCopies); 
+						updateHistory.setInt(7,numOfDidntReturnOnTime); 
+						updateHistory.executeUpdate();
+					} 
+					catch (SQLException e) 
+					{
+
+						e.printStackTrace();
+					} 
+				}
+				
+			}
 			catch (SQLException e) 
 			{
 
 				e.printStackTrace();
 			} 
-			
-			
+	
 			return new ObjectMessage(resReport,"","Results  active,frozen,locked for report1");
 		}
 		else 
@@ -193,7 +259,7 @@ public abstract class AHistoryDBController
 	}
 
 	/**
-	 * This function returns an ObservableList<String> list to the client with the comboBox options (of the old reports)
+	 * This function returns an ArrayList<String> list to the client with the comboBox options (of the old reports)
 	 * @param msg - the object from the client
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return ObjectMessage with the answer to the client
@@ -203,7 +269,6 @@ public abstract class AHistoryDBController
 		ObjectMessage answer = new ObjectMessage(); 
 		
 		ArrayList <String> s=new ArrayList<String>();
-		ObservableList<String> list;
 		
 		boolean noResults = true;
 		
@@ -229,10 +294,10 @@ public abstract class AHistoryDBController
 		
 		if(!noResults)
 		{
-			list = FXCollections.observableArrayList(s);
+			
 			
 			Report report = new Report();
-			report.setOldReportsOptions(list);
+			report.setComboBoxOptions(s);
 					
 			answer.addObject(report); 
 			answer.setNote("options for old reports comboBox");

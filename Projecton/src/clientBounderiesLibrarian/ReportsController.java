@@ -38,8 +38,8 @@ public class ReportsController implements IGUIController
 
 	OBLClient client;
 
-    @FXML
-    private VBox report1;
+	@FXML
+	private VBox report1;
 	@FXML
 	private TabPane TabPaneSelect;
 
@@ -109,14 +109,14 @@ public class ReportsController implements IGUIController
 	@FXML
 	private JFXTextField BookIDReport3;
 
-    @FXML
-    private VBox resultsForReport3;
-    
-    @FXML
-    private Button showNewReportBtn;
-    
-    @FXML
-    private Button showPreviousReportBtn;
+	@FXML
+	private VBox resultsForReport3;
+
+	@FXML
+	private Button showNewReportBtn;
+
+	@FXML
+	private Button showPreviousReportBtn;
 
 	ObservableList<Integer> list1;
 	ObservableList<Integer> list2;
@@ -131,7 +131,7 @@ public class ReportsController implements IGUIController
 		resultsForReport3.setVisible(false);
 		report1.setVisible(false);
 		combo();
-		
+
 		ObjectMessage sendToServer=new ObjectMessage("Ask for report2","History");
 		client.handleMessageFromClient(sendToServer); 
 
@@ -144,31 +144,31 @@ public class ReportsController implements IGUIController
 		if(msg.getNote().equals("Report number 2"))
 		{
 			setReport2Result(msg);
-			
+
 			ArrayList <IEntity> result = msg.getObjectList();
 			//set first diagram
-    		ArrayList<Long> detailsArray0 = ((Report)result.get(0)).getDetailsArray();
+			ArrayList<Long> detailsArray0 = ((Report)result.get(0)).getDetailsArray();
 			setDiagram(detailsArray0,diagramForRegular);
-			
+
 			//set second diagram
-    		ArrayList<Long> detailsArray1 = ((Report)result.get(1)).getDetailsArray();
+			ArrayList<Long> detailsArray1 = ((Report)result.get(1)).getDetailsArray();
 			setDiagram(detailsArray1,diagramForDesired);
-			
+
 			//set thread diagram
-    		ArrayList<Long> detailsArray2 = ((Report)result.get(2)).getDetailsArray();
+			ArrayList<Long> detailsArray2 = ((Report)result.get(2)).getDetailsArray();
 			setDiagram(detailsArray2,diagramForAll);
-			
+
 			//set the comboBox for the Report1
 			ObjectMessage sendToServer=new ObjectMessage("get previous reports options","History");
 			client.handleMessageFromClient(sendToServer); 
-			
+
 		}
 		else if(msg.getNote().equals("Report number 3")) //for Report3
 		{
 			setReport3Result(msg);
-			
+
 			ArrayList <IEntity> result = msg.getObjectList();
-    		ArrayList<Long> detailsArray = ((Report)result.get(0)).getDetailsArray();
+			ArrayList<Long> detailsArray = ((Report)result.get(0)).getDetailsArray();
 			setDiagram(detailsArray, diagramForNumLateReturns);
 		}
 		else if(msg.getNote().equals("Report number 3 - no results")) //for Report3
@@ -185,17 +185,11 @@ public class ReportsController implements IGUIController
 			totalNumOfCopies.setText(newRes.getTotalCopies());
 			numOfdelayedReaderAccounts.setText(newRes.getNumOfDidntReturnOnTime());
 			report1.setVisible(true);
-			
-			/*//add the that report to the combo box, so she can view it now
-			ArrayList <String> s=new ArrayList<String>();
-			s.add(newRes.getChosenDateForReport1().getMonth()+" - " +newRes.getChosenDateForReport1().getYear());
-			list3 = FXCollections.observableArrayList(s);
-			chooseFromPreviousComboBox.setItems( list3);*/
-			
-			//set the comboBox for the Report1
+
+			//set the comboBox for old reports
 			ObjectMessage sendToServer=new ObjectMessage("get previous reports options","History");
 			client.handleMessageFromClient(sendToServer); 
-		
+
 		}
 
 		else if((msg.getNote().equals("no result for report1")))
@@ -203,14 +197,21 @@ public class ReportsController implements IGUIController
 			report1.setVisible(false);
 			AClientCommonUtilities.infoAlert("No data for the choosen period", "No results"); 
 		}
-		else if(msg.getNote().equals("options for old reports comboBox")) 
-		{
-			ArrayList <IEntity> result = msg.getObjectList();
-			chooseFromPreviousComboBox.setItems( ((Report)result.get(0)).getOldReportsOptions() );
-		}
+
 		else if(msg.getNote().equals("No options for old reports comboBox")) 
 		{
 			//Do nothing..
+		}
+		else if(msg.getNote().equals("options for old reports comboBox")) 
+		{
+			Platform.runLater(()->
+			{
+				ObservableList<String> list;
+				ArrayList <IEntity> result = msg.getObjectList();
+
+				list = FXCollections.observableArrayList(((Report)result.get(0)).getComboBoxOptions());
+				chooseFromPreviousComboBox.setItems( list );
+			});
 		}
 
 	}
@@ -224,16 +225,16 @@ public class ReportsController implements IGUIController
 	private void setReport3Result(ObjectMessage msg) 
 	{
 		resultsForReport3.setVisible(true);
-		
+
 		ArrayList <IEntity> result = msg.getObjectList();
-		
+
 		totalForLateReturns.setText(String.valueOf(((Report)result.get(0)).getTotal()));
 		avgForDurationLateReturns.setText(String.valueOf(((Report)result.get(0)).getAverage()));
 		medianForDurationLateReturns.setText(String.valueOf(((Report)result.get(0)).getMedian()));
-		
+
 	}
 
-	
+
 	/**
 	 * This function sets the results of Report2 to the GUI
 	 * @param msg- the received object from the server
@@ -258,11 +259,11 @@ public class ReportsController implements IGUIController
 		medianForAll.setText(String.valueOf(medianAll));
 	}
 
-	
-    @FXML
-    void getBookInfo(KeyEvent event) 
-    {
-    	String bookID;	
+
+	@FXML
+	void getBookInfo(KeyEvent event) 
+	{
+		String bookID;	
 
 		if (AValidationInput.checkValidationBook("bookID", BookIDReport3.getText()).equals("correct"))
 		{	
@@ -275,138 +276,149 @@ public class ReportsController implements IGUIController
 		ObjectMessage sendToServer=new ObjectMessage("Ask for report3","History");
 		sendToServer.setExtra(bookID); 
 		client.handleMessageFromClient(sendToServer);
-    }
-    
-    
-    @FXML //choose by Year & Month
-    void showNewReport(ActionEvent event) 
-    {
-    	int mounth;
-    	if (monthComboBox.getValue()==12)
-    	{
-    		mounth=1;
-    		
-    	}
-    	else
-    	{
-    		mounth=monthComboBox.getValue()+1;
-    	}
-    	
-    	int year=yearComboBox.getValue();
-    	LocalDate now = LocalDate.of(year, mounth,1 );
-    	Date dateForReport=java.sql.Date.valueOf(now);//make date from combobox
-
-    	Report newReport=new Report(dateForReport);
-    	ObjectMessage sendToServer=new ObjectMessage(newReport,"Ask for new report1","History");
-    	client.handleMessageFromClient(sendToServer);
+	}
 
 
-    }
-    
-    
-    @FXML //choose from comboBox
-    void showPreviousReport(ActionEvent event) 
-    {
+	@FXML //choose by Year & Month
+	void showNewReport(ActionEvent event) 
+	{
+		int mounth;
+		if (monthComboBox.getValue()==12)
+		{
+			mounth=1;
 
-    }
+		}
+		else
+		{
+			mounth=monthComboBox.getValue()+1;
+		}
 
+		int year=yearComboBox.getValue();
+		LocalDate now = LocalDate.of(year, mounth,1 );
+		Date dateForReport=java.sql.Date.valueOf(now);//make date from combobox
 
-    /**
-     * This function sets the BarChart diagram with the details that came from the server
-     * @param detailsArray - arrayList with the data for the diagram
-     * @param diagram - the reference for the diagram to set for the data
-     */
-    private void setDiagram(ArrayList<Long> detailsArray, BarChart<String,Number> diagram)
-    { 	
-    	Platform.runLater(()->
-    	{
-    		diagram.getData().clear();
-
-    		//if there is no data for the diagram- finish
-    		if(0 == detailsArray.size())
-    		{
-    			XYChart.Series<String,Number> series = new XYChart.Series<String,Number>();
-    			diagram.getData().add(series);
-    			series.setName("");
-    			return;
-    		}
-    		
-    		//get the max value
-    		Long maxValue = detailsArray.get(detailsArray.size() -1 );
+		Report newReport=new Report(dateForReport);
+		ObjectMessage sendToServer=new ObjectMessage(newReport,"Ask for new report1","History");
+		client.handleMessageFromClient(sendToServer);
 
 
-    		XYChart.Series<String,Number> series = new XYChart.Series<String,Number>();
+	}
 
 
-    		//find the range in the columns
-    		float range = (float) (maxValue/10.0) ;
-    		float addTOi = (float) 1.0;
-    		if(range <= 1.0)
-    		{
-    			range = 0;
-    		}
-    		else
-    		{
-    			addTOi = range;
-    		}
+	@FXML //choose from comboBox
+	void showPreviousReport(ActionEvent event) 
+	{
+		if(null != chooseFromPreviousComboBox.getValue() && !(chooseFromPreviousComboBox.getValue()).equals(""))
+		{
+			String month = (chooseFromPreviousComboBox.getValue()).substring(0, 2);
+			String year = (chooseFromPreviousComboBox.getValue()).substring(5, 9);
 
-    		for(float i=1; i<maxValue || i<=10 ; i+=addTOi)
-    		{
-    			//find the value for the i-column
-    			Integer cnt = 0;
-    			for(int j=0; j<detailsArray.size(); j++)
-    			{
+			Report report = new Report();
+			report.setYear(year);
+			report.setMonth(month);
 
-    				//check if in the range
-    				if( ((float)detailsArray.get(j) >= i) && ((float)detailsArray.get(j) <= i+range) )
-    				{
-    					cnt++; 
-    				}
-    			}
+			ObjectMessage sendToServer=new ObjectMessage(report,"Ask for old report1","History");
+			client.handleMessageFromClient(sendToServer);
+		}
+	}
 
-    			//set the format of numbers that will be displayed in the diagrams
-    			DecimalFormat df = new DecimalFormat();
+
+	/**
+	 * This function sets the BarChart diagram with the details that came from the server
+	 * @param detailsArray - arrayList with the data for the diagram
+	 * @param diagram - the reference for the diagram to set for the data
+	 */
+	private void setDiagram(ArrayList<Long> detailsArray, BarChart<String,Number> diagram)
+	{ 	
+		Platform.runLater(()->
+		{
+			diagram.getData().clear();
+
+			//if there is no data for the diagram- finish
+			if(0 == detailsArray.size())
+			{
+				XYChart.Series<String,Number> series = new XYChart.Series<String,Number>();
+				diagram.getData().add(series);
+				series.setName("");
+				return;
+			}
+
+			//get the max value
+			Long maxValue = detailsArray.get(detailsArray.size() -1 );
+
+
+			XYChart.Series<String,Number> series = new XYChart.Series<String,Number>();
+
+
+			//find the range in the columns
+			float range = (float) (maxValue/10.0) ;
+			float addTOi = (float) 1.0;
+			if(range <= 1.0)
+			{
+				range = 0;
+			}
+			else
+			{
+				addTOi = range;
+			}
+
+			for(float i=1; i<maxValue || i<=10 ; i+=addTOi)
+			{
+				//find the value for the i-column
+				Integer cnt = 0;
+				for(int j=0; j<detailsArray.size(); j++)
+				{
+
+					//check if in the range
+					if( ((float)detailsArray.get(j) >= i) && ((float)detailsArray.get(j) <= i+range) )
+					{
+						cnt++; 
+					}
+				}
+
+				//set the format of numbers that will be displayed in the diagrams
+				DecimalFormat df = new DecimalFormat();
 				df.setMaximumFractionDigits(2);
-				
-    			//set the column
-    			if(0 == range)
-    			{
-    				series.getData().add(new XYChart.Data<String,Number>((String.valueOf(i)), cnt));
-    			}
-    			else
-    			{
-    				
-    				series.getData().add(new XYChart.Data<String,Number>((df.format(i) + "-" + df.format(i+range)), cnt));
-    			}
 
-    		}
+				//set the column
+				if(0 == range)
+				{
+					series.getData().add(new XYChart.Data<String,Number>((String.valueOf(i)), cnt));
+				}
+				else
+				{
 
-    		
-    		diagram.getData().add(series);
-    	});
-    }
+					series.getData().add(new XYChart.Data<String,Number>((df.format(i) + "-" + df.format(i+range)), cnt));
+				}
 
-    public void combo() 
-    {
-    	ArrayList <Integer> s=new ArrayList<Integer>();
-    	LocalDate now = LocalDate.now();
+			}
+
+
+			diagram.getData().add(series);
+		});
+	}
+
+	public void combo() 
+	{
+		ArrayList <Integer> s=new ArrayList<Integer>();
+		LocalDate now = LocalDate.now();
 		int year=now.getYear();
- 	
-    	for(int i=2016; i<=year; i++)
-    	{
-    		s.add(i);
-    	}
 
-    	list1 = FXCollections.observableArrayList(s);
-    	yearComboBox.setItems( list1);
+		for(int i=2016; i<=year; i++)
+		{
+			s.add(i);
+		}
 
-    	ArrayList <Integer> b=new ArrayList<Integer>();
+		list1 = FXCollections.observableArrayList(s);
+		yearComboBox.setItems( list1);
 
-    	for(int i= 1; i<= 12; i++)
-    	{
-    		b.add(i);
-    	}
-    	list2 = FXCollections.observableArrayList(b);
-    	monthComboBox.setItems( list2);
-    }
+		ArrayList <Integer> b=new ArrayList<Integer>();
+
+		for(int i= 1; i<= 12; i++)
+		{
+			b.add(i);
+		}
+		list2 = FXCollections.observableArrayList(b);
+		monthComboBox.setItems( list2);
+	}
 }

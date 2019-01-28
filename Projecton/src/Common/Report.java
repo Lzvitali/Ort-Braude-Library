@@ -23,7 +23,9 @@ public class Report implements IEntity , Serializable
 	private String numOfDidntReturnOnTime; //for Report1
 
 	private ArrayList<String> comboBoxOptions; //for Report1
-	private transient ObservableList<String> oldReportsOptions; //for Report1
+	
+	private String year;
+	private String month;
 
 
 
@@ -149,11 +151,21 @@ public class Report implements IEntity , Serializable
 	{
 		this.chosenDateForReport1 = chosenDateForReport1;
 	}
-	public ObservableList<String> getOldReportsOptions() {
-		return oldReportsOptions;
+	public String getYear() 
+	{
+		return year;
 	}
-	public void setOldReportsOptions(ObservableList<String> oldReportsOptions) {
-		this.oldReportsOptions = oldReportsOptions;
+	public void setYear(String year) 
+	{
+		this.year = year;
+	}
+	public String getMonth() 
+	{
+		return month;
+	}
+	public void setMonth(String month) 
+	{
+		this.month = month;
 	}
 
 	
