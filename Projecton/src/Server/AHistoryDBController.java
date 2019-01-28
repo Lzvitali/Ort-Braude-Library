@@ -166,6 +166,7 @@ public abstract class AHistoryDBController
 			try 
 			{
 				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?) "); 
+				int yaerr=checkingDate.getYear();
 				updateHistory.setString(1,Integer.toString(firstDayForReportLaters.getYear())); 
 				updateHistory.setString(2,Integer.toString(firstDayForReportLaters.getMonth())); 
 				updateHistory.setInt(3,active);

@@ -23,7 +23,7 @@ public class Report implements IEntity , Serializable
 	private String numOfDidntReturnOnTime; //for Report1
 
 	private ArrayList<String> comboBoxOptions; //for Report1
-	private ObservableList<String> oldReportsOptions; //for Report1
+	private transient ObservableList<String> oldReportsOptions; //for Report1
 
 
 

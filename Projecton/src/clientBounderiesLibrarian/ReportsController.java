@@ -159,8 +159,8 @@ public class ReportsController implements IGUIController
 			setDiagram(detailsArray2,diagramForAll);
 			
 			//set the comboBox for the Report1
-			//ObjectMessage sendToServer=new ObjectMessage("get previous reports options","History");
-			//client.handleMessageFromClient(sendToServer); 
+			ObjectMessage sendToServer=new ObjectMessage("get previous reports options","History");
+			client.handleMessageFromClient(sendToServer); 
 			
 		}
 		else if(msg.getNote().equals("Report number 3")) //for Report3
@@ -186,11 +186,15 @@ public class ReportsController implements IGUIController
 			numOfdelayedReaderAccounts.setText(newRes.getNumOfDidntReturnOnTime());
 			report1.setVisible(true);
 			
-			//add the that report to the combo box, so she can view it now
+			/*//add the that report to the combo box, so she can view it now
 			ArrayList <String> s=new ArrayList<String>();
 			s.add(newRes.getChosenDateForReport1().getMonth()+" - " +newRes.getChosenDateForReport1().getYear());
 			list3 = FXCollections.observableArrayList(s);
-			chooseFromPreviousComboBox.setItems( list3);
+			chooseFromPreviousComboBox.setItems( list3);*/
+			
+			//set the comboBox for the Report1
+			ObjectMessage sendToServer=new ObjectMessage("get previous reports options","History");
+			client.handleMessageFromClient(sendToServer); 
 		
 		}
 
