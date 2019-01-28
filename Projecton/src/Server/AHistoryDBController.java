@@ -165,14 +165,14 @@ public abstract class AHistoryDBController
 			//add all data to `ReportsHistory` table
 			try 
 			{
-				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?); "); 
+				PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?) "); 
 				updateHistory.setString(1,Integer.toString(firstDayForReportLaters.getYear())); 
 				updateHistory.setString(2,Integer.toString(firstDayForReportLaters.getMonth())); 
 				updateHistory.setInt(3,active);
 				updateHistory.setInt(4,frozen); 
 				updateHistory.setInt(5,locked); 
-				updateHistory.setInt(5,quantityOfCopies); 
-				updateHistory.setInt(5,numOfDidntReturnOnTime); 
+				updateHistory.setInt(6,quantityOfCopies); 
+				updateHistory.setInt(7,numOfDidntReturnOnTime); 
 				updateHistory.executeUpdate();
 			} 
 			catch (SQLException e) 
