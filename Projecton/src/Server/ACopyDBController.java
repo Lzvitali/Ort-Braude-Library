@@ -447,6 +447,7 @@ public abstract class ACopyDBController
 					if(rs2.getBoolean(6))
 					{
 						canDelay = false;
+						reason = "That book is desired and can't be delayed";
 					}
 					else
 					{
@@ -459,12 +460,13 @@ public abstract class ACopyDBController
 						if(rs4.next())
 						{
 							canDelay = false;
+							reason = "That book was reserved by someone.\nSo you can't delay it's return date";
 						}
 						else
 						{
 							//check if he is not already in delay
+							
 							//Date dateOfReturn =  rs1.getDate(5);
-
 							//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 							//LocalDateTime now = LocalDateTime.now();
 
@@ -474,6 +476,7 @@ public abstract class ACopyDBController
 							if( today.after(dateOfReturn) )
 							{
 								canDelay = false;
+								reason = "You already was late in returning that book.\nSo you can't delay it's return date";
 							}
 							else
 							{
@@ -487,7 +490,8 @@ public abstract class ACopyDBController
 									//if the reader account is active
 									if(!rs3.getString(8).equals("Active"))
 									{
-										canDelay = false;	
+										canDelay = false;
+										reason = "Your status is not Active.\nSo you can't delay it's return date";
 									}
 									else
 									{
@@ -575,26 +579,28 @@ public abstract class ACopyDBController
 				//the requested copy is exist
 				//checks if the requested copy is not borrowed
 				String borrowerId=rs2.getString(3);
-				if(borrowerId!=null && !msg.getExtra().equals("after book lost"))
+				if(borrowerId!=NULL && !msg.getExtra().equals("after book lost"))
 				{
 					answer= new ObjectMessage("The copy is borrowed,you can not delete it","Unsucessfull");
 				}
 				else
 				{
+					int bookOfCopyID=rs2.getInt(2);
+					
+					//there is one or more reservation
+					getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
+					getNumOfCopies.setInt(1, bookOfCopyID); 
+					rs3 =getNumOfCopies.executeQuery();
+					rs3.next();
+					countNumOfCopies=rs3.getInt(1);
+					
 					//the requested copy is not borrowed
 					//check if there is reservations to the fitting book
-					int bookOfCopyID=rs2.getInt(2);
 					checksReservations = connToSQL.prepareStatement("SELECT * FROM obl.reservations WHERE bookId = ? ");
 					checksReservations.setInt(1, bookOfCopyID);
 					rs2 =checksReservations.executeQuery();
 					if(rs2.next())
 					{
-						//there is one or more reservation
-						getNumOfCopies = connToSQL.prepareStatement("SELECT COUNT(*) FROM copy WHERE bookID=? ");
-						getNumOfCopies.setInt(1, bookOfCopyID); 
-						rs3 =getNumOfCopies.executeQuery();
-						rs3.next();
-						countNumOfCopies=rs3.getInt(1);
 						if(countNumOfCopies==1 && !msg.getExtra().equals("after book lost"))
 						{
 							answer= new ObjectMessage("There is a reservation to this book and this is the last copy, you can not delete it","Unsucessfull");
@@ -632,13 +638,13 @@ public abstract class ACopyDBController
 					{
 						try 
 						{
-							//delete pdf file of book
-							File myFile = new File("pdfFiles\\"+bookName+".pdf");
-							myFile.delete();
-							
 							ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
 							ps.setInt(1,bookOfCopyID);
 							ps.executeUpdate();
+							
+							//delete pdf file of book
+							File myFile = new File("pdfFiles\\"+bookName+".pdf");
+							myFile.delete();
 						}
 						catch (SQLException e) 
 						{

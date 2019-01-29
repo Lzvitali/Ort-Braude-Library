@@ -382,14 +382,7 @@ public class MyBorrowsAndReservesController implements IGUIController
 	{ 
 		if( !copy.isCanDelay() )
 		{ 
-			if(copy.getReasonForCantDelay().equals("The date of return is the most updated"))
-			{
-				AClientCommonUtilities.alertErrorWithOption("The date of return is the most updated", "Rejection", "Ok");
-			}
-			else
-			{
-				AClientCommonUtilities.alertErrorWithOption("you can't delay the return date for this book", "Rejection", "Ok");
-			}		
+			AClientCommonUtilities.alertErrorWithOption(copy.getReasonForCantDelay(), "Rejection", "Ok");
 		}
 		else
 		{
