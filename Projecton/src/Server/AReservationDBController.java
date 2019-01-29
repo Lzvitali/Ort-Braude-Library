@@ -55,6 +55,10 @@ public abstract class AReservationDBController
 		{
 			return getReaderThatCanImplement(msg, connToSQL);
 		}
+		else if (((msg.getMessage()).equals("deleteAllReservations")))
+		{
+			return deleteAllReservations(msg, connToSQL);
+		}
 		else
 		{ 
 			return null; 
@@ -544,6 +548,61 @@ public abstract class AReservationDBController
 				e.printStackTrace();
 				return new ObjectMessage("ReaderThatCanImplement","NoFound");
 			}
+	}
+	
+	private static ObjectMessage deleteAllReservations(ObjectMessage msg, Connection connToSQL)
+	{
+		PreparedStatement ps;
+		Book book=(Book)msg.getObjectList().get(0); 
+		ResultSet rs;
+		//delete all reservations
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT COUNT(*)  FROM obl.reservations WHERE bookId=?");
+			ps.setInt(1,book.getBookID());
+			rs=ps.executeQuery();
+			rs.next();
+			if(rs.getInt(1)!=0)
+			{
+				ps = connToSQL.prepareStatement("SELECT readerAccountID  FROM obl.reservations WHERE bookId=?");
+				ps.setInt(1,book.getBookID());
+				rs=ps.executeQuery();
+				while(rs.next())
+				{
+					ReaderAccount getReaderAccount=new ReaderAccount();
+					getReaderAccount.setId(rs.getString(1));
+					ObjectMessage askReaderAccount=new ObjectMessage(getReaderAccount,"SearchReader","ReaderAccount");
+					ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askReaderAccount, connToSQL)).getObjectList().get(0);
+					
+					ObjectMessage askBookDetails=new ObjectMessage(book,"searchBookID","Book");
+					Book bookDetails = (Book) (ABookDBController.selection(askBookDetails, connToSQL)).getObjectList().get(0);
+					
+					ObjectMessage notify=new ObjectMessage("sendMail","Daily");
+					Mail mail=new Mail();
+					mail.setTo(readerAccount.getEmail());
+					String body="Hello "+readerAccount.getFirstName()+"\nWe sorry to tell you but the book "+bookDetails.getBookName()
+							+ "\n its was our last copy of this book."
+							+ ".\nSo we want to notify you that your reservation have been canceled."
+							+"\n 		Thank you , Ort Braude Library";
+					mail.setBody(body);
+					String subject="Canceled your reservation for "+bookDetails.getBookName();
+					mail.setSubject(subject);
+					notify.addObject(mail);
+					ADailyDBController.selection(notify, connToSQL);
+				}
+				ps = connToSQL.prepareStatement("DELETE FROM obl.reservations WHERE bookId=?");
+				ps.setInt(1,book.getBookID());
+				ps.executeUpdate();
+
+			}
+			
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 	
 	

@@ -638,13 +638,25 @@ public abstract class ACopyDBController
 					{
 						try 
 						{
+							if(msg.getExtra().equals("after book lost"))
+							{
+								ObjectMessage objectMessage=new ObjectMessage();
+								Book book=new Book();
+								book.setBookID(bookOfCopyID);
+								objectMessage.setMessage("deleteAllReservations");
+								objectMessage.addObject(book);
+								AReservationDBController.selection(objectMessage, connToSQL);
+							}
+							
 							ps = connToSQL.prepareStatement("DELETE book FROM obl.book WHERE bookId=?");
 							ps.setInt(1,bookOfCopyID);
 							ps.executeUpdate();
 							
+
+							
 							//delete pdf file of book
-							File myFile = new File("pdfFiles\\"+bookName+".pdf");
-							myFile.delete();
+							//File myFile = new File("pdfFiles\\"+bookName+".pdf");
+							//myFile.delete();  // TODO:NEED TO UNCOMMENT
 						}
 						catch (SQLException e) 
 						{
@@ -652,7 +664,8 @@ public abstract class ACopyDBController
 							answer= new ObjectMessage("Unexpected Error.","Unsucessfull");
 						}
 					}
-	
+					
+					//add to history of the reader account if he lost the book
 					if(!msg.getExtra().equals("") && null != msg.getExtra())
 					{
 						if(msg.getExtra().equals("after book lost"))
@@ -831,4 +844,7 @@ public abstract class ACopyDBController
 			return null;
 		}
 	}
+	
+	
+
 }
