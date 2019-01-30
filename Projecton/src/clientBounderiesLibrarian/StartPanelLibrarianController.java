@@ -344,7 +344,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		else
 		{
 			valid=true;
-			askedBook.setFreeSearch(searchBookTextField.getText());;
+			askedBook.setFreeSearch(searchBookTextField.getText());
 		}
 		if(valid)
 		{
@@ -657,6 +657,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 					//readerAccountID = ((ReaderAccount)result.get(i)).getId();
 					tempReaderAccountID = ((ReaderAccount)result.get(i)).getId();
 					((ReaderAccount)result.get(i)).getBorrowsAndReserves().setOnAction(e -> openBorrowsAndReserves(e,tempReaderAccountID));
+					((ReaderAccount)result.get(i)).getMoreDetails().setOnAction(e -> openUpdateDetails(e,tempReaderAccountID));
 					
 					if(LogInController.permission==1)
 					{
@@ -671,6 +672,12 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		}
 	}
 	
+	private void openUpdateDetails(ActionEvent e, String readerID) 
+	{
+		readerAccountID = readerID;
+		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/PersonalDetails.fxml","Update details");
+	}
+
 	void openBorrowsAndReserves(ActionEvent e, String readerID) 
 	{
 		readerAccountID = readerID;

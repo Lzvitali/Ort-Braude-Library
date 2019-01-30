@@ -70,8 +70,8 @@ public class UpdateBookController implements IGUIController
 	@FXML
 	private JFXButton updateBtn;
 
-	@FXML
-	private TextField bookIDTextField;
+    @FXML
+    private JFXTextField bookIDTextField;
 
 
 	@FXML
