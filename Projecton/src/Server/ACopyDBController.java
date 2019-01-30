@@ -20,6 +20,7 @@ import Common.Book;
 import Common.Copy;
 import Common.History;
 import Common.IEntity;
+import Common.Mail;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
@@ -136,7 +137,8 @@ public abstract class ACopyDBController
 	{
 		ObjectMessage answer = new ObjectMessage("Delayed"); 
 		Copy copy=(Copy) msg.getObjectList().get(0);
-
+		PreparedStatement ps;
+		ResultSet rs;
 		PreparedStatement setDate = null; 
 
 		try 
@@ -148,6 +150,31 @@ public abstract class ACopyDBController
 			setDate.setDate(1, (java.sql.Date) nowPlus14Date ); 
 			setDate.setInt(2, copy.getCopyID() ); 
 			setDate.executeUpdate(); 
+			
+			
+			//send mail by ziv
+			
+			ps = connToSQL.prepareStatement("SELECT bookId FROM copy WHERE copyId = ?");
+			ps.setInt(1, copy.getCopyID() ); 
+			rs=ps.executeQuery();
+			rs.next();
+			
+			Book book=new Book();
+			book.setBookID(rs.getInt(1));
+			ObjectMessage askBookDetails=new ObjectMessage(book,"searchBookID","Book");
+			Book bookDetails = (Book) (ABookDBController.selection(askBookDetails, connToSQL)).getObjectList().get(0);
+			
+			ObjectMessage notify=new ObjectMessage("sendMail","Daily");
+			Mail mail=new Mail();
+			mail.setTo("obllibrarians@gmail.com");
+			String body="Hello librarians, "+"\nWe want to notfiy you that the user id "+copy.getBorrowerID()
+					+ " have delayed his book "+bookDetails.getBookName()+ "."
+					+"\n 		Thank you , Ort Braude Library";
+			mail.setBody(body);
+			String subject="User "+copy.getBorrowerID()+" delayed his book "+bookDetails.getBookName();
+			mail.setSubject(subject);
+			notify.addObject(mail);
+			ADailyDBController.selection(notify, connToSQL);
 		}
 
 		catch (SQLException e) 
