@@ -199,13 +199,13 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     
 
     @FXML
-    private TableColumn<?, ?> accountEmail;
+    private TableColumn<IEntity, String> accountEmail;
 
     @FXML
-    private TableColumn<?, ?> accountLateReturns;
+    private TableColumn<IEntity, Integer> accountLateReturns;
 
     @FXML
-    private TableColumn<?, ?> accountMoreDetails;
+    private TableColumn<IEntity, Button> accountMoreDetails;
     
     
 
@@ -637,9 +637,15 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				accountStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 				accountPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
 				borrowsAndReservesColumn.setCellValueFactory(new PropertyValueFactory<>("borrowsAndReserves"));
+				accountMoreDetails.setCellValueFactory(new PropertyValueFactory<>("moreDetails"));
+				accountLateReturns.setCellValueFactory(cellData -> new SimpleIntegerProperty(((ReaderAccount)cellData.getValue()).getNumOfDelays()).asObject());
 				if(LogInController.permission==1)
 				{
 					freezeColumn.setCellValueFactory(new PropertyValueFactory<>("freeze"));
+				}
+				if(LogInController.permission==2)
+				{
+					accountEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 				}
 				int i;
 				ArrayList <IEntity> result=msg.getObjectList();
@@ -647,7 +653,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				{
 
 					((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
-					
+					((ReaderAccount)result.get(i)).setMoreDetails(new Button("More Details"));
 					//readerAccountID = ((ReaderAccount)result.get(i)).getId();
 					tempReaderAccountID = ((ReaderAccount)result.get(i)).getId();
 					((ReaderAccount)result.get(i)).getBorrowsAndReserves().setOnAction(e -> openBorrowsAndReserves(e,tempReaderAccountID));

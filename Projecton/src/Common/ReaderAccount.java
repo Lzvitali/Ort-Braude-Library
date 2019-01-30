@@ -13,15 +13,18 @@ public class ReaderAccount extends User
 	private String phone;
 	private String email;
 	private String status; // active/frozen/locked
-	private int numOfDelays;
+	private Integer numOfDelays;
 	private String adress;//add to table column 
 	private String educationYear;//add to table column 
 	private String freeSearch;
 	//buttons for the Librarian and for the Library director
 	private transient Button borrowsAndReserves;
 	private transient Button freeze;
+	private transient Button moreDetails;
 	
 	
+	
+
 	//Constructors
 	public ReaderAccount(String id, String password, int permission, boolean isOnline, String firstName,
 			String lastName, String phone, String email, String status, int numOfDelays, String adress,
@@ -216,6 +219,14 @@ public class ReaderAccount extends User
 	public int getNumOfDelays() 
 	{
 		return numOfDelays;
+	}
+	
+	public Button getMoreDetails() {
+		return moreDetails;
+	}
+
+	public void setMoreDetails(Button moreDetails) {
+		this.moreDetails = moreDetails;
 	}
 
 
