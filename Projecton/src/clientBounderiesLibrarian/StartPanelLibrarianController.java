@@ -655,9 +655,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 					((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
 					((ReaderAccount)result.get(i)).setMoreDetails(new Button("More Details"));
 					//readerAccountID = ((ReaderAccount)result.get(i)).getId();
-					tempReaderAccountID = ((ReaderAccount)result.get(i)).getId();
-					((ReaderAccount)result.get(i)).getBorrowsAndReserves().setOnAction(e -> openBorrowsAndReserves(e,tempReaderAccountID));
-					((ReaderAccount)result.get(i)).getMoreDetails().setOnAction(e -> openUpdateDetails(e,tempReaderAccountID));
+					//tempReaderAccountID = ((ReaderAccount)result.get(i)).getId();
+					ReaderAccount readerAccount = (ReaderAccount)result.get(i); 
+					((ReaderAccount)result.get(i)).getBorrowsAndReserves().setOnAction(e -> openBorrowsAndReserves(e,readerAccount));
+					((ReaderAccount)result.get(i)).getMoreDetails().setOnAction(e -> openUpdateDetails(e,readerAccount));
 					
 					if(LogInController.permission==1)
 					{
@@ -672,15 +673,15 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		}
 	}
 	
-	private void openUpdateDetails(ActionEvent e, String readerID) 
+	private void openUpdateDetails(ActionEvent e, ReaderAccount reader) 
 	{
-		readerAccountID = readerID;
+		readerAccountID = reader.getId();
 		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/PersonalDetails.fxml","Update details");
 	}
 
-	void openBorrowsAndReserves(ActionEvent e, String readerID) 
+	void openBorrowsAndReserves(ActionEvent e, ReaderAccount reader) 
 	{
-		readerAccountID = readerID;
+		readerAccountID = reader.getId();
 		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/BorrowsAndReservationsLForLibrarian.fxml","Orders and borrows");
 	}
 	
