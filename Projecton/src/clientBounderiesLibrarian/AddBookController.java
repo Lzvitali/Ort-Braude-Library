@@ -218,7 +218,9 @@ public class AddBookController implements IGUIController
 	{
 		FileChooser fc=new FileChooser();
 		fc.getExtensionFilters().add(new ExtensionFilter("PDF Files","*.pdf"));
+		fc.setInitialDirectory(new File("c:\\"));
 		f=fc.showOpenDialog(null);
+		
 		if(f!=null)
 		{
 			isUploaded=true;
