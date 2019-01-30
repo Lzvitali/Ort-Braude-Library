@@ -196,6 +196,18 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
     @FXML
     private TabPane TabPaneSelect;
+    
+
+    @FXML
+    private TableColumn<?, ?> accountEmail;
+
+    @FXML
+    private TableColumn<?, ?> accountLateReturns;
+
+    @FXML
+    private TableColumn<?, ?> accountMoreDetails;
+    
+    
 
 	private ToggleGroup toggleGroupForBooks; 
 	private ToggleGroup toggleGroupForAccounts; 

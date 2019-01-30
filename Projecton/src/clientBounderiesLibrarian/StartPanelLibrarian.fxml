@@ -289,14 +289,17 @@
                                           </HBox>
                                        </children>
                                     </AnchorPane>
-                                    <TableView fx:id="searchReaderAccountTable" layoutX="152.0" layoutY="139.0" prefHeight="358.0" prefWidth="923.0">
+                                    <TableView fx:id="searchReaderAccountTable" layoutX="26.0" layoutY="139.0" prefHeight="358.0" prefWidth="1161.0">
                                       <columns>
                                         <TableColumn fx:id="accountIDColumn" prefWidth="98.0" text="ID" />
-                                        <TableColumn fx:id="accountFirstNameColumn" prefWidth="182.0" text="First name" />
-                                          <TableColumn fx:id="accountLastNameColumn" prefWidth="188.0" text="Last name" />
-                                          <TableColumn fx:id="accountStatusColumn" prefWidth="176.0" text="status" />
-                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="126.0" text="phone" />
-                                          <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="152.0" text="Borrows &amp; Reserves" />
+                                        <TableColumn fx:id="accountFirstNameColumn" prefWidth="147.0" text="First name" />
+                                          <TableColumn fx:id="accountLastNameColumn" prefWidth="173.0" text="Last name" />
+                                          <TableColumn fx:id="accountStatusColumn" prefWidth="131.0" text="status" />
+                                          <TableColumn fx:id="accountPhoneColumn" prefWidth="133.0" text="phone" />
+                                          <TableColumn fx:id="accountEmail" prefWidth="141.0" text="email" />
+                                          <TableColumn fx:id="accountLateReturns" prefWidth="92.0" text="Late returns" />
+                                          <TableColumn fx:id="borrowsAndReservesColumn" minWidth="15.0" prefWidth="149.0" text="Borrows &amp; Reserves" />
+                                          <TableColumn fx:id="accountMoreDetails" prefWidth="97.0" text="More details" />
                                       </columns>
                                     </TableView>
                                  </children>

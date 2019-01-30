@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import Common.IGUIController;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
+import clientBounderiesLibrarian.StartPanelLibrarianController;
 import clientCommonBounderies.LogInController;
 import clientCommonBounderies.StartPanelController;
 import clientConrollers.AClientCommonUtilities;
@@ -57,7 +58,26 @@ public class PersonalDetailsController implements IGUIController
     	client.setClientUI(this);
     	
     	ReaderAccount readerAccount=new ReaderAccount();
-    	readerAccount.setId(LogInController.currentID);
+    	String readerID = "0";
+    	
+    	// 1 = Library Director , 2 = Librarian , 3 = reader account
+
+    	//if the reader account opening the window
+    	if(LogInController.permission == 3)
+    	{
+    		readerID = LogInController.currentID;
+    	}
+
+    	//if the librarian or the library director opening the window
+    	else 
+    	{
+    		if(LogInController.permission == 1 || LogInController.permission == 2)
+    		{
+    			readerID = StartPanelLibrarianController.readerAccountID;
+    		}
+    	}
+    			
+    	readerAccount.setId(readerID);
     	ObjectMessage objectMessage=new ObjectMessage(readerAccount,"SearchReader","ReaderAccount");
     	client.setClientUI(this);
     	client.handleMessageFromClient(objectMessage);
