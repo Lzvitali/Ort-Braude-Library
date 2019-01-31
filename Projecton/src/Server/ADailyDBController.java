@@ -57,6 +57,7 @@ public abstract class ADailyDBController
     	executor.scheduleAtFixedRate(() -> checkIfDidntImplementReservation(connToSQL), 0, 4, TimeUnit.HOURS);
         executor.scheduleAtFixedRate(() -> resetUserStatusHistory(connToSQL),20, 86399, TimeUnit.SECONDS);
         executor.scheduleAtFixedRate(() -> countQuantityOfCopyEveryMounth(connToSQL),15, 86399, TimeUnit.SECONDS);
+        executor.scheduleAtFixedRate(() -> checkNotifyReturnDaily(connToSQL), 0, 1, TimeUnit.DAYS);
     }
     
     
@@ -439,5 +440,68 @@ public abstract class ADailyDBController
    	 		e.printStackTrace();
    	 	}
 	}
+
+	private static void  checkNotifyReturnDaily(Connection connToSQL)
+	{
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date now =  Calendar.getInstance().getTime();
+   	 	String today=format.format(now);
+   	 	Calendar cal = Calendar.getInstance();
+   	 	cal.setTime(now);
+   	 	cal.add(Calendar.DATE, 1); //minus number would decrement the days
+     	String tommorow=format.format(cal.getTime()); 
+   	 	ArrayList <Copy> copies=new ArrayList<Copy>();
+   	 	Copy copyInput;
+   	 	ResultSet rs;
+   	 	PreparedStatement ps;
+   	 	try 
+   	 	{
+			ps=connToSQL.prepareStatement("SELECT * FROM copy WHERE borrowerId IS NOT NULL AND returnDate = ?");
+			ps.setString(1, tommorow);
+			rs =ps.executeQuery();
+			while(rs.next())
+			{
+				copyInput=new Copy();
+				copyInput.setCopyID(rs.getInt(1));
+				copyInput.setBookID(rs.getInt(2));
+				copyInput.setBorrowerID(rs.getString(3));
+				copyInput.setReturnDate(rs.getString(5));
+				copies.add(copyInput);
+			}
+			
+			for(Copy copy:copies)
+			{
+				ReaderAccount readerAccount=new ReaderAccount();
+				readerAccount.setId(copy.getBorrowerID());
+				ObjectMessage askTheFirstReader=new ObjectMessage(readerAccount,"SearchReader","ReaderAccount");
+				readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askTheFirstReader, connToSQL)).getObjectList().get(0);
+				
+				Book askedBook=new Book();
+				askedBook.setBookID(copy.getBookID());
+				ObjectMessage bookDetails=new ObjectMessage(askedBook,"searchBookID","Book");
+				Book book = (Book) (ABookDBController.selection(bookDetails, connToSQL)).getObjectList().get(0);
+				
+				ObjectMessage notify=new ObjectMessage("sendMail","Daily");
+				Mail mail=new Mail();
+				mail.setTo(readerAccount.getEmail());
+				String subject="Return your book "+book.getBookName()+" Untill tommorow";
+				mail.setSubject(subject);
+				String body="Hello "+readerAccount.getFirstName()+"\nWe want to notfiy you that you need to come to library"
+							+ " and return  "+book.getBookName()
+							+ ".\nUntill tommorow."
+							+"\n 		Thank you , Ort Braude Library";
+				mail.setBody(body);
+				notify.addObject(mail);
+				ADailyDBController.selection(notify, connToSQL);
+			}
+					
+   	 	}
+   	 	catch(Exception e)
+   	 	{
+   	 		e.printStackTrace();
+   	 	}
+	}
+
+
 }
 
