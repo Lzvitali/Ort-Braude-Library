@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -76,6 +77,12 @@ public class UpdateBookController implements IGUIController
 
 	@FXML
 	private VBox bookInfoVBox;
+	
+	
+    @FXML
+    private Label noResultLabel;
+    
+    
 
 	@FXML
 	void initialize() 
@@ -187,6 +194,8 @@ public class UpdateBookController implements IGUIController
 		{
 			Platform.runLater(()->
 			{
+				noResultLabel.setVisible(false);
+				
 				bookInfoVBox.setVisible(true); 
 				Book tempBook=(Book)msg.getObjectList().get(0);
 
@@ -212,7 +221,12 @@ public class UpdateBookController implements IGUIController
 		}
 		else if(msg.getMessage().equals("Book not exist in DB"))
 		{
-			bookInfoVBox.setVisible(false); 
+			bookInfoVBox.setVisible(false);
+			
+			if(!bookIDTextField.getText().equals("") && !bookIDTextField.getText().equals(" ") && !bookIDTextField.getText().equals("   "))
+			{
+				noResultLabel.setVisible(true);
+			}
 		}
 	}
 

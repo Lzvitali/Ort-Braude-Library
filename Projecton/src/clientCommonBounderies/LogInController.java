@@ -81,8 +81,6 @@ public class LogInController  implements IGUIController
     	else if(checkResult.equals("correct"))
 		{
     		currentID=id;
-        	
-        	//System.out.println(id + "  " + password);
 
         	User user = new User(id,password);
         	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
@@ -93,15 +91,6 @@ public class LogInController  implements IGUIController
     	{
     		AClientCommonUtilities.alertErrorWithOption(checkResult, "Wrong input", "Ok");
     	}
-    	
-    	
-    	//login with no validation
-    	/*currentID=id;
-    	
-    	User user = new User(id,password);
-    	ObjectMessage msg = new ObjectMessage(user,"user try to log in","User");
-    	client.setClientUI(this);
-    	client.handleMessageFromClient(msg); */
     	
     }
     

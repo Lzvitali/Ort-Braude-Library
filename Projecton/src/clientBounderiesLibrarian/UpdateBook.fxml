@@ -113,5 +113,6 @@
             <JFXTextField fx:id="bookIDTextField" onKeyTyped="#showBookInfo" prefHeight="29.0" prefWidth="220.0" />
          </children>
       </HBox>
+      <Label fx:id="noResultLabel" layoutX="180.0" layoutY="116.0" prefHeight="21.0" prefWidth="229.0" text=" -Book with such ID dos'nt exist-" visible="false" />
    </children>
 </AnchorPane>

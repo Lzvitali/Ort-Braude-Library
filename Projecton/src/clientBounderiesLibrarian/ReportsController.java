@@ -32,6 +32,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
 
 public class ReportsController implements IGUIController
 {
@@ -107,7 +108,7 @@ public class ReportsController implements IGUIController
 	private BarChart<String,Number> diagramForNumLateReturns;
 
 	@FXML
-	private JFXTextField BookIDReport3;
+	private JFXTextField bookIDReport3;
 
 	@FXML
 	private VBox resultsForReport3;
@@ -117,6 +118,11 @@ public class ReportsController implements IGUIController
 
 	@FXML
 	private Button showPreviousReportBtn;
+	
+
+    @FXML
+    private Label noResultLabel;
+    
 
 	ObservableList<Integer> list1;
 	ObservableList<Integer> list2;
@@ -165,6 +171,8 @@ public class ReportsController implements IGUIController
 		}
 		else if(msg.getNote().equals("Report number 3")) //for Report3
 		{
+			noResultLabel.setVisible(false);
+			
 			setReport3Result(msg);
 
 			ArrayList <IEntity> result = msg.getObjectList();
@@ -174,6 +182,11 @@ public class ReportsController implements IGUIController
 		else if(msg.getNote().equals("Report number 3 - no results")) //for Report3
 		{
 			resultsForReport3.setVisible(false);
+			 
+			if(!bookIDReport3.getText().equals("") && !bookIDReport3.getText().equals(" ") && !bookIDReport3.getText().equals("   "))
+			{
+				noResultLabel.setVisible(true);
+			}
 		}
 		else if(msg.getNote().equals("Results  active,frozen,locked for report1"))
 		{
@@ -265,9 +278,9 @@ public class ReportsController implements IGUIController
 	{
 		String bookID;	
 
-		if (AValidationInput.checkValidationBook("bookID", BookIDReport3.getText()).equals("correct"))
+		if (AValidationInput.checkValidationBook("bookID", bookIDReport3.getText()).equals("correct"))
 		{	
-			bookID=BookIDReport3.getText();
+			bookID=bookIDReport3.getText();
 		}
 		else
 		{

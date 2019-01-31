@@ -66,8 +66,7 @@ public class AUserDBController
 			ps.setString(1, ((User)msg.getObjectList().get(0)).getId() ); 
 			ps.setString(2, ((User)msg.getObjectList().get(0)).getPassword()); 
 			rs =ps.executeQuery();
-
-			String pass = ((User)msg.getObjectList().get(0)).getPassword();
+			
 			
 			if(rs.next())
 			{
