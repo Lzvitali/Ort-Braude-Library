@@ -296,17 +296,20 @@ public class ReportsController implements IGUIController
 	void showNewReport(ActionEvent event) 
 	{
 		int mounth;
+		int year;
 		if (monthComboBox.getValue()==12)
 		{
 			mounth=1;
+			year=yearComboBox.getValue()+1;
 
 		}
 		else
 		{
 			mounth=monthComboBox.getValue()+1;
+			 year=yearComboBox.getValue();
 		}
 
-		int year=yearComboBox.getValue();
+		
 		LocalDate now = LocalDate.of(year, mounth,1 );
 		Date dateForReport=java.sql.Date.valueOf(now);//make date from combobox
 
@@ -321,10 +324,11 @@ public class ReportsController implements IGUIController
 	@FXML //choose from comboBox
 	void showPreviousReport(ActionEvent event) 
 	{
+		
 		if(null != chooseFromPreviousComboBox.getValue() && !(chooseFromPreviousComboBox.getValue()).equals(""))
 		{
 			String month = (chooseFromPreviousComboBox.getValue()).substring(0, 2);
-			String year = (chooseFromPreviousComboBox.getValue()).substring(5, 9);
+			String year = (chooseFromPreviousComboBox.getValue()).substring(4,8);
 
 			Report report = new Report();
 			report.setYear(year);
@@ -333,6 +337,7 @@ public class ReportsController implements IGUIController
 			ObjectMessage sendToServer=new ObjectMessage(report,"Ask for old report1","History");
 			client.handleMessageFromClient(sendToServer);
 		}
+		
 	}
 
 

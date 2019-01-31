@@ -1,5 +1,6 @@
 package Server;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -7,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +23,7 @@ import Common.Report;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public abstract class AHistoryDBController
+public abstract class AHistoryDBController implements Serializable
 {
 
 
@@ -69,19 +71,24 @@ public abstract class AHistoryDBController
 		Report answerReport = new Report();
 		
 		PreparedStatement oldRepot = null;  
-		ResultSet rs1 = null;
+		ResultSet rsOld = null;
 		
 		
 		try
 		{
+			Report newReport=(Report)msg.getObjectList().get(0);
 			oldRepot = connToSQL.prepareStatement("SELECT * FROM ReportsHistory WHERE Year = ? AND Month = ? ");
-			oldRepot.setString(1, ((Report)msg.getObjectList().get(0)).getYear()); 
-			oldRepot.setString(2, ((Report)msg.getObjectList().get(0)).getMonth());  
-			rs1 =oldRepot.executeQuery();
+			System.out.println(newReport.getYear());
+			oldRepot.setString(1, (newReport.getYear())); 
+			oldRepot.setString(2, (newReport.getMonth()));  
+			rsOld =oldRepot.executeQuery();
 			
-			rs1.next();
+			if(rsOld.next())// here is problem ...
+			{
+				answerReport = new Report(rsOld.getInt(3), rsOld.getInt(4), rsOld.getInt(5), rsOld.getInt(6), rsOld.getInt(7));
+			}
 			
-			answerReport = new Report(rs1.getInt(3), rs1.getInt(4), rs1.getInt(5), rs1.getInt(6), rs1.getInt(7));
+			
 		}
 		catch (SQLException e) 
 		{
@@ -102,19 +109,40 @@ public abstract class AHistoryDBController
 	{
 		Report newReport=(Report)msg.getObjectList().get(0);
 		Date checkingDate=(Date)newReport.getChosenDateForReport1();
-		Date firstDayForReportLaters=new Date(checkingDate.getYear() - 1, checkingDate.getMonth(), 1);
-		int month=firstDayForReportLaters.getMonth();
-		if(month==1)
+
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
+		SimpleDateFormat sdf3 = new SimpleDateFormat("MM");
+		String yearr1=sdf1.format(checkingDate);
+		String month2=sdf3.format(checkingDate);
+		int month1=Integer.parseInt(month2);
+		int year1=Integer.parseInt(yearr1);
+		if(month1==1)
 		{
-			month=12;
-			firstDayForReportLaters.setMonth(month);
+			month1=12;
+			year1--;
 		}
 		else 
 		{
-			month-=1;
-			firstDayForReportLaters.setMonth(month);
+			month1--;
 		}
 		
+		LocalDate firstDayForReportLaters = LocalDate.of(year1, month1, 1);
+		
+		//Date firstDayForReportLaters=new Date(Integer.parseInt(yearr1) , Integer.parseInt(month2)-1, 1);
+		//Month month=firstDayForReportLaters.getMonth();
+		/*if(firstDayForReportLaters.getMonth().equals(1))
+		{
+			
+			firstDayForReportLaters.plusMonths(11);
+			
+			firstDayForReportLaters.minusYears(1);
+		}
+		else 
+		{
+			
+			firstDayForReportLaters.minusMonths(1);
+		}*/
+		Date actuallyMonth=java.sql.Date.valueOf(firstDayForReportLaters);
 		ResultSet rs;
 		int active=0, frozen=0, locked=0, quantityOfCopies=0, numOfDidntReturnOnTime=0;
 		
@@ -163,7 +191,7 @@ public abstract class AHistoryDBController
 			}
 			//statement for getting quantities of total book copies  in specific month     
 			PreparedStatement report4 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
-			report4.setDate(2,firstDayForReportLaters);
+			report4.setDate(2,checkingDate);
 			report4.setString(1,"Quantity of copies");
 			rs = report4.executeQuery();
 			if(rs.next())
@@ -177,9 +205,9 @@ public abstract class AHistoryDBController
 
 
 			//statement for getting quantities of total book copies  in specific month     
-			PreparedStatement report5 = (PreparedStatement) connToSQL.prepareStatement("select count(distinct readerAccountID) AS count from obl.history where `action`=? and date >= ? and date <= ?");	
+			PreparedStatement report5 = (PreparedStatement) connToSQL.prepareStatement("select count(distinct readerAccountID) AS count from obl.history where `action`=? and date >= ? and date < ?");	
 			report5.setString(1,"Late in return");
-			report5.setDate(2,firstDayForReportLaters);
+			report5.setDate(2,actuallyMonth);
 			report5.setDate(3,checkingDate);
 			rs = report5.executeQuery();
 			if(rs.next())
@@ -199,15 +227,15 @@ public abstract class AHistoryDBController
 		if(active!=0 || frozen!=0 || locked!=0 || quantityOfCopies!=0||numOfDidntReturnOnTime!=0)
 		{
 			Report resReport=new Report(active,frozen,locked,quantityOfCopies,numOfDidntReturnOnTime);
-			resReport.setChosenDateForReport1(firstDayForReportLaters);
+			resReport.setChosenDateForReport1(actuallyMonth);
 			
 			
 			//check if still not in the `ReportsHistory` table
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+			/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 			SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
 			String yearr=sdf.format(firstDayForReportLaters);
-			String monthh=sdf2.format(firstDayForReportLaters);
+			String monthh=sdf2.format(firstDayForReportLaters);*/
 			
 			PreparedStatement oldRepot = null;  
 			ResultSet rs1 = null;
@@ -216,8 +244,8 @@ public abstract class AHistoryDBController
 			try
 			{
 				oldRepot = connToSQL.prepareStatement("SELECT * FROM ReportsHistory WHERE Year = ? AND Month = ? ");
-				oldRepot.setString(1, yearr); 
-				oldRepot.setString(2, monthh);  
+				oldRepot.setString(1, Integer.toString(year1) ); 
+				oldRepot.setString(2, Integer.toString(month1));  
 				rs1 =oldRepot.executeQuery();
 				
 				if(!rs1.next()) //if it is not in that table, put it in there
@@ -226,8 +254,8 @@ public abstract class AHistoryDBController
 					try 
 					{
 						PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?) "); 
-						updateHistory.setString(1,yearr); 
-						updateHistory.setString(2,monthh); 
+						updateHistory.setString(1,Integer.toString(year1)); 
+						updateHistory.setString(2,Integer.toString(month1)); 
 						updateHistory.setInt(3,active); 
 						updateHistory.setInt(4,frozen); 
 						updateHistory.setInt(5,locked); 
