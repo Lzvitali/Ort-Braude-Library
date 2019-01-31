@@ -72,10 +72,88 @@ public abstract class ACopyDBController
 		{
 			return checkIfUserGotAlreadyCopy(msg, connToSQL);
 		} 
+		else if(((msg.getMessage()).equals("showCopyInfo")))
+		{
+			return getCopyInfo(msg, connToSQL);
+		} 
 		else
 		{
 			return null; 
 		}
+	}
+
+	/**
+	 * This function return an object with with the info of the copy that it gets (if its exist)
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
+	private static ObjectMessage getCopyInfo(ObjectMessage msg, Connection connToSQL) 
+	{
+		ObjectMessage answer = new ObjectMessage(); 
+		Copy copy=(Copy) msg.getObjectList().get(0);
+		
+		Book returnedBookInfo;
+		ReaderAccount borrower = new ReaderAccount();
+		int bookID;
+		String borrowerId;
+		
+		PreparedStatement checkCopy=null;
+		PreparedStatement getBorrower=null;
+		ResultSet query1 = null;
+		ResultSet query2 = null;
+		
+		try
+		{
+			//get the copy
+			checkCopy= (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM copy WHERE copyId = ?");
+			checkCopy.setInt(1,copy.getCopyID());
+			query1 =checkCopy.executeQuery();
+			
+			if(query1.next())
+			{
+				//if the copy exist 
+				bookID = query1.getInt(2); //get it's bookID
+				borrowerId = query1.getString(3); //get it's borrowerID
+				
+				//get the book info
+				Book book=new Book(bookID);
+				ObjectMessage theBookOfTheCopy= new ObjectMessage(book,"showBookInfo","Book"); 
+				ObjectMessage returnedAnswer = ABookDBController.selection(theBookOfTheCopy, connToSQL);
+				returnedBookInfo = (Book)returnedAnswer.getObjectList().get(0);
+				
+				answer.addObject(returnedBookInfo);
+				
+				//get the borrower
+				getBorrower= (PreparedStatement) connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ?");
+				getBorrower.setString(1,borrowerId);
+				query2 =getBorrower.executeQuery();
+				
+				if(query2.next())
+				{
+					borrower.setFirstName(query2.getString(2));
+					borrower.setLastName(query2.getString(3));
+					
+					answer.addObject(borrower); 
+					answer.setNote("copy found and borrowed");
+				}
+				else
+				{
+					answer.setNote("copy found but NOT borrowed");
+				}
+				
+			}
+			else
+			{
+				answer.setNote("copy not exist"); 
+			}
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+		
+		return answer;
 	}
 
 	/**
@@ -202,6 +280,7 @@ public abstract class ACopyDBController
 	{
 
 		ObjectMessage answer=new ObjectMessage();
+		answer.setMessage(""); 
 		Date borrowDate;
 
 		PreparedStatement checkCopy=null;
@@ -222,10 +301,10 @@ public abstract class ACopyDBController
 			checkCopy.setInt(1,tempCopy.getCopyID());
 			query1 =checkCopy.executeQuery();
 			Boolean temp=query1.next();
-			if(temp==false)
+			if(temp == false)
 			{
-				answer.setNote("The copyID is wrong or the copyID does not borrowed");
-
+				answer.setMessage("The copyID is wrong OR not borrowed");
+				answer.setNote("Unsuccessful ReturnCopy"); 
 			}
 			else
 			{
@@ -334,6 +413,7 @@ public abstract class ACopyDBController
 						reader.setId(id);
 						reader.setStatus("Active");
 						AReaderAccountDBController.selection(msg, connToSQL);
+						answer.setMessage("successful ReturnCopy.\nThe status of the reader account changed back to 'Active'"); 
 					}
 				}
 				

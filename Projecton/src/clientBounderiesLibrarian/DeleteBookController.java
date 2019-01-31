@@ -103,15 +103,15 @@ public class DeleteBookController implements IGUIController
 	public void display(ObjectMessage msg) 
 	{
 		if(msg.getMessage().equals("This Book was successfully deleted "))
-		{
-			
+		{		
 			AClientCommonUtilities.infoAlert(msg.getMessage(),"A successful deleleting book");
+			AClientCommonUtilities.backToStartPanel();
 		}
 		else
 		{
-			AClientCommonUtilities.infoAlert(msg.getMessage(),"Unsuccessful deleleting book");
+			AClientCommonUtilities.alertErrorWithOption(msg.getMessage(), "Unsuccessful deleleting book", "Ok");
 		}	
-		AClientCommonUtilities.backToStartPanel();
+		
 	}
 }
 

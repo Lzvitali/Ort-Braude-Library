@@ -52,9 +52,11 @@ public class AUserDBController
 		ObjectMessage answer = new ObjectMessage();
 
 		String permition;
+		boolean canContinue = true; //if the user that try to login is 'reader account' and his status is 'Locked' - this flag will be: false
 
-		PreparedStatement ps = null; 
-		PreparedStatement ps2 = null; 
+		PreparedStatement getUser = null;  
+		PreparedStatement gerReaderAccount = null;  
+		PreparedStatement updateOnlineStatus;
 		ResultSet rs = null; 
 		ResultSet rs2 = null;
 
@@ -62,74 +64,64 @@ public class AUserDBController
 		try 
 		{
 			//get the data of the user from the BD
-			ps = connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? AND password=? ");
-			ps.setString(1, ((User)msg.getObjectList().get(0)).getId() ); 
-			ps.setString(2, ((User)msg.getObjectList().get(0)).getPassword()); 
-			rs =ps.executeQuery();
-			
-			
+			getUser = connToSQL.prepareStatement("SELECT * FROM user WHERE ID = ? AND password=? ");
+			getUser.setString(1, ((User)msg.getObjectList().get(0)).getId() ); 
+			getUser.setString(2, ((User)msg.getObjectList().get(0)).getPassword()); 
+			rs =getUser.executeQuery();
+						
 			if(rs.next())
 			{
 				
 				//if exist and not connected
 				if(rs.getString(4).equals("0"))
 				{
-					PreparedStatement updateTime;
-					try 
+					
+					//check if locked (only if reader account)
+					if(3 == rs.getInt(3))
 					{
-						updateTime = connToSQL.prepareStatement("UPDATE user "+"SET isOnline = ? WHERE ID = ?");
-						updateTime.setString(1, "1");
-						updateTime.setString(2, ((User)msg.getObjectList().get(0)).getId());
-						updateTime.executeUpdate();
-					} 
-					catch (SQLException e) 
-					{
-						e.printStackTrace();
-					}
+						//get the data of the reader account from the BD
+						gerReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
+						gerReaderAccount.setString(1, ((User)msg.getObjectList().get(0)).getId() );  
+						rs2 =gerReaderAccount.executeQuery();
 
-					permition = rs.getString(3);
-					answer.setNote(permition); 
-					answer.setMessage("successful");
+						if(rs2.next())
+						{
+							//check if locked
+							if(rs2.getString(8).equals("Locked"))
+							{
+								answer.setMessage("unsuccessful");
+								answer.setNote("User is Locked");
+								canContinue = false;
+							}
+						}	
+
+					}
+					
+					if(canContinue) //if it is 'reader account'- he is not 'locked' OR it is 'librarian'/'library director'
+					{ 
+						//change the user to 'online'
+						try 
+						{
+							updateOnlineStatus = connToSQL.prepareStatement("UPDATE user "+"SET isOnline = ? WHERE ID = ?");
+							updateOnlineStatus.setString(1, "1");
+							updateOnlineStatus.setString(2, ((User)msg.getObjectList().get(0)).getId());
+							updateOnlineStatus.executeUpdate();
+						} 
+						catch (SQLException e) 
+						{
+							e.printStackTrace();
+						}
+
+						permition = rs.getString(3);
+						answer.setNote(permition); 
+						answer.setMessage("successful");
+					}
+									
 				}
 				else //if exist but already connected
 				{
 					answer.setMessage("unsuccessful");
 					answer.setNote("User already connected");
-				}
-			
-				
-				//check if locked (only if reader account)
-				if(3 == rs.getInt(3))
-				{
-					//get the data of the reader account from the BD
-					ps2 = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
-					ps2.setString(1, ((User)msg.getObjectList().get(0)).getId() );  
-					rs2 =ps2.executeQuery();
-
-					if(rs2.next())
-					{
-						//check if locked
-						if(rs2.getString(8).equals("Locked"))
-						{
-							answer.setMessage("unsuccessful");
-							answer.setNote("User is Locked");
-						}
-					}
-					
-					//set back to 'not online'
-					PreparedStatement updateTime;
-					try 
-					{
-						updateTime = connToSQL.prepareStatement("UPDATE user "+"SET isOnline = ? WHERE ID = ?");
-						updateTime.setString(1, "0");
-						updateTime.setString(2, ((User)msg.getObjectList().get(0)).getId());
-						updateTime.executeUpdate();
-					} 
-					catch (SQLException e) 
-					{
-						e.printStackTrace();
-					}
-
 				}
 					
 			}

@@ -9,12 +9,12 @@
 
 <AnchorPane prefHeight="194.0" prefWidth="527.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clientBounderiesLibrarian.DeleteBookController">
    <children>
-      <JFXTextField fx:id="CopyIdTextField" alignment="TOP_LEFT" layoutX="122.0" layoutY="97.0" prefHeight="28.0" prefWidth="196.0" promptText="Copy ID">
+      <JFXTextField fx:id="CopyIdTextField" alignment="TOP_LEFT" labelFloat="true" layoutX="122.0" layoutY="97.0" prefHeight="28.0" prefWidth="196.0" promptText="Enter Copy ID">
          <font>
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXButton fx:id="OkDeleteBtn" buttonType="RAISED" layoutX="331.0" layoutY="94.0" onAction="#okDeleteBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Ok">
+      <JFXButton fx:id="OkDeleteBtn" buttonType="RAISED" layoutX="331.0" layoutY="94.0" onAction="#okDeleteBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Aprove">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></JFXButton>
