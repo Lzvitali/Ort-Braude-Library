@@ -1,6 +1,6 @@
 package Server;
 
-import java.io.Serializable;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -23,7 +23,7 @@ import Common.Report;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public abstract class AHistoryDBController implements Serializable
+public abstract class AHistoryDBController 
 {
 
 
@@ -127,21 +127,6 @@ public abstract class AHistoryDBController implements Serializable
 		}
 		
 		LocalDate firstDayForReportLaters = LocalDate.of(year1, month1, 1);
-		
-		//Date firstDayForReportLaters=new Date(Integer.parseInt(yearr1) , Integer.parseInt(month2)-1, 1);
-		//Month month=firstDayForReportLaters.getMonth();
-		/*if(firstDayForReportLaters.getMonth().equals(1))
-		{
-			
-			firstDayForReportLaters.plusMonths(11);
-			
-			firstDayForReportLaters.minusYears(1);
-		}
-		else 
-		{
-			
-			firstDayForReportLaters.minusMonths(1);
-		}*/
 		Date actuallyMonth=java.sql.Date.valueOf(firstDayForReportLaters);
 		ResultSet rs;
 		int active=0, frozen=0, locked=0, quantityOfCopies=0, numOfDidntReturnOnTime=0;
