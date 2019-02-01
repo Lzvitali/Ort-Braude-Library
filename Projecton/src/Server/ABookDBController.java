@@ -342,7 +342,12 @@ public abstract class  ABookDBController
 	}
 
 
-
+	/**
+	 * This function search Book according to what filled(without ID) in the object
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with Book with full details if found if not return proper message
+	 */
 	private static ObjectMessage searchBook(ObjectMessage msg, Connection connToSQL)
 	{
 		int isFreeSearch=0;
@@ -464,6 +469,12 @@ public abstract class  ABookDBController
 		return answer;
 	}
 	
+	/**
+	 * This function search Book according to id
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with Book with full details if found if not return proper message
+	 */
 	private static ObjectMessage searchBookID(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps = null;

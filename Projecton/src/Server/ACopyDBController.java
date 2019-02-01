@@ -450,7 +450,12 @@ public abstract class ACopyDBController
 		return answer;
 	}
 
-
+	/**
+	 * This function check if all the copies of specifec book are borrowed
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage checkIfAllBorrowed(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -922,7 +927,12 @@ public abstract class ACopyDBController
 		}
 	}
 
-
+	/**
+	 * This function check if the readerAccount have already copy of spesifec book
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return String with result to function that called it
+	 */
 	private static ObjectMessage checkIfUserGotAlreadyCopy(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;

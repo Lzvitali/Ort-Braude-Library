@@ -38,16 +38,16 @@ import Common.Reservation;
 public abstract class ADailyDBController 
 {
 	
-    static String testDay="01";
+    static String testDay="01"; //Date when the threads start run(monlthy)
 	
 	
 	
-	final static String userName = "OBLManager2019@gmail.com";
-	final static String password = "Aa112233";
+	final static String userName = "OBLManager2019@gmail.com";//The mail adresss of server
+	final static String password = "Aa112233";//The mail password of server
 	
-    static ScheduledThreadPoolExecutor executor;
-    static ExecutorService pool = Executors.newFixedThreadPool(15); 
-    private static Object lock1 = new Object();
+    static ScheduledThreadPoolExecutor executor; //Scheduled thread pool for manage threads
+    static ExecutorService pool = Executors.newFixedThreadPool(15); // regular thread pool for send mails
+    private static Object lock1 = new Object(); // for syronyizhed
     
     
     
@@ -286,7 +286,12 @@ public abstract class ADailyDBController
 		}
 	}
 
-	
+	/**
+	 * This function count reader accounts per status(Active\Freeze\Locked)
+	 *  and insert it to History table
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @param month - the month that need to update
+	 */
 	private static void  updateHistoryStatusReader(Connection connToSQL,int month)
 	{
 		PreparedStatement ps;
@@ -330,7 +335,12 @@ public abstract class ADailyDBController
 		}
 	}
 
-
+	/**
+	 * This function check if have readerAccount in delay of return that still didnt notify the ReaderAccount
+	 * happen once per delay in borrow
+	 *  and insert it to History table
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	@SuppressWarnings("resource")
 	private static void  checkDelayDaily(Connection connToSQL)
 	{
@@ -437,7 +447,12 @@ public abstract class ADailyDBController
 		}		
 	}
 
-	
+	/**
+	 * This function check if have reader account that didnt implement his reservation in the 48 hours he had,
+	 * if he didnt implement cancel his reservaion and let the next one to implmenent(if have one)
+	 *  and insert it to History table
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	private static void  checkIfDidntImplementReservation(Connection connToSQL)
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -473,6 +488,11 @@ public abstract class ADailyDBController
    	 	}
 	}
 
+	/**
+	 * This function check if have reader account that suppose to return his borrow book in the next day
+	 * if have somone like this , it will notify him
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	private static void  checkNotifyReturnDaily(Connection connToSQL)
 	{
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
