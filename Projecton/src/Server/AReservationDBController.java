@@ -304,6 +304,13 @@ public abstract class AReservationDBController
 		return answer;
 	}
 	
+	/**
+	 * This function let readerAccount reserve a book if doesnt have reserve for book 
+	 * also check that all the copies of the book is borrowed and the readerAccount is active
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage reserveBook(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -403,6 +410,12 @@ public abstract class AReservationDBController
 		
 	}
 	
+	/**
+	 * This function check if reader account doesnt have reserve for book 
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage alreadyReserveBook(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -433,6 +446,13 @@ public abstract class AReservationDBController
 		}
 	}
 
+	/**
+	 * This function cancel reservation for spesific book and spesific reader account
+	 * if have somone next in the queue let the next person implement
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage cancelReservation(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -476,6 +496,13 @@ public abstract class AReservationDBController
 
 	}
 
+	/**
+	 * This function let the next readerAccount implement his resrvation 
+	 * start the time of 48 hours and notify him about it
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage letImplementReservation(ObjectMessage msg, Connection connToSQL)
 	{
 		
@@ -515,6 +542,12 @@ public abstract class AReservationDBController
 		return new ObjectMessage("letImplementReservation","SentMail");
 	}
 
+	/**
+	 * This function check if have somone that can implement reservation for book 
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client , if found reader account send him else send propper message
+	 */
 	private static ObjectMessage getReaderThatCanImplement(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -550,6 +583,14 @@ public abstract class AReservationDBController
 			}
 	}
 	
+	/**
+	 * This function triggerd when somone lost his book and it was the last copy of this book
+	 * the function delete all the reservations for book and notify all the people who had reservation
+	 * for this book.
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client 
+	 */
 	private static ObjectMessage deleteAllReservations(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -581,7 +622,7 @@ public abstract class AReservationDBController
 					Mail mail=new Mail();
 					mail.setTo(readerAccount.getEmail());
 					String body="Hello "+readerAccount.getFirstName()+"\nWe sorry to tell you but the book "+bookDetails.getBookName()
-							+ "\n its was our last copy of this book."
+							+ " lost.\n its was our last copy of this book."
 							+ ".\nSo we want to notify you that your reservation have been canceled."
 							+"\n 		Thank you , Ort Braude Library";
 					mail.setBody(body);
