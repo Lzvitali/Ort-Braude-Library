@@ -12,6 +12,7 @@ import java.util.Scanner;
 import Common.Book;
 import Common.ObjectMessage;
 import Common.User;
+import javafx.application.Platform;
 import ocsf.server.*;
 
 /**
@@ -54,7 +55,7 @@ public class OblServer extends AbstractServer
 
 	public void handleMessageFromClient(Object msg, ConnectionToClient client)
 	{
-		
+
 		ObjectMessage objectMessage = (ObjectMessage)msg;
 		ObjectMessage answer;
 
@@ -125,7 +126,7 @@ public class OblServer extends AbstractServer
 				e.printStackTrace();
 			}
 		}
-		
+
 		else if( (objectMessage.getNote()).equals("AddPDF") ) 
 		{
 
@@ -165,39 +166,42 @@ public class OblServer extends AbstractServer
 		}
 		else if( (objectMessage.getNote()).equals("getPDF") ) 
 		{
-			String bookName = (objectMessage.getMessage());
-			//A Guide to the SQL Standard.pdf
-			//pdfFiles\\"+bookName+".pdf
-			File myFile = new File("pdfFiles\\"+bookName+".pdf");
-
-			Socket sock;
-			ServerSocket servsock;
-			BufferedInputStream bis;
-
-			try
+			Platform.runLater(()->
 			{
+				String bookName = (objectMessage.getMessage());
+				//A Guide to the SQL Standard.pdf
+				//pdfFiles\\"+bookName+".pdf
+				File myFile = new File("pdfFiles\\"+bookName+".pdf");
 
-				servsock = new ServerSocket(5643);
-				ObjectMessage obj = new ObjectMessage(  "pfdRecieve", Integer.toString( ((int) myFile.length())*4 )  );
-				obj.setExtra(objectMessage.getExtra());
-				client.sendToClient(obj);
-				sock = servsock.accept();
-				byte[] mybytearray = new byte[((int) myFile.length())*4];
-				bis = new BufferedInputStream(new FileInputStream(myFile));
-				bis.read(mybytearray, 0, mybytearray.length);
-				OutputStream os = sock.getOutputStream();
-				os.write(mybytearray, 0, mybytearray.length);
-				os.flush();
-				
-				servsock.close();
-				os.close();
-				bis.close();
-				sock.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+				Socket sock;
+				ServerSocket servsock;
+				BufferedInputStream bis;
+
+				try
+				{
+
+					servsock = new ServerSocket(5643);
+					ObjectMessage obj = new ObjectMessage(  "pfdRecieve", Integer.toString( ((int) myFile.length())*4 )  );
+					obj.setExtra(objectMessage.getExtra());
+					client.sendToClient(obj);
+					sock = servsock.accept();
+					byte[] mybytearray = new byte[((int) myFile.length())*4];
+					bis = new BufferedInputStream(new FileInputStream(myFile));
+					bis.read(mybytearray, 0, mybytearray.length);
+					OutputStream os = sock.getOutputStream();
+					os.write(mybytearray, 0, mybytearray.length);
+					os.flush();
+
+					servsock.close();
+					os.close();
+					bis.close();
+					sock.close();
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			});
 		}
 
 		else if( (objectMessage.getNote()).equals("Copy") ) 
@@ -240,7 +244,7 @@ public class OblServer extends AbstractServer
 	{
 		System.out.println("The server is online ");
 		ADailyDBController.startThreads(connToSQL);
-		
+
 	}
 
 	/**
@@ -325,7 +329,7 @@ public class OblServer extends AbstractServer
 
 	}
 
-	
+
 
 
 }
