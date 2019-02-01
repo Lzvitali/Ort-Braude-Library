@@ -23,6 +23,11 @@ import Common.Report;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * This class make the functionality for the server that includes a connection to the DB.
+ * The Focus of this class is on functions that deal with 'History' tables
+ */
+
 public abstract class AHistoryDBController 
 {
 
@@ -640,7 +645,12 @@ public abstract class AHistoryDBController
 
 	}
 
-
+	/**
+	 * This function collects the data that needed for Report2 (second tab)
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage getReportTwo( ObjectMessage msg, Connection connToSQL) 
 	{
 		ArrayList<IEntity> result=new ArrayList<IEntity>();

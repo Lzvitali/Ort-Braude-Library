@@ -23,6 +23,10 @@ import Common.ReaderAccount;
 import clientCommonBounderies.LogInController;
 import clientConrollers.AClientCommonUtilities;
 
+/**
+ * This class make the functionality for the server that includes a connection to the DB.
+ * The Focus of this class is on functions that deal with 'Books'
+ */
 
 public abstract class  ABookDBController 
 {

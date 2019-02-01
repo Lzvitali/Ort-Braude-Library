@@ -25,6 +25,10 @@ import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
+/**
+ * This Class is the controller for fxml file: BorrowBook.fxml
+ */
+
 public class BorrowBookController implements IGUIController
 {
 

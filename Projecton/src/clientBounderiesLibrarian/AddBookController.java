@@ -42,6 +42,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+/**
+ * This Class is the controller for fxml file: AddBook.fxml
+ */
+
 public class AddBookController implements IGUIController
 {
 	OBLClient client;

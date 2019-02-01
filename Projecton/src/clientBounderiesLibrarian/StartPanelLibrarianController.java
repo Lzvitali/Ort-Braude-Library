@@ -250,7 +250,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		searchResultTable.setVisible(false);
 		searchReaderAccountTable.setVisible(false);
 	}
-
+	
+	/**
+	 * function that sets the redio buttons for book search
+	 */
 	void setRedioButtonsForBooksSearch() 
 	{
 		toggleGroupForBooks = new ToggleGroup();
@@ -260,6 +263,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		this.freeSearchBookRB.setToggleGroup(toggleGroupForBooks);
 	}
 
+	/**
+	 * function that sets the redio buttons for reader account search
+	 */
 	void setRedioButtonsForAccountsSearch()
 	{
 		toggleGroupForAccounts = new ToggleGroup();
@@ -288,6 +294,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 
 	}
 
+	/**
+	 * this function collects search text for book search
+	 */
 	private  void  searchBookPressed()
 	{
 		JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForBooks.getSelectedToggle();
@@ -355,6 +364,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	}
 
 
+	/**
+	 * this function collects search text for reader account search
+	 */
 	private  void searchReaderAccountPressed()
 	{
 		JFXRadioButton selectedRadioButton = (JFXRadioButton) toggleGroupForAccounts.getSelectedToggle();
@@ -513,6 +525,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 			
 		}
 	}
+	
+	/**
+	 * this function sets the search results for book search
+	 * @param msg object with the search result that the server returned
+	 */
 	private void searchBookResult(ObjectMessage msg)
 	{
 		searchResultTable.getItems().clear();
@@ -618,6 +635,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		}
 	}
 
+	/**
+	 * this function sets the search results for reader account search
+	 * @param msg object with the search result that the server returned
+	 */
 	private void searchReaderAccountResult(ObjectMessage msg)
 	{
 		searchReaderAccountTable.getItems().clear();
@@ -673,12 +694,22 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		}
 	}
 	
+	/**
+	 * this function opens the window of 'PersonalDetails' 
+	 * @param e
+	 * @param reader the reader account that his information should be in that window
+	 */
 	private void openUpdateDetails(ActionEvent e, ReaderAccount reader) 
 	{
 		readerAccountID = reader.getId();
 		AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/PersonalDetails.fxml","Update details");
 	}
 
+	/**
+	 * this function opens the window of 'Borrows and reservations' 
+	 * @param e
+	 * @param reader the reader account that his information should be in that window
+	 */
 	void openBorrowsAndReserves(ActionEvent e, ReaderAccount reader) 
 	{
 		readerAccountID = reader.getId();
@@ -686,7 +717,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	}
 	
 	
-	
+	/**
+	 * function that handles the 'change status' option of library director
+	 * @param e
+	 * @param reader reader the reader account that his information should be in that window
+	 */
 	void changeStatus(ActionEvent e, ReaderAccount reader) 
 	{
 		

@@ -35,6 +35,11 @@ import Common.ReaderAccount;
 import Common.Report;
 import Common.Reservation;
 
+/**
+ * This class make the functionality for the server that includes a connection to the DB.
+ * The Focus of this class is on functions that deal with Daily action (occurs every X time)
+ */
+
 public abstract class ADailyDBController 
 {
 	

@@ -23,6 +23,10 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 
+/**
+ * This Class is the controller for fxml file: ReturnBook.fxml
+ */
+
 public class ReturnBookController implements IGUIController {
 
 	OBLClient client;
@@ -89,7 +93,11 @@ public class ReturnBookController implements IGUIController {
 
 	}
 
-
+	/**
+	 * This function will be committed each time a button on the keyboard pressed
+	 * will ask the server for checking if a book with that CopyId exist
+	 * @param event
+	 */
 	@FXML
 	void showCopyInfo(KeyEvent event)
 	{

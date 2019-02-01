@@ -19,9 +19,14 @@ import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.Reservation;
 
+/**
+ * This class make the functionality for the server that includes a connection to the DB.
+ * The Focus of this class is on functions that deal with 'Reservations'
+ */
+
 public abstract class AReservationDBController 
 {
-	
+
 	/**
 	 * This function sorts the request in the 'msg' to the relevant function and returns the answer
 	 * @param msg - the object from the client
@@ -64,7 +69,7 @@ public abstract class AReservationDBController
 			return null; 
 		}
 	}
-	
+
 	/**
 	 * this method implement reservation it recieve reader account and reservation 
 	 * it check if we can to borrow the copy and consider the queue of reservation for each book
@@ -92,7 +97,7 @@ public abstract class AReservationDBController
 		String temp;
 		try
 		{ 
-			 
+
 			isActive = connToSQL.prepareStatement("SELECT * FROM readeraccount WHERE ID = ? ");
 			isActive.setString(1, reader.getId()); 
 			rs1 =isActive.executeQuery();
@@ -146,13 +151,13 @@ public abstract class AReservationDBController
 							}
 
 						}
-							answer.setMessage("ReservationNotImplemented");
-							answer.setNote("The reader account is not the first on queue");
-							answer.addObject(msg.getObjectList().get(0));
+						answer.setMessage("ReservationNotImplemented");
+						answer.setNote("The reader account is not the first on queue");
+						answer.addObject(msg.getObjectList().get(0));
 					}
 				}
 			}
-			
+
 		}
 		catch (SQLException e) 
 		{
@@ -160,10 +165,15 @@ public abstract class AReservationDBController
 		}	
 		return answer;
 	}
-	
-	
+
+	/**
+	 * This function makes the borrow implementation
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage implementTheBorrow(ObjectMessage msg, Connection connToSQL) 
-{
+	{
 		ObjectMessage answer = new ObjectMessage();
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		Reservation reserve=(Reservation) msg.getObjectList().get(1);
@@ -172,48 +182,48 @@ public abstract class AReservationDBController
 		ResultSet rs2=null;
 		try
 		{
-		getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
-		getBook.setInt(1, reserve.getBookID());
-		rs1 = getBook.executeQuery();
-		rs1.next();
-		numOfCopy = connToSQL.prepareStatement("UPDATE `copy` SET `borrowerId`=?, `borrowDate`=?,`returnDate`=? WHERE bookId=? AND borrowerId is null"); 
-		numOfCopy.setString(1, reader.getId());
-	
-		if(rs1.getBoolean(6))
-		{
-			LocalDate now = LocalDate.now();
-			Date today=java.sql.Date.valueOf(now);
-			LocalDate nowPlus3 = LocalDate.now().plusDays(3);
-			Date nowPlus3Date = java.sql.Date.valueOf(nowPlus3);
-		
-			numOfCopy.setDate(2, (java.sql.Date) today);
-			numOfCopy.setDate(3, (java.sql.Date) nowPlus3Date);
-		}
-		else 
-		{
-			LocalDate now = LocalDate.now();
-			Date today=java.sql.Date.valueOf(now);
-			LocalDate nowPlus14 = LocalDate.now().plusDays(14);
-			Date nowPlus14Date = java.sql.Date.valueOf(nowPlus14);
-		
-			numOfCopy.setDate(2, (java.sql.Date) today);
-			numOfCopy.setDate(3, (java.sql.Date) nowPlus14Date);
-		}
-	
-		numOfCopy.setInt(4, reserve.getBookID());
-		numOfCopy.executeUpdate();
+			getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
+			getBook.setInt(1, reserve.getBookID());
+			rs1 = getBook.executeQuery();
+			rs1.next();
+			numOfCopy = connToSQL.prepareStatement("UPDATE `copy` SET `borrowerId`=?, `borrowDate`=?,`returnDate`=? WHERE bookId=? AND borrowerId is null"); 
+			numOfCopy.setString(1, reader.getId());
 
-		answer.setMessage("ReservationImplemented");
-		PreparedStatement deleteReserve = connToSQL.prepareStatement("delete FROM reservations WHERE bookId=? AND readerAccountID=?");
-		deleteReserve.setInt(1, reserve.getBookID());
-		deleteReserve.setString(2, reader.getId());
-		deleteReserve.executeUpdate();
+			if(rs1.getBoolean(6))
+			{
+				LocalDate now = LocalDate.now();
+				Date today=java.sql.Date.valueOf(now);
+				LocalDate nowPlus3 = LocalDate.now().plusDays(3);
+				Date nowPlus3Date = java.sql.Date.valueOf(nowPlus3);
+
+				numOfCopy.setDate(2, (java.sql.Date) today);
+				numOfCopy.setDate(3, (java.sql.Date) nowPlus3Date);
+			}
+			else 
+			{
+				LocalDate now = LocalDate.now();
+				Date today=java.sql.Date.valueOf(now);
+				LocalDate nowPlus14 = LocalDate.now().plusDays(14);
+				Date nowPlus14Date = java.sql.Date.valueOf(nowPlus14);
+
+				numOfCopy.setDate(2, (java.sql.Date) today);
+				numOfCopy.setDate(3, (java.sql.Date) nowPlus14Date);
+			}
+
+			numOfCopy.setInt(4, reserve.getBookID());
+			numOfCopy.executeUpdate();
+
+			answer.setMessage("ReservationImplemented");
+			PreparedStatement deleteReserve = connToSQL.prepareStatement("delete FROM reservations WHERE bookId=? AND readerAccountID=?");
+			deleteReserve.setInt(1, reserve.getBookID());
+			deleteReserve.setString(2, reader.getId());
+			deleteReserve.executeUpdate();
 		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		
+
 		//get number of copy for History table
 		PreparedStatement getBookId;
 		try {
@@ -222,7 +232,7 @@ public abstract class AReservationDBController
 			getBookId.setString(2,reader.getId());
 			rs2 = getBookId.executeQuery();
 			rs2.next();
-			
+
 			//add `implement reservation book` to HISTORY
 			LocalDate now = LocalDate.now(); 
 			Date today = java.sql.Date.valueOf(now);
@@ -234,10 +244,10 @@ public abstract class AReservationDBController
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return answer;
 	}
-	
+
 	/**
 	 * This function returns the list of reservation of the reader account
 	 * @param msg - the object from the client
@@ -249,7 +259,7 @@ public abstract class AReservationDBController
 		ObjectMessage answer = null;  
 		ReaderAccount reader=(ReaderAccount) msg.getObjectList().get(0);
 		boolean resultExist = false;
-		
+
 		PreparedStatement getReserves = null;  
 		PreparedStatement getBook = null;
 		ResultSet rs1 = null; 
@@ -261,17 +271,17 @@ public abstract class AReservationDBController
 			getReserves = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE readerAccountID = ? ");
 			getReserves.setString(1, reader.getId() ); 
 			rs1 =getReserves.executeQuery();
-			
+
 			ArrayList <IEntity> result=new ArrayList<IEntity>(); 
-			
+
 			//go by all the reservations that the reader account reserved and get the book of each one
 			while(rs1.next())
 			{
 				resultExist = true;
-				 
+
 				int bookId = rs1.getInt(1); //the bookID of the current copy
 				String date = rs1.getString(3);
-				
+
 				//get the book of that reserve
 				getBook = connToSQL.prepareStatement("SELECT * FROM Book WHERE bookId = ? ");
 				getBook.setInt(1, bookId ); 
@@ -282,9 +292,9 @@ public abstract class AReservationDBController
 					Reservation reservation = new Reservation(bookId, date, rs2.getString(2), rs2.getString(3), rs2.getString(4),rs2.getString(5), rs2.getString(6), rs2.getString(7)); 
 					result.add(reservation);  
 				}
-				
+
 			}
-			
+
 			if(resultExist)
 			{
 				answer = new ObjectMessage(result,"TheReserves"," ");
@@ -293,17 +303,17 @@ public abstract class AReservationDBController
 			{
 				answer = new ObjectMessage(result,"NoReserves"," ");
 			}
-			
+
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
-		
+
 
 		return answer;
 	}
-	
+
 	/**
 	 * This function let readerAccount reserve a book if doesnt have reserve for book 
 	 * also check that all the copies of the book is borrowed and the readerAccount is active
@@ -323,93 +333,93 @@ public abstract class AReservationDBController
 		ObjectMessage resultOfCopy=ACopyDBController.selection(message,connToSQL);
 		if(resultOfCopy.getNote().equals("FoundBook"))
 		{
-				answer=new ObjectMessage("reserveBook","HaveAvailableCopy");
-				return answer;
+			answer=new ObjectMessage("reserveBook","HaveAvailableCopy");
+			return answer;
 		}
- 		else
- 		{
- 			message=new ObjectMessage();
- 			message.addObject(msg.getObjectList().get(0), msg.getObjectList().get(1));
- 			ObjectMessage resultOfExistReserve=AReservationDBController.alreadyReserveBook(message,connToSQL);
- 			if(resultOfExistReserve.getNote().equals("FoundReserve"))
- 			{
+		else
+		{
+			message=new ObjectMessage();
+			message.addObject(msg.getObjectList().get(0), msg.getObjectList().get(1));
+			ObjectMessage resultOfExistReserve=AReservationDBController.alreadyReserveBook(message,connToSQL);
+			if(resultOfExistReserve.getNote().equals("FoundReserve"))
+			{
 				answer=new ObjectMessage("reserveBook","ExistReserve");
 				return answer;
- 			}
- 			else
- 			{
- 	 			message=new ObjectMessage("checkIfUserGotAlreadyCopy","Copy");
- 	 			message.addObject(msg.getObjectList().get(0), msg.getObjectList().get(1));
- 	 			ObjectMessage resultIfUserGotAlreadyCopy=ACopyDBController.selection(message,connToSQL);
- 	 			if(resultIfUserGotAlreadyCopy.getNote().equals("HaveCopy"))
- 	 			{
- 					answer=new ObjectMessage("reserveBook","HaveCopy");
- 					return answer;
- 	 			}
- 	 			else
- 	 			{
-	 				try 
-	 				{
-	 					ps = connToSQL.prepareStatement("SELECT status FROM obl.readeraccount WHERE ID=?");
-	 					ps.setString(1,askedReaderAccount.getId());
-	 					rs=ps.executeQuery();
-	 					rs.next();
-	 					if(rs.getString(1).equals("Active"))
-	 					{
-		 					Date date = new Date();
-		 					Date time= new Date();
-		 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-		 					SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
-		 					String currentDate = sdf.format(date);
-		 					String currentTime = sdf2.format(date);
-		 					try 
-		 					{
+			}
+			else
+			{
+				message=new ObjectMessage("checkIfUserGotAlreadyCopy","Copy");
+				message.addObject(msg.getObjectList().get(0), msg.getObjectList().get(1));
+				ObjectMessage resultIfUserGotAlreadyCopy=ACopyDBController.selection(message,connToSQL);
+				if(resultIfUserGotAlreadyCopy.getNote().equals("HaveCopy"))
+				{
+					answer=new ObjectMessage("reserveBook","HaveCopy");
+					return answer;
+				}
+				else
+				{
+					try 
+					{
+						ps = connToSQL.prepareStatement("SELECT status FROM obl.readeraccount WHERE ID=?");
+						ps.setString(1,askedReaderAccount.getId());
+						rs=ps.executeQuery();
+						rs.next();
+						if(rs.getString(1).equals("Active"))
+						{
+							Date date = new Date();
+							Date time= new Date();
+							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+							SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
+							String currentDate = sdf.format(date);
+							String currentTime = sdf2.format(date);
+							try 
+							{
 								date=new SimpleDateFormat("yyyy-MM-dd").parse(currentDate);
 								time=new SimpleDateFormat("hh:mm:ss").parse(currentTime);
 							} 
-		 					catch (ParseException e) 
-		 					{
-		
+							catch (ParseException e) 
+							{
+
 								e.printStackTrace();
 							}
-		 					java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
-		 					java.sql.Time sqlTime = new java.sql.Time(time.getTime()); 
+							java.sql.Date sqlDate = new java.sql.Date(date.getTime()); 
+							java.sql.Time sqlTime = new java.sql.Time(time.getTime()); 
 							ps = connToSQL.prepareStatement("INSERT INTO `Reservations` (`bookId`,`readerAccountID`, `Date`,`Time`) VALUES (?,?,?,?)");
 							ps.setInt(1,askedBook.getBookID());
 							ps.setString(2,askedReaderAccount.getId());
 							ps.setDate(3, sqlDate);
 							ps.setTime(4, sqlTime);
 							ps.executeUpdate();
-							
+
 
 							//add `reservation book` to HISTORY
 							LocalDate now = LocalDate.now(); 
 							Date today = java.sql.Date.valueOf(now);
 							History sendObject =new History(askedReaderAccount.getId(),"Reserve book",askedBook.getBookID(),(java.sql.Date) today);
 							AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
-							
+
 							answer=new ObjectMessage("reserveBook","Reserved");
-							
+
 							return answer;
-	 						
-	 					}
-	 					else
-	 					{
+
+						}
+						else
+						{
 							answer=new ObjectMessage("reserveBook","The Status of reader account is "+rs.getString(1)+"\nHe can't reserve book.");
 							return answer;
-	 					}
+						}
 					} 
-	 				catch (SQLException e) 
-	 				{
+					catch (SQLException e) 
+					{
 						e.printStackTrace();
 						return null;
 					}
- 	 			}
- 			}	
- 		}
-		
+				}
+			}	
+		}
+
 	}
-	
+
 	/**
 	 * This function check if reader account doesnt have reserve for book 
 	 * @param msg - the object from the client
@@ -479,7 +489,7 @@ public abstract class AReservationDBController
 				implementReservation.addObject(readerAccount, book);
 				letImplementReservation(implementReservation,connToSQL);
 			}
-			
+
 			//add `cancel reservation book` to HISTORY
 			LocalDate now = LocalDate.now(); 
 			Date today = java.sql.Date.valueOf(now);
@@ -505,7 +515,7 @@ public abstract class AReservationDBController
 	 */
 	private static ObjectMessage letImplementReservation(ObjectMessage msg, Connection connToSQL)
 	{
-		
+
 		PreparedStatement ps;
 		ReaderAccount askedReaderAccount=(ReaderAccount)msg.getObjectList().get(0);
 		Book book=(Book)msg.getObjectList().get(1);
@@ -515,8 +525,8 @@ public abstract class AReservationDBController
 			ps.setInt(1,book.getBookID());
 			ps.setString(2,askedReaderAccount.getId());
 			ps.executeUpdate();
-			
-			
+
+
 			//send mail
 			ObjectMessage notify=new ObjectMessage("sendMail","Daily");
 			Mail mail=new Mail();
@@ -530,15 +540,15 @@ public abstract class AReservationDBController
 			mail.setSubject(subject);
 			notify.addObject(mail);
 			ADailyDBController.selection(notify, connToSQL);
-			
+
 		} 
 		catch (SQLException e) 
 		{
-			
+
 			e.printStackTrace();
 			return null;
 		} 
-		
+
 		return new ObjectMessage("letImplementReservation","SentMail");
 	}
 
@@ -554,35 +564,35 @@ public abstract class AReservationDBController
 		Book book=(Book)msg.getObjectList().get(0); 
 		ResultSet rs = null; 
 
-			//get the copies that the reader account borrowed 
-			try 
+		//get the copies that the reader account borrowed 
+		try 
+		{
+			ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM reservations WHERE bookId=? AND startTimerImplement IS NULL");
+			ps.setInt(1, book.getBookID()); 
+			rs =ps.executeQuery();
+			rs.next();
+			if(rs.getInt(1)==0)
 			{
-				ps = connToSQL.prepareStatement("SELECT COUNT(*) FROM reservations WHERE bookId=? AND startTimerImplement IS NULL");
+				return new ObjectMessage("ReaderThatCanImplement","NoFound");
+			}
+			else
+			{
+				ps = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? AND startTimerImplement IS NULL ORDER BY `Date`,`Time` ");
 				ps.setInt(1, book.getBookID()); 
 				rs =ps.executeQuery();
 				rs.next();
-				if(rs.getInt(1)==0)
-				{
-					return new ObjectMessage("ReaderThatCanImplement","NoFound");
-				}
-				else
-				{
-					ps = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? AND startTimerImplement IS NULL ORDER BY `Date`,`Time` ");
-					ps.setInt(1, book.getBookID()); 
-					rs =ps.executeQuery();
-					rs.next();
-					ReaderAccount readerAccount=new ReaderAccount();
-					readerAccount.setId(rs.getString(2));
-					return new ObjectMessage(readerAccount,"ReaderThatCanImplement","Found");
-				}
-			} 
-			catch (SQLException e) 
-			{
-				e.printStackTrace();
-				return new ObjectMessage("ReaderThatCanImplement","NoFound");
+				ReaderAccount readerAccount=new ReaderAccount();
+				readerAccount.setId(rs.getString(2));
+				return new ObjectMessage(readerAccount,"ReaderThatCanImplement","Found");
 			}
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			return new ObjectMessage("ReaderThatCanImplement","NoFound");
+		}
 	}
-	
+
 	/**
 	 * This function triggerd when somone lost his book and it was the last copy of this book
 	 * the function delete all the reservations for book and notify all the people who had reservation
@@ -614,17 +624,17 @@ public abstract class AReservationDBController
 					getReaderAccount.setId(rs.getString(1));
 					ObjectMessage askReaderAccount=new ObjectMessage(getReaderAccount,"SearchReader","ReaderAccount");
 					ReaderAccount readerAccount =(ReaderAccount) (AReaderAccountDBController.selection(askReaderAccount, connToSQL)).getObjectList().get(0);
-					
+
 					ObjectMessage askBookDetails=new ObjectMessage(book,"searchBookID","Book");
 					Book bookDetails = (Book) (ABookDBController.selection(askBookDetails, connToSQL)).getObjectList().get(0);
-					
+
 					ObjectMessage notify=new ObjectMessage("sendMail","Daily");
 					Mail mail=new Mail();
 					mail.setTo(readerAccount.getEmail());
 					String body="Hello "+readerAccount.getFirstName()+"\nWe sorry to tell you but the book "+bookDetails.getBookName()
-							+ " lost.\n its was our last copy of this book."
-							+ ".\nSo we want to notify you that your reservation have been canceled."
-							+"\n 		Thank you , Ort Braude Library";
+					+ " lost.\n its was our last copy of this book."
+					+ ".\nSo we want to notify you that your reservation have been canceled."
+					+"\n 		Thank you , Ort Braude Library";
 					mail.setBody(body);
 					String subject="Canceled your reservation for "+bookDetails.getBookName();
 					mail.setSubject(subject);
@@ -636,7 +646,7 @@ public abstract class AReservationDBController
 				ps.executeUpdate();
 
 			}
-			
+
 		} 
 		catch (SQLException e) 
 		{
@@ -645,7 +655,7 @@ public abstract class AReservationDBController
 
 		return null;
 	}
-	
-	
-	
+
+
+
 }

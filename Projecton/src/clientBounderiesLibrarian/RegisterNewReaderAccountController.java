@@ -28,6 +28,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
+/**
+ * This Class is the controller for fxml file: RegisterNewAccount.fxml
+ */
+
 public class RegisterNewReaderAccountController implements IGUIController
 {
 	OBLClient client;

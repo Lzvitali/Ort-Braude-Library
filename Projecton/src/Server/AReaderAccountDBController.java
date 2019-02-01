@@ -17,6 +17,11 @@ import Common.IEntity;
 import Common.ObjectMessage;
 import Common.ReaderAccount;
 
+/**
+ * This class make the functionality for the server that includes a connection to the DB.
+ * The Focus of this class is on functions that deal with 'Reader account'
+ */
+
 public class AReaderAccountDBController 
 {
 

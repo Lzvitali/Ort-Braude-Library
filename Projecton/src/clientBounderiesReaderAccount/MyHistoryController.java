@@ -26,6 +26,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+/**
+ * This Class is the controller for fxml file: MyHistory.fxml
+ */
+
 public class MyHistoryController implements IGUIController 
 {
 

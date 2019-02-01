@@ -26,6 +26,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
+/**
+ * This Class is the controller for fxml file: UpdateBook.fxml
+ */
+
 public class UpdateBookController implements IGUIController 
 {
 

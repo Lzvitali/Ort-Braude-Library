@@ -23,6 +23,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
+/**
+ * This Class is the controller for fxml file: DeleteBook.fxml
+ */
+
 public class DeleteBookController implements IGUIController 
 {
 	OBLClient client;
@@ -42,12 +46,14 @@ public class DeleteBookController implements IGUIController
     private JFXButton CancelBtn;
 
     @FXML
-    void cancelBtnClicked(ActionEvent event) {
+    void cancelBtnClicked(ActionEvent event) 
+    {
     	AClientCommonUtilities.backToStartPanel();
     }
 
     @FXML
-    void okDeleteBtnClicked(ActionEvent event) {
+    void okDeleteBtnClicked(ActionEvent event) 
+    {
     	String result=validationResult();
     	if(result.equals("correct"))
     	{
@@ -72,7 +78,9 @@ public class DeleteBookController implements IGUIController
 
     }
     
-    //check if id of the copy is valid
+    /**
+     * check if id of the copy is valid
+     */
     private String validationResult()
     {
     	String result,finalResult="";

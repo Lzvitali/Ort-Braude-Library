@@ -50,6 +50,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * This Class is the controller for fxml file: StartPanelReaderAccountCont.fxml
+ */
+
 public class StartPanelReaderAccountController implements IGUIController,IGUIStartPanel
 {
 
@@ -159,7 +163,9 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     }
 
     
-    //TODO: Ziv-- add comments for JaavaDoc
+	/**
+	 * this function collects search text for book search
+	 */
     @FXML
     void makeSearch(ActionEvent event) 
     {
@@ -243,9 +249,6 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	AClientCommonUtilities.loadWindow(getClass(),"/clientBounderiesReaderAccount/PersonalDetails.fxml","Personal details");
     }
     
-     
-
-
 
 	@Override
 	public int getActivateWindows() 
@@ -282,7 +285,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		
 	}
 	
-	//TODO: Ziv-- add comments for JaavaDoc
+	/**
+	 * this function sets the search results for book search
+	 * @param msg object with the search result that the server returned
+	 */
 	private void searchBookResult(ObjectMessage msg)
 	{
 		searchResultTable.getItems().clear();
@@ -411,7 +417,9 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	client.handleMessageFromClient(objectMessage);
 	}
 	
-	
+	/**
+	 * function that sets the redio buttons for book search
+	 */
     void setRedioButtonsForBooksSearch()
     {
     	toggleGroupForBooks = new ToggleGroup();
@@ -441,6 +449,10 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
        }
     }
 	
+	/**
+	 * this function handles the result of 'reserve' option
+	 * @param msg
+	 */
     private void reserveBookResult(ObjectMessage msg)
     {
     	if(msg.getNote().equals("HaveAvailableCopy"))

@@ -16,6 +16,10 @@ import clientConrollers.OBLClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+
+/**
+ * This Class is the controller for fxml file: StartPanelReaderAccount.fxml
+ */
  
 public class PersonalDetailsController implements IGUIController
 {

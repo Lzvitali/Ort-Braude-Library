@@ -9,6 +9,11 @@ import java.sql.SQLException;
 import Common.ObjectMessage;
 import Common.User;
 
+/**
+ * This class make the functionality for the server that includes a connection to the DB.
+ * The Focus of this class is on functions that deal with 'Users' in general 
+ */
+
 public class AUserDBController 
 {
 	/**
@@ -32,12 +37,8 @@ public class AUserDBController
 			return LogOutAll(msg, connToSQL);
 		}
 
-
-
-		return null; // TODO: delete it. did it only to escape the error 
+		return null; 
 	}
-
-
 
 
 

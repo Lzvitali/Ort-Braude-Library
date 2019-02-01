@@ -273,6 +273,11 @@ public class ReportsController implements IGUIController
 	}
 
 
+	/**
+	 * This function will be committed each time a button on the keyboard pressed
+	 * will ask the server for checking if a book with that id exist
+	 * @param event
+	 */
 	@FXML
 	void getBookInfo(KeyEvent event) 
 	{
@@ -291,13 +296,12 @@ public class ReportsController implements IGUIController
 		client.handleMessageFromClient(sendToServer);
 	}
 
-
-	@FXML 
 	/**
 	 * The function activated when user press button for option choose by Year & Month
 	 * and ask send to server this date for creating report
 	 * @param event
 	 */
+	@FXML 
 	void showNewReport(ActionEvent event) 
 	{
 		int mounth;

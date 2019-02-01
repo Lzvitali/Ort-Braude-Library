@@ -25,6 +25,11 @@ import Common.ObjectMessage;
 import Common.ReaderAccount;
 import Common.User;
 
+/**
+ * This class make the functionality for the server that includes a connection to the DB.
+ * The Focus of this class is on functions that deal with 'Copies'
+ */
+
 public abstract class ACopyDBController 
 {
 
@@ -276,6 +281,12 @@ public abstract class ACopyDBController
 
 	}
 
+	/**
+	 * This function makes the 'return book' and all the actions that might happen after it
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage tryToReturnBook(ObjectMessage msg, Connection connToSQL) 
 	{
 

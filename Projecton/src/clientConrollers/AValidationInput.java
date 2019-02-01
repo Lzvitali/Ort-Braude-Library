@@ -9,99 +9,99 @@ import java.util.Locale;
 
 /**
  * 
- * @author Ester Asulin
- * this class chack if the fields of the registration user form are valid
+ * this class check input validation for the client before we send it to the server
  *
  */
 public abstract class AValidationInput 
-{/**
-*this method call to the relevant method according the field that was sent
-*/
+{
+	/**
+	 *this method call to the relevant method according the field that was sent
+	 */
 	public static String checkValidationUser(String field, String context)
 	{
 		String result="correct";
 		switch(field)
 		{
-			case "UserID":
-			{	
-				result=checkValidationID(context);
-				break;
-			}
-			case "Last Name":
-			{
-				result=checkValidationLastName(context);
-				break;
-			}
-			case "First Name":
-			{
-				result=checkValidationFirstName(context);
-				break;
-			}
-			case "Phone Number":
-			{
-				result=checkValidationPhoneNumber(context);
-				break;
+		case "UserID":
+		{	
+			result=checkValidationID(context);
+			break;
+		}
+		case "Last Name":
+		{
+			result=checkValidationLastName(context);
+			break;
+		}
+		case "First Name":
+		{
+			result=checkValidationFirstName(context);
+			break;
+		}
+		case "Phone Number":
+		{
+			result=checkValidationPhoneNumber(context);
+			break;
 
-			}
-			case "Email":
-			{
-				result=checkValidationEmail(context);
-				break;
+		}
+		case "Email":
+		{
+			result=checkValidationEmail(context);
+			break;
 
-			}
-			case "EducationYear":
-			{
-				result=checkValidationEducationYear(context);
-				break;
-			}
-			
-				
+		}
+		case "EducationYear":
+		{
+			result=checkValidationEducationYear(context);
+			break;
+		}
+
+
 		}
 		return result;
 	}
-	
-	
+
+
 	public static String checkValidationBook(String field, String context)
 	{
 		String result="correct";
 		switch(field)
 		{
-			case "bookID":
-			{
-				result=checkValidationBookID(context); 
-				break;
+		case "bookID":
+		{
+			result=checkValidationBookID(context); 
+			break;
 
-			}
-			case  "copyID":
-			{
-				result=checkValidationCopyID(context);
-				break;
-			}
-			case "bookName":
-			{
-				result=checkValidationBookName(context);
-				break;
+		}
+		case  "copyID":
+		{
+			result=checkValidationCopyID(context);
+			break;
+		}
+		case "bookName":
+		{
+			result=checkValidationBookName(context);
+			break;
 
-			}
-			case "authorName":
-			{
-				result=checkValidationAuthorName(context);
-				break;
+		}
+		case "authorName":
+		{
+			result=checkValidationAuthorName(context);
+			break;
 
-			}
-			case "dateOfBook":
-			{
-				result=checkValidationYearOfBook(context); 
-				break;
+		}
+		case "dateOfBook":
+		{
+			result=checkValidationYearOfBook(context); 
+			break;
 
-			}
-			case "topic":
-			{
-				result=checkValidationTopic(context);
-				break;
+		}
+		case "topic":
+		{
+			result=checkValidationTopic(context);
+			break;
 
-			}
-				
+		}
+
 		}
 		return result;
 	}
@@ -117,7 +117,7 @@ public abstract class AValidationInput
 			return "Enter please numbers between 1 to 4";
 		}
 	}
-	
+
 	/**
 	 * this method check if the email address is valid
 	 * @param context is the value of the field
@@ -139,11 +139,11 @@ public abstract class AValidationInput
 		}
 		return "correct";
 	}
-/**
- * this method check if the phone number is valid
- * @param context is the value of the field
- * @return correct if context passed all the Tests else return the match massage by the test how's fails 
-*/
+	/**
+	 * this method check if the phone number is valid
+	 * @param context is the value of the field
+	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
+	 */
 	private static String checkValidationPhoneNumber(String context)
 	{
 		if(context.equals(""))
@@ -168,7 +168,7 @@ public abstract class AValidationInput
 	 * this method check if the first name is valid
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
-	*/
+	 */
 	private static String checkValidationFirstName(String context)
 	{
 		if(context.equals(""))
@@ -189,7 +189,7 @@ public abstract class AValidationInput
 	 * this method check if the Last name is valid
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
-	*/
+	 */
 	private static String checkValidationLastName(String context)
 	{
 		if(context.equals(""))
@@ -210,7 +210,7 @@ public abstract class AValidationInput
 	 * this method check if the ID is valid
 	 * @param context is the value of the field
 	 * @return correct if context passed all the Tests else return the match massage by the test how's fails 
-	*/
+	 */
 	private static String checkValidationID(String context)
 	{
 		if(context.equals(""))
@@ -225,7 +225,7 @@ public abstract class AValidationInput
 		{
 			return "You must fill only numbers";
 		}
-	/*	if(!chackDigit(context))
+		/*	if(!chackDigit(context))
 		{
 			return "Insert correct user id";
 		}*/
@@ -251,7 +251,7 @@ public abstract class AValidationInput
 		{
 			return false;
 		}
-		
+
 		for(j=saveIndexStrudel;j<context.length();j++)
 		{
 			if(context.charAt(j)=='.')
@@ -288,7 +288,7 @@ public abstract class AValidationInput
 	/**
 	 * this method is called by chackValidationLastName or chackValidationfirstName
 	 * is checks if the context contain only characters
-	* @param context is the value of the field
+	 * @param context is the value of the field
 	 * @return true if context passed all the Tests else return false 
 	 */
 	private static Boolean onlyCharacters(String context)
@@ -303,31 +303,31 @@ public abstract class AValidationInput
 		}
 		return true;
 	}
-	
+
 	private static boolean checkIfDateOfBookBeforeToday(String context)
 	{
-		
-		
+
+
 		//check if date before is before today
-	    Date enteredDate=null;
-	    try
-	    {
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM");
-	    enteredDate = sdf.parse(context);
-	    }catch (Exception ex)
-	    {
-	        // enteredDate will be null if date="287686";
-	    }
-	    Date currentDate = new Date();      
-	    if(enteredDate.after(currentDate)){
-	        return false;
-	    }
-	    else 
-	    	return true;
-	    
-		
+		Date enteredDate=null;
+		try
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM");
+			enteredDate = sdf.parse(context);
+		}catch (Exception ex)
+		{
+			// enteredDate will be null if date="287686";
+		}
+		Date currentDate = new Date();      
+		if(enteredDate.after(currentDate)){
+			return false;
+		}
+		else 
+			return true;
+
+
 	}
-	
+
 	/**
 	 * this method is called by checkValidationPhoneNumbers or chackValidationID
 	 * it checks if the string contains only numbers
@@ -345,7 +345,7 @@ public abstract class AValidationInput
 		}
 		return true;
 	}
-	
+
 	private static Boolean checkIfYearIsonlyNumbers(String context)
 	{
 		for(int i=0;i<4;i++) 
@@ -357,7 +357,7 @@ public abstract class AValidationInput
 		}
 		return true;
 	}
-	
+
 	private static Boolean checkIfYearIsBetweenTheRange(String context)
 	{
 		LocalDate currentDate = LocalDate.now();
@@ -368,12 +368,12 @@ public abstract class AValidationInput
 		}
 		return true;
 	}
-/**
- * this method is called by checkValidID 
- * this method check the last digit of the ID by the known algorithem for this
- * @param context is the value of the field
- * @return true if context passed all the Tests else return false 
- */
+	/**
+	 * this method is called by checkValidID 
+	 * this method check the last digit of the ID by the known algorithem for this
+	 * @param context is the value of the field
+	 * @return true if context passed all the Tests else return false 
+	 */
 	private static Boolean chackDigit(String context)
 	{   //sum= sum of all weight digits, digitWeight= current weight numbers, temp= temporary variable in case the weightdigit bigger than 9
 		int sum=0, digitWeight=0,temp=0;
@@ -393,8 +393,8 @@ public abstract class AValidationInput
 					temp+=(digitWeight/10);
 					digitWeight=temp;
 				}
-				
-				
+
+
 			}
 			sum+=digitWeight;
 			digitWeight=0;
@@ -406,14 +406,14 @@ public abstract class AValidationInput
 		}
 		return true;
 	}
-	
+
 	private static String checkValidationBookID(String context)
 	{
 		if(context.equals("") || null == context)
 		{
 			return "Insert book id";	
 		}
-	/*	if(context.length()>9)
+		/*	if(context.length()>9)
 		{
 			return "Insert no more then 9 digit book id ";
 		}*/
@@ -421,7 +421,7 @@ public abstract class AValidationInput
 		{
 			return "You must fill only numbers";
 		}
-		
+
 		return "correct";
 	}
 	private static String checkValidationCopyID(String context)
@@ -430,7 +430,7 @@ public abstract class AValidationInput
 		{
 			return "Insert copy id";	
 		}
-	/*	if(context.length()>9)
+		/*	if(context.length()>9)
 		{
 			return "Insert no more then 9 digit book id ";
 		}*/
@@ -438,10 +438,10 @@ public abstract class AValidationInput
 		{
 			return "You must fill only numbers";
 		}
-		
+
 		return "correct";
 	}
-	
+
 	private static String checkValidationBookName(String context)
 	{
 		if(context.equals("") || null == context)
@@ -452,11 +452,11 @@ public abstract class AValidationInput
 		{
 			return "The Book Name is too long";
 		}*/
-		
+
 		return "correct";
 	}
-	
-	
+
+
 	private static String checkValidationAuthorName(String context)
 	{
 		if(context.equals("") || null == context)
@@ -471,8 +471,8 @@ public abstract class AValidationInput
 		{
 			return "You must fill only character";
 		}*/
-		
-		
+
+
 		for(int i=0; i<context.length(); i++)
 		{
 
@@ -491,9 +491,9 @@ public abstract class AValidationInput
 		}
 		return "correct";
 	}
-	
-	
-	
+
+
+
 	private static String checkValidationTopic(String context)
 	{
 		if(context.equals("") || null == context)
@@ -510,30 +510,30 @@ public abstract class AValidationInput
 		}*/
 		return "correct";
 	}
-	
+
 	private static String checkValidationYearOfBook(String context)
 	{
 		if(context.equals("") || null == context)
 		{
 			return "Insert year";	
 		}
-		
+
 		if(context.length() != 4)        
 		{
 			return "Year of book must be 4 digits";
 		}
-		
+
 		if(!checkIfYearIsonlyNumbers(context))
 		{
 			return "Year of book must be filled with only numbers";
 		}
-		
+
 		if(!checkIfYearIsBetweenTheRange(context)) 
 		{
 			return "Year of book must be between 1800 to current year(include it) ";
 		}
-		
+
 		return "correct";
-	
+
 	}
 }
