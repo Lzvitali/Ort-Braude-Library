@@ -113,6 +113,10 @@ public class AddBookController implements IGUIController
 
 
 	@FXML
+	/**
+	 * the function activated when user press on cancel upload file and it's clean file path
+	 * @param event
+	 */
 	void cancelUpload(ActionEvent event)
 	{
 		isUploaded=false;
@@ -120,6 +124,10 @@ public class AddBookController implements IGUIController
 		cancelUploadBtn.setVisible(false);
 	}
 
+	/**
+	 * the function set letters and numbers to the comboBox
+	 * @param event
+	 */
 	public void combo() 
 	{
 		ArrayList <String> s=new ArrayList<String>();
@@ -147,6 +155,10 @@ public class AddBookController implements IGUIController
 
 	//add new book or only copy
 	@FXML
+	/**
+	 * the function activated when user press on save and it's sand all data about new book to server
+	 * @param event
+	 */
 	void saveAddNewBook(ActionEvent event) 
 	{ 
 		String checkResult = validationFields();
@@ -180,40 +192,14 @@ public class AddBookController implements IGUIController
 
 
 
-		/*if(isUploaded)
-		{
-
-			File myFile = new File(f.getAbsolutePath());
-			Socket sock;
-			ServerSocket servsock;
-			BufferedInputStream bis;
-			try
-			{
-				servsock = new ServerSocket(5643);
-				client.handleMessageFromClient(msg);
-				sock = servsock.accept();
-				byte[] mybytearray = new byte[(int) myFile.length()];
-				bis = new BufferedInputStream(new FileInputStream(myFile));
-				bis.read(mybytearray, 0, mybytearray.length);
-				OutputStream os = sock.getOutputStream();
-				os.write(mybytearray, 0, mybytearray.length);
-				os.flush();
-				sock.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-
-		}*/
-
-
-
 	}
 
 
-	//function upload file and send it to server/ sending- still not writing
 	@FXML
+	/**
+	 * function upload file and send it to server
+	 * @param event
+	 */
 	void uploadTableOfContents(ActionEvent event) 
 	{
 		FileChooser fc=new FileChooser();
@@ -242,7 +228,10 @@ public class AddBookController implements IGUIController
 
 
 
-	//The function checks validation of input
+	/**
+	 * The function checks validation of input
+	 * @return
+	 */
 	private String validationFields()
 	{
 		String result,finalResult="";
@@ -328,12 +317,13 @@ public class AddBookController implements IGUIController
 	}
 	Book bookForSend;
 
+	
+	@FXML
 	/**
 	 * This function activate every time that user input text in key fields and create 'book' object and send it to server to check if this book is exist in db 
 	 * @param event
 	 * 
 	 */
-	@FXML
 	void checkLocation(KeyEvent event) 
 	{
 		Platform.runLater(()->
@@ -466,8 +456,12 @@ public class AddBookController implements IGUIController
 		}
 
 	}
-
-	//the function set location of exists book in gui window for client
+ 
+	
+	/**
+	 * the function set location of exists book in gui window for client
+	 * @param msg
+	 */
 	private void setLocation(ObjectMessage msg)
 	{
 		Platform.runLater(()->
@@ -479,7 +473,10 @@ public class AddBookController implements IGUIController
 		});
 	}
 
-	//the function send uploaded file from client to server
+	
+	/**
+	 * the function send uploaded file from client to server
+	 */
 	public void sendFile()
 	{
 		File myFile = new File(f.getAbsolutePath());

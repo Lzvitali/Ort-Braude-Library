@@ -292,7 +292,12 @@ public class ReportsController implements IGUIController
 	}
 
 
-	@FXML //choose by Year & Month
+	@FXML 
+	/**
+	 * The function activated when user press button for option choose by Year & Month
+	 * and ask send to server this date for creating report
+	 * @param event
+	 */
 	void showNewReport(ActionEvent event) 
 	{
 		int mounth;

@@ -451,7 +451,7 @@ public abstract class ACopyDBController
 	}
 
 	/**
-	 * This function check if all the copies of specifec book are borrowed
+	 * This function check if all the copies of specific book are borrowed
 	 * @param msg - the object from the client
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return ObjectMessage with the answer to the client

@@ -79,14 +79,18 @@ public class MyHistoryController implements IGUIController
 		{
 			setHistiryToTable(msg);
 		}
-		else if(msg.getMessage().equals("SetHistory"))
+		else if(msg.getMessage().equals("NoHistory"))
 		{
 			//do nothing
 		}
 		
 	}
 
-	//the function add data about users history from server to user gui window
+	
+	/**
+	 * the function add data about users history from server to user gui window
+	 * @param msg
+	 */
 	private void setHistiryToTable(ObjectMessage msg) 
 	{
 		

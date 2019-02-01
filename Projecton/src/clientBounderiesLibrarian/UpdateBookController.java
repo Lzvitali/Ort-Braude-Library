@@ -94,7 +94,10 @@ public class UpdateBookController implements IGUIController
 		combo();
 	}
 
-	//the function insert chars in to the Combo box in the gui window
+	
+	/**
+	 * the function insert chars in to the Combo box in the gui window
+	 */
 	public void combo() 
 	{
 		ArrayList <String> s=new ArrayList<String>();
@@ -120,6 +123,10 @@ public class UpdateBookController implements IGUIController
 	}
 
 	@FXML
+	/**
+	 * function close opened window
+	 * @param event
+	 */
 	void cancelBtnClicked(ActionEvent event) 
 	{
 		AClientCommonUtilities.backToStartPanel();
@@ -127,8 +134,12 @@ public class UpdateBookController implements IGUIController
 	}
 
 
-	//the function activated every time when user type in `bookId` box and ask server if this book exist . 
+	
 	@FXML
+	/**
+	 * the function activated every time when user type in `bookId` box and ask server if this book exist . 
+	 * @param event
+	 */
 	void showBookInfo(KeyEvent event) 
 	{
 
@@ -156,8 +167,12 @@ public class UpdateBookController implements IGUIController
 
 	}
 
-	//the function activated when user press button for update book`s information
+	
 	@FXML
+	/**
+	 * the function activated when user press button for update book`s information
+	 * @param event
+	 */
 	void updateAddNewBook(ActionEvent event)//update information about book
 	{
 		String checkResult = validationFields();
@@ -231,7 +246,11 @@ public class UpdateBookController implements IGUIController
 	}
 
 
-	//The function checks validation of input
+	
+	/**
+	 * The function checks validation of input
+	 * @return
+	 */
 	private String validationFields()
 	{
 		String result,finalResult="";
