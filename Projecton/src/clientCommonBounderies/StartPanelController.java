@@ -182,8 +182,8 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			{
 				selectedRadioButton=bookNameRB;
 			}
-
-
+			
+		
 			String selectedString = selectedRadioButton.getText();
 			Book askedBook=new Book();
 			if(selectedString.equals("Book name"))
@@ -200,7 +200,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("bookName", searchTextField.getText()),"Invaild Input" ,"continue" );
 					searchTextField.setText("");
 				}
-
+					
 			}
 			else if(selectedString.equals("Author name"))
 			{
@@ -231,7 +231,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 					AClientCommonUtilities.alertErrorWithOption(AValidationInput.checkValidationBook("topic", searchTextField.getText()), "Invaild Input","continue" );
 					searchTextField.setText("");
 				}
-
+				
 			}
 			else
 			{
@@ -339,40 +339,37 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	 */
 	private void getPDF(ObjectMessage msg)
 	{
-		Platform.runLater(()->
+		Socket sock;
+		try
 		{
-			Socket sock;
-			try
-			{
-				sock = new Socket(AStartClient.serverIP, 5643);
-				byte[] mybytearray = new byte[Integer.parseInt(msg.getNote())];
-				InputStream is = sock.getInputStream();
-				FileOutputStream fos = new FileOutputStream(msg.getExtra());
-				BufferedOutputStream bos = new BufferedOutputStream(fos);
-				int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
-				int current = bytesRead; 
+			sock = new Socket(AStartClient.serverIP, 5643);
+			byte[] mybytearray = new byte[Integer.parseInt(msg.getNote())];
+			InputStream is = sock.getInputStream();
+			FileOutputStream fos = new FileOutputStream(msg.getExtra());
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
+			int current = bytesRead; 
 
-				do 
+			do 
+			{
+				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
+				if(bytesRead >= 0) 
 				{
-					bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
-					if(bytesRead >= 0) 
-					{
-						current += bytesRead;
-					}
-				} while(bytesRead < -1);
+					current += bytesRead;
+				}
+			} while(bytesRead < -1);
 
-				bos.write(mybytearray, 0 , current);
-				bos.flush();
+			bos.write(mybytearray, 0 , current);
+			bos.flush();
 
-				fos.close();
-				bos.close();
-				sock.close();
-			} 
-			catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-		});
+			fos.close();
+			bos.close();
+			sock.close();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 
 
@@ -381,13 +378,13 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	{
 		return numOfActiveWindows;
 	}
-
+	
 	@Override
 	public void setActivateWindows(int newWindows) 
 	{
 		numOfActiveWindows=newWindows;
 	}
-
+	
 	void setRedioButtonsForBooksSearch()
 	{
 		toggleGroupForBooks = new ToggleGroup();
@@ -396,7 +393,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		this.topicRB.setToggleGroup(toggleGroupForBooks);
 		this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
 	}
-
+	
 	@FXML
 	void makeSearchBookWithEnterBtn(KeyEvent event)
 	{
@@ -404,7 +401,7 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		if(event.getCode().equals(KeyCode.ENTER))
 		{
 			makeSearch(new ActionEvent());
-		}
+	   }
 	}
 
 
