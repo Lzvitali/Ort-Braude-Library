@@ -27,6 +27,12 @@ public abstract class AHistoryDBController
 {
 
 
+	/**
+	 * This function sorts the request in the 'msg' to the relevant function and returns the answer
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	public static ObjectMessage selection(ObjectMessage msg, Connection connToSQL)
 	{	
 		if (((msg.getMessage()).equals("Ask for report2")))

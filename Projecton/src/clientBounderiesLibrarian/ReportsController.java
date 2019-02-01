@@ -415,7 +415,10 @@ public class ReportsController implements IGUIController
 			diagram.getData().add(series);
 		});
 	}
-
+	
+/**
+ * this function set data in comboBox (year and month)
+ */
 	public void combo() 
 	{
 		ArrayList <Integer> s=new ArrayList<Integer>();
