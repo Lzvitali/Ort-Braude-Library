@@ -349,15 +349,23 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
 			int current = bytesRead; 
+			int offsetStart = 0;
+			int offsetFin = offsetStart+1024;
+			boolean canStop = false;
 
 			do 
 			{
-				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
-				if(bytesRead >= 0) 
+				if(offsetFin >= current)
 				{
-					current += bytesRead;
+					offsetFin = current - offsetStart;
+					canStop = true;
 				}
-			} while(bytesRead < -1);
+				bytesRead = is.read(mybytearray, offsetStart, offsetFin);
+				
+				offsetStart = offsetFin+1;
+				offsetFin += 1024;		
+					
+			} while(!canStop);
 
 			bos.write(mybytearray, 0 , current);
 			bos.flush();
