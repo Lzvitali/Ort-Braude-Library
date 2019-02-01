@@ -165,39 +165,7 @@ public class OblServer extends AbstractServer
 		}
 		else if( (objectMessage.getNote()).equals("getPDF") ) 
 		{
-			String bookName = (objectMessage.getMessage());
-			//A Guide to the SQL Standard.pdf
-			//pdfFiles\\"+bookName+".pdf
-			File myFile = new File("pdfFiles\\"+bookName+".pdf");
-
-			Socket sock;
-			ServerSocket servsock;
-			BufferedInputStream bis;
-
-			try
-			{
-
-				servsock = new ServerSocket(5643);
-				ObjectMessage obj = new ObjectMessage(  "pfdRecieve", Integer.toString( ((int) myFile.length())*4 )  );
-				obj.setExtra(objectMessage.getExtra());
-				client.sendToClient(obj);
-				sock = servsock.accept();
-				byte[] mybytearray = new byte[((int) myFile.length())*4];
-				bis = new BufferedInputStream(new FileInputStream(myFile));
-				bis.read(mybytearray, 0, mybytearray.length);
-				OutputStream os = sock.getOutputStream();
-				os.write(mybytearray, 0, mybytearray.length);
-				os.flush();
-				
-				servsock.close();
-				os.close();
-				bis.close();
-				sock.close();
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			getPdf(msg, client);
 		}
 
 		else if( (objectMessage.getNote()).equals("Copy") ) 
@@ -227,9 +195,46 @@ public class OblServer extends AbstractServer
 		}
 
 
+	}
+	
+	private void getPdf(Object msg, ConnectionToClient client)
+	{
+		ObjectMessage objectMessage = (ObjectMessage)msg;
+		ObjectMessage answer;
+		
+		String bookName = (objectMessage.getMessage());
+		//A Guide to the SQL Standard.pdf
+		//pdfFiles\\"+bookName+".pdf
+		File myFile = new File("pdfFiles\\"+bookName+".pdf");
 
+		Socket sock;
+		ServerSocket servsock;
+		BufferedInputStream bis;
 
+		try
+		{
 
+			servsock = new ServerSocket(5643);
+			ObjectMessage obj = new ObjectMessage(  "pfdRecieve", Integer.toString( (int) myFile.length())  );
+			obj.setExtra(objectMessage.getExtra());
+			client.sendToClient(obj);
+			sock = servsock.accept();
+			byte[] mybytearray = new byte[((int) myFile.length())];
+			bis = new BufferedInputStream(new FileInputStream(myFile));
+			bis.read(mybytearray, 0, mybytearray.length);
+			OutputStream os = sock.getOutputStream();
+			os.write(mybytearray, 0, mybytearray.length);
+			os.flush();
+			
+			servsock.close();
+			os.close();
+			bis.close();
+			sock.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
