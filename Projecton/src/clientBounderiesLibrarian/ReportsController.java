@@ -327,7 +327,7 @@ public class ReportsController implements IGUIController
 		
 		if(null != chooseFromPreviousComboBox.getValue() && !(chooseFromPreviousComboBox.getValue()).equals(""))
 		{
-			String month = (chooseFromPreviousComboBox.getValue()).substring(0, 2);
+			String month = (chooseFromPreviousComboBox.getValue()).substring(0, 1);
 			String year = (chooseFromPreviousComboBox.getValue()).substring(4,8);
 
 			Report report = new Report();

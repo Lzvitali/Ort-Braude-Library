@@ -77,10 +77,11 @@ public abstract class AHistoryDBController
 		try
 		{
 			Report newReport=(Report)msg.getObjectList().get(0);
-			oldRepot = connToSQL.prepareStatement("SELECT * FROM ReportsHistory WHERE Year = ? AND Month = ? ");
-			System.out.println(newReport.getYear());
-			oldRepot.setString(1, (newReport.getYear())); 
-			oldRepot.setString(2, (newReport.getMonth()));  
+			String year = newReport.getYear();
+			String month = newReport.getMonth();
+			oldRepot = connToSQL.prepareStatement("SELECT * FROM obl.reportshistory WHERE Year = ? AND Month = ? ");
+			oldRepot.setString(1, year); 
+			oldRepot.setString(2, month);  
 			rsOld =oldRepot.executeQuery();
 			
 			if(rsOld.next())// here is problem ...

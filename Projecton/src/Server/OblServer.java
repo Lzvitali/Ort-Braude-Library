@@ -178,11 +178,11 @@ public class OblServer extends AbstractServer
 			{
 
 				servsock = new ServerSocket(5643);
-				ObjectMessage obj = new ObjectMessage("pfdRecieve", Integer.toString(((int) myFile.length())));
+				ObjectMessage obj = new ObjectMessage(  "pfdRecieve", Integer.toString( ((int) myFile.length())*4 )  );
 				obj.setExtra(objectMessage.getExtra());
 				client.sendToClient(obj);
 				sock = servsock.accept();
-				byte[] mybytearray = new byte[(int) myFile.length()];
+				byte[] mybytearray = new byte[((int) myFile.length())*4];
 				bis = new BufferedInputStream(new FileInputStream(myFile));
 				bis.read(mybytearray, 0, mybytearray.length);
 				OutputStream os = sock.getOutputStream();
