@@ -38,7 +38,7 @@ import Common.Reservation;
 public abstract class ADailyDBController 
 {
 	
-    static String testDay="27";
+    static String testDay="01";
 	
 	
 	
@@ -50,6 +50,12 @@ public abstract class ADailyDBController
     private static Object lock1 = new Object();
     
     
+    
+    
+	/**
+	 * This function start the timing of threads,triggered when the server is starting 
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
     public static void startThreads(Connection connToSQL)
     {
     	executor=new ScheduledThreadPoolExecutor(10);
@@ -60,7 +66,11 @@ public abstract class ADailyDBController
         executor.scheduleAtFixedRate(() -> checkNotifyReturnDaily(connToSQL), 0, 1, TimeUnit.DAYS);
     }
     
-    
+	/**
+	 * This function sorts the request in the 'msg' to the relevant function and returns the answer
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	public static void selection(ObjectMessage msg, Connection connToSQL)
 	{
 
@@ -70,7 +80,11 @@ public abstract class ADailyDBController
 		}
 	}
 
-	
+	/**
+	 * This function send mail to asked email with asked details
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	private static void sendMail(ObjectMessage msg, Connection connToSQL) 
 	{
 			Mail mail=((Mail)((ObjectMessage)msg).getObjectList().get(0));
@@ -128,6 +142,11 @@ public abstract class ADailyDBController
 	        }
 	}
 	 
+
+	/**
+	 * This function insert all readerAccounts with their status to table once to month
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	private static void monthlyUpdateUserStatusHistory(Connection connToSQL)
 	{
 		PreparedStatement ps=null;
@@ -152,6 +171,10 @@ public abstract class ADailyDBController
 		
 	}
 
+	/**
+	 * This function insert all readerAccounts with their status to table once to month
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	private static void  countQuantityOfCopyEveryMounth(Connection connToSQL)
 	{
 		PreparedStatement ps=null;
@@ -182,6 +205,12 @@ public abstract class ADailyDBController
    	 	}
 	}
 	
+	
+
+	/**
+	 * This function add asked copies to the Quantity of copies of current month
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	public static void  countQuantityOfCopyInCaseAddCopyOrBookToDB(Connection connToSQL, Integer numOfAddedCopies)
 	{
 		PreparedStatement ps=null;
@@ -220,7 +249,10 @@ public abstract class ADailyDBController
 		
 	}
 	
-	
+	/**
+	 * This function drop the table of UserStatusHistory and Restore it as empty
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 */
 	private static void  resetUserStatusHistory(Connection connToSQL)
 	{
 		synchronized(lock1) 

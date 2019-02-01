@@ -55,7 +55,13 @@ public class AReaderAccountDBController
 		}
 	}
 
-	
+	/**
+	 * This function change the status of ReaderAccount , updating in ReaderAccount table and insert
+	 * to UserHistoryStatus if not exist
+	 * @param msg- the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with the answer to the client
+	 */
 	private static ObjectMessage changeStatus(ObjectMessage msg, Connection connToSQL)
 	{
 		PreparedStatement ps;
@@ -310,6 +316,14 @@ public class AReaderAccountDBController
 		return answer;
 	}
 
+
+
+	/**
+	 * This function search ReaderAccount according to what filled in the object
+	 * @param msg - the object from the client
+	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+	 * @return ObjectMessage with ReaderAccount with full details if found if not return proper message
+	 */
 	private static ObjectMessage searchReaderAccount(ObjectMessage msg, Connection connToSQL)
 	{
 		int isFreeSearch=0;
@@ -400,4 +414,5 @@ public class AReaderAccountDBController
 		}
 		return answer;
 	}
+
 }
