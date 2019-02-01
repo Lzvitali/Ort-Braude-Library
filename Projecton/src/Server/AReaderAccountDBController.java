@@ -224,6 +224,7 @@ public class AReaderAccountDBController
 		PreparedStatement checkPhoneDB = null;
 		PreparedStatement checkEmailDB = null;
 		PreparedStatement updateUser ;
+		PreparedStatement ps;
 		PreparedStatement updateReaderAccount ;
 		ResultSet rs = null; 
 		ResultSet rs2 = null; 
@@ -294,7 +295,13 @@ public class AReaderAccountDBController
 			LocalDate now = LocalDate.now(); 
 			Date today = java.sql.Date.valueOf(now);
 			History sendObject =new History((String)reader.getId(),"Registration to OBL",(java.sql.Date) today);
-			AHistoryDBController.enterActionToHistory(sendObject, connToSQL);	
+			AHistoryDBController.enterActionToHistory(sendObject, connToSQL);
+			
+			//update ReaderStatusHistory
+
+			ps = connToSQL.prepareStatement("INSERT INTO `UserStatusHistory` (`readerAccountID`,`status`) VALUES (?,'Active'); ");
+			ps.setString(1,reader.getId());
+			ps.executeUpdate();
 		}
 		catch (SQLException e) 
 		{
