@@ -133,7 +133,7 @@ public class ReturnBookController implements IGUIController {
 		if(msg.getNote().equals("successful ReturnCopy"))
 		{
 			String successful;
-			if(msg.getMessage().equals("successful ReturnCopy.\\nThe status of the reader account changed back to 'Active'"))
+			if(msg.getMessage().equals("successful ReturnCopy.\nThe status of the reader account changed back to 'Active'"))
 			{
 				successful=msg.getMessage();				
 			}

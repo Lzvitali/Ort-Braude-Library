@@ -412,7 +412,8 @@ public abstract class ACopyDBController
 						ReaderAccount reader = new ReaderAccount();
 						reader.setId(id);
 						reader.setStatus("Active");
-						AReaderAccountDBController.selection(msg, connToSQL);
+						obj0.addObject(reader);
+						AReaderAccountDBController.selection(obj0, connToSQL);
 						answer.setMessage("successful ReturnCopy.\nThe status of the reader account changed back to 'Active'"); 
 					}
 				}
