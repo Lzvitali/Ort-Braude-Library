@@ -169,6 +169,12 @@ public class AUserDBController
 	}
 
 
+	/**
+	 * This function attempts to logout all the users.
+	 * @param msg
+	 * @param connToSQL
+	 * @return a message in ObjectMessage
+	 */
 	private static ObjectMessage LogOutAll(ObjectMessage msg, Connection connToSQL)
 	{
 		ObjectMessage answer = new ObjectMessage();

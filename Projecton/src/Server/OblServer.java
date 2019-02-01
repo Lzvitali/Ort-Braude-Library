@@ -243,6 +243,9 @@ public class OblServer extends AbstractServer
 		
 	}
 
+	/**
+	 * This function makes the connection to DB of our server	
+	 */	
 	public static void ConnectToDB(String user,String password,String schema) // make the connection for DB according the user and password that entered
 	{
 
@@ -266,6 +269,9 @@ public class OblServer extends AbstractServer
 
 	}
 
+	/**
+	 * This function print message if the server stoped
+	 */	
 	protected void serverStopped()
 	{
 		System.out.println("Server has stopped listening for connections.");
