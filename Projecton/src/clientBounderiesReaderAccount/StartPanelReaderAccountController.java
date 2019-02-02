@@ -377,21 +377,14 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 			InputStream is = sock.getInputStream();
 			FileOutputStream fos = new FileOutputStream(msg.getExtra());
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
-			int current = bytesRead; 
-
-			do 
-			{
-				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
-				if(bytesRead >= 0) 
-				{
-					current += bytesRead;
-				}
-			} while(bytesRead < -1);
-
-			bos.write(mybytearray, 0 , current);
+			byte[] bytes = new byte[16 * 1024];
+	        int count;
+	        while ((count = is.read(bytes)) > 0) {
+	            fos.write(bytes, 0, count);
+	        }
+	
 			bos.flush();
-
+	
 			fos.close();
 			bos.close();
 			sock.close();
@@ -400,6 +393,7 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 		{
 			e.printStackTrace();
 		}
+
 	}
 
 	@FXML

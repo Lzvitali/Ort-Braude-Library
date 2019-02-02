@@ -500,11 +500,15 @@ public class AddBookController implements IGUIController
 			client.setClientUI(this);
 			client.handleMessageFromClient(m);
 			sock = servsock.accept();
-			byte[] mybytearray = new byte[(int) myFile.length()];
 			bis = new BufferedInputStream(new FileInputStream(myFile));
-			bis.read(mybytearray, 0, mybytearray.length);
 			OutputStream os = sock.getOutputStream();
-			os.write(mybytearray, 0, mybytearray.length);
+			
+			byte[] bytes = new byte[16*1024];
+		    int count;
+		    while ((count = bis.read(bytes)) > 0) 
+		    {
+		        os.write(bytes, 0, count);
+		    }
 			os.flush();
 
 			servsock.close();

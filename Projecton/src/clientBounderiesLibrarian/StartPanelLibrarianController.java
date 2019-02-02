@@ -606,23 +606,15 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 		try
 		{
 			sock = new Socket(AStartClient.serverIP, 5643);
-			byte[] mybytearray = new byte[Integer.parseInt(msg.getNote())];
 			InputStream is = sock.getInputStream();
 			FileOutputStream fos = new FileOutputStream(msg.getExtra());
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			int bytesRead = is.read(mybytearray,0, Integer.parseInt(msg.getNote()));
-			int current = bytesRead; 
+			byte[] bytes = new byte[16 * 1024];
+	        int count;
+	        while ((count = is.read(bytes)) > 0) {
+	            fos.write(bytes, 0, count);
+	        }
 
-			do 
-			{
-				bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
-				if(bytesRead >= 0) 
-				{
-					current += bytesRead;
-				}
-			} while(bytesRead < -1);
-
-			bos.write(mybytearray, 0 , current);
 			bos.flush();
 
 			fos.close();

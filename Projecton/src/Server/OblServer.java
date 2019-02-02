@@ -133,23 +133,17 @@ public class OblServer extends AbstractServer
 			try
 			{
 				sock = new Socket(client.getInetAddress().getHostAddress(), 5643);
-				byte[] mybytearray = new byte[Integer.parseInt(objectMessage.getMessage())];
 				InputStream is = sock.getInputStream();
 				FileOutputStream fos = new FileOutputStream("pdfFiles\\"+objectMessage.getExtra() + ".pdf");
 				BufferedOutputStream bos = new BufferedOutputStream(fos);
-				int bytesRead = is.read(mybytearray,0, Integer.parseInt(objectMessage.getMessage()));
-				int current = bytesRead; 
 
-				do 
-				{
-					bytesRead = is.read(mybytearray, current, (mybytearray.length-current));
-					if(bytesRead >= 0) 
-					{
-						current += bytesRead;
-					}
-				} while(bytesRead < -1);
-
-				bos.write(mybytearray, 0 , current);
+				byte[] bytes = new byte[16 * 1024];
+		        int count;
+		        while ((count = is.read(bytes)) > 0) 
+		        {
+		            fos.write(bytes, 0, count);
+		        }
+		        
 				bos.flush();
 
 				fos.close();
@@ -219,11 +213,16 @@ public class OblServer extends AbstractServer
 			obj.setExtra(objectMessage.getExtra());
 			client.sendToClient(obj);
 			sock = servsock.accept();
-			byte[] mybytearray = new byte[((int) myFile.length())];
 			bis = new BufferedInputStream(new FileInputStream(myFile));
-			bis.read(mybytearray, 0, mybytearray.length);
-			OutputStream os = sock.getOutputStream();
-			os.write(mybytearray, 0, mybytearray.length);
+			OutputStream os = sock.getOutputStream();	
+			
+			byte[] bytes = new byte[16*1024];
+		    int count;
+		    while ((count = bis.read(bytes)) > 0) 
+		    {
+		        os.write(bytes, 0, count);
+		    }
+		    
 			os.flush();
 			
 			servsock.close();
