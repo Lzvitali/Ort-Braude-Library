@@ -31,12 +31,12 @@
             <AnchorPane prefHeight="45.0" prefWidth="288.0" />
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <JFXButton fx:id="LogInBtn" onAction="#makeLogIn" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Log in">
+                  <JFXButton fx:id="LogInBtn" onAction="#makeLogIn" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Log in">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font></JFXButton>
                   <AnchorPane prefHeight="82.0" prefWidth="92.0" />
-                  <JFXButton fx:id="cancelLogInBtn" onAction="#cancelLogIn" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Cancel">
+                  <JFXButton fx:id="cancelLogInBtn" onAction="#cancelLogIn" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font></JFXButton>

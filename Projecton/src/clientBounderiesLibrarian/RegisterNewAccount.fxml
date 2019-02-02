@@ -126,13 +126,13 @@
       </ImageView>
       <HBox layoutX="41.0" layoutY="474.0" prefHeight="54.0" prefWidth="372.0">
          <children>
-            <JFXButton fx:id="CancelBtn" onAction="#cancelRegistration" prefHeight="32.0" prefWidth="95.0" stylesheets="@buttonsStyle.css" text="Cancel">
+            <JFXButton fx:id="CancelBtn" onAction="#cancelRegistration" prefHeight="32.0" prefWidth="95.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Cancel">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>
             </JFXButton>
             <AnchorPane prefHeight="54.0" prefWidth="125.0" />
-            <JFXButton fx:id="SaveBtn" onAction="#saveRegistration" prefHeight="32.0" prefWidth="103.0" stylesheets="@buttonsStyle.css" text="Save">
+            <JFXButton fx:id="SaveBtn" onAction="#saveRegistration" prefHeight="32.0" prefWidth="103.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Save">
                <font>
                   <Font name="System Bold" size="15.0" />
                </font>

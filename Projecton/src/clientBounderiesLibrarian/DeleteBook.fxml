@@ -14,11 +14,11 @@
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </JFXTextField>
-      <JFXButton fx:id="OkDeleteBtn" buttonType="RAISED" layoutX="331.0" layoutY="94.0" onAction="#okDeleteBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Aprove">
+      <JFXButton fx:id="OkDeleteBtn" buttonType="RAISED" layoutX="331.0" layoutY="94.0" onAction="#okDeleteBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Aprove">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></JFXButton>
-      <JFXButton fx:id="CancelBtn" layoutX="61.0" layoutY="146.0" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">
+      <JFXButton fx:id="CancelBtn" layoutX="61.0" layoutY="146.0" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Cancel">
          <font>
             <Font name="System Bold" size="15.0" />
          </font></JFXButton>

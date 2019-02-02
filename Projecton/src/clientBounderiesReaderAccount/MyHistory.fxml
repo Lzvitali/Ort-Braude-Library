@@ -23,7 +23,7 @@
             <TableColumn fx:id="Details" prefWidth="231.0" text="Details" />
         </columns>
       </TableView>
-      <JFXButton fx:id="ExitBtn" layoutX="48.0" layoutY="429.0" onAction="#exitBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientBounderiesLibrarian/buttonsStyle.css" text="Exit">
+      <JFXButton fx:id="ExitBtn" layoutX="48.0" layoutY="429.0" onAction="#exitBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Exit">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

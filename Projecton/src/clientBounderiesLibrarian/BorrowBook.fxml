@@ -33,13 +33,13 @@
       </ImageView>
       <HBox layoutX="110.0" layoutY="236.0" prefHeight="47.0" prefWidth="303.0">
          <children>
-            <JFXButton fx:id="CancelBtn" onAction="#cancelBorrrow" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">
+            <JFXButton fx:id="CancelBtn" onAction="#cancelBorrrow" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Cancel">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </JFXButton>
             <AnchorPane prefHeight="47.0" prefWidth="39.0" />
-            <JFXButton fx:id="AproveBtn" onAction="#aproveBorrowBook" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Aprove">
+            <JFXButton fx:id="AproveBtn" onAction="#aproveBorrowBook" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Aprove">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

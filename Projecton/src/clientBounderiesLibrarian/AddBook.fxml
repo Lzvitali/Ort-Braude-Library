@@ -125,12 +125,12 @@
             <AnchorPane prefHeight="129.0" prefWidth="313.0" />
             <HBox prefHeight="24.0" prefWidth="355.0" spacing="125.0">
                <children>
-                  <JFXButton fx:id="CancelBtn" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Cancel">
+                  <JFXButton fx:id="CancelBtn" onAction="#cancelBtnClicked" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Cancel">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="SaveBtn" onAction="#saveAddNewBook" prefHeight="25.0" prefWidth="116.0" stylesheets="@buttonsStyle.css" text="Save">
+                  <JFXButton fx:id="SaveBtn" onAction="#saveAddNewBook" prefHeight="25.0" prefWidth="116.0" stylesheets="@../clientCommonBounderies/buttonsStyle.css" text="Save">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
