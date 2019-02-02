@@ -50,7 +50,10 @@ public class DeleteBookController implements IGUIController
     {
     	AClientCommonUtilities.backToStartPanel();
     }
-
+    
+	/**
+	 * This function triggerd by click on delete button  , send the request to server to delete book  
+	 */ 
     @FXML
     void okDeleteBtnClicked(ActionEvent event) 
     {

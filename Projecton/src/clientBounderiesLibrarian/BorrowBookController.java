@@ -79,11 +79,6 @@ public class BorrowBookController implements IGUIController
 			AClientCommonUtilities.alertErrorWithOption(checkResult,"Wrong","Back");	
 			
 		}
-	/*	ReaderAccount reader=new ReaderAccount(readerAccountID.getText());
-		Copy copy=new Copy(CopyIdTextField.getText());
-		ObjectMessage msg = new ObjectMessage(reader,copy,"CheckIfExist","ReaderAccount",reader.getId());
-		client.handleMessageFromClient(msg);	*/
-
 
 	}
 
@@ -128,6 +123,10 @@ public class BorrowBookController implements IGUIController
 		AClientCommonUtilities.backToStartPanel();
 	}
 
+	
+	/**
+	 * This function ask from server the return date of the book that entered (while typing)  
+	 */
 	@FXML
 	void setDateForBorrowBook(KeyEvent event) 
 	{

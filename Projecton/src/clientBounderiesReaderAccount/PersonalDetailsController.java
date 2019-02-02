@@ -94,7 +94,11 @@ public class PersonalDetailsController implements IGUIController
     	AClientCommonUtilities.backToStartPanel();
     }
 
-    
+
+	/**
+	 * This function triged by click on submit , if all the input are vaild it send request to update the info 
+	 * of user that is login , if the input is invalid print propper message
+	 */
     @FXML
     void updatePersonalDetailsClicked(ActionEvent event) 
     {

@@ -50,19 +50,18 @@ import javafx.stage.FileChooser;
 
 /**
  * This class is a Controller for StartPanel.fxml AND for LogInFxml
- * @author Vitali
  *
  */
 
 public class StartPanelController implements IGUIController, IGUIStartPanel
 {
 	//Instance variables **********************************************
-	protected static int numOfActiveWindows=0; 
-	private static int alreadyInitilized=0;
+	protected static int numOfActiveWindows=0;  //number of active sub windows
+	private static int alreadyInitilized=0; //check if the form is already initlaized
 	/**
 	 * this is the details of the current user that we need in all the next controllers 
 	 */
-	public static User user; 
+	public static User user; //the current user
 
 	public  static OBLClient connToClientController;
 
@@ -146,7 +145,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	}
 
 
-	public  void connect(String ip,int port) //make the connection to ClientController.
+	/**
+	 * This function make the connection to ClientController
+	 */
+	public  void connect(String ip,int port) 
 	{
 		try 
 		{
@@ -164,6 +166,11 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		LogInController.startPanelController = getClass(); 
 	}
 
+
+	/**
+	 * This function send request to server for making search for book that asked , the function
+	 * check if entered valid input , if not print message
+	 */
 	@FXML
 	void makeSearch(ActionEvent event) 
 	{
@@ -265,6 +272,11 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 
 	}
 
+	/**
+	 * This function show the result that the server send , all the books that the server
+	 * found that relevant to our search , if didnt find any book it will print
+	 * propper message
+	 */
 	private void searchBookResult(ObjectMessage msg)
 	{
 		searchResultTable.getItems().clear();
@@ -378,6 +390,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		numOfActiveWindows=newWindows;
 	}
 	
+
+	/**
+	 * This function initialize the group of radio button
+	 */
 	void setRedioButtonsForBooksSearch()
 	{
 		toggleGroupForBooks = new ToggleGroup();
@@ -387,6 +403,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
 	}
 	
+
+	/**
+	 * This function let the user make search book with enter button
+	 */
 	@FXML
 	void makeSearchBookWithEnterBtn(KeyEvent event)
 	{

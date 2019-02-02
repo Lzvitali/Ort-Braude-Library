@@ -72,6 +72,9 @@ public class ReturnBookController implements IGUIController {
 
 	}
 
+	/**
+	 * This function send request to return copy that selected only if the input is valid
+	 */
 	@FXML
 	void OkBtnClicked(ActionEvent event) 
 	{

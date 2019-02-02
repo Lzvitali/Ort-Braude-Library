@@ -65,6 +65,11 @@ public class LogInController  implements IGUIController
     	AClientCommonUtilities.backToStartPanel();
     }
 
+	/**
+	 * This function send request to server to login the user that requested
+	 * the client will send the id and password only if valid else will print
+	 * propper message
+	 */
     @FXML
     void makeLogIn(ActionEvent event) 
     {
@@ -95,7 +100,9 @@ public class LogInController  implements IGUIController
     }
     
 
-
+	/**
+	 * This function trigger login function if pressed enter on password textfield
+	 */
 	@FXML
     void makeLoginWithEnterBtn(KeyEvent event)
     {

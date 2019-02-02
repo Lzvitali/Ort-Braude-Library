@@ -68,14 +68,18 @@ public class RegisterNewReaderAccountController implements IGUIController
 	@FXML
 	private JFXButton SaveBtn;
 
-	ObservableList<String> list1;
+	ObservableList<String> list1; // List for combo box
 
 	@FXML
 	void cancelRegistration(ActionEvent event) 
 	{
 		AClientCommonUtilities.backToStartPanel();
 	}
-
+	
+	/**
+	 * This function check if all the details that in Registration Form are valid , and if yes send request to server
+	 * else print propper message
+	 */
 	@FXML
 	void saveRegistration(ActionEvent event) 
 	{
@@ -124,7 +128,9 @@ public class RegisterNewReaderAccountController implements IGUIController
 		combo();
 	}
 
-
+	/**
+	 * initialize the combobox for eduaction year
+	 */
 	public void combo() 
 	{
 		ArrayList <String> s=new ArrayList<String>();
@@ -136,6 +142,9 @@ public class RegisterNewReaderAccountController implements IGUIController
 		EditionYearsCmbBox.setItems((ObservableList) list1);
 	}
 
+	/**
+	 * This function check if all the details that in Registration Form are valid and return propper message
+	 */
 	private String validationResult()
 	{
 		String result,finalResult="";
