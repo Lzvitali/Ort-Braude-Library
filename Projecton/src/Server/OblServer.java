@@ -303,9 +303,9 @@ public class OblServer extends AbstractServer
 		try //get the username and the password for MYSQL
 		{
 			Scanner reader = new Scanner(System.in);
-			// System.out.println("Enter the username of MYSQL" );
+			System.out.println("Enter the username of MYSQL" );
 			user=reader.nextLine();
-			// System.out.println("Enter the password of MYSQL" );
+			System.out.println("Enter the password of MYSQL" );
 			password=reader.nextLine();
 			// System.out.println("Enter the name of schema in MYSQL" );
 			schema="obl";//reader.nextLine();
