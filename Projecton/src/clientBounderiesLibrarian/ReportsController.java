@@ -302,7 +302,7 @@ public class ReportsController implements IGUIController
 	}
 
 	/**
-	 * The function activated when user press button for option choose by Year & Month
+	 * The function activated when user press button for option choose by Year and Month
 	 * and ask send to server this date for creating report
 	 * @param event
 	 */

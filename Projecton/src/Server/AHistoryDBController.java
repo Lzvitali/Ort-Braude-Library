@@ -284,7 +284,7 @@ public abstract class AHistoryDBController
 	}
 
 	/**
-	 * This function returns an ArrayList<String> list to the client with the comboBox options (of the old reports)
+	 * This function returns an ArrayList of String list to the client with the comboBox options (of the old reports)
 	 * @param msg - the object from the client
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return ObjectMessage with the answer to the client

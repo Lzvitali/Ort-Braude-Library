@@ -59,7 +59,7 @@ public class OBLClient extends AbstractClient //Make connection between our IGUI
   /**
    * This method handles all data coming from the UI            
    *
-   * @param message The message from the UI.    
+   * @param msg The message from the UI.    
    */
 
   public void handleMessageFromClient(Object msg) 

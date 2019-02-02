@@ -130,7 +130,6 @@ public class AddBookController implements IGUIController
 
 	/**
 	 * the function set letters and numbers to the comboBox
-	 * @param event
 	 */
 	public void combo() 
 	{

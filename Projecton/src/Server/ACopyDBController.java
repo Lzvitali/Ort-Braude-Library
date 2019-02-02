@@ -666,7 +666,7 @@ public abstract class ACopyDBController
 
 	/**
 	 * This function will delete the requested copy if it possible
-	 * The function checks if the copy is not borrowed and if there is a reservation to the fitting book and the requested copy is the last in the library->can not delete the copy
+	 * The function checks if the copy is not borrowed and if there is a reservation to the fitting book and the requested copy is the last in the library-can not delete the copy
 	 * @param msg - the object from the client
 	 * @param connToSQL - the connection to the MySQL created in the Class OBLServer
 	 * @return ObjectMessage with the answer to the client
