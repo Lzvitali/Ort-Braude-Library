@@ -66,11 +66,11 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	 */
 	OBLClient client;
 
-	private static int numOfActiveWindows=0;
+	private static int numOfActiveWindows=0; //Active sub windows of main panel
 
 	public static String readerAccountID; //when the librarian wants to access into the borrows and reserves of a reader account after a search 
-	public static ReaderAccount readerAccount;
-	private static String tempReaderAccountID;
+	public static ReaderAccount readerAccount; //readerAccount for even handler
+	private static String tempReaderAccountID;//readerAccount for even handler
 
 
 	//FXML attibutes ****************************************************
@@ -277,12 +277,13 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	}
 
 
+	/**
+	 * function check which tabed selected for search Book/ReaderAccount
+	 */
 	@FXML
 	void makeSearch(ActionEvent event) 
 	{
-		//lets example that will be here valdaion for book(still not exist so didnt write)
 
-		//if success do this and if selected book :
 		if(TabPaneSelect.getSelectionModel().getSelectedItem().getText().equals("Search book"))
 		{
 			searchBookPressed();
@@ -759,6 +760,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 	}
 
 
+	/**
+	 * let the user make search book when press enter on textfield search
+	 */
 	@FXML
     void makeSearchBookWithEnterBtn(KeyEvent event)
     {
@@ -768,6 +772,10 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
     		searchBookPressed();
        }
     }
+	
+	/**
+	 * let the user make search reader when press enter on textfield search
+	 */
 	@FXML
     void makeSearchReaderWithEnterBtn(KeyEvent event)
     {
@@ -778,8 +786,9 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
        }
     }
 
-	
-	
+	/**
+	 * Open sub window of change book
+	 */
     @FXML
     void openChangeBookInfo(ActionEvent event) 
     {
