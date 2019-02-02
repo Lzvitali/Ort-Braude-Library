@@ -23,13 +23,17 @@ import clientCommonBounderies.StartPanelController;
 
 public class AStartClient extends Application
 {
-	public static Stage primaryStagePanel;
-	public static IGUIStartPanel startPanelController;
-	private String choosen="/clientBounderiesLibrarian/StartPanelLibrarian.fxml"; //Librarian
-	private String choosen1="/clientCommonBounderies/StartPanel.fxml";
-	private String choosen2="/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml";
+	public static Stage primaryStagePanel;// the primarystage that running
+	public static IGUIStartPanel startPanelController;//The main panel that running at the moment
+	private String choosen="/clientBounderiesLibrarian/StartPanelLibrarian.fxml"; //Librarian path of fxml
+	private String choosen1="/clientCommonBounderies/StartPanel.fxml";//Guest path of fxml
+	private String choosen2="/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml";//Reader path of fxml
 	public static String serverIP ;
 	
+	
+	/**
+	 * lunch the client application gui , opening the guest form.
+	 */
     @Override
     public void start(Stage primaryStage) throws Exception //start the client (open FXML/Controller)
     {

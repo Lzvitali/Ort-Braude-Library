@@ -91,7 +91,7 @@ public class OBLClient extends AbstractClient //Make connection between our IGUI
   }
 
 
-public void setClientUI(IGUIController clientUI) // TO_DELETE later
+public void setClientUI(IGUIController clientUI) 
 {
 	this.clientUI = clientUI;
 }

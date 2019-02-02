@@ -145,7 +145,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 	}
 
 
-	public  void connect(String ip,int port) //make the connection to ClientController.
+	/**
+	 * This function make the connection to ClientController
+	 */
+	public  void connect(String ip,int port) 
 	{
 		try 
 		{
@@ -163,6 +166,11 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		LogInController.startPanelController = getClass(); 
 	}
 
+
+	/**
+	 * This function send request to server for making search for book that asked , the function
+	 * check if entered valid input , if not print message
+	 */
 	@FXML
 	void makeSearch(ActionEvent event) 
 	{
@@ -264,6 +272,11 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 
 	}
 
+	/**
+	 * This function show the result that the server send , all the books that the server
+	 * found that relevant to our search , if didnt find any book it will print
+	 * propper message
+	 */
 	private void searchBookResult(ObjectMessage msg)
 	{
 		searchResultTable.getItems().clear();
@@ -377,6 +390,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		numOfActiveWindows=newWindows;
 	}
 	
+
+	/**
+	 * This function initialize the group of radio button
+	 */
 	void setRedioButtonsForBooksSearch()
 	{
 		toggleGroupForBooks = new ToggleGroup();
@@ -386,6 +403,10 @@ public class StartPanelController implements IGUIController, IGUIStartPanel
 		this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
 	}
 	
+
+	/**
+	 * This function let the user make search book with enter button
+	 */
 	@FXML
 	void makeSearchBookWithEnterBtn(KeyEvent event)
 	{
