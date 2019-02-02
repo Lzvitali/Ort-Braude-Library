@@ -168,7 +168,12 @@ public class AReaderAccountDBController
 		}
 		return new ObjectMessage("Reader account with this ID does not exist in DB.","ReaderNotExist");
 	}
-
+/**
+ * this function change reader account personal detail according to his request
+ * @param msg- the object from the client
+ * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+ * @return ObjectMessage with the answer to the client
+ */
 
 
 	private static ObjectMessage changePersnalDetails(ObjectMessage msg, Connection connToSQL)
@@ -225,7 +230,12 @@ public class AReaderAccountDBController
 
 	}
 
-
+/**
+ * this function create new reader account and checking that this account does not exist in the database
+ * @param msg- the object from the client
+ * @param connToSQL - the connection to the MySQL created in the Class OBLServer
+ * @return ObjectMessage with the answer to the client
+ */
 
 
 	private static ObjectMessage registerNewReaderAccount(ObjectMessage msg, Connection connToSQL)
