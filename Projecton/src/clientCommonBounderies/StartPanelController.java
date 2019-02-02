@@ -50,19 +50,18 @@ import javafx.stage.FileChooser;
 
 /**
  * This class is a Controller for StartPanel.fxml AND for LogInFxml
- * @author Vitali
  *
  */
 
 public class StartPanelController implements IGUIController, IGUIStartPanel
 {
 	//Instance variables **********************************************
-	protected static int numOfActiveWindows=0; 
-	private static int alreadyInitilized=0;
+	protected static int numOfActiveWindows=0;  //number of active sub windows
+	private static int alreadyInitilized=0; //check if the form is already initlaized
 	/**
 	 * this is the details of the current user that we need in all the next controllers 
 	 */
-	public static User user; 
+	public static User user; //the current user
 
 	public  static OBLClient connToClientController;
 

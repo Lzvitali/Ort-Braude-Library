@@ -150,6 +150,11 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	searchResultTable.setVisible(false);
     }
 
+
+	/**
+	 * This function request from the server to logout the current user that is login
+	 * @param event
+	 */
     @FXML
     void makeLogOut(ActionEvent event) 
     {
@@ -396,6 +401,11 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
 
 	}
 
+
+	/**
+	 * This function send request to server to resreve the selected book
+	 * for the user that is login.
+	 */
 	@FXML
 	void AskToReserve(ActionEvent event)
 	{
@@ -423,6 +433,11 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
         this.freeSearchRB.setToggleGroup(toggleGroupForBooks);
     }
     
+
+	/**
+	 * This function send request to server to check if all the copies of selected book
+	 * are borrowed
+	 */
     public void availableBook(int ID)
     {
     	ObjectMessage objectMessage;
@@ -432,7 +447,9 @@ public class StartPanelReaderAccountController implements IGUIController,IGUISta
     	client.handleMessageFromClient(objectMessage);
     }
     
-    
+	/**
+	 * This function makes search of books when press entered
+	 */
 	@FXML
     void makeSearchBookWithEnterBtn(KeyEvent event)
     {
