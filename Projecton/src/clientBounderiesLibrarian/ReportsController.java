@@ -304,6 +304,7 @@ public class ReportsController implements IGUIController
 	@FXML 
 	void showNewReport(ActionEvent event) 
 	{
+		chooseFromPreviousComboBox.setValue(" ");
 		int mounth;
 		int year;
 		if (monthComboBox.getValue()==12)
@@ -333,6 +334,9 @@ public class ReportsController implements IGUIController
 	@FXML //choose from comboBox
 	void showPreviousReport(ActionEvent event) 
 	{
+		monthComboBox.setValue(null);
+		yearComboBox.setValue(null);
+		
 		
 		if(null != chooseFromPreviousComboBox.getValue() && !(chooseFromPreviousComboBox.getValue()).equals(""))
 		{
