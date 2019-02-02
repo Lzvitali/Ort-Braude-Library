@@ -43,7 +43,7 @@ import Common.Reservation;
 public abstract class ADailyDBController 
 {
 	
-    static String testDay="02"; //Date when the threads start run(monlthy)
+    static String testDay="01"; //Date when the threads start run(monlthy)
 	
 	
 	
