@@ -52,8 +52,8 @@ public class DeleteBookController implements IGUIController
     }
     
 	/**
-	 * This function triggerd by click on delete button  , send the request to servet to delete book  
-	 */
+	 * This function triggerd by click on delete button  , send the request to server to delete book  
+	 */ 
     @FXML
     void okDeleteBtnClicked(ActionEvent event) 
     {
