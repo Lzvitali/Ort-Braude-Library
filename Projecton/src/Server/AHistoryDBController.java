@@ -120,7 +120,7 @@ public abstract class AHistoryDBController
 	private static ObjectMessage getNewReportOne(ObjectMessage msg, Connection connToSQL)
 	{
 		Report newReport=(Report)msg.getObjectList().get(0);
-		Date checkingDate=(Date)newReport.getChosenDateForReport1();
+		Date checkingDate=(Date)newReport.getChosenDateForReport1();//real date
 
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
 		SimpleDateFormat sdf3 = new SimpleDateFormat("MM");
@@ -128,18 +128,18 @@ public abstract class AHistoryDBController
 		String month2=sdf3.format(checkingDate);
 		int month1=Integer.parseInt(month2);
 		int year1=Integer.parseInt(yearr1);
-		if(month1==1)
+		if(month1==12)
 		{
-			month1=12;
-			year1--;
+			month1=1;
+			year1++;
 		}
 		else 
 		{
-			month1--;
+			month1++;
 		}
 		
 		LocalDate firstDayForReportLaters = LocalDate.of(year1, month1, 1);
-		Date actuallyMonth=java.sql.Date.valueOf(firstDayForReportLaters);
+		Date nextMonth=java.sql.Date.valueOf(firstDayForReportLaters);//next month
 		ResultSet rs;
 		int active=0, frozen=0, locked=0, quantityOfCopies=0, numOfDidntReturnOnTime=0;
 		
@@ -204,8 +204,8 @@ public abstract class AHistoryDBController
 			//statement for getting quantities of total book copies  in specific month     
 			PreparedStatement report5 = (PreparedStatement) connToSQL.prepareStatement("select count(distinct readerAccountID) AS count from obl.history where `action`=? and date >= ? and date < ?");	
 			report5.setString(1,"Late in return");
-			report5.setDate(2,actuallyMonth);
-			report5.setDate(3,checkingDate);
+			report5.setDate(2,checkingDate);
+			report5.setDate(3,nextMonth);
 			rs = report5.executeQuery();
 			if(rs.next())
 			{
@@ -224,7 +224,7 @@ public abstract class AHistoryDBController
 		if(active!=0 || frozen!=0 || locked!=0 || quantityOfCopies!=0||numOfDidntReturnOnTime!=0)
 		{
 			Report resReport=new Report(active,frozen,locked,quantityOfCopies,numOfDidntReturnOnTime);
-			resReport.setChosenDateForReport1(actuallyMonth);
+			resReport.setChosenDateForReport1(nextMonth);
 			
 			
 			//check if still not in the `ReportsHistory` table

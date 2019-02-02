@@ -312,7 +312,7 @@ public class ReportsController implements IGUIController
 		chooseFromPreviousComboBox.setValue(" ");
 		int mounth;
 		int year;
-		if (monthComboBox.getValue()==12)
+		/*if (monthComboBox.getValue()==12)
 		{
 			mounth=1;
 			year=yearComboBox.getValue()+1;
@@ -323,7 +323,9 @@ public class ReportsController implements IGUIController
 			mounth=monthComboBox.getValue()+1;
 			 year=yearComboBox.getValue();
 		}
-
+*/
+		mounth=monthComboBox.getValue();
+		 year=yearComboBox.getValue();
 		
 		LocalDate now = LocalDate.of(year, mounth,1 );
 		Date dateForReport=java.sql.Date.valueOf(now);//make date from combobox
