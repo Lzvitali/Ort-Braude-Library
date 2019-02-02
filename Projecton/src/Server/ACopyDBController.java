@@ -779,8 +779,8 @@ public abstract class ACopyDBController
 
 							
 							//delete pdf file of book
-							//File myFile = new File("pdfFiles\\"+bookName+".pdf");
-							//myFile.delete();  // TODO:NEED TO UNCOMMENT
+							File myFile = new File("pdfFiles\\"+bookName+".pdf");
+							myFile.delete();  
 						}
 						catch (SQLException e) 
 						{
