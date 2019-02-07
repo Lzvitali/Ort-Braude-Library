@@ -38,8 +38,7 @@
             <HBox fx:id="borrowerInfoHBox" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label prefHeight="28.0" prefWidth="70.0" text="Borrower:" />
-                  <AnchorPane prefHeight="29.0" prefWidth="2.0" />
-                  <Label fx:id="borrowerInfoLabel" prefHeight="28.0" prefWidth="258.0" text="Label" />
+                  <Label fx:id="borrowerInfoLabel" prefHeight="28.0" prefWidth="250.0" text="Label" />
                </children>
             </HBox>
          </children>

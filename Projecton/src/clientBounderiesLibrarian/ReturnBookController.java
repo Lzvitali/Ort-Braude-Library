@@ -182,7 +182,7 @@ public class ReturnBookController implements IGUIController {
 				borrowerInfoHBox.setVisible(true);
 				bookInfoLabel.setVisible(true);
 
-				bookInfoLabel.setText("Book name: " + book.getBookName());
+				bookInfoLabel.setText("Book name:  " + book.getBookName());
 				borrowerInfoLabel.setText("Not borrowed");
 			});
 		}

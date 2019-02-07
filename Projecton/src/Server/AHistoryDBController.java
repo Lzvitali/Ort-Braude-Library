@@ -80,11 +80,11 @@ public abstract class AHistoryDBController
 	private static ObjectMessage getOldwReportOne(ObjectMessage msg, Connection connToSQL) 
 	{
 		Report answerReport = new Report();
-		
+
 		PreparedStatement oldRepot = null;  
 		ResultSet rsOld = null;
-		
-		
+
+
 		try
 		{
 			Report newReport=(Report)msg.getObjectList().get(0);
@@ -94,20 +94,20 @@ public abstract class AHistoryDBController
 			oldRepot.setString(1, year); 
 			oldRepot.setString(2, month);  
 			rsOld =oldRepot.executeQuery();
-			
+
 			if(rsOld.next())// here is problem ...
 			{
 				answerReport = new Report(rsOld.getInt(3), rsOld.getInt(4), rsOld.getInt(5), rsOld.getInt(6), rsOld.getInt(7));
 			}
-			
-			
+
+
 		}
 		catch (SQLException e) 
 		{
 
 			e.printStackTrace();
 		} 
-		
+
 		return new ObjectMessage(answerReport,"","Results  active,frozen,locked for report1");
 	}
 
@@ -124,6 +124,11 @@ public abstract class AHistoryDBController
 
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
 		SimpleDateFormat sdf3 = new SimpleDateFormat("MM");
+
+		//real year and month
+		String yearReal=sdf1.format(checkingDate);
+		String monthReal=sdf3.format(checkingDate);
+
 		String yearr1=sdf1.format(checkingDate);
 		String month2=sdf3.format(checkingDate);
 		int month1=Integer.parseInt(month2);
@@ -137,12 +142,12 @@ public abstract class AHistoryDBController
 		{
 			month1++;
 		}
-		
+
 		LocalDate firstDayForReportLaters = LocalDate.of(year1, month1, 1);
 		Date nextMonth=java.sql.Date.valueOf(firstDayForReportLaters);//next month
 		ResultSet rs;
 		int active=0, frozen=0, locked=0, quantityOfCopies=0, numOfDidntReturnOnTime=0;
-		
+
 		try 
 		{
 			//statement for getting active reader account in specific month                
@@ -158,7 +163,7 @@ public abstract class AHistoryDBController
 			{
 				active=0;
 			}
-			
+
 			//statement for getting frozen reader account in specific month                
 			PreparedStatement report2 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
 			report2.setDate(2,checkingDate);
@@ -172,7 +177,7 @@ public abstract class AHistoryDBController
 			{
 				frozen=0;
 			}
-			
+
 			//statement for getting locked reader account in specific month                
 			PreparedStatement report3 = (PreparedStatement) connToSQL.prepareStatement("SELECT Note FROM obl.history where action =? and date=?");
 			report3.setDate(2,checkingDate);
@@ -225,34 +230,34 @@ public abstract class AHistoryDBController
 		{
 			Report resReport=new Report(active,frozen,locked,quantityOfCopies,numOfDidntReturnOnTime);
 			resReport.setChosenDateForReport1(nextMonth);
-			
-			
+
+
 			//check if still not in the `ReportsHistory` table
-			
+
 			/*SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
 			SimpleDateFormat sdf2 = new SimpleDateFormat("MM");
 			String yearr=sdf.format(firstDayForReportLaters);
 			String monthh=sdf2.format(firstDayForReportLaters);*/
-			
+
 			PreparedStatement oldRepot = null;  
 			ResultSet rs1 = null;
-			
-			
+
+
 			try
 			{
 				oldRepot = connToSQL.prepareStatement("SELECT * FROM ReportsHistory WHERE Year = ? AND Month = ? ");
 				oldRepot.setString(1, Integer.toString(year1) ); 
 				oldRepot.setString(2, Integer.toString(month1));  
 				rs1 =oldRepot.executeQuery();
-				
+
 				if(!rs1.next()) //if it is not in that table, put it in there
 				{
 					//add all data to `ReportsHistory` table
 					try 
 					{
 						PreparedStatement updateHistory = connToSQL.prepareStatement("INSERT INTO `ReportsHistory` (`Year`,`Month`,`ActiveReaderAccounts`,`FreezedReaderAccounts`,`LockedReaderAccounts`,`totalBookCopies`,`didntReturned`) VALUES (?,?,?,?,?,?,?) "); 
-						updateHistory.setString(1,Integer.toString(year1)); 
-						updateHistory.setString(2,Integer.toString(month1)); 
+						updateHistory.setString(1,yearReal);  
+						updateHistory.setString(2,monthReal); 
 						updateHistory.setInt(3,active); 
 						updateHistory.setInt(4,frozen); 
 						updateHistory.setInt(5,locked); 
@@ -266,14 +271,14 @@ public abstract class AHistoryDBController
 						e.printStackTrace();
 					} 
 				}
-				
+
 			}
 			catch (SQLException e) 
 			{
 
 				e.printStackTrace();
 			} 
-	
+
 			return new ObjectMessage(resReport,"","Results  active,frozen,locked for report1");
 		}
 		else 
@@ -292,20 +297,20 @@ public abstract class AHistoryDBController
 	private static ObjectMessage getPreviousReportsOptions(ObjectMessage msg, Connection connToSQL)
 	{
 		ObjectMessage answer = new ObjectMessage(); 
-		
+
 		ArrayList <String> s=new ArrayList<String>();
-		
+
 		boolean noResults = true;
-		
+
 		PreparedStatement oldReports = null;  
 		ResultSet rs = null;
-		
+
 		try
 		{
 			//get all the rows
 			oldReports = connToSQL.prepareStatement("SELECT * FROM ReportsHistory ");   
 			rs =oldReports.executeQuery();
-			
+
 			while(rs.next())
 			{
 				noResults = false;
@@ -316,14 +321,14 @@ public abstract class AHistoryDBController
 		{
 			e.printStackTrace();
 		} 
-		
+
 		if(!noResults)
 		{
-			
-			
+
+
 			Report report = new Report();
 			report.setComboBoxOptions(s);
-					
+
 			answer.addObject(report); 
 			answer.setNote("options for old reports comboBox");
 		}
@@ -331,12 +336,12 @@ public abstract class AHistoryDBController
 		{
 			answer.setNote("No options for old reports comboBox");
 		}
-		
-		
+
+
 		return answer;
 	}
 
-	
+
 	/**
 	 * function get history of specific reader account from DB and sent it to client 
 	 * @param msg- the object from the client
