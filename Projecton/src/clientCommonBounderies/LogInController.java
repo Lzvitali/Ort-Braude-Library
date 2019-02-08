@@ -147,7 +147,7 @@ public class LogInController  implements IGUIController
 			else if((msg.getNote()).equals("3"))
 			{
 				permission=3;
-				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml","Librarian Start Panel");
+				AClientCommonUtilities.loadStartPanelWindow(startPanelController,"/clientBounderiesReaderAccount/StartPanelReaderAccount.fxml","Reader Account Start Panel");
 			}
 		}
 		//if unsuccessful show proper error message
