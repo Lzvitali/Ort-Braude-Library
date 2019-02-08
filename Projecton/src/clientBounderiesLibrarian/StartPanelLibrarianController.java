@@ -666,7 +666,7 @@ public class StartPanelLibrarianController implements IGUIController,IGUIStartPa
 				for(i=0;i<result.size();i++)
 				{
 
-					((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Open"));
+					((ReaderAccount)result.get(i)).setBorrowsAndReserves(new Button("Borrows and Reservs"));
 					((ReaderAccount)result.get(i)).setMoreDetails(new Button("More Details"));
 					//readerAccountID = ((ReaderAccount)result.get(i)).getId();
 					//tempReaderAccountID = ((ReaderAccount)result.get(i)).getId();
