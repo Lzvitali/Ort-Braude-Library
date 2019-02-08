@@ -207,7 +207,7 @@ public abstract class AClientCommonUtilities
 		Platform.runLater(()->
 		{   
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
-			ButtonType bttCountiue = new ButtonType("countiue", ButtonBar.ButtonData.FINISH);
+			ButtonType bttCountiue = new ButtonType("continue", ButtonBar.ButtonData.FINISH);
 			alert.getButtonTypes().clear();
 			alert.setHeaderText(headerText);
 			alert.setTitle(title);
