@@ -555,78 +555,81 @@ public abstract class ACopyDBController
 				//////////////////////////////////////////////////////////
 
 				String reason=" ";
-
-				//check if the return date is the most updated 20    28
+				
 				LocalDate nowPlus7 = LocalDate.now().plusDays(7);
 				Date nowPlus7Date = java.sql.Date.valueOf(nowPlus7);
 				Date dateOfReturn = rs1.getDate(5); 
-				if(dateOfReturn.after(nowPlus7Date))
+				
+				//check if the book is desired
+				if(rs2.getBoolean(6))
 				{
 					canDelay = false;
-					reason = "The date of return is the most updated";
+					reason = "That book is desired and can't be delayed";
 				}
 				else
 				{
-					//check if the book is desired
-					if(rs2.getBoolean(6))
+
+					//check if it reserved by someone
+					getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
+					getReservs.setInt(1, rs1.getInt(2) ); 
+					rs4 =getReservs.executeQuery();
+
+					if(rs4.next())
 					{
 						canDelay = false;
-						reason = "That book is desired and can't be delayed";
+						reason = "That book was reserved by someone.\nSo you can't delay it's return date";
 					}
 					else
 					{
+						//check if he is not already in delay
+						
+						//Date dateOfReturn =  rs1.getDate(5);
+						//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
+						//LocalDateTime now = LocalDateTime.now();
 
-						//check if it reserved by someone
-						getReservs = connToSQL.prepareStatement("SELECT * FROM Reservations WHERE bookId = ? ");
-						getReservs.setInt(1, rs1.getInt(2) ); 
-						rs4 =getReservs.executeQuery();
+						LocalDate now = LocalDate.now(); 
+						Date today = java.sql.Date.valueOf(now);
 
-						if(rs4.next())
+						if( today.after(dateOfReturn) )
 						{
 							canDelay = false;
-							reason = "That book was reserved by someone.\nSo you can't delay it's return date";
+							reason = "You already was late in returning that book.\nSo you can't delay it's return date";
 						}
 						else
 						{
-							//check if he is not already in delay
-							
-							//Date dateOfReturn =  rs1.getDate(5);
-							//DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
-							//LocalDateTime now = LocalDateTime.now();
+							//check if reader account is active
+							getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
+							getReaderAccount.setString(1, reader.getId() ); 
+							rs3 =getReaderAccount.executeQuery();
 
-							LocalDate now = LocalDate.now(); 
-							Date today = java.sql.Date.valueOf(now);
-
-							if( today.after(dateOfReturn) )
+							if(rs3.next())
 							{
-								canDelay = false;
-								reason = "You already was late in returning that book.\nSo you can't delay it's return date";
-							}
-							else
-							{
-								//check if reader account is active
-								getReaderAccount = connToSQL.prepareStatement("SELECT * FROM ReaderAccount WHERE ID = ? ");
-								getReaderAccount.setString(1, reader.getId() ); 
-								rs3 =getReaderAccount.executeQuery();
-
-								if(rs3.next())
+								//if the reader account is active
+								if(!rs3.getString(8).equals("Active"))
 								{
-									//if the reader account is active
-									if(!rs3.getString(8).equals("Active"))
+									canDelay = false;
+									reason = "Your status is not Active.\nSo you can't delay it's return date";
+								}
+								else
+								{
+									//check if the return date is the most updated 20    28
+									if(dateOfReturn.after(nowPlus7Date))
 									{
 										canDelay = false;
-										reason = "Your status is not Active.\nSo you can't delay it's return date";
+										reason = "The date of return is the most updated.\nYou can ask for delay when it will be less then a week for it's return date";
 									}
 									else
 									{
 										canDelay = true;
-									}
+									}								
 								}
-							}	
-						}
-
+							}
+						}	
 					}
+
 				}
+
+				
 
 				((Copy)(CopyAndBook[0])).setReasonForCantDelay(reason);
 
