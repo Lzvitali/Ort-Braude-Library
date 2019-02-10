@@ -215,20 +215,17 @@ public abstract class AValidationInput
 	{
 		if(context.equals(""))
 		{
-			return"Insert 9 digit user id";	
+			return "Please fill both: ID and Password";	
 		}
-		if(context.length() != 9)
-		{
-			return "Insert 9 digit user id or fill zero before";
-		}
-		if(!onlyNumbers(context))
+		else if(!onlyNumbers(context))
 		{
 			return "You must fill only numbers";
 		}
-		/*	if(!chackDigit(context))
+		else if(context.length() != 9)
 		{
-			return "Insert correct user id";
-		}*/
+			return "Insert 9 digit user id or fill zero before";
+		}
+
 		return "correct";
 	}
 	/**
@@ -500,6 +497,24 @@ public abstract class AValidationInput
 		{
 			return "Insert Topic";	
 		}
+		
+		for(int i=0; i<context.length(); i++)
+		{
+
+			if (i==0)
+			{
+				if(!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z'))))
+				{
+					return "Uncorrect input for the topic\nShould contain only latters";
+				}
+			}
+			else if (!((context.charAt(i) >= 'a' && context.charAt(i) <= 'z') || ((context.charAt(i)) >= 'A' && (context.charAt(i) <= 'Z')) || (context.charAt(i)) == ','  || (context.charAt(i)) == ' ' || (context.charAt(i)) == '.'))
+			{
+				return "Uncorrect input for the topic";
+			}
+
+		}
+		
 		/*if(context.length()>15)          //why not?
 		{
 			return "The Topic is too long"; 

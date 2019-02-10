@@ -179,14 +179,39 @@ public class AddBookController implements IGUIController
 			{
 				bookLocation =  bookLocationLetter.getValue() + "-" + BookLocationNumber.getValue();
 			}
-
-
-			boolean isDesired= DesiredCheckBox.isSelected();
-			book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText(), bookLocation);
-			ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
-			book.setFileIsLoaded(isUploaded);
-			client.setClientUI(this);
-			client.handleMessageFromClient(msg);
+			
+			//if file was upload check that it is a '.pdf' file
+			if(isUploaded)
+			{
+				String fileName = f.getAbsolutePath();
+				//int fileLength = fileName.length();
+				
+				if(fileName.substring(fileName.length()-4,fileName.length()).equals(".pdf"))
+				{
+					boolean isDesired= DesiredCheckBox.isSelected();
+					book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText(), bookLocation);
+					ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
+					book.setFileIsLoaded(isUploaded);
+					client.setClientUI(this);
+					client.handleMessageFromClient(msg);
+				}
+				else
+				{
+					AClientCommonUtilities.alertErrorWithOption("The file must be '.pdf' file","Wrong","Back");
+				}
+				
+			}
+			
+			else
+			{
+				boolean isDesired= DesiredCheckBox.isSelected();
+				book=new Book(BookTitleTextField.getText(), BookAuthorTextField.getText(),PublishedYearTextField.getText(),TopicTextField.getText(),String.valueOf(isDesired),EditionTextField.getText(),numberOfCopies.getText(), bookLocation);
+				ObjectMessage msg= new ObjectMessage(book,"addBook","Book");
+				book.setFileIsLoaded(isUploaded);
+				client.setClientUI(this);
+				client.handleMessageFromClient(msg);
+			}
+			
 		}
 		else
 		{
