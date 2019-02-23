@@ -546,7 +546,7 @@ public abstract class ACopyDBController
 				if(rs2.next())
 				{
 					//set the book info from the second query
-					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), rs2.getString(6), rs2.getInt(7)) );
+					CopyAndBook[1]=( new Book(rs2.getString(2), rs2.getString(3), rs2.getString(4), rs2.getString(5), Boolean.toString(rs2.getBoolean(6)), rs2.getInt(7)) );
 				}
 
 
