@@ -12,7 +12,7 @@ The software is server-client side, the system manages a library by taking full 
 * JavaMail - Sending mails to users.
 
 ## Requirements
-For initializing the DB, you can this [file](https://github.com/Lzvitali/Ort-Braude-Library/blob/master/initDB.sql) - run it in MySQL before you start the server.  
+For initializing the DB, you can use this [file](https://github.com/Lzvitali/Ort-Braude-Library/blob/master/initDB.sql) - run it in MySQL before you start the server.  
 
 ## Setup
 The code implements the server and the client. For starting the server you need to run OblServer.java file (you must start the server first before you run the client) and then for starting the client you need to run AStartClient.java. 
